@@ -1,0 +1,3 @@
+[submodule "qwebdavlib"]
+	path = qwebdavlib
+	url = https://github.com/beidl/qwebdavlib

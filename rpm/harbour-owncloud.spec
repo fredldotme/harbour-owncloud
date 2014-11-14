@@ -6,6 +6,7 @@
 Name:       harbour-owncloud
 
 # >> macros
+%define __requires_exclude ^libqwebdav.*$
 # << macros
 
 %{!?qtc_qmake:%define qtc_qmake %qmake}

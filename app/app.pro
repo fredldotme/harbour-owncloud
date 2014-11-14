@@ -31,11 +31,13 @@ OTHER_FILES += qml/harbour-owncloud.qml \
 CONFIG += sailfishapp_i18n
 TRANSLATIONS += translations/harbour-owncloud-de.ts
 
-# include(shared/qwebdavlib/qwebdavlib/qwebdavlib.pro)
+LIBS += $$OUT_PWD/../qwebdavlib/qwebdavlib/libqwebdav.so.1
 
-unix:!macx: LIBS += -L$$OUT_PWD/../qwebdavlib/qwebdavlib/ -lqwebdav
+QMAKE_RPATHDIR += /usr/share/harbour-owncloud/libs
 
-# INSTALLS += $$PWD/../qwebdavlib/qwebdavlib
+qwebdavlib.path = /usr/share/harbour-owncloud/libs
+qwebdavlib.files += $$OUT_PWD/../qwebdavlib/qwebdavlib/libqwebdav.so.1
+INSTALLS += qwebdavlib
 
 INCLUDEPATH += $$PWD/../qwebdavlib/qwebdavlib
 DEPENDPATH += $$PWD/../qwebdavlib/qwebdavlib

@@ -13,18 +13,24 @@
 TARGET = harbour-owncloud
 
 CONFIG += sailfishapp
+QT += xml
 
-SOURCES += src/harbour-owncloud.cpp
+SOURCES += src/harbour-owncloud.cpp \
+    src/owncloudbrowser.cpp \
+    src/entryinfo.cpp
+
+HEADERS += \
+    src/owncloudbrowser.h \
+    src/entryinfo.h
 
 OTHER_FILES += qml/harbour-owncloud.qml \
     qml/cover/CoverPage.qml \
-    qml/pages/FirstPage.qml \
-    qml/pages/SecondPage.qml \
     rpm/harbour-owncloud.changes.in \
     rpm/harbour-owncloud.spec \
     rpm/harbour-owncloud.yaml \
     translations/*.ts \
-    harbour-owncloud.desktop
+    harbour-owncloud.desktop \
+    qml/pages/FileBrowser.qml
 
 # to disable building translations every time, comment out the
 # following CONFIG line

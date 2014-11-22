@@ -11,6 +11,7 @@ OwnCloudBrowser::OwnCloudBrowser(QObject *parent, Settings *settings) :
     connect(&parser, SIGNAL(errorChanged(QString)), this, SLOT(printError(QString)));
     connect(&webdav, SIGNAL(errorChanged(QString)), this, SLOT(printError(QString)));
     connect(&webdav, SIGNAL(checkSslCertifcate(const QList<QSslError>&)), this, SLOT(proxyHandleSslError(const QList<QSslError>&)));
+    connect(&webdav, SIGNAL(authenticationRequired(QNetworkReply*,QAuthenticator*)), this, SLOT(proxyHandleLoginFailed());
 }
 
 void OwnCloudBrowser::reloadSettings() {
@@ -19,13 +20,16 @@ void OwnCloudBrowser::reloadSettings() {
                                  settings->path() + "/remote.php/webdav",
                                  settings->username(),
                                  settings->password(),
-                                 settings->port());
+                                 settings->port(),
+                                 settings->md5Hex(),
+                                 settings->sha1Hex());
 }
 
 void OwnCloudBrowser::proxyHandleSslError(const QList<QSslError>& errors)
 {
     QSslCertificate cert = errors[0].certificate();
-    emit sslCertifcateError(cert.digest(QCryptographicHash::Md5), cert.digest(QCryptographicHash::Sha1));
+    emit sslCertifcateError(webdav.digestToHex(cert.digest(QCryptographicHash::Md5)),
+                            webdav.digestToHex(cert.digest(QCryptographicHash::Sha1)));
 }
 
 void OwnCloudBrowser::printList()
@@ -63,4 +67,9 @@ void OwnCloudBrowser::getDirectoryContent(QString path)
 {
     currentPath = path;
     parser.listDirectory(&webdav, path);
+}
+
+void OwnCloudBrowser::proxyHandleLoginFailed()
+{
+    emit loginFailed();
 }

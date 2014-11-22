@@ -27,7 +27,6 @@ bool Settings::parseFromAddressString(QString value)
     qDebug() << "port: " << m_port;
     qDebug() << "path: " << m_path;
 
-    writeSettings();
     return url.isValid();
 }
 
@@ -48,7 +47,7 @@ bool Settings::readSettings()
         return false;
     }
     m_hoststring = m_isHttps ? "https://" : "http://";
-    m_hoststring += m_hostname + ":" + QString::number(m_port) + "/" + m_path;
+    m_hoststring += m_hostname + ":" + QString::number(m_port) + m_path;
     emit hoststringChanged();
 
     if(settings.allKeys().contains("username"))
@@ -61,6 +60,20 @@ bool Settings::readSettings()
     }
     emit usernameChanged();
 
+    if(settings.allKeys().contains("certMD5") &&
+            settings.allKeys().contains("certSHA1"))
+    {
+        m_md5Hex = settings.value("certMD5").toString();
+        m_sha1Hex = settings.value("certSHA1").toString();
+        if(isCustomCert()) {
+            emit customCertChanged();
+        }
+        settings.endGroup();
+    } else {
+        settings.endGroup();
+        return false;
+    }
+
     return true;
 }
 
@@ -72,9 +85,23 @@ void Settings::writeSettings()
     settings.setValue("port", QVariant::fromValue<int>(m_port));
     settings.setValue("isHttps", QVariant::fromValue<bool>(m_isHttps));
     settings.setValue("username", QVariant::fromValue<QString>(m_username));
+    settings.setValue("certMD5", QVariant::fromValue<QString>(m_md5Hex));
+    settings.setValue("certSHA1", QVariant::fromValue<QString>(m_sha1Hex));
     settings.endGroup();
 
     emit settingsChanged();
+}
+
+void Settings::acceptCertificate(QString md5, QString sha1)
+{
+    m_md5Hex = md5;
+    m_sha1Hex = sha1;
+    emit customCertChanged();
+}
+
+void Settings::acceptCertificate(bool value)
+{
+    acceptCertificate("", "");
 }
 
 QString Settings::hostname()
@@ -120,4 +147,19 @@ QString Settings::password()
 void Settings::setPassword(QString value)
 {
     m_password = value;
+}
+
+QString Settings::md5Hex()
+{
+    return m_md5Hex;
+}
+
+QString Settings::sha1Hex()
+{
+    return m_sha1Hex;
+}
+
+bool Settings::isCustomCert()
+{
+    return !m_md5Hex.isEmpty() && !m_sha1Hex.isEmpty();
 }

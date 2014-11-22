@@ -5,7 +5,7 @@ import "pages"
 ApplicationWindow
 {
     id: applicationWindow
-    initialPage: Component { Login { } }
+    initialPage: Component { Login { id: loginPage } }
     cover: Qt.resolvedUrl("cover/CoverPage.qml")
 }
 

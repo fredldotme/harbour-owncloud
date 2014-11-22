@@ -9,6 +9,29 @@ Page {
         settings.readSettings();
     }
 
+    Connections {
+        target: browser
+        onSslCertifcateError: {
+            pageStack.completeAnimation();
+            pageStack.push("SSLErrorDialog.qml", {md5Digest : md5Digest, sha1Digest : sha1Digest});
+        }
+    }
+
+    Connections {
+        target: browser
+        onLoginFailed: {
+
+        }
+    }
+
+    Connections {
+        target: browser
+        onLoginSucceeded: {
+            pageStack.replace("FileBrowser.qml");
+            browser.getDirectoryContent("/");
+        }
+    }
+
     Label {
         id: topLabel
         text: "ownCloud"
@@ -22,6 +45,7 @@ Page {
         id: hostaddress
         width: parent.width
         anchors.top: topLabel.bottom
+        anchors.topMargin: 20
         placeholderText: "Host address"
         text: settings.hoststring;
     }
@@ -43,10 +67,18 @@ Page {
         placeholderText: "Password"
     }
 
+    TextSwitch {
+        id: certSwitch
+        anchors.top: password.bottom
+        text: "Accept certificate"
+        visible: settings.isCustomCert
+        checked: settings.isCustomCert
+    }
+
     Button {
         id: continueButton
         text: "Continue"
-        anchors.top: password.bottom
+        anchors.top: certSwitch.bottom
         anchors.topMargin: 30
         width: parent.width
         anchors.horizontalCenter: pageRoot
@@ -58,10 +90,8 @@ Page {
             settings.password = password.text;
             settings.writeSettings();
 
-            var nextDirectory = Qt.createComponent("FileBrowser.qml");
             browser.getDirectoryContent("/");
-            //pageStack.clear()
-            pageStack.replace(nextDirectory)
+
         }
     }
 }

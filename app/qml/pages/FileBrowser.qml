@@ -33,7 +33,9 @@ Page {
 
             Image {
                 id: icon
-                source: "../images/large-folder.png"
+                source: listView.model[index].isDirectory ?
+                            "../images/large-folder.png" :
+                            "../images/large-file.png"
                 height: label.height
                 width: height
             }

@@ -34,3 +34,13 @@ void EntryInfo::setSize(qint64 value)
 {
     m_size = value;
 }
+
+void EntryInfo::setMimeType(QString value)
+{
+    m_mime = value;
+}
+
+QString EntryInfo::mimeType()
+{
+    return m_mime;
+}

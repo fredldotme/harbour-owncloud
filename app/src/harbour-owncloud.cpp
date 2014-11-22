@@ -21,14 +21,11 @@ int main(int argc, char *argv[])
     QGuiApplication *app = SailfishApp::application(argc, argv);
     QQuickView *view = SailfishApp::createView();
 
-    view->setSource(SailfishApp::pathTo("qml/harbour-owncloud.qml"));
 
     view->rootContext()->setContextProperty("browser", browser);
     view->rootContext()->setContextProperty("settings", settings);
-
+    view->setSource(SailfishApp::pathTo("qml/harbour-owncloud.qml"));
     view->showFullScreen();
-
-    //browser->getDirectoryContent("/");
 
     return app->exec();
 }

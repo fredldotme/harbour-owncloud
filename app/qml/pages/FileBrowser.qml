@@ -22,6 +22,24 @@ Page {
         }
     }
 
+    Connections {
+        target: browser
+        onSslCertifcateError: {
+            var sslErrorPage = Qt.createComponent("SSLErrorDialog.qml")
+            var pageObj = sslErrorPage.createObject(applicationActive);
+            pageObj.md5Digest = md5Digest;
+            pageObj.sha1Digest = sha1Digest;
+            pageStack.completeAnimation();
+            pageStack.push(pageObj)
+        }
+    }
+
+    /*BusyIndicator {
+            anchors.centerIn: parent
+            running: model.status == Model.Loading
+        }
+    */
+
     SilicaListView {
         id: listView
         anchors.fill: parent

@@ -10,6 +10,7 @@ OwnCloudBrowser::OwnCloudBrowser(QObject *parent, Settings *settings) :
     connect(&parser, SIGNAL(finished()), this, SLOT(printList()));
     connect(&parser, SIGNAL(errorChanged(QString)), this, SLOT(printError(QString)));
     connect(&webdav, SIGNAL(errorChanged(QString)), this, SLOT(printError(QString)));
+    connect(&webdav, SIGNAL(checkSslCertifcate(const QList<QSslError>&)), this, SLOT(proxyHandleSslError(const QList<QSslError>&)));
 }
 
 void OwnCloudBrowser::reloadSettings() {
@@ -21,6 +22,11 @@ void OwnCloudBrowser::reloadSettings() {
                                  settings->port());
 }
 
+void OwnCloudBrowser::proxyHandleSslError(const QList<QSslError>& errors)
+{
+    QSslCertificate cert = errors[0].certificate();
+    emit sslCertifcateError(cert.digest(QCryptographicHash::Md5), cert.digest(QCryptographicHash::Sha1));
+}
 
 void OwnCloudBrowser::printList()
 {

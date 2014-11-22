@@ -27,14 +27,15 @@ private:
     QWebdavDirParser parser;
     QString currentPath;
 
-
 signals:
     void directoryContentChanged(QString currentPath, QVariantList entries);
-    
+    void sslCertifcateError(QString md5Digest, QString sha1Digest);
+
 public slots:
     void printList();
     void printError(QString errorMsg);
     void reloadSettings();
+    void proxyHandleSslError(const QList<QSslError> &errors);
 
 public:
     void start();

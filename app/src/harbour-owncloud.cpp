@@ -15,15 +15,18 @@ int main(int argc, char *argv[])
     qmlRegisterType<OwnCloudBrowser>("OwnCloud", 1, 0, "OwnCloudBrowser");
     qmlRegisterType<Settings>("OwnCloud", 1, 0, "Settings");
 
-    Settings *settings = new Settings();
-    OwnCloudBrowser *browser = new OwnCloudBrowser(NULL, settings);
-
     QGuiApplication *app = SailfishApp::application(argc, argv);
+    app->setOrganizationName("harbour-owncloud");
+    app->setOrganizationDomain("harbour-owncloud");
+    app->setApplicationName("harbour-owncloud");
     QQuickView *view = SailfishApp::createView();
 
 
+    Settings *settings = new Settings();
+    OwnCloudBrowser *browser = new OwnCloudBrowser(NULL, settings);
     view->rootContext()->setContextProperty("browser", browser);
     view->rootContext()->setContextProperty("settings", settings);
+
     view->setSource(SailfishApp::pathTo("qml/harbour-owncloud.qml"));
     view->showFullScreen();
 

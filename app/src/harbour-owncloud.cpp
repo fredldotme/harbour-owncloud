@@ -4,16 +4,19 @@
 
 #include "owncloudbrowser.h"
 #include "entryinfo.h"
-
+#include "settings.h"
 
 Q_DECLARE_METATYPE(EntryInfo*)
+Q_DECLARE_METATYPE(OwnCloudBrowser*)
 
 int main(int argc, char *argv[])
 {
-    qmlRegisterType<EntryInfo>();
-    qmlRegisterType<OwnCloudBrowser>();
+    qmlRegisterType<EntryInfo>("OwnCloud", 1, 0, "EntryInfo");
+    qmlRegisterType<OwnCloudBrowser>("OwnCloud", 1, 0, "OwnCloudBrowser");
+    qmlRegisterType<Settings>("OwnCloud", 1, 0, "Settings");
 
-    OwnCloudBrowser *browser = new OwnCloudBrowser();
+    Settings *settings = new Settings();
+    OwnCloudBrowser *browser = new OwnCloudBrowser(NULL, settings);
 
     QGuiApplication *app = SailfishApp::application(argc, argv);
     QQuickView *view = SailfishApp::createView();
@@ -21,9 +24,11 @@ int main(int argc, char *argv[])
     view->setSource(SailfishApp::pathTo("qml/harbour-owncloud.qml"));
 
     view->rootContext()->setContextProperty("browser", browser);
+    view->rootContext()->setContextProperty("settings", settings);
+
     view->showFullScreen();
 
-    browser->getDirectoryContent("/");
+    //browser->getDirectoryContent("/");
 
     return app->exec();
 }

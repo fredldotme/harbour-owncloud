@@ -9,21 +9,24 @@
 #include <QVariant>
 
 #include "entryinfo.h"
+#include "settings.h"
 
 class OwnCloudBrowser : public QObject
 {
     Q_OBJECT
 
 public:
-    OwnCloudBrowser(QObject* parent = 0);
+    OwnCloudBrowser(QObject* parent = 0, Settings* settings = 0);
 
     Q_INVOKABLE QString getCurrentPath();
     Q_INVOKABLE void getDirectoryContent(QString path);
 
 private:
+    Settings *settings;
     QWebdav webdav;
     QWebdavDirParser parser;
     QString currentPath;
+
 
 signals:
     void directoryContentChanged(QString currentPath, QVariantList entries);
@@ -31,6 +34,7 @@ signals:
 public slots:
     void printList();
     void printError(QString errorMsg);
+    void reloadSettings();
 
 public:
     void start();

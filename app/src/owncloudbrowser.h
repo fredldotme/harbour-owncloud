@@ -27,6 +27,8 @@ private:
     QWebdavDirParser parser;
     QString currentPath;
 
+    bool ignoreFail;
+
 signals:
     void directoryContentChanged(QString currentPath, QVariantList entries);
     void sslCertifcateError(QString md5Digest, QString sha1Digest);
@@ -34,7 +36,7 @@ signals:
     void loginSucceeded();
 
 public slots:
-    void printList();
+    void handleResponse();
     void printError(QString errorMsg);
     void reloadSettings();
     void proxyHandleSslError(const QList<QSslError> &errors);

@@ -53,7 +53,6 @@ bool Settings::readSettings()
     if(settings.allKeys().contains("username"))
     {
         m_username = settings.value("username").toString();
-        settings.endGroup();
     } else {
         settings.endGroup();
         return false;
@@ -74,6 +73,7 @@ bool Settings::readSettings()
         return false;
     }
 
+    emit settingsChanged();
     return true;
 }
 

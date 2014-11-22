@@ -8,6 +8,7 @@ Dialog {
     property string sha1Digest;
 
     DialogHeader {
+        id: header
         acceptText: "Accept"
         cancelText: "Reject"
     }
@@ -16,23 +17,25 @@ Dialog {
         Label {
             id: hintLabel
             text: "Do you want to accept this certificate?"
+            anchors.top: header.bottom
         }
 
         Label {
             id: md5Label
             text: md5Digest
-            anchors.top: hintLabel
+            anchors.top: hintLabel.bottom
         }
 
         Label {
             id: sha1Label
             text: sha1Digest
-            anchors.top: md5Label
+            anchors.top: md5Label.bottom
         }
     }
 
     onAccepted: {
         console.log("DERE")
         settings.acceptCertificate(md5Digest, sha1Digest);
+        browser.getDirectoryContent("/");
     }
 }

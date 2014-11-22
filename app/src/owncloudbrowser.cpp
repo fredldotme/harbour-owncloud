@@ -4,14 +4,15 @@ OwnCloudBrowser::OwnCloudBrowser(QObject *parent, Settings *settings) :
     QObject(parent)
 {
     this->settings = settings;
+    this->ignoreFail = true;
 
     // Need to decide on how to securely save password
     connect(settings, SIGNAL(settingsChanged()), this, SLOT(reloadSettings()));
-    connect(&parser, SIGNAL(finished()), this, SLOT(printList()));
+    connect(&parser, SIGNAL(finished()), this, SLOT(handleResponse()));
     connect(&parser, SIGNAL(errorChanged(QString)), this, SLOT(printError(QString)));
     connect(&webdav, SIGNAL(errorChanged(QString)), this, SLOT(printError(QString)));
     connect(&webdav, SIGNAL(checkSslCertifcate(const QList<QSslError>&)), this, SLOT(proxyHandleSslError(const QList<QSslError>&)));
-    connect(&webdav, SIGNAL(authenticationRequired(QNetworkReply*,QAuthenticator*)), this, SLOT(proxyHandleLoginFailed());
+    connect(&webdav, SIGNAL(authenticationRequired(QNetworkReply*,QAuthenticator*)), this, SLOT(proxyHandleLoginFailed()));
 }
 
 void OwnCloudBrowser::reloadSettings() {
@@ -32,8 +33,9 @@ void OwnCloudBrowser::proxyHandleSslError(const QList<QSslError>& errors)
                             webdav.digestToHex(cert.digest(QCryptographicHash::Sha1)));
 }
 
-void OwnCloudBrowser::printList()
+void OwnCloudBrowser::handleResponse()
 {
+    emit loginSucceeded();
     QList<QWebdavItem> list = parser.getList();
     QVariantList entries;
 
@@ -71,5 +73,10 @@ void OwnCloudBrowser::getDirectoryContent(QString path)
 
 void OwnCloudBrowser::proxyHandleLoginFailed()
 {
-    emit loginFailed();
+    if(ignoreFail) {
+        ignoreFail = false;
+        getDirectoryContent("/");
+    } else {
+        emit loginFailed();
+    }
 }

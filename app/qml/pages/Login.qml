@@ -9,27 +9,8 @@ Page {
         settings.readSettings();
     }
 
-    Connections {
-        target: browser
-        onSslCertifcateError: {
-            pageStack.completeAnimation();
-            pageStack.push("SSLErrorDialog.qml", {md5Digest : md5Digest, sha1Digest : sha1Digest});
-        }
-    }
-
-    Connections {
-        target: browser
-        onLoginFailed: {
-
-        }
-    }
-
-    Connections {
-        target: browser
-        onLoginSucceeded: {
-            pageStack.replace("FileBrowser.qml");
-            browser.getDirectoryContent("/");
-        }
+    RemorseItem {
+        id: remorse
     }
 
     Label {
@@ -91,7 +72,7 @@ Page {
             settings.writeSettings();
 
             browser.getDirectoryContent("/");
-
+            pageStack.replace("FileBrowser.qml");
         }
     }
 }

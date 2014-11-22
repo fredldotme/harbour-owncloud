@@ -17,11 +17,13 @@ QT += xml
 
 SOURCES += src/harbour-owncloud.cpp \
     src/owncloudbrowser.cpp \
-    src/entryinfo.cpp
+    src/entryinfo.cpp \
+    src/settings.cpp
 
 HEADERS += \
     src/owncloudbrowser.h \
-    src/entryinfo.h
+    src/entryinfo.h \
+    src/settings.h
 
 OTHER_FILES += qml/harbour-owncloud.qml \
     qml/cover/CoverPage.qml \
@@ -30,7 +32,9 @@ OTHER_FILES += qml/harbour-owncloud.qml \
     rpm/harbour-owncloud.yaml \
     translations/*.ts \
     harbour-owncloud.desktop \
-    qml/pages/FileBrowser.qml
+    qml/pages/FileBrowser.qml \
+    qml/pages/FileDetails.qml \
+    qml/pages/Login.qml
 
 # to disable building translations every time, comment out the
 # following CONFIG line
@@ -47,3 +51,5 @@ INSTALLS += qwebdavlib
 
 INCLUDEPATH += $$PWD/../qwebdavlib/qwebdavlib
 DEPENDPATH += $$PWD/../qwebdavlib/qwebdavlib
+
+DEFINES += QWEBDAVITEM_EXTENDED_PROPERTIES

@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import OwnCloud 1.0
 
 
 Page {
@@ -30,17 +31,34 @@ Page {
         delegate: BackgroundItem {
             id: delegate
 
+            Image {
+                id: icon
+                source: "../images/large-folder.png"
+                height: label.height
+                width: height
+            }
+
             Label {
-                x: Theme.paddingLarge
+                id: label
+                x: icon.x + icon.width
+                y: icon.y - icon.height
                 text: listView.model[index].name
                 anchors.verticalCenter: parent.verticalCenter
                 color: delegate.highlighted ? Theme.highlightColor : Theme.primaryColor
             }
 
             onClicked: {
-                var nextPage = Qt.createComponent("FileBrowser.qml");
-                browser.getDirectoryContent(remotePath + listView.model[index].name + "/");
-                pageStack.push(nextPage)
+                if(listView.model[index].isDirectory) {
+                    var nextDirectory = Qt.createComponent("FileBrowser.qml");
+                    browser.getDirectoryContent(remotePath + listView.model[index].name + "/");
+                    pageStack.push(nextDirectory)
+                } else {
+                    var fileComponent = Qt.createComponent("FileDetails.qml");
+                    var fileDetails = fileComponent.createObject(pageRoot);
+                    fileDetails.filePath = remotePath;
+                    fileDetails.entry = listView.model[index];
+                    pageStack.push(fileDetails);
+                }
             }
         }
         VerticalScrollDecorator {}

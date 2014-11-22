@@ -20,7 +20,8 @@ public:
     Q_PROPERTY(int port READ port)
     Q_PROPERTY(bool isHttps READ isHttps)
 
-    Q_PROPERTY(QString username READ username WRITE setUsername(QString))
+    Q_PROPERTY(QString hoststring READ hoststring NOTIFY hoststringChanged())
+    Q_PROPERTY(QString username READ username WRITE setUsername(QString) NOTIFY usernameChanged())
     Q_PROPERTY(QString password READ password WRITE setPassword(QString))
 
     QString hostname();
@@ -28,6 +29,7 @@ public:
     int port();
     bool isHttps();
 
+    QString hoststring();
     QString username();
     QString password();
 
@@ -39,6 +41,7 @@ private:
     int m_port;
     bool m_isHttps;
 
+    QString m_hoststring;
     QString m_username;
     QString m_password;
 
@@ -48,6 +51,8 @@ private:
 
 signals:
     void settingsChanged();
+    void usernameChanged();
+    void hoststringChanged();
 
 public slots:
 

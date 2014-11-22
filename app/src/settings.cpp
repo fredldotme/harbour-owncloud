@@ -3,6 +3,7 @@
 Settings::Settings(QObject *parent) :
     QObject(parent)
 {
+    m_hoststring = "https://";
 }
 
 bool Settings::parseFromAddressString(QString value)
@@ -32,7 +33,7 @@ bool Settings::parseFromAddressString(QString value)
 
 bool Settings::readSettings()
 {
-    settings.beginGroup("Host");
+    settings.beginGroup("Settings");
     if(settings.allKeys().contains("hostname") &&
             settings.allKeys().contains("path") &&
             settings.allKeys().contains("port") &&
@@ -42,13 +43,14 @@ bool Settings::readSettings()
         m_path = settings.value("path").toString();
         m_port = settings.value("port").toInt();
         m_isHttps = settings.value("isHttps").toBool();
-        settings.endGroup();
     } else {
         settings.endGroup();
         return false;
     }
+    m_hoststring = m_isHttps ? "https://" : "http://";
+    m_hoststring += m_hostname + ":" + QString::number(m_port) + "/" + m_path;
+    emit hoststringChanged();
 
-    settings.beginGroup("User");
     if(settings.allKeys().contains("username"))
     {
         m_username = settings.value("username").toString();
@@ -57,20 +59,18 @@ bool Settings::readSettings()
         settings.endGroup();
         return false;
     }
+    emit usernameChanged();
 
     return true;
 }
 
 void Settings::writeSettings()
 {
-    settings.beginGroup("Host");
+    settings.beginGroup("Settings");
     settings.setValue("hostname", QVariant::fromValue<QString>(m_hostname));
     settings.setValue("path", QVariant::fromValue<QString>(m_path));
     settings.setValue("port", QVariant::fromValue<int>(m_port));
     settings.setValue("isHttps", QVariant::fromValue<bool>(m_isHttps));
-    settings.endGroup();
-
-    settings.beginGroup("User");
     settings.setValue("username", QVariant::fromValue<QString>(m_username));
     settings.endGroup();
 
@@ -95,6 +95,11 @@ int Settings::port()
 bool Settings::isHttps()
 {
     return m_isHttps;
+}
+
+QString Settings::hoststring()
+{
+    return m_hoststring;
 }
 
 QString Settings::username()

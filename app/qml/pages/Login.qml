@@ -4,7 +4,10 @@ import Sailfish.Silica 1.0
 
 Page {
     id: pageRoot
-    anchors.fill: parent
+
+    Component.onCompleted: {
+        settings.readSettings();
+    }
 
     Label {
         id: topLabel
@@ -20,7 +23,7 @@ Page {
         width: parent.width
         anchors.top: topLabel.bottom
         placeholderText: "Host address"
-        text: "https://"
+        text: settings.hoststring;
     }
 
     TextField {
@@ -28,7 +31,7 @@ Page {
         width: parent.width
         anchors.top: hostaddress.bottom
         anchors.topMargin: 30
-        text: settings.username != "" ? settings.username : "";
+        text: settings.username;
         placeholderText: "User name"
     }
 
@@ -57,7 +60,8 @@ Page {
 
             var nextDirectory = Qt.createComponent("FileBrowser.qml");
             browser.getDirectoryContent("/");
-            pageStack.push(nextDirectory)
+            //pageStack.clear()
+            pageStack.replace(nextDirectory)
         }
     }
 }

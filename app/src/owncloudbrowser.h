@@ -20,6 +20,7 @@ public:
 
     Q_INVOKABLE QString getCurrentPath();
     Q_INVOKABLE void getDirectoryContent(QString path);
+    Q_INVOKABLE void download(QString path);
 
 private:
     Settings *settings;

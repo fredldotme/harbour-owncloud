@@ -12,7 +12,7 @@ OwnCloudBrowser::OwnCloudBrowser(QObject *parent, Settings *settings) :
     connect(&parser, SIGNAL(errorChanged(QString)), this, SLOT(printError(QString)));
     connect(&webdav, SIGNAL(errorChanged(QString)), this, SLOT(printError(QString)));
     connect(&webdav, SIGNAL(checkSslCertifcate(const QList<QSslError>&)), this, SLOT(proxyHandleSslError(const QList<QSslError>&)));
-    connect(&webdav, SIGNAL(authenticationRequired(QNetworkReply*,QAuthenticator*)), this, SLOT(proxyHandleLoginFailed()));
+    //connect(&webdav, SIGNAL(authenticationRequired(QNetworkReply*,QAuthenticator*)), this, SLOT(proxyHandleLoginFailed()));
 }
 
 void OwnCloudBrowser::reloadSettings() {
@@ -52,6 +52,7 @@ void OwnCloudBrowser::handleResponse()
         tmpVariant.setValue(entry);
         entries.append(tmpVariant);
     }
+
     emit directoryContentChanged(currentPath, entries);
 }
 
@@ -65,6 +66,11 @@ QString OwnCloudBrowser::getCurrentPath()
     return currentPath;
 }
 
+void OwnCloudBrowser::download(QString path)
+{
+
+}
+
 void OwnCloudBrowser::getDirectoryContent(QString path)
 {
     currentPath = path;
@@ -73,10 +79,10 @@ void OwnCloudBrowser::getDirectoryContent(QString path)
 
 void OwnCloudBrowser::proxyHandleLoginFailed()
 {
-    if(ignoreFail) {
+    /*if(ignoreFail) {
         ignoreFail = false;
         getDirectoryContent("/");
     } else {
         emit loginFailed();
-    }
+    }*/
 }

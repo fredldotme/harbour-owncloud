@@ -15,8 +15,6 @@ Page {
         target: browser
         onDirectoryContentChanged: {
             if(currentPath == remotePath) {
-                console.log(entries);
-                console.log(entries.length);
                 listView.model = entries;
             }
         }
@@ -42,14 +40,18 @@ Page {
                 source: listView.model[index].isDirectory ?
                             "../images/large-folder.png" :
                             "../images/large-file.png"
+                anchors.left: parent.left
+                anchors.leftMargin: Theme.paddingLarge
+                anchors.top: parent.top
+                anchors.topMargin: 18
                 height: label.height
-                width: height
+                fillMode: Image.PreserveAspectFit
             }
 
             Label {
                 id: label
                 x: icon.x + icon.width
-                y: icon.y - icon.height
+                y: icon.y - icon.height + 6
                 text: listView.model[index].name
                 anchors.verticalCenter: parent.verticalCenter
                 color: delegate.highlighted ? Theme.highlightColor : Theme.primaryColor

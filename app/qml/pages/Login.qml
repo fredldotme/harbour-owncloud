@@ -18,7 +18,7 @@ Page {
         text: "ownCloud"
         font.pixelSize: Theme.fontSizeLarge
         x: (parent.width / 2) - (width / 2)
-        anchors.horizontalCenter: pageRoot
+        anchors.horizontalCenter: pageRoot.horizontalCenter
         anchors.topMargin: 20
     }
 
@@ -37,6 +37,7 @@ Page {
         anchors.top: hostaddress.bottom
         anchors.topMargin: 30
         text: settings.username;
+        inputMethodHints: Qt.ImhNoAutoUppercase
         placeholderText: "User name"
     }
 
@@ -62,7 +63,7 @@ Page {
         anchors.top: certSwitch.bottom
         anchors.topMargin: 30
         width: parent.width
-        anchors.horizontalCenter: pageRoot
+        anchors.horizontalCenter: pageRoot.horizontalCenter
 
         onClicked: {
             settings.parseFromAddressString(hostaddress.text)

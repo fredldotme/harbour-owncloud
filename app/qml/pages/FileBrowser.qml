@@ -72,6 +72,11 @@ Page {
             }
         }
         VerticalScrollDecorator {}
+
+        BusyIndicator {
+            anchors.centerIn: parent
+            running: listView.model === undefined
+        }
     }
 }
 

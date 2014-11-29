@@ -7,15 +7,14 @@ Page {
     property string filePath : ""
     property EntryInfo entry;
 
-        PageHeader {
-            title: entry.name
-        }
+    PageHeader {
+        title: entry.name
+    }
 
-        Item {
-            anchors.centerIn: pageRoot
-            Label {
-                text: "MIME type: " + entry.mimeType
-            }
+    Item {
+        anchors.centerIn: pageRoot
+        Label {
+            text: "MIME type: " + entry.mimeType
         }
-
+    }
 }

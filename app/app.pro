@@ -18,12 +18,16 @@ QT += xml
 SOURCES += src/harbour-owncloud.cpp \
     src/owncloudbrowser.cpp \
     src/entryinfo.cpp \
-    src/settings.cpp
+    src/settings.cpp \
+    src/downloadmanager.cpp \
+    src/downloadentry.cpp
 
 HEADERS += \
     src/owncloudbrowser.h \
     src/entryinfo.h \
-    src/settings.h
+    src/settings.h \
+    src/downloadmanager.h \
+    src/downloadentry.h
 
 OTHER_FILES += qml/harbour-owncloud.qml \
     qml/cover/CoverPage.qml \

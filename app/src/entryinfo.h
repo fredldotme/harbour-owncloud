@@ -7,8 +7,8 @@ class EntryInfo : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString name READ name)
-    Q_PROPERTY(bool isDirectory READ isDirectory)
+    Q_PROPERTY(QString name READ name NOTIFY nameChanged())
+    Q_PROPERTY(bool isDirectory READ isDirectory NOTIFY isDirectoryChanged())
     Q_PROPERTY(qint64 size READ size)
     Q_PROPERTY(QString mimeType READ mimeType)
 
@@ -33,6 +33,8 @@ private:
 
 
 signals:
+    void nameChanged();
+    void isDirectoryChanged();
 
 public slots:
 

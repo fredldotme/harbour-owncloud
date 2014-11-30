@@ -109,7 +109,8 @@ void Settings::acceptCertificate(QString md5, QString sha1)
 
 void Settings::acceptCertificate(bool value)
 {
-    acceptCertificate("", "");
+    if(!value)
+        acceptCertificate("", "");
 }
 
 bool Settings::isAutoLogin()

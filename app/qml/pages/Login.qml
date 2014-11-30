@@ -4,6 +4,7 @@ import Sailfish.Silica 1.0
 
 Page {
     id: pageRoot
+    anchors.fill: parent
 
     property bool loginFailed : false;
     property bool loginInProgress : false;
@@ -25,93 +26,100 @@ Page {
         }
     }
 
-    Label {
-        id: topLabel
-        text: "ownCloud"
-        font.pixelSize: Theme.fontSizeLarge
-        enabled: !loginInProgress
-        x: (parent.width / 2) - (width / 2)
-        anchors.horizontalCenter: pageRoot.horizontalCenter
-        anchors.top: parent.top
-        anchors.topMargin: 20
-    }
+    SilicaListView {
+        anchors.fill: parent
 
-    NotificationPopup {
-        visible: loginFailed
-        height: topLabel.height + 20
-    }
+        Label {
+            id: topLabel
+            text: "ownCloud"
+            font.pixelSize: Theme.fontSizeLarge
+            enabled: !loginInProgress
+            x: (parent.width / 2) - (width / 2)
+            anchors.horizontalCenter: pageRoot.horizontalCenter
+            anchors.top: parent.top
+            anchors.topMargin: 20
+        }
 
-    TextField {
-        id: hostaddress
-        enabled: !loginInProgress
-        width: parent.width
-        anchors.top: topLabel.bottom
-        anchors.topMargin: 20
-        placeholderText: "Host address"
-        text: settings.hoststring;
-    }
+        NotificationPopup {
+            visible: loginFailed
+            height: topLabel.height + 20
+        }
 
-    TextField {
-        id: username
-        enabled: !loginInProgress
-        width: parent.width
-        anchors.top: hostaddress.bottom
-        anchors.topMargin: 30
-        text: settings.username;
-        inputMethodHints: Qt.ImhNoAutoUppercase
-        placeholderText: "User name"
-    }
+        TextField {
+            id: hostaddress
+            enabled: !loginInProgress
+            width: parent.width
+            anchors.top: topLabel.bottom
+            anchors.topMargin: 20
+            placeholderText: "Host address"
+            text: settings.hoststring;
+        }
 
-    TextField {
-        id: password
-        enabled: !loginInProgress
-        text: settings.password
-        width: parent.width
-        anchors.top: username.bottom
-        echoMode: TextInput.Password
-        placeholderText: "Password"
-    }
+        TextField {
+            id: username
+            enabled: !loginInProgress
+            width: parent.width
+            anchors.top: hostaddress.bottom
+            anchors.topMargin: 30
+            text: settings.username;
+            inputMethodHints: Qt.ImhNoAutoUppercase
+            placeholderText: "User name"
+        }
 
-    TextSwitch {
-        id: autoLoginSwitch
-        enabled: !loginInProgress
-        anchors.top: password.bottom
-        text: "Login automatically"
-        checked: settings.autoLogin
-    }
+        TextField {
+            id: password
+            enabled: !loginInProgress
+            text: settings.password
+            width: parent.width
+            anchors.top: username.bottom
+            echoMode: TextInput.Password
+            placeholderText: "Password"
+        }
 
-    TextSwitch {
-        id: certSwitch
-        enabled: !loginInProgress
-        anchors.top: autoLoginSwitch.bottom
-        text: "Accept certificate"
-        visible: settings.isCustomCert
-        checked: settings.isCustomCert
-    }
+        TextSwitch {
+            id: autoLoginSwitch
+            enabled: !loginInProgress
+            anchors.top: password.bottom
+            text: "Login automatically"
+            checked: settings.autoLogin
+        }
 
-    Button {
-        id: continueButton
-        enabled: !loginInProgress
-        text: "Continue"
-        anchors.top: certSwitch.bottom
-        anchors.topMargin: 30
-        anchors.horizontalCenter: pageRoot.horizontalCenter
+        TextSwitch {
+            id: certSwitch
+            enabled: !loginInProgress
+            anchors.top: autoLoginSwitch.bottom
+            text: "Accept certificate"
+            visible: settings.isCustomCert
+            checked: settings.isCustomCert
+        }
 
-        onClicked: {
-            settings.parseFromAddressString(hostaddress.text)
+        Button {
+            id: continueButton
+            enabled: !loginInProgress
+            text: "Continue"
+            anchors.top: certSwitch.bottom
+            anchors.topMargin: 30
+            anchors.horizontalCenter: parent.horizontalCenter
 
-            settings.username = username.text;
-            settings.password = password.text;
-            settings.autoLogin = autoLoginSwitch.checked;
-            settings.writeSettings();
+            onClicked: {
+                settings.parseFromAddressString(hostaddress.text)
 
-            loginInProgress = true;
-            browser.testConnection();
+                settings.username = username.text;
+                settings.password = password.text;
+                settings.autoLogin = autoLoginSwitch.checked;
+                settings.isCustomCert = certSwitch.checked;
+                settings.writeSettings();
+
+                loginInProgress = true;
+                browser.testConnection();
+            }
+        }
+
+        BusyIndicator {
+            anchors.centerIn: parent
+            running: loginInProgress
         }
     }
 
-    BusyIndicator {
-        anchors.centerIn: parent
-        running: loginInProgress
-    }
+
 }

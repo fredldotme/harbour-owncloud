@@ -7,37 +7,51 @@ Dialog {
     property string md5Digest;
     property string sha1Digest;
 
-    DialogHeader {
-        id: header
-        acceptText: "Accept"
-        cancelText: "Reject"
-    }
-
     SilicaListView {
         anchors.fill: parent
+
+        DialogHeader {
+            id: header
+            acceptText: "Accept"
+            cancelText: "Reject"
+        }
+
         Label {
             id: hintLabel
             text: "Do you want to accept this certificate?"
             anchors.top: header.bottom
             anchors.topMargin: 32
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
+
+        Label {
+            id: md5Hint
+            anchors.top: hintLabel.bottom
+            anchors.topMargin: 32
+            text: "MD5 fingerprint:"
         }
 
         Label {
             id: md5Label
             text: md5Digest
-            anchors.top: hintLabel.bottom
+            anchors.top: md5Hint.bottom
+        }
+
+        Label {
+            id: sha1Hint
+            anchors.top: md5Label.bottom
+            anchors.topMargin: 20
+            text: "SHA1 fingerprint:"
         }
 
         Label {
             id: sha1Label
             text: sha1Digest
-            anchors.top: md5Label.bottom
+            anchors.top: sha1Hint.bottom
         }
     }
 
     onAccepted: {
-        console.log("DERE")
         settings.acceptCertificate(md5Digest, sha1Digest);
-        browser.getDirectoryContent("/");
     }
 }

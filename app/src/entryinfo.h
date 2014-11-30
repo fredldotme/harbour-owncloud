@@ -8,6 +8,7 @@ class EntryInfo : public QObject
     Q_OBJECT
 
     Q_PROPERTY(QString name READ name NOTIFY nameChanged())
+    Q_PROPERTY(QString path READ path)
     Q_PROPERTY(bool isDirectory READ isDirectory NOTIFY isDirectoryChanged())
     Q_PROPERTY(qint64 size READ size)
     Q_PROPERTY(QString mimeType READ mimeType)

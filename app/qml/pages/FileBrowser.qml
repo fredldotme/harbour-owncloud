@@ -72,7 +72,6 @@ Page {
                     } else {
                         var fileComponent = Qt.createComponent("FileDetails.qml");
                         var fileDetails = fileComponent.createObject(pageRoot);
-                        fileDetails.filePath = remotePath;
                         fileDetails.entry = listView.model[index];
                         pageStack.push(fileDetails);
                     }

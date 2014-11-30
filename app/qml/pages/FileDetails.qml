@@ -4,7 +4,6 @@ import OwnCloud 1.0
 
 Page {
     id: pageRoot
-    property string filePath : ""
     property EntryInfo entry;
 
     SilicaFlickable {
@@ -26,8 +25,37 @@ Page {
             title: entry.name
         }
 
+        Image {
+            id: fileImage
+            source: "../images/large-file.png"
+            width: parent.width / 3
+            height: width
+            x: (parent.width / 2) - (width / 2)
+            y: width
+        }
+
+        Label {
+            id: remotePathLabel
+            text: "Remote path: " + entry.path
+            anchors.top: fileImage.bottom
+            anchors.topMargin: 32
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
+
+        Label {
+            id: sizeLabel
+            text: "Size: " + entry.size + " bytes"
+            anchors.top: remotePathLabel.bottom
+            anchors.topMargin: 6
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
+
         Label {
             text: "MIME type: " + entry.mimeType
+            visible: entry.mimeType != ""
+            anchors.top: sizeLabel.bottom
+            anchors.topMargin: 6
+            anchors.horizontalCenter: parent.horizontalCenter
         }
     }
 }

@@ -4,10 +4,11 @@ import "pages"
 
 ApplicationWindow
 {
+    property bool loginInProgress : false;
+
     id: applicationWindow
     initialPage: Component { Login { id: loginPage } }
     cover: Qt.resolvedUrl("cover/CoverPage.qml")
-
 
     Connections {
         target: browser
@@ -22,7 +23,6 @@ ApplicationWindow
     Connections {
         target: browser
         onLoginFailed: {
-            console.log("Login FAILED!")
             pageStack.completeAnimation();
             pageStack.clear();
             var loginComponent = Qt.createComponent("pages/Login.qml");

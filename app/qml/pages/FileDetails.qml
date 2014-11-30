@@ -15,7 +15,17 @@ Page {
                 text: qsTr("Download")
                 enabled: downloader.isNotEnqueued(entry);
                 onClicked: {
-                    var download = downloader.enqueueDownload(entry)
+                    var download = downloader.enqueueDownload(entry, false)
+                    enabled = false;
+                }
+            }
+
+            MenuItem {
+                id: downloadAndOpen
+                text: qsTr("Download and open")
+                enabled: downloader.isNotEnqueued(entry);
+                onClicked: {
+                    var download = downloader.enqueueDownload(entry, true)
                     enabled = false;
                 }
             }

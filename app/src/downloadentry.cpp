@@ -1,6 +1,6 @@
 #include "downloadentry.h"
 
-DownloadEntry::DownloadEntry(QObject *parent, QWebdav *webdav, QString name, QString remotePath, QString localPath, qint64 size) :
+DownloadEntry::DownloadEntry(QObject *parent, QWebdav *webdav, QString name, QString remotePath, QString localPath, qint64 size, bool open) :
     QObject(parent)
 {
     this->webdav = webdav;
@@ -10,6 +10,8 @@ DownloadEntry::DownloadEntry(QObject *parent, QWebdav *webdav, QString name, QSt
     m_localPath = localPath;
     m_size = size;
     m_progress = 0.0;
+
+    m_open = open;
 }
 
 DownloadEntry::~DownloadEntry()
@@ -71,5 +73,8 @@ void DownloadEntry::cancelDownload()
 
 void DownloadEntry::handleReadComplete()
 {
+    if(m_open) {
+        ShellCommand::runCommand("xdg-open", QStringList(getLocalPath()));
+    }
     emit downloadCompleted();
 }

@@ -12,6 +12,16 @@ Page {
         settings.readSettings();
     }
 
+    Connections {
+        target: browser
+        onLoginSucceeded: {
+            loginInProgress = false;
+            pageStack.clear();
+            browser.getDirectoryContent("/");
+            pageStack.push("FileBrowser.qml");
+        }
+    }
+
     TextField {
         id: hostaddress
         width: parent.width
@@ -57,7 +67,7 @@ Page {
 
     Button {
         id: continueButton
-        text: "Continue"
+        text: "Save"
         anchors.top: certSwitch.bottom
         anchors.topMargin: 30
         width: parent.width

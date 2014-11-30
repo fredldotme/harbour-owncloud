@@ -6,15 +6,14 @@ DownloadManager::DownloadManager(QObject *parent, QWebdav *webdav) :
     this->webdav = webdav;
 }
 
-DownloadEntry* DownloadManager::enqueueDownload(EntryInfo* entry)
+DownloadEntry* DownloadManager::enqueueDownload(EntryInfo* entry, bool open)
 {
     downloadMutex.lock();
 
-    qDebug() << "Info: " << entry->size();
     QString name = entry->path().mid(entry->path().lastIndexOf("/") + 1);
     QString destination = destinationFromMIME(entry->mimeType()) + "/" + name;
 
-    DownloadEntry *newDownload = new DownloadEntry(this, webdav, name, entry->path(), destination, entry->size());
+    DownloadEntry *newDownload = new DownloadEntry(this, webdav, name, entry->path(), destination, entry->size(), open);
     connect(newDownload, SIGNAL(downloadCompleted()), this, SLOT(handleDownloadCompleted()), Qt::DirectConnection);
     if(downloadQueue.size() == 0) {
         newDownload->startDownload();

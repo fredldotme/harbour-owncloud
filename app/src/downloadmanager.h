@@ -16,7 +16,7 @@ class DownloadManager : public QObject
 public:
     DownloadManager(QObject *parent = 0, QWebdav *webdav = 0);
 
-    Q_INVOKABLE DownloadEntry* enqueueDownload(EntryInfo* entry);
+    Q_INVOKABLE DownloadEntry* enqueueDownload(EntryInfo* entry, bool open);
     Q_INVOKABLE bool isNotEnqueued(EntryInfo* entry);
 
 private:

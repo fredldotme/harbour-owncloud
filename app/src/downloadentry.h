@@ -5,6 +5,8 @@
 #include <QNetworkReply>
 #include <qwebdav.h>
 
+#include "shellcommand.h"
+
 class DownloadEntry : public QObject
 {
     Q_OBJECT
@@ -17,7 +19,7 @@ class DownloadEntry : public QObject
 public:
     DownloadEntry(QObject *parent = 0, QWebdav *webdav = 0,
                   QString name = "", QString remotePath = "",
-                  QString localPath = "", qint64 size = 0);
+                  QString localPath = "", qint64 size = 0, bool open = false);
 
     ~DownloadEntry();
 
@@ -37,6 +39,8 @@ private:
     QWebdav *webdav;
 
     QFile *localFile;
+
+    bool m_open;
 
     QString m_name;
     QString m_localPath;

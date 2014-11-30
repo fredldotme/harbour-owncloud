@@ -25,5 +25,9 @@
         <source>Download</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Download and open</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

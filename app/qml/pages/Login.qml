@@ -7,7 +7,6 @@ Page {
     anchors.fill: parent
 
     property bool loginFailed : false;
-    property bool loginInProgress : false;
 
     Component.onCompleted: {
         settings.readSettings();
@@ -23,6 +22,13 @@ Page {
             loginInProgress = false;
             browser.getDirectoryContent("/");
             pageStack.replace("FileBrowser.qml");
+        }
+    }
+
+    Connections {
+        target: browser
+        onLoginFailed: {
+            loginInProgress = false;
         }
     }
 

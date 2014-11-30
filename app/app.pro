@@ -20,14 +20,16 @@ SOURCES += src/harbour-owncloud.cpp \
     src/entryinfo.cpp \
     src/settings.cpp \
     src/downloadmanager.cpp \
-    src/downloadentry.cpp
+    src/downloadentry.cpp \
+    src/shellcommand.cpp
 
 HEADERS += \
     src/owncloudbrowser.h \
     src/entryinfo.h \
     src/settings.h \
     src/downloadmanager.h \
-    src/downloadentry.h
+    src/downloadentry.h \
+    src/shellcommand.h
 
 OTHER_FILES += qml/harbour-owncloud.qml \
     qml/cover/CoverPage.qml \

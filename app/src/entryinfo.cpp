@@ -5,6 +5,16 @@ EntryInfo::EntryInfo(QObject *parent) :
 {
 }
 
+QString EntryInfo::path()
+{
+    return m_path;
+}
+
+void EntryInfo::setPath(QString value)
+{
+    m_path = value;
+}
+
 QString EntryInfo::name()
 {
     return m_name;

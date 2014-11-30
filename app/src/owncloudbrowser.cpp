@@ -42,6 +42,7 @@ void OwnCloudBrowser::handleResponse()
     QWebdavItem item;
     foreach(item, list) {
         EntryInfo *entry = new EntryInfo();
+        entry->setPath(item.path());
         entry->setName(item.name());
         entry->setDirectory(item.isDir());
         entry->setSize(item.size());

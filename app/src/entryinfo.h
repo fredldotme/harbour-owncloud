@@ -15,17 +15,20 @@ class EntryInfo : public QObject
 public:
     EntryInfo(QObject *parent = 0);
 
+    void setPath(QString value);
     void setName(QString value);
     void setDirectory(bool value);
     void setSize(qint64 value);
     void setMimeType(QString value);
 
+    QString path();
     QString name();
     bool isDirectory();
     qint64 size();
     QString mimeType();
 
 private:
+    QString m_path;
     QString m_name;
     bool m_isDirectory;
     qint64 m_size;

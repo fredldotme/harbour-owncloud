@@ -1,5 +1,7 @@
 Investigate issues with reading MIME types
 
+File uploads
+
 Discuss and implement automatic camera photo uploading
 
 Add missing file/directory operations:
@@ -11,3 +13,5 @@ Add missing file/directory operations:
 Open files after download using xdg helper
 
 Relevant information about files and directories in respecive detail pages
+
+UI for Download Manager

@@ -34,6 +34,9 @@ Dialog {
         Label {
             id: md5Label
             text: md5Digest
+            font.pixelSize: Theme.fontSizeSmall
+            wrapMode: Text.WrapAnywhere
+            width: parent.width
             anchors.top: md5Hint.bottom
         }
 
@@ -47,6 +50,9 @@ Dialog {
         Label {
             id: sha1Label
             text: sha1Digest
+            font.pixelSize: Theme.fontSizeSmall
+            wrapMode: Text.WrapAnywhere
+            width: parent.width
             anchors.top: sha1Hint.bottom
         }
     }

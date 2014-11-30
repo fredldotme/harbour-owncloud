@@ -11,3 +11,5 @@ Add missing file/directory operations:
 Open files after download using xdg helper
 
 Relevant information about files and directories in respecive detail pages
+
+[CLAIMED beidl] Allow autologin

@@ -7,10 +7,11 @@ Page {
     anchors.fill: parent
 
     property bool loginFailed : false;
+    property bool settingsMode : false;
 
     Component.onCompleted: {
         settings.readSettings();
-        if(settings.autoLogin) {
+        if(settings.autoLogin && !settingsMode) {
             loginInProgress = true;
             browser.testConnection();
         }
@@ -21,6 +22,9 @@ Page {
         onLoginSucceeded: {
             loginInProgress = false;
             browser.getDirectoryContent("/");
+            if(settingsMode) {
+                pageStack.clear()
+            }
             pageStack.replace("FileBrowser.qml");
         }
     }
@@ -102,7 +106,7 @@ Page {
         Button {
             id: continueButton
             enabled: !loginInProgress
-            text: "Continue"
+            text: settingsMode ? "Save" : "Continue"
             anchors.top: certSwitch.bottom
             anchors.topMargin: 30
             anchors.horizontalCenter: parent.horizontalCenter

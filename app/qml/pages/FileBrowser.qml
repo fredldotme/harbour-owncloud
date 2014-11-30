@@ -27,7 +27,9 @@ Page {
             MenuItem {
                 text: qsTr("Settings")
                 onClicked: {
-                    pageStack.push("SettingsPage.qml")
+                    var settingsPage = Qt.createComponent("Login.qml")
+                    var settingsObject = settingsPage.createObject(pageRoot, {settingsMode : true})
+                    pageStack.push(settingsObject)
                 }
             }
 

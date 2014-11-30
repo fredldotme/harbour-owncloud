@@ -29,8 +29,11 @@ void DownloadManager::handleDownloadCompleted()
 {
     downloadMutex.lock();
 
-    if(!downloadQueue.isEmpty())
-        downloadQueue.dequeue();
+    if(!downloadQueue.isEmpty()) {
+        disconnect(downloadQueue.head(), SIGNAL(downloadCompleted()), this, SLOT(handleDownloadCompleted()));
+        DownloadEntry *entry = downloadQueue.dequeue();
+        delete entry;
+    }
 
     if(!downloadQueue.isEmpty() && downloadQueue.head())
         downloadQueue.head()->startDownload();

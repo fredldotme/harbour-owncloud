@@ -6,6 +6,7 @@
 Name:       harbour-owncloud
 
 # >> macros
+%define debug_package %{nil}
 %define __requires_exclude ^libqwebdav.*$
 # << macros
 

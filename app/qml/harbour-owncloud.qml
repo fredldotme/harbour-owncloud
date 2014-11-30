@@ -25,7 +25,9 @@ ApplicationWindow
             console.log("Login FAILED!")
             pageStack.completeAnimation();
             pageStack.clear();
-            pageStack.replace("pages/Login.qml")
+            var loginComponent = Qt.createComponent("pages/Login.qml");
+            var loginObject = loginComponent.createObject(applicationWindow, { loginFailed: true})
+            pageStack.replace(loginObject)
         }
     }
 }

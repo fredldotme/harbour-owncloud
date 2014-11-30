@@ -58,7 +58,6 @@ void OwnCloudBrowser::proxyHandleLoginFailed()
 
 void OwnCloudBrowser::handleResponse()
 {
-    //emit loginSucceeded();
     QList<QWebdavItem> list = parser.getList();
     QVariantList entries;
 

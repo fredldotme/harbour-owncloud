@@ -5,6 +5,9 @@ import Sailfish.Silica 1.0
 Page {
     id: pageRoot
 
+    property bool loginFailed : false;
+    property bool loginInProgress : false;
+
     Component.onCompleted: {
         settings.readSettings();
     }
@@ -12,13 +15,10 @@ Page {
     Connections {
         target: browser
         onLoginSucceeded: {
+            loginInProgress = false;
             browser.getDirectoryContent("/");
             pageStack.replace("FileBrowser.qml");
         }
-    }
-
-    RemorseItem {
-        id: remorse
     }
 
     Label {
@@ -27,7 +27,13 @@ Page {
         font.pixelSize: Theme.fontSizeLarge
         x: (parent.width / 2) - (width / 2)
         anchors.horizontalCenter: pageRoot.horizontalCenter
+        anchors.top: parent.top
         anchors.topMargin: 20
+    }
+
+    NotificationPopup {
+        visible: loginFailed
+        height: topLabel.height + 20
     }
 
     TextField {
@@ -81,7 +87,13 @@ Page {
             settings.password = password.text;
             settings.writeSettings();
 
+            loginInProgress = true;
             browser.testConnection();
         }
+    }
+
+    BusyIndicator {
+        anchors.centerIn: parent
+        running: loginInProgress
     }
 }

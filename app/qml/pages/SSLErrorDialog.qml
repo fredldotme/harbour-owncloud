@@ -14,10 +14,12 @@ Dialog {
     }
 
     SilicaListView {
+        anchors.fill: parent
         Label {
             id: hintLabel
             text: "Do you want to accept this certificate?"
             anchors.top: header.bottom
+            anchors.topMargin: 32
         }
 
         Label {

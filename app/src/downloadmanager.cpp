@@ -8,6 +8,8 @@ DownloadManager::DownloadManager(QObject *parent, QWebdav *webdav) :
 
 void DownloadManager::enqueueDownload(EntryInfo* entry)
 {
+    downloadMutex.lock();
+
     qDebug() << "Info: " << entry->size();
     QString name = entry->path().mid(entry->path().lastIndexOf("/") + 1);
     QString destination = destinationFromMIME(entry->mimeType()) + "/" + name;
@@ -18,14 +20,19 @@ void DownloadManager::enqueueDownload(EntryInfo* entry)
         newDownload->startDownload();
     }
     downloadQueue.enqueue(newDownload);
+
+    downloadMutex.unlock();
 }
 
 void DownloadManager::handleDownloadCompleted()
 {
+    downloadMutex.lock();
     downloadQueue.dequeue();
 
     if(downloadQueue.size() > 0)
         downloadQueue.head()->startDownload();
+
+    downloadMutex.unlock();
 }
 
 QString DownloadManager::destinationFromMIME(QString mime)

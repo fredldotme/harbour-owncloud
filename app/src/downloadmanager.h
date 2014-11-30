@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QQueue>
+#include <QMutex>
 #include <QStandardPaths>
 
 #include <qwebdav.h>
@@ -20,6 +21,7 @@ public:
 private:
     QWebdav *webdav;
     QQueue<DownloadEntry *> downloadQueue;
+    QMutex downloadMutex;
 
     QString destinationFromMIME(QString mime);
 

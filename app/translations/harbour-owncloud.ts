@@ -8,4 +8,11 @@
         <translation type="unfinished"></translation>
     </message>
 </context>
+<context>
+    <name>FileBrowser</name>
+    <message>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
 </TS>

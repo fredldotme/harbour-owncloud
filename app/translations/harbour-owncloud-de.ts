@@ -18,6 +18,10 @@
         <source>Item</source>
         <translation type="obsolete">Element</translation>
     </message>
+    <message>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FirstPage</name>

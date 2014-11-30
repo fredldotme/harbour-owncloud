@@ -10,8 +10,6 @@ Add missing file/directory operations:
     - delete
     - mkdir
 
-Open files after download using xdg helper
-
 Relevant information about files and directories in respecive detail pages
 
 UI for Download Manager

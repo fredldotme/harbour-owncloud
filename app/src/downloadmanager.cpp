@@ -15,7 +15,7 @@ DownloadEntry* DownloadManager::enqueueDownload(EntryInfo* entry)
     QString destination = destinationFromMIME(entry->mimeType()) + "/" + name;
 
     DownloadEntry *newDownload = new DownloadEntry(this, webdav, name, entry->path(), destination, entry->size());
-    connect(newDownload, SIGNAL(downloadCompleted()), this, SLOT(handleDownloadCompleted()));
+    connect(newDownload, SIGNAL(downloadCompleted()), this, SLOT(handleDownloadCompleted()), Qt::DirectConnection);
     if(downloadQueue.size() == 0) {
         newDownload->startDownload();
     }
@@ -29,9 +29,11 @@ DownloadEntry* DownloadManager::enqueueDownload(EntryInfo* entry)
 void DownloadManager::handleDownloadCompleted()
 {
     downloadMutex.lock();
-    downloadQueue.dequeue();
 
-    if(downloadQueue.size() > 0)
+    if(!downloadQueue.isEmpty())
+        downloadQueue.dequeue();
+
+    if(!downloadQueue.isEmpty() && downloadQueue.head())
         downloadQueue.head()->startDownload();
 
     downloadMutex.unlock();
@@ -39,11 +41,14 @@ void DownloadManager::handleDownloadCompleted()
 
 bool DownloadManager::isNotEnqueued(EntryInfo *entry)
 {
+    downloadMutex.lock();
     for(int i = 0; i < downloadQueue.size(); i++) {
         if(downloadQueue.at(i)->getRemotePath() == entry->path()) {
             return false;
         }
     }
+    downloadMutex.unlock();
+
     return true;
 }
 

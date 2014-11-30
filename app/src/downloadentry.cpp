@@ -14,6 +14,8 @@ DownloadEntry::DownloadEntry(QObject *parent, QWebdav *webdav, QString name, QSt
 
 DownloadEntry::~DownloadEntry()
 {
+    disconnect(webdav, SIGNAL(finished(QNetworkReply*)), this, SLOT(handleReadComplete()));
+
     if(localFile)
         delete localFile;
 }

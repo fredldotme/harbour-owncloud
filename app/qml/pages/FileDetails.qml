@@ -12,9 +12,12 @@ Page {
 
         PullDownMenu {
             MenuItem {
+                id: download
                 text: qsTr("Download")
+                enabled: downloader.isNotEnqueued(entry);
                 onClicked: {
-                    downloader.enqueueDownload(entry)
+                    var download = downloader.enqueueDownload(entry)
+                    enabled = false;
                 }
             }
         }

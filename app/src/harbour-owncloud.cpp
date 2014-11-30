@@ -18,6 +18,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<OwnCloudBrowser>("OwnCloud", 1, 0, "OwnCloudBrowser");
     qmlRegisterType<Settings>("OwnCloud", 1, 0, "Settings");
     qmlRegisterType<DownloadManager>("OwnCloud", 1, 0, "DownloadManager");
+    qmlRegisterType<DownloadEntry>("OwnCloud", 1, 0, "DownloadEntry");
 
     QGuiApplication *app = SailfishApp::application(argc, argv);
     app->setOrganizationName("harbour-owncloud");

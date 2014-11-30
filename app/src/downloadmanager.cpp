@@ -6,7 +6,7 @@ DownloadManager::DownloadManager(QObject *parent, QWebdav *webdav) :
     this->webdav = webdav;
 }
 
-void DownloadManager::enqueueDownload(EntryInfo* entry)
+DownloadEntry* DownloadManager::enqueueDownload(EntryInfo* entry)
 {
     downloadMutex.lock();
 
@@ -22,6 +22,8 @@ void DownloadManager::enqueueDownload(EntryInfo* entry)
     downloadQueue.enqueue(newDownload);
 
     downloadMutex.unlock();
+
+    return newDownload;
 }
 
 void DownloadManager::handleDownloadCompleted()
@@ -33,6 +35,16 @@ void DownloadManager::handleDownloadCompleted()
         downloadQueue.head()->startDownload();
 
     downloadMutex.unlock();
+}
+
+bool DownloadManager::isNotEnqueued(EntryInfo *entry)
+{
+    for(int i = 0; i < downloadQueue.size(); i++) {
+        if(downloadQueue.at(i)->getRemotePath() == entry->path()) {
+            return false;
+        }
+    }
+    return true;
 }
 
 QString DownloadManager::destinationFromMIME(QString mime)

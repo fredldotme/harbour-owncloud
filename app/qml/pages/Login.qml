@@ -43,6 +43,7 @@ Page {
 
     TextField {
         id: password
+        text: settings.password
         width: parent.width
         anchors.top: username.bottom
         echoMode: TextInput.Password

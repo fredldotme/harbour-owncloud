@@ -59,6 +59,15 @@ bool Settings::readSettings()
     }
     emit usernameChanged();
 
+    if(settings.allKeys().contains("password"))
+    {
+        m_password = QString(QByteArray::fromBase64(settings.value("password").toByteArray()));
+    } else {
+        settings.endGroup();
+        return false;
+    }
+    emit passwordChanged();
+
     if(settings.allKeys().contains("certMD5") &&
             settings.allKeys().contains("certSHA1"))
     {
@@ -85,6 +94,7 @@ void Settings::writeSettings()
     settings.setValue("port", QVariant::fromValue<int>(m_port));
     settings.setValue("isHttps", QVariant::fromValue<bool>(m_isHttps));
     settings.setValue("username", QVariant::fromValue<QString>(m_username));
+    settings.setValue("password", QVariant::fromValue<QString>(m_password.toLatin1().toBase64()));
     settings.setValue("certMD5", QVariant::fromValue<QString>(m_md5Hex));
     settings.setValue("certSHA1", QVariant::fromValue<QString>(m_sha1Hex));
     settings.endGroup();
@@ -96,6 +106,7 @@ void Settings::acceptCertificate(QString md5, QString sha1)
 {
     m_md5Hex = md5;
     m_sha1Hex = sha1;
+    writeSettings();
     emit customCertChanged();
 }
 

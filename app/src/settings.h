@@ -25,7 +25,7 @@ public:
 
     Q_PROPERTY(QString hoststring READ hoststring NOTIFY hoststringChanged())
     Q_PROPERTY(QString username READ username WRITE setUsername(QString) NOTIFY usernameChanged())
-    Q_PROPERTY(QString password READ password WRITE setPassword(QString))
+    Q_PROPERTY(QString password READ password WRITE setPassword(QString) NOTIFY passwordChanged())
 
     QString hostname();
     QString path();
@@ -64,6 +64,7 @@ private:
 signals:
     void settingsChanged();
     void usernameChanged();
+    void passwordChanged();
     void hoststringChanged();
     void customCertChanged();
 

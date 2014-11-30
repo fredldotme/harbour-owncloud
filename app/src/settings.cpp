@@ -4,6 +4,7 @@ Settings::Settings(QObject *parent) :
     QObject(parent)
 {
     m_hoststring = "https://";
+    m_isHttps = true;
 }
 
 bool Settings::parseFromAddressString(QString value)
@@ -42,31 +43,25 @@ bool Settings::readSettings()
         m_path = settings.value("path").toString();
         m_port = settings.value("port").toInt();
         m_isHttps = settings.value("isHttps").toBool();
-    } else {
-        settings.endGroup();
-        return false;
+
+        m_hoststring = m_isHttps ? "https://" : "http://";
+        m_hoststring += m_hostname + ":" + QString::number(m_port) + m_path;
+        emit hoststringChanged();
     }
-    m_hoststring = m_isHttps ? "https://" : "http://";
-    m_hoststring += m_hostname + ":" + QString::number(m_port) + m_path;
-    emit hoststringChanged();
+
 
     if(settings.allKeys().contains("username"))
     {
         m_username = settings.value("username").toString();
-    } else {
-        settings.endGroup();
-        return false;
+        emit usernameChanged();
     }
-    emit usernameChanged();
+
 
     if(settings.allKeys().contains("password"))
     {
         m_password = QString(QByteArray::fromBase64(settings.value("password").toByteArray()));
-    } else {
-        settings.endGroup();
-        return false;
+        emit passwordChanged();
     }
-    emit passwordChanged();
 
     if(settings.allKeys().contains("certMD5") &&
             settings.allKeys().contains("certSHA1"))
@@ -76,12 +71,9 @@ bool Settings::readSettings()
         if(isCustomCert()) {
             emit customCertChanged();
         }
-        settings.endGroup();
-    } else {
-        settings.endGroup();
-        return false;
     }
 
+    settings.endGroup();
     emit settingsChanged();
     return true;
 }

@@ -5,7 +5,7 @@
     <name>CoverPage</name>
     <message>
         <source>My Cover</source>
-        <translation>Mein Cover</translation>
+        <translation type="vanished">Mein Cover</translation>
     </message>
 </context>
 <context>

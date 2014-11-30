@@ -22,6 +22,7 @@ public:
     Q_PROPERTY(bool isHttps READ isHttps)
 
     Q_PROPERTY(bool isCustomCert READ isCustomCert WRITE acceptCertificate(bool) NOTIFY customCertChanged())
+    Q_PROPERTY(bool autoLogin READ isAutoLogin WRITE setAutoLogin(bool) NOTIFY autoLoginChanged())
 
     Q_PROPERTY(QString hoststring READ hoststring NOTIFY hoststringChanged())
     Q_PROPERTY(QString username READ username WRITE setUsername(QString) NOTIFY usernameChanged())
@@ -36,6 +37,8 @@ public:
     QString username();
     QString password();
 
+    bool isAutoLogin();
+
     QString md5Hex();
     QString sha1Hex();
 
@@ -47,6 +50,8 @@ private:
     int m_port;
     bool m_isHttps;
 
+    bool m_autoLogin;
+
     QString m_hoststring;
     QString m_username;
     QString m_password;
@@ -56,16 +61,17 @@ private:
 
     void setUsername(QString value);
     void setPassword(QString value);
+    void setAutoLogin(bool value);
     void acceptCertificate(bool value);
 
     bool isCustomCert();
-
 
 signals:
     void settingsChanged();
     void usernameChanged();
     void passwordChanged();
     void hoststringChanged();
+    void autoLoginChanged();
     void customCertChanged();
 
 public slots:

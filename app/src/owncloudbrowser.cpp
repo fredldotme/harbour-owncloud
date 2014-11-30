@@ -44,7 +44,6 @@ void OwnCloudBrowser::testConnectionFinished()
 
 void OwnCloudBrowser::proxyHandleSslError(const QList<QSslError>& errors)
 {
-    qDebug() << "BEIDL Accept cert";
     QSslCertificate cert = errors[0].certificate();
     emit sslCertifcateError(webdav->digestToHex(cert.digest(QCryptographicHash::Md5)),
                             webdav->digestToHex(cert.digest(QCryptographicHash::Sha1)));
@@ -52,7 +51,6 @@ void OwnCloudBrowser::proxyHandleSslError(const QList<QSslError>& errors)
 
 void OwnCloudBrowser::proxyHandleLoginFailed()
 {
-    qDebug() << "BEIDL Failed";
     emit loginFailed();
 }
 

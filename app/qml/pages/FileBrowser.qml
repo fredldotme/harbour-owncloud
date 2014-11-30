@@ -25,6 +25,13 @@ Page {
 
         PullDownMenu {
             MenuItem {
+                text: qsTr("Settings")
+                onClicked: {
+                    pageStack.push("SettingsPage.qml")
+                }
+            }
+
+            MenuItem {
                 text: qsTr("Refresh")
                 onClicked: {
                     listView.model = undefined

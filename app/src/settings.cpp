@@ -49,13 +49,17 @@ bool Settings::readSettings()
         emit hoststringChanged();
     }
 
+    if(settings.allKeys().contains("autoLogin"))
+    {
+        m_autoLogin = settings.value("autoLogin").toBool();
+        emit autoLoginChanged();
+    }
 
     if(settings.allKeys().contains("username"))
     {
         m_username = settings.value("username").toString();
         emit usernameChanged();
     }
-
 
     if(settings.allKeys().contains("password"))
     {
@@ -85,6 +89,7 @@ void Settings::writeSettings()
     settings.setValue("path", QVariant::fromValue<QString>(m_path));
     settings.setValue("port", QVariant::fromValue<int>(m_port));
     settings.setValue("isHttps", QVariant::fromValue<bool>(m_isHttps));
+    settings.setValue("autoLogin", QVariant::fromValue<bool>(m_autoLogin));
     settings.setValue("username", QVariant::fromValue<QString>(m_username));
     settings.setValue("password", QVariant::fromValue<QString>(m_password.toLatin1().toBase64()));
     settings.setValue("certMD5", QVariant::fromValue<QString>(m_md5Hex));
@@ -105,6 +110,17 @@ void Settings::acceptCertificate(QString md5, QString sha1)
 void Settings::acceptCertificate(bool value)
 {
     acceptCertificate("", "");
+}
+
+bool Settings::isAutoLogin()
+{
+    return m_autoLogin;
+}
+
+void Settings::setAutoLogin(bool value)
+{
+    m_autoLogin = value;
+    emit autoLoginChanged();
 }
 
 QString Settings::hostname()

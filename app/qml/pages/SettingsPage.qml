@@ -10,42 +10,12 @@ Page {
 
     Component.onCompleted: {
         settings.readSettings();
-        if(settings.autoLogin) {
-            loginInProgress = true;
-            browser.testConnection();
-        }
-    }
-
-    Connections {
-        target: browser
-        onLoginSucceeded: {
-            loginInProgress = false;
-            browser.getDirectoryContent("/");
-            pageStack.replace("FileBrowser.qml");
-        }
-    }
-
-    Label {
-        id: topLabel
-        text: "ownCloud"
-        font.pixelSize: Theme.fontSizeLarge
-        enabled: !loginInProgress
-        x: (parent.width / 2) - (width / 2)
-        anchors.horizontalCenter: pageRoot.horizontalCenter
-        anchors.top: parent.top
-        anchors.topMargin: 20
-    }
-
-    NotificationPopup {
-        visible: loginFailed
-        height: topLabel.height + 20
     }
 
     TextField {
         id: hostaddress
-        enabled: !loginInProgress
         width: parent.width
-        anchors.top: topLabel.bottom
+        anchors.top: parent.top
         anchors.topMargin: 20
         placeholderText: "Host address"
         text: settings.hoststring;
@@ -53,7 +23,6 @@ Page {
 
     TextField {
         id: username
-        enabled: !loginInProgress
         width: parent.width
         anchors.top: hostaddress.bottom
         anchors.topMargin: 30
@@ -64,7 +33,6 @@ Page {
 
     TextField {
         id: password
-        enabled: !loginInProgress
         text: settings.password
         width: parent.width
         anchors.top: username.bottom
@@ -74,7 +42,6 @@ Page {
 
     TextSwitch {
         id: autoLoginSwitch
-        enabled: !loginInProgress
         anchors.top: password.bottom
         text: "Login automatically"
         checked: settings.autoLogin
@@ -82,7 +49,6 @@ Page {
 
     TextSwitch {
         id: certSwitch
-        enabled: !loginInProgress
         anchors.top: autoLoginSwitch.bottom
         text: "Accept certificate"
         visible: settings.isCustomCert
@@ -91,10 +57,10 @@ Page {
 
     Button {
         id: continueButton
-        enabled: !loginInProgress
         text: "Continue"
         anchors.top: certSwitch.bottom
         anchors.topMargin: 30
+        width: parent.width
         anchors.horizontalCenter: pageRoot.horizontalCenter
 
         onClicked: {
@@ -102,7 +68,6 @@ Page {
 
             settings.username = username.text;
             settings.password = password.text;
-            settings.autoLogin = autoLoginSwitch.checked;
             settings.writeSettings();
 
             loginInProgress = true;

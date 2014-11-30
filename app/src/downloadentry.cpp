@@ -1,13 +1,21 @@
 #include "downloadentry.h"
 
-DownloadEntry::DownloadEntry(QObject *parent, QString name, QString remotePath, QString localPath, qint64 size) :
+DownloadEntry::DownloadEntry(QObject *parent, QWebdav *webdav, QString name, QString remotePath, QString localPath, qint64 size) :
     QObject(parent)
 {
+    this->webdav = webdav;
+
     m_name = name;
     m_remotePath = remotePath;
     m_localPath = localPath;
     m_size = size;
     m_progress = 0.0;
+}
+
+DownloadEntry::~DownloadEntry()
+{
+    if(localFile)
+        delete localFile;
 }
 
 QString DownloadEntry::getName()
@@ -43,7 +51,10 @@ void DownloadEntry::setProgress(qreal value)
 
 void DownloadEntry::startDownload()
 {
-
+    localFile = new QFile(m_localPath);
+    localFile->open(QFile::ReadWrite);
+    connect(webdav, SIGNAL(finished(QNetworkReply*)), this, SLOT(handleReadComplete()));
+    webdav->get(m_remotePath, localFile);
 }
 
 void DownloadEntry::pauseDownload()
@@ -54,4 +65,9 @@ void DownloadEntry::pauseDownload()
 void DownloadEntry::cancelDownload()
 {
 
+}
+
+void DownloadEntry::handleReadComplete()
+{
+    emit downloadCompleted();
 }

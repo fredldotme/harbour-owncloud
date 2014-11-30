@@ -2,6 +2,8 @@
 #define DOWNLOADENTRY_H
 
 #include <QObject>
+#include <QNetworkReply>
+#include <qwebdav.h>
 
 class DownloadEntry : public QObject
 {
@@ -13,9 +15,11 @@ class DownloadEntry : public QObject
     Q_PROPERTY(qreal progress READ getProgress NOTIFY progressChanged)
 
 public:
-    DownloadEntry(QObject *parent = 0, QString name = "",
-                  QString remotePath = "", QString localPath = "",
-                  qint64 size = 0);
+    DownloadEntry(QObject *parent = 0, QWebdav *webdav = 0,
+                  QString name = "", QString remotePath = "",
+                  QString localPath = "", qint64 size = 0);
+
+    ~DownloadEntry();
 
     QString getName();
     QString getLocalPath();
@@ -30,6 +34,10 @@ public:
     void cancelDownload();
 
 private:
+    QWebdav *webdav;
+
+    QFile *localFile;
+
     QString m_name;
     QString m_localPath;
     QString m_remotePath;
@@ -45,6 +53,7 @@ signals:
     void downloadCompleted();
 
 public slots:
+    void handleReadComplete();
 
 };
 

@@ -51,9 +51,9 @@ TRANSLATIONS += translations/harbour-owncloud-de.ts
 
 LIBS += $$OUT_PWD/../qwebdavlib/qwebdavlib/libqwebdav.so.1
 
-QMAKE_RPATHDIR += /usr/share/harbour-owncloud/libs
+QMAKE_RPATHDIR += /usr/share/harbour-owncloud/lib
 
-qwebdavlib.path = /usr/share/harbour-owncloud/libs
+qwebdavlib.path = /usr/share/harbour-owncloud/lib
 qwebdavlib.files += $$OUT_PWD/../qwebdavlib/qwebdavlib/libqwebdav.so.1
 INSTALLS += qwebdavlib
 

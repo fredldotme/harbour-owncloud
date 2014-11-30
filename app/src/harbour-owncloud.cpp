@@ -14,11 +14,11 @@ Q_DECLARE_METATYPE(OwnCloudBrowser*)
 
 int main(int argc, char *argv[])
 {
-    qmlRegisterType<EntryInfo>("OwnCloud", 1, 0, "EntryInfo");
-    qmlRegisterType<OwnCloudBrowser>("OwnCloud", 1, 0, "OwnCloudBrowser");
-    qmlRegisterType<Settings>("OwnCloud", 1, 0, "Settings");
-    qmlRegisterType<DownloadManager>("OwnCloud", 1, 0, "DownloadManager");
-    qmlRegisterType<DownloadEntry>("OwnCloud", 1, 0, "DownloadEntry");
+    qmlRegisterType<EntryInfo>("harbour.owncloud", 1, 0, "EntryInfo");
+    qmlRegisterType<OwnCloudBrowser>("harbour.owncloud", 1, 0, "OwnCloudBrowser");
+    qmlRegisterType<Settings>("harbour.owncloud", 1, 0, "Settings");
+    qmlRegisterType<DownloadManager>("harbour.owncloud", 1, 0, "DownloadManager");
+    qmlRegisterType<DownloadEntry>("harbour.owncloud", 1, 0, "DownloadEntry");
 
     QGuiApplication *app = SailfishApp::application(argc, argv);
     app->setOrganizationName("harbour-owncloud");

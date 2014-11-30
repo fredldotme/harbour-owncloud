@@ -1,3 +1,5 @@
+DEFINES += QWEBDAVITEM_EXTENDED_PROPERTIES
+
 TEMPLATE = subdirs
 SUBDIRS = qwebdavlib/qwebdavlib app
 

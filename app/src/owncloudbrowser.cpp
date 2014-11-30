@@ -8,11 +8,6 @@ OwnCloudBrowser::OwnCloudBrowser(QObject *parent, Settings *settings, QWebdav *w
     this->ignoreFail = true;
 
     connect(settings, SIGNAL(settingsChanged()), this, SLOT(reloadSettings()));
-    connect(&parser, SIGNAL(finished()), this, SLOT(handleResponse()));
-    connect(&parser, SIGNAL(errorChanged(QString)), this, SLOT(printError(QString)));
-    connect(this->webdav, SIGNAL(errorChanged(QString)), this, SLOT(printError(QString)));
-    connect(this->webdav, SIGNAL(checkSslCertifcate(const QList<QSslError>&)), this, SLOT(proxyHandleSslError(const QList<QSslError>&)));
-    connect(this->webdav, SIGNAL(authenticationRequired(QNetworkReply*,QAuthenticator*)), this, SLOT(proxyHandleLoginFailed()));
 }
 
 void OwnCloudBrowser::reloadSettings() {
@@ -26,16 +21,44 @@ void OwnCloudBrowser::reloadSettings() {
                                  settings->sha1Hex());
 }
 
+void OwnCloudBrowser::testConnection()
+{
+    connect(webdav, SIGNAL(checkSslCertifcate(const QList<QSslError>&)), this, SLOT(proxyHandleSslError(const QList<QSslError>&)));
+    connect(webdav, SIGNAL(finished(QNetworkReply*)), this, SLOT(testConnectionFinished()));
+    connect(webdav, SIGNAL(errorChanged(QString)), this, SLOT(proxyHandleLoginFailed()));
+
+    parser.listDirectory(webdav, "/");
+}
+
+void OwnCloudBrowser::testConnectionFinished()
+{
+    qDebug() << "BEIDL Finished";
+
+    disconnect(webdav, SIGNAL(finished(QNetworkReply*)), this, SLOT(testConnectionFinished()));
+
+    connect(&parser, SIGNAL(finished()), this, SLOT(handleResponse()));
+    connect(&parser, SIGNAL(errorChanged(QString)), this, SLOT(printError(QString)));
+    connect(webdav, SIGNAL(errorChanged(QString)), this, SLOT(printError(QString)));
+    emit loginSucceeded();
+}
+
 void OwnCloudBrowser::proxyHandleSslError(const QList<QSslError>& errors)
 {
+    qDebug() << "BEIDL Accept cert";
     QSslCertificate cert = errors[0].certificate();
     emit sslCertifcateError(webdav->digestToHex(cert.digest(QCryptographicHash::Md5)),
                             webdav->digestToHex(cert.digest(QCryptographicHash::Sha1)));
 }
 
+void OwnCloudBrowser::proxyHandleLoginFailed()
+{
+    qDebug() << "BEIDL Failed";
+    emit loginFailed();
+}
+
 void OwnCloudBrowser::handleResponse()
 {
-    emit loginSucceeded();
+    //emit loginSucceeded();
     QList<QWebdavItem> list = parser.getList();
     QVariantList entries;
 
@@ -73,14 +96,4 @@ void OwnCloudBrowser::getDirectoryContent(QString path)
 {
     currentPath = path;
     parser.listDirectory(webdav, path);
-}
-
-void OwnCloudBrowser::proxyHandleLoginFailed()
-{
-    if(ignoreFail) {
-        ignoreFail = false;
-        getDirectoryContent("/");
-    } else {
-        emit loginFailed();
-    }
 }

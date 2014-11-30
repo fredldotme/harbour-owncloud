@@ -9,6 +9,14 @@ Page {
         settings.readSettings();
     }
 
+    Connections {
+        target: browser
+        onLoginSucceeded: {
+            browser.getDirectoryContent("/");
+            pageStack.replace("FileBrowser.qml");
+        }
+    }
+
     RemorseItem {
         id: remorse
     }
@@ -73,8 +81,7 @@ Page {
             settings.password = password.text;
             settings.writeSettings();
 
-            browser.getDirectoryContent("/");
-            pageStack.replace("FileBrowser.qml");
+            browser.testConnection();
         }
     }
 }

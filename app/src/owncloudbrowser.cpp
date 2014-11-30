@@ -7,13 +7,12 @@ OwnCloudBrowser::OwnCloudBrowser(QObject *parent, Settings *settings, QWebdav *w
     this->settings = settings;
     this->ignoreFail = true;
 
-    // Need to decide on how to securely save password
     connect(settings, SIGNAL(settingsChanged()), this, SLOT(reloadSettings()));
     connect(&parser, SIGNAL(finished()), this, SLOT(handleResponse()));
     connect(&parser, SIGNAL(errorChanged(QString)), this, SLOT(printError(QString)));
     connect(this->webdav, SIGNAL(errorChanged(QString)), this, SLOT(printError(QString)));
     connect(this->webdav, SIGNAL(checkSslCertifcate(const QList<QSslError>&)), this, SLOT(proxyHandleSslError(const QList<QSslError>&)));
-    //connect(&webdav, SIGNAL(authenticationRequired(QNetworkReply*,QAuthenticator*)), this, SLOT(proxyHandleLoginFailed()));
+    connect(this->webdav, SIGNAL(authenticationRequired(QNetworkReply*,QAuthenticator*)), this, SLOT(proxyHandleLoginFailed()));
 }
 
 void OwnCloudBrowser::reloadSettings() {
@@ -46,8 +45,10 @@ void OwnCloudBrowser::handleResponse()
         entry->setName(item.name());
         entry->setDirectory(item.isDir());
         entry->setSize(item.size());
-        if(!item.isDir())
+        if(!item.isDir()) {
             entry->setMimeType(item.mimeType());
+            qDebug() << "MIME Type: " << item.mimeType();
+        }
 
         QVariant tmpVariant;
         tmpVariant.setValue(entry);
@@ -75,10 +76,10 @@ void OwnCloudBrowser::getDirectoryContent(QString path)
 
 void OwnCloudBrowser::proxyHandleLoginFailed()
 {
-    /*if(ignoreFail) {
+    if(ignoreFail) {
         ignoreFail = false;
         getDirectoryContent("/");
     } else {
         emit loginFailed();
-    }*/
+    }
 }

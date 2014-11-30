@@ -7,6 +7,7 @@
 
 #include <qwebdav.h>
 #include "downloadentry.h"
+#include "entryinfo.h"
 
 class DownloadManager : public QObject
 {
@@ -14,7 +15,7 @@ class DownloadManager : public QObject
 public:
     DownloadManager(QObject *parent = 0, QWebdav *webdav = 0);
 
-    Q_INVOKABLE void enqueueDownload(QString remotePath, QString mimeType, qint64 size);
+    Q_INVOKABLE void enqueueDownload(EntryInfo* entry);
 
 private:
     QWebdav *webdav;

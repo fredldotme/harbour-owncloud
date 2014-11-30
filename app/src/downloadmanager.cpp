@@ -6,12 +6,13 @@ DownloadManager::DownloadManager(QObject *parent, QWebdav *webdav) :
     this->webdav = webdav;
 }
 
-void DownloadManager::enqueueDownload(QString remotePath, QString mimeType, qint64 size)
+void DownloadManager::enqueueDownload(EntryInfo* entry)
 {
-    QString name = remotePath.mid(remotePath.lastIndexOf("/") + 1);
-    QString destination = destinationFromMIME(mimeType) + "/" + name;
+    qDebug() << "Info: " << entry->size();
+    QString name = entry->path().mid(entry->path().lastIndexOf("/") + 1);
+    QString destination = destinationFromMIME(entry->mimeType()) + "/" + name;
 
-    DownloadEntry *newDownload = new DownloadEntry(0, name, remotePath, destination, size);
+    DownloadEntry *newDownload = new DownloadEntry(0, name, entry->path(), destination, entry->size());
     connect(newDownload, SIGNAL(downloadCompleted()), this, SLOT(handleDownloadCompleted()));
     if(downloadQueue.size() == 0) {
         newDownload->startDownload();

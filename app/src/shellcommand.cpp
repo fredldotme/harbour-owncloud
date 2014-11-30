@@ -8,6 +8,6 @@ void ShellCommand::runCommand(QString command, QStringList args)
 {
     QProcess *proc = new QProcess();
     proc->setReadChannel(QProcess::StandardOutput);
-    connect(proc, SIGNAL(finished(int)), proc, SLOT(terminate()));
+    connect(proc, SIGNAL(finished(int)), proc, SLOT(deleteLater()));
     proc->start(command, args);
 }

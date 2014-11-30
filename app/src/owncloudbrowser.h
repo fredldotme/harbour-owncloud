@@ -16,15 +16,14 @@ class OwnCloudBrowser : public QObject
     Q_OBJECT
 
 public:
-    OwnCloudBrowser(QObject* parent = 0, Settings* settings = 0);
+    OwnCloudBrowser(QObject* parent = 0, Settings* settings = 0, QWebdav* webdav = 0);
 
     Q_INVOKABLE QString getCurrentPath();
     Q_INVOKABLE void getDirectoryContent(QString path);
-    Q_INVOKABLE void download(QString path);
 
 private:
     Settings *settings;
-    QWebdav webdav;
+    QWebdav *webdav;
     QWebdavDirParser parser;
     QString currentPath;
 

@@ -7,12 +7,22 @@ Page {
     property string filePath : ""
     property EntryInfo entry;
 
-    PageHeader {
-        title: entry.name
-    }
+    SilicaFlickable {
+        anchors.fill: parent
 
-    Item {
-        anchors.centerIn: pageRoot
+        PullDownMenu {
+            MenuItem {
+                text: qsTr("Download")
+                onClicked: {
+                    downloader.enqueueDownload(entry)
+                }
+            }
+        }
+
+        PageHeader {
+            title: entry.name
+        }
+
         Label {
             text: "MIME type: " + entry.mimeType
         }

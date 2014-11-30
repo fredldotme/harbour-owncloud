@@ -24,6 +24,13 @@
     </message>
 </context>
 <context>
+    <name>FileDetails</name>
+    <message>
+        <source>Download</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>FirstPage</name>
     <message>
         <source>Show Page 2</source>

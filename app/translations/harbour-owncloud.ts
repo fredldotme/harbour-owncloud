@@ -15,4 +15,11 @@
         <translation type="unfinished"></translation>
     </message>
 </context>
+<context>
+    <name>FileDetails</name>
+    <message>
+        <source>Download</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
 </TS>

@@ -8,6 +8,7 @@ OwnCloudBrowser::OwnCloudBrowser(QObject *parent, Settings *settings, QWebdav *w
     this->ignoreFail = true;
 
     connect(settings, SIGNAL(settingsChanged()), this, SLOT(reloadSettings()));
+    connect(webdav, SIGNAL(errorChanged(QString)), this, SLOT(proxyHandleLoginFailed()), Qt::DirectConnection);
 }
 
 void OwnCloudBrowser::reloadSettings() {
@@ -24,8 +25,7 @@ void OwnCloudBrowser::reloadSettings() {
 void OwnCloudBrowser::testConnection()
 {
     connect(webdav, SIGNAL(checkSslCertifcate(const QList<QSslError>&)), this, SLOT(proxyHandleSslError(const QList<QSslError>&)));
-    connect(webdav, SIGNAL(finished(QNetworkReply*)), this, SLOT(testConnectionFinished()));
-    connect(webdav, SIGNAL(errorChanged(QString)), this, SLOT(proxyHandleLoginFailed()));
+    connect(webdav, SIGNAL(finished(QNetworkReply*)), this, SLOT(testConnectionFinished()), Qt::DirectConnection);
 
     parser.listDirectory(webdav, "/");
 }
@@ -34,11 +34,10 @@ void OwnCloudBrowser::testConnectionFinished()
 {
     qDebug() << "BEIDL Finished";
 
+    disconnect(webdav, SIGNAL(checkSslCertifcate(const QList<QSslError>&)), this, SLOT(proxyHandleSslError(const QList<QSslError>&)));
     disconnect(webdav, SIGNAL(finished(QNetworkReply*)), this, SLOT(testConnectionFinished()));
 
     connect(&parser, SIGNAL(finished()), this, SLOT(handleResponse()));
-    connect(&parser, SIGNAL(errorChanged(QString)), this, SLOT(printError(QString)));
-    connect(webdav, SIGNAL(errorChanged(QString)), this, SLOT(printError(QString)));
     emit loginSucceeded();
 }
 
@@ -51,6 +50,8 @@ void OwnCloudBrowser::proxyHandleSslError(const QList<QSslError>& errors)
 
 void OwnCloudBrowser::proxyHandleLoginFailed()
 {
+    qDebug() << "BEIDL Failed";
+
     emit loginFailed();
 }
 

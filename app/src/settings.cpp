@@ -16,7 +16,7 @@ bool Settings::parseFromAddressString(QString value)
 
     QUrl url(value, QUrl::StrictMode);
     if(url.isValid()) {
-        if(m_hostname.isEmpty())
+        if(url.host().isEmpty())
             return false;
 
         m_isHttps = value.startsWith("https://") ? true : false;
@@ -48,7 +48,8 @@ bool Settings::readSettings()
         m_hoststring = m_isHttps ? "https://" : "http://";
         m_hoststring += m_hostname + ":" + QString::number(m_port) + m_path;
     } else {
-        m_hoststring = "";
+        m_hoststring = "https://";
+        m_isHttps = true;
     }
     emit hoststringChanged();
 

@@ -1,15 +1,10 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import harbour.owncloud 1.0
 import "pages"
 
 ApplicationWindow
 {
     property bool loginInProgress : false;
-
-    id: applicationWindow
-    initialPage: Component { Login { id: loginPage } }
-    cover: Qt.resolvedUrl("cover/CoverPage.qml")
 
     Connections {
         target: browser
@@ -28,9 +23,14 @@ ApplicationWindow
             pageStack.clear();
             var loginComponent = Qt.createComponent("pages/Login.qml");
             var loginObject = loginComponent.createObject(applicationWindow, { loginFailed: true})
-            pageStack.replace(loginObject)
+            pageStack.completeAnimation();
+            pageStack.push(loginObject)
         }
     }
+
+    id: applicationWindow
+    initialPage: Component { Login { id: loginPage } }
+    cover: Qt.resolvedUrl("cover/CoverPage.qml")
 }
 
 

@@ -44,7 +44,7 @@ Page {
             font.pixelSize: Theme.fontSizeLarge
             enabled: !loginInProgress
             x: (parent.width / 2) - (width / 2)
-            anchors.horizontalCenter: pageRoot.horizontalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: parent.top
             anchors.topMargin: 20
         }

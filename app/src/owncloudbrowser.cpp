@@ -1,12 +1,34 @@
 #include "owncloudbrowser.h"
 
-OwnCloudBrowser::OwnCloudBrowser(QObject *parent, Settings *settings, QWebdav *webdav) :
+OwnCloudBrowser::OwnCloudBrowser(QObject *parent, Settings *settings) :
     QObject(parent)
 {
-    this->webdav = webdav;
+    this->webdav = 0;
     this->settings = settings;
-
     connect(settings, SIGNAL(settingsChanged()), this, SLOT(reloadSettings()));
+
+    resetWebdav();
+}
+
+OwnCloudBrowser::~OwnCloudBrowser()
+{
+    if(webdav)
+        delete webdav;
+}
+
+QWebdav* OwnCloudBrowser::getWebdav()
+{
+    return webdav;
+}
+
+void OwnCloudBrowser::resetWebdav()
+{
+    if(webdav) {
+        disconnect(webdav, SIGNAL(errorChanged(QString)), this, SLOT(proxyHandleLoginFailed()));
+        disconnect(&parser, SIGNAL(errorChanged(QString)), this, SLOT(proxyHandleLoginFailed()));
+        delete webdav;
+    }
+    webdav = new QWebdav();
     connect(webdav, SIGNAL(errorChanged(QString)), this, SLOT(proxyHandleLoginFailed()), Qt::DirectConnection);
     connect(&parser, SIGNAL(errorChanged(QString)), this, SLOT(proxyHandleLoginFailed()), Qt::DirectConnection);
 }

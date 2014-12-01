@@ -26,15 +26,13 @@ int main(int argc, char *argv[])
     app->setApplicationName("harbour-owncloud");
     QQuickView *view = SailfishApp::createView();
 
-    QWebdav *webdav = new QWebdav();
-
     Settings *settings = new Settings();
-    OwnCloudBrowser *browser = new OwnCloudBrowser(NULL, settings, webdav);
-    DownloadManager *dlManager = new DownloadManager(0, webdav);
+    OwnCloudBrowser *browser = new OwnCloudBrowser(NULL, settings);
+    DownloadManager *downloader = new DownloadManager(0, browser);
 
     view->rootContext()->setContextProperty("browser", browser);
     view->rootContext()->setContextProperty("settings", settings);
-    view->rootContext()->setContextProperty("downloader", dlManager);
+    view->rootContext()->setContextProperty("downloader", downloader);
 
     view->setSource(SailfishApp::pathTo("qml/harbour-owncloud.qml"));
     view->showFullScreen();

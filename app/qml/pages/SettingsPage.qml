@@ -24,6 +24,7 @@ Page {
             MenuItem {
                 text: "Reset connection settings"
                 onClicked: {
+                    browser.resetWebdav();
                     settings.resetSettings();
                     pageStack.clear();
                     pageStack.push("Login.qml");

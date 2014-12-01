@@ -6,7 +6,7 @@
 #include <QMutex>
 #include <QStandardPaths>
 
-#include <qwebdav.h>
+#include "owncloudbrowser.h"
 #include "downloadentry.h"
 #include "entryinfo.h"
 
@@ -14,13 +14,13 @@ class DownloadManager : public QObject
 {
     Q_OBJECT
 public:
-    DownloadManager(QObject *parent = 0, QWebdav *webdav = 0);
+    DownloadManager(QObject *parent = 0, OwnCloudBrowser *browser = 0);
 
     Q_INVOKABLE DownloadEntry* enqueueDownload(EntryInfo* entry, bool open);
     Q_INVOKABLE bool isNotEnqueued(EntryInfo* entry);
 
 private:
-    QWebdav *webdav;
+    OwnCloudBrowser *browser;
     QQueue<DownloadEntry *> downloadQueue;
     QMutex downloadMutex;
 

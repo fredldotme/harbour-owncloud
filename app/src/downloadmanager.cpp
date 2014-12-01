@@ -1,9 +1,9 @@
 #include "downloadmanager.h"
 
-DownloadManager::DownloadManager(QObject *parent, QWebdav *webdav) :
+DownloadManager::DownloadManager(QObject *parent, OwnCloudBrowser *browser) :
     QObject(parent)
 {
-    this->webdav = webdav;
+    this->browser = browser;
 }
 
 DownloadEntry* DownloadManager::enqueueDownload(EntryInfo* entry, bool open)
@@ -13,7 +13,7 @@ DownloadEntry* DownloadManager::enqueueDownload(EntryInfo* entry, bool open)
     QString name = entry->path().mid(entry->path().lastIndexOf("/") + 1);
     QString destination = destinationFromMIME(entry->mimeType()) + "/" + name;
 
-    DownloadEntry *newDownload = new DownloadEntry(this, webdav, name, entry->path(), destination, entry->size(), open);
+    DownloadEntry *newDownload = new DownloadEntry(this, browser->getWebdav(), name, entry->path(), destination, entry->size(), open);
     connect(newDownload, SIGNAL(downloadCompleted()), this, SLOT(handleDownloadCompleted()), Qt::DirectConnection);
     if(downloadQueue.size() == 0) {
         newDownload->startDownload();

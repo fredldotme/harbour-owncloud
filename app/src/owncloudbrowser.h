@@ -16,11 +16,15 @@ class OwnCloudBrowser : public QObject
     Q_OBJECT
 
 public:
-    OwnCloudBrowser(QObject* parent = 0, Settings* settings = 0, QWebdav* webdav = 0);
+    OwnCloudBrowser(QObject* parent = 0, Settings* settings = 0);
+    ~OwnCloudBrowser();
 
     Q_INVOKABLE void testConnection();
     Q_INVOKABLE QString getCurrentPath();
     Q_INVOKABLE void getDirectoryContent(QString path);
+    Q_INVOKABLE void resetWebdav();
+
+    QWebdav* getWebdav();
 
 private:
     Settings *settings;

@@ -39,6 +39,10 @@ Page {
             anchors.topMargin: 64
             text: "Login automatically"
             checked: settings.autoLogin
+            onCheckedChanged: {
+                settings.autoLogin = checked
+                settings.writeSettings()
+            }
         }
     }
 }

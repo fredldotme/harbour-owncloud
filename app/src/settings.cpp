@@ -5,28 +5,29 @@ Settings::Settings(QObject *parent) :
 {
     m_hoststring = "https://";
     m_isHttps = true;
+    m_autoLogin = false;
 }
 
 bool Settings::parseFromAddressString(QString value)
 {
-    if(value.startsWith("https://")) {
-        m_isHttps = true;
-    } else if (value.startsWith("http://")) {
-        m_isHttps = false;
-    } else {
+    if(!value.startsWith("https://") && !value.startsWith("http://")) {
         return false;
     }
 
     QUrl url(value, QUrl::StrictMode);
-    m_hostname = url.host();
-    m_path = url.path();
-    m_port = url.port();
-    if(m_port == -1) {
-        m_port = m_isHttps ? 443 : 80;
+    if(url.isValid()) {
+        if(m_hostname.isEmpty())
+            return false;
+
+        m_isHttps = value.startsWith("https://") ? true : false;
+        m_hostname = url.host();
+        m_path = url.path();
+        m_port = url.port();
+
+        if(m_port == -1) {
+            m_port = m_isHttps ? 443 : 80;
+        }
     }
-    qDebug() << "hostname: " << m_hostname;
-    qDebug() << "port: " << m_port;
-    qDebug() << "path: " << m_path;
 
     return url.isValid();
 }
@@ -46,36 +47,38 @@ bool Settings::readSettings()
 
         m_hoststring = m_isHttps ? "https://" : "http://";
         m_hoststring += m_hostname + ":" + QString::number(m_port) + m_path;
-        emit hoststringChanged();
+    } else {
+        m_hoststring = "";
     }
+    emit hoststringChanged();
 
     if(settings.allKeys().contains("autoLogin"))
     {
         m_autoLogin = settings.value("autoLogin").toBool();
-        emit autoLoginChanged();
+    } else {
+        m_autoLogin = false;
     }
+    emit autoLoginChanged();
 
     if(settings.allKeys().contains("username"))
     {
         m_username = settings.value("username").toString();
-        emit usernameChanged();
     }
+    emit usernameChanged();
 
     if(settings.allKeys().contains("password"))
     {
         m_password = QString(QByteArray::fromBase64(settings.value("password").toByteArray()));
-        emit passwordChanged();
     }
+    emit passwordChanged();
 
     if(settings.allKeys().contains("certMD5") &&
             settings.allKeys().contains("certSHA1"))
     {
         m_md5Hex = settings.value("certMD5").toString();
         m_sha1Hex = settings.value("certSHA1").toString();
-        if(isCustomCert()) {
-            emit customCertChanged();
-        }
     }
+    emit customCertChanged();
 
     settings.endGroup();
     emit settingsChanged();
@@ -95,6 +98,30 @@ void Settings::writeSettings()
     settings.setValue("certMD5", QVariant::fromValue<QString>(m_md5Hex));
     settings.setValue("certSHA1", QVariant::fromValue<QString>(m_sha1Hex));
     settings.endGroup();
+
+    emit settingsChanged();
+}
+
+void Settings::resetSettings()
+{
+    settings.beginGroup("Settings");
+    settings.clear();
+    settings.endGroup();
+
+    m_hostname = "";
+    m_port = 443;
+    m_username = "";
+    m_password = "";
+    m_md5Hex = "";
+    m_sha1Hex = "";
+
+    m_hoststring = "https://";
+    m_isHttps = true;
+    m_autoLogin = false;
+
+    emit hoststringChanged();
+    emit usernameChanged();
+    emit passwordChanged();
 
     emit settingsChanged();
 }

@@ -14,6 +14,7 @@ public:
     Q_INVOKABLE bool parseFromAddressString(QString value);
     Q_INVOKABLE bool readSettings();
     Q_INVOKABLE void writeSettings();
+    Q_INVOKABLE void resetSettings();
     Q_INVOKABLE void acceptCertificate(QString md5, QString sha1);
 
     Q_PROPERTY(QString hostname READ hostname)

@@ -2,11 +2,18 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 BackgroundItem {
-    id: notification
+    id: notificationItem
     width: parent.width
+    property string notification : "";
 
     onVisibleChanged: {
-        animationIn.start()
+        if(visible) {
+            animationOut.stop()
+            animationIn.start()
+        } else {
+            animationIn.stop()
+            animationOut.stop()
+        }
     }
 
     Timer {
@@ -21,7 +28,7 @@ BackgroundItem {
 
     NumberAnimation {
         id: animationIn
-        target: notification;
+        target: notificationItem;
         property: "opacity";
         duration: 200;
         running: false;
@@ -35,7 +42,7 @@ BackgroundItem {
 
     NumberAnimation {
         id: animationOut
-        target: notification;
+        target: notificationItem;
         property: "opacity";
         running: false;
         duration: 300;
@@ -50,7 +57,7 @@ BackgroundItem {
     }
 
     Label {
-        text: "Login failed"
+        text: notification
         color: "black"
         anchors.centerIn: parent
     }

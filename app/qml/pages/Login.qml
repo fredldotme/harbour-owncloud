@@ -3,14 +3,13 @@ import Sailfish.Silica 1.0
 
 Page {
     id: pageRoot
-    anchors.fill: parent
 
     property bool loginFailed : false;
-    property bool settingsMode : false;
+    property bool invalidURL : false;
 
     Component.onCompleted: {
         settings.readSettings();
-        if(settings.autoLogin && !settingsMode) {
+        if(settings.autoLogin) {
             loginInProgress = true;
             browser.testConnection();
         }
@@ -21,9 +20,6 @@ Page {
         onLoginSucceeded: {
             loginInProgress = false;
             browser.getDirectoryContent("/");
-            if(settingsMode) {
-                pageStack.clear()
-            }
             pageStack.replace("FileBrowser.qml");
         }
     }
@@ -35,7 +31,7 @@ Page {
         }
     }
 
-    SilicaListView {
+    SilicaFlickable {
         anchors.fill: parent
 
         Label {
@@ -50,8 +46,17 @@ Page {
         }
 
         NotificationPopup {
+            id: loginFailedPopup
             visible: loginFailed
             height: topLabel.height + 20
+            notification: "Login failed"
+        }
+
+        NotificationPopup {
+            id: invalidURLPopup
+            visible: invalidURL
+            height: topLabel.height + 20
+            notification: "Invalid URL"
         }
 
         TextField {
@@ -105,22 +110,25 @@ Page {
         Button {
             id: continueButton
             enabled: !loginInProgress
-            text: settingsMode ? "Save" : "Continue"
+            text: "Continue"
             anchors.top: certSwitch.bottom
             anchors.topMargin: 30
             anchors.horizontalCenter: parent.horizontalCenter
 
             onClicked: {
-                settings.parseFromAddressString(hostaddress.text)
+                invalidURL = false;
+                if(settings.parseFromAddressString(hostaddress.text)) {
+                    settings.username = username.text;
+                    settings.password = password.text;
+                    settings.autoLogin = autoLoginSwitch.checked;
+                    settings.isCustomCert = certSwitch.checked;
+                    settings.writeSettings();
 
-                settings.username = username.text;
-                settings.password = password.text;
-                settings.autoLogin = autoLoginSwitch.checked;
-                settings.isCustomCert = certSwitch.checked;
-                settings.writeSettings();
-
-                loginInProgress = true;
-                browser.testConnection();
+                    loginInProgress = true;
+                    browser.testConnection();
+                } else {
+                    invalidURL = true;
+                }
             }
         }
 

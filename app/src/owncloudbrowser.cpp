@@ -5,10 +5,10 @@ OwnCloudBrowser::OwnCloudBrowser(QObject *parent, Settings *settings, QWebdav *w
 {
     this->webdav = webdav;
     this->settings = settings;
-    this->ignoreFail = true;
 
     connect(settings, SIGNAL(settingsChanged()), this, SLOT(reloadSettings()));
     connect(webdav, SIGNAL(errorChanged(QString)), this, SLOT(proxyHandleLoginFailed()), Qt::DirectConnection);
+    connect(&parser, SIGNAL(errorChanged(QString)), this, SLOT(proxyHandleLoginFailed()), Qt::DirectConnection);
 }
 
 void OwnCloudBrowser::reloadSettings() {
@@ -51,6 +51,7 @@ void OwnCloudBrowser::proxyHandleSslError(const QList<QSslError>& errors)
 void OwnCloudBrowser::proxyHandleLoginFailed()
 {
     qDebug() << "BEIDL Failed";
+    disconnect(&parser, SIGNAL(finished()), this, SLOT(handleResponse()));
 
     emit loginFailed();
 }

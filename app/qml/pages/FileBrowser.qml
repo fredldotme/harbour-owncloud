@@ -32,6 +32,13 @@ Page {
             }
 
             MenuItem {
+                text: qsTr("File transfers")
+                onClicked: {
+                    pageStack.push("TransferPage.qml")
+                }
+            }
+
+            MenuItem {
                 text: qsTr("Refresh")
                 onClicked: {
                     listView.model = undefined
@@ -78,8 +85,7 @@ Page {
                         pageStack.push(nextDirectory)
                     } else {
                         var fileComponent = Qt.createComponent("FileDetails.qml");
-                        var fileDetails = fileComponent.createObject(pageRoot);
-                        fileDetails.entry = listView.model[index];
+                        var fileDetails = fileComponent.createObject(pageRoot, {entry: listView.model[index]});
                         pageStack.push(fileDetails);
                     }
                 }

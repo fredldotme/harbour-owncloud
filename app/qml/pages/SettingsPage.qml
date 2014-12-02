@@ -19,6 +19,10 @@ Page {
     SilicaFlickable {
         anchors.fill: parent
 
+        PageHeader {
+            title: "Settings"
+        }
+
         PullDownMenu {
             id: pulley
             MenuItem {

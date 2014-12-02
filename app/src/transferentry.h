@@ -14,7 +14,6 @@ class TransferEntry : public QObject
     Q_PROPERTY(QString name READ getName NOTIFY nameChanged)
     Q_PROPERTY(QString localPath READ getLocalPath NOTIFY localPathChanged)
     Q_PROPERTY(qint64 size READ getSize NOTIFY sizeChanged)
-    Q_PROPERTY(qreal progress READ getProgress NOTIFY progressChanged)
     Q_PROPERTY(int direction READ getTransferDirection)
 
 public:
@@ -33,14 +32,12 @@ public:
     QString getLocalPath();
     QString getRemotePath();
     qint64 getSize();
-    qreal getProgress();
     int getTransferDirection();
 
     void setProgress(qreal value);
 
     void startTransfer();
-    void pauseTransfer();
-    void cancelTransfer();
+    Q_INVOKABLE void cancelTransfer();
 
 private:
     QWebdav *webdav;
@@ -62,7 +59,7 @@ signals:
     void sizeChanged();
     void progressChanged(qreal progress, QString remotePath);
 
-    void downloadCompleted();
+    void transferCompleted(bool success);
 
 public slots:
     void handleReadComplete();

@@ -16,7 +16,9 @@ class TransferManager : public QObject
 public:
     TransferManager(QObject *parent = 0, OwnCloudBrowser *browser = 0);
 
-    Q_INVOKABLE void enqueueDownload(EntryInfo* entry, bool open);
+    Q_PROPERTY(bool transfering READ isTransfering NOTIFY transferingChanged)
+
+    Q_INVOKABLE TransferEntry* enqueueDownload(EntryInfo* entry, bool open);
     Q_INVOKABLE void enqueueUpload(QString localPath, QString remotePath);
     Q_INVOKABLE bool isNotEnqueued(EntryInfo* entry);
     Q_INVOKABLE QVariantList getTransfers();
@@ -30,7 +32,11 @@ private:
 
     QString destinationFromMIME(QString mime);
 
+    bool isTransfering();
+
 signals:
+    void transferAdded();
+    void transferingChanged();
 
 public slots:
     void handleDownloadCompleted();

@@ -32,7 +32,12 @@ QVariantList TransferManager::getTransfers()
     return transfers;
 }
 
-void TransferManager::enqueueDownload(EntryInfo* entry, bool open)
+bool TransferManager::isTransfering()
+{
+    return !downloadQueue.isEmpty() || !uploadQueue.isEmpty();
+}
+
+TransferEntry* TransferManager::enqueueDownload(EntryInfo* entry, bool open)
 {
     downloadMutex.lock();
 
@@ -49,13 +54,17 @@ void TransferManager::enqueueDownload(EntryInfo* entry, bool open)
                                                    direction,
                                                    open);
 
-    connect(newDownload, SIGNAL(downloadCompleted()), this, SLOT(handleDownloadCompleted()), Qt::DirectConnection);
+    connect(newDownload, SIGNAL(transferCompleted(bool)), this, SLOT(handleDownloadCompleted()), Qt::DirectConnection);
     if(downloadQueue.isEmpty()) {
         newDownload->startTransfer();
     }
     downloadQueue.enqueue(newDownload);
+    emit transferingChanged();
 
     downloadMutex.unlock();
+
+    emit transferAdded();
+    return newDownload;
 }
 
 void TransferManager::enqueueUpload(QString localPath, QString remotePath)
@@ -68,19 +77,23 @@ void TransferManager::handleDownloadCompleted()
     downloadMutex.lock();
 
     if(!downloadQueue.isEmpty()) {
-        disconnect(downloadQueue.head(), SIGNAL(downloadCompleted()), this, SLOT(handleDownloadCompleted()));
+        disconnect(downloadQueue.head(), SIGNAL(transferCompleted(bool)), this, SLOT(handleDownloadCompleted()));
         TransferEntry *entry = downloadQueue.dequeue();
-        delete entry;
+        entry->deleteLater();
     }
 
     if(!downloadQueue.isEmpty() && downloadQueue.head())
         downloadQueue.head()->startTransfer();
 
+    emit transferingChanged();
     downloadMutex.unlock();
 }
 
 bool TransferManager::isNotEnqueued(EntryInfo *entry)
 {
+    if(entry == NULL)
+        return false;
+
     downloadMutex.lock();
     for(int i = 0; i < downloadQueue.size(); i++) {
         if(downloadQueue.at(i)->getRemotePath() == entry->path()) {

@@ -26,6 +26,10 @@
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>File transfers</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FileDetails</name>
@@ -62,6 +66,13 @@
     <message>
         <source>Item</source>
         <translation type="vanished">Element</translation>
+    </message>
+</context>
+<context>
+    <name>TransferPage</name>
+    <message>
+        <source>No file transfers pending</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

@@ -5,6 +5,7 @@ import harbour.owncloud 1.0
 Page {
     id: pageRoot
     property EntryInfo entry;
+    property TransferEntry downloadEntry;
 
     SilicaFlickable {
         anchors.fill: parent
@@ -15,8 +16,15 @@ Page {
                 text: qsTr("Download")
                 enabled: transfer.isNotEnqueued(entry);
                 onClicked: {
-                    var download = transfer.enqueueDownload(entry, false)
+                    downloadEntry = transfer.enqueueDownload(entry, false)
                     enabled = false;
+                }
+
+                Connections {
+                    target: downloadEntry
+                    onTransferCompleted: {
+                        download.enabled = true
+                    }
                 }
             }
 
@@ -25,8 +33,15 @@ Page {
                 text: qsTr("Download and open")
                 enabled: transfer.isNotEnqueued(entry);
                 onClicked: {
-                    var download = transfer.enqueueDownload(entry, true)
+                    downloadEntry = transfer.enqueueDownload(entry, true)
                     enabled = false;
+                }
+
+                Connections {
+                    target: downloadEntry
+                    onTransferCompleted: {
+                        downloadAndOpen.enabled = true
+                    }
                 }
             }
         }

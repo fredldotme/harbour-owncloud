@@ -19,6 +19,23 @@ CoverBackground {
             anchors.horizontalCenter: parent.horizontalCenter
             font.pixelSize: Theme.fontSizeSmall
         }
+
+        BusyIndicator {
+            visible: transfer.transfering
+            running: transfer.transfering
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
+    }
+
+    CoverActionList {
+        enabled: transfer.transfering
+
+        CoverAction {
+            iconSource: "image://theme/icon-cover-transfers"
+            onTriggered: {
+                pageStack.push("TransferPage.qml")
+            }
+        }
     }
 
 }

@@ -1,4 +1,4 @@
-#include "transferentry.h"
+﻿#include "transferentry.h"
 
 TransferEntry::TransferEntry(QObject *parent, QWebdav *webdav,
                              QString name, QString remotePath,
@@ -21,7 +21,7 @@ TransferEntry::TransferEntry(QObject *parent, QWebdav *webdav,
 
 TransferEntry::~TransferEntry()
 {
-    disconnect(webdav, SIGNAL(finished(QNetworkReply*)), this, SLOT(handleReadComplete()));
+    disconnect(this, 0, 0, 0);
     if(networkReply)
         delete networkReply;
 }
@@ -46,16 +46,10 @@ qint64 TransferEntry::getSize()
     return m_size;
 }
 
-qreal TransferEntry::getProgress()
-{
-    return m_progress;
-}
-
 void TransferEntry::setProgress(qreal value)
 {
     if(m_progress != value) {
         m_progress = value;
-        qDebug() << "progress: " << value;
         emit progressChanged(m_progress, m_remotePath);
     }
 }
@@ -73,27 +67,25 @@ void TransferEntry::startTransfer()
     if(m_direction == DOWN) {
         networkReply = webdav->get(m_remotePath, localFile);
         connect(networkReply, SIGNAL(downloadProgress(qint64,qint64)),
-                this, SLOT(handleProgressChange(qint64,qint64)));
+                this, SLOT(handleProgressChange(qint64,qint64)), Qt::DirectConnection);
     } else {
         networkReply = webdav->put(m_remotePath, localFile);
         connect(networkReply, SIGNAL(uploadProgress(qint64,qint64)),
-                this, SLOT(handleProgressChange(qint64,qint64)));
+                this, SLOT(handleProgressChange(qint64,qint64)), Qt::DirectConnection);
     }
 }
 
 void TransferEntry::handleProgressChange(qint64 bytes, qint64 bytesTotal)
 {
-    setProgress((qreal)bytes/(qreal)bytesTotal);
-}
-
-void TransferEntry::pauseTransfer()
-{
-
+    if(bytesTotal > 0)
+        setProgress((qreal)bytes/(qreal)bytesTotal);
 }
 
 void TransferEntry::cancelTransfer()
 {
-
+    if(networkReply)
+        networkReply->abort();
+    emit transferCompleted(false);
 }
 
 void TransferEntry::handleReadComplete()
@@ -102,5 +94,5 @@ void TransferEntry::handleReadComplete()
         ShellCommand::runCommand("xdg-open", QStringList(getLocalPath()));
     }
 
-    emit downloadCompleted();
+    emit transferCompleted(true);
 }

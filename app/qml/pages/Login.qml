@@ -66,6 +66,7 @@ Page {
             anchors.top: topLabel.bottom
             anchors.topMargin: 20
             placeholderText: "Host address"
+            label: placeholderText
             text: settings.hoststring;
         }
 
@@ -78,6 +79,7 @@ Page {
             text: settings.username;
             inputMethodHints: Qt.ImhNoAutoUppercase
             placeholderText: "User name"
+            label: placeholderText
         }
 
         TextField {
@@ -88,6 +90,7 @@ Page {
             anchors.top: username.bottom
             echoMode: TextInput.Password
             placeholderText: "Password"
+            label: placeholderText
         }
 
         TextSwitch {

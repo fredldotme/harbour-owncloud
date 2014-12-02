@@ -1,8 +1,9 @@
-#include "downloadentry.h"
+#include "transferentry.h"
 
-DownloadEntry::DownloadEntry(QObject *parent, QWebdav *webdav,
+TransferEntry::TransferEntry(QObject *parent, QWebdav *webdav,
                              QString name, QString remotePath,
-                             QString localPath, qint64 size, bool open) :
+                             QString localPath, qint64 size,
+                             TransferDirection direction, bool open) :
     QObject(parent)
 {
     this->webdav = webdav;
@@ -12,65 +13,70 @@ DownloadEntry::DownloadEntry(QObject *parent, QWebdav *webdav,
     m_localPath = localPath;
     m_size = size;
     m_progress = 0.0;
+    m_direction = direction;
 
     m_open = open;
 }
 
-DownloadEntry::~DownloadEntry()
+TransferEntry::~TransferEntry()
 {
     disconnect(webdav, SIGNAL(finished(QNetworkReply*)), this, SLOT(handleReadComplete()));
 }
 
-QString DownloadEntry::getName()
+QString TransferEntry::getName()
 {
     return m_name;
 }
 
-QString DownloadEntry::getLocalPath()
+QString TransferEntry::getLocalPath()
 {
     return m_localPath;
 }
 
-QString DownloadEntry::getRemotePath()
+QString TransferEntry::getRemotePath()
 {
     return m_remotePath;
 }
 
-qint64 DownloadEntry::getSize()
+qint64 TransferEntry::getSize()
 {
     return m_size;
 }
 
-qreal DownloadEntry::getProgress()
+qreal TransferEntry::getProgress()
 {
     return m_progress;
 }
 
-void DownloadEntry::setProgress(qreal value)
+void TransferEntry::setProgress(qreal value)
 {
     m_progress = value;
     emit progressChanged();
 }
 
-void DownloadEntry::startDownload()
+void TransferEntry::startTransfer()
 {
     localFile = new QFile(m_localPath, this);
     localFile->open(QFile::ReadWrite);
     connect(webdav, SIGNAL(finished(QNetworkReply*)), this, SLOT(handleReadComplete()));
-    webdav->get(m_remotePath, localFile);
+    if(m_direction == DOWN) {
+        webdav->get(m_remotePath, localFile);
+    } else {
+        webdav->put(m_remotePath, localFile);
+    }
 }
 
-void DownloadEntry::pauseDownload()
+void TransferEntry::pauseTransfer()
 {
 
 }
 
-void DownloadEntry::cancelDownload()
+void TransferEntry::cancelTransfer()
 {
 
 }
 
-void DownloadEntry::handleReadComplete()
+void TransferEntry::handleReadComplete()
 {
     if(m_open) {
         ShellCommand::runCommand("xdg-open", QStringList(getLocalPath()));

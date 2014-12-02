@@ -1,5 +1,5 @@
-#ifndef DOWNLOADENTRY_H
-#define DOWNLOADENTRY_H
+#ifndef TRANSFERENTRY_H
+#define TRANSFERENTRY_H
 
 #include <QObject>
 #include <QNetworkReply>
@@ -7,7 +7,7 @@
 
 #include "shellcommand.h"
 
-class DownloadEntry : public QObject
+class TransferEntry : public QObject
 {
     Q_OBJECT
 
@@ -17,11 +17,16 @@ class DownloadEntry : public QObject
     Q_PROPERTY(qreal progress READ getProgress NOTIFY progressChanged)
 
 public:
-    DownloadEntry(QObject *parent = 0, QWebdav *webdav = 0,
-                  QString name = "", QString remotePath = "",
-                  QString localPath = "", qint64 size = 0, bool open = false);
+    enum TransferDirection {
+        DOWN, UP
+    };
 
-    ~DownloadEntry();
+    TransferEntry(QObject *parent = 0, QWebdav *webdav = 0,
+                  QString name = "", QString remotePath = "",
+                  QString localPath = "", qint64 size = 0,
+                  TransferDirection direction = DOWN, bool open = false);
+
+    ~TransferEntry();
 
     QString getName();
     QString getLocalPath();
@@ -31,9 +36,9 @@ public:
 
     void setProgress(qreal value);
 
-    void startDownload();
-    void pauseDownload();
-    void cancelDownload();
+    void startTransfer();
+    void pauseTransfer();
+    void cancelTransfer();
 
 private:
     QWebdav *webdav;
@@ -47,6 +52,7 @@ private:
     QString m_remotePath;
     qint64 m_size;
     qreal m_progress;
+    TransferDirection m_direction;
 
 signals:
     void nameChanged();
@@ -61,4 +67,4 @@ public slots:
 
 };
 
-#endif // DOWNLOADENTRY_H
+#endif // TRANSFERENTRY_H

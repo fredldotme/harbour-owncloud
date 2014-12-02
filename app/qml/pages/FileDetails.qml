@@ -15,7 +15,7 @@ Page {
                 text: qsTr("Download")
                 enabled: downloader.isNotEnqueued(entry);
                 onClicked: {
-                    var download = downloader.enqueueDownload(entry, false)
+                    var download = transfer.enqueueDownload(entry, false)
                     enabled = false;
                 }
             }
@@ -25,7 +25,7 @@ Page {
                 text: qsTr("Download and open")
                 enabled: downloader.isNotEnqueued(entry);
                 onClicked: {
-                    var download = downloader.enqueueDownload(entry, true)
+                    var download = transfer.enqueueDownload(entry, true)
                     enabled = false;
                 }
             }

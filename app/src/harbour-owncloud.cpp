@@ -5,11 +5,11 @@
 #include "owncloudbrowser.h"
 #include "entryinfo.h"
 #include "settings.h"
-#include "downloadmanager.h"
-#include "downloadentry.h"
+#include "transfermanager.h"
+#include "transferentry.h"
 
 Q_DECLARE_METATYPE(EntryInfo*)
-Q_DECLARE_METATYPE(DownloadEntry*)
+Q_DECLARE_METATYPE(TransferEntry*)
 Q_DECLARE_METATYPE(OwnCloudBrowser*)
 
 int main(int argc, char *argv[])
@@ -17,8 +17,8 @@ int main(int argc, char *argv[])
     qmlRegisterType<EntryInfo>("harbour.owncloud", 1, 0, "EntryInfo");
     qmlRegisterType<OwnCloudBrowser>("harbour.owncloud", 1, 0, "OwnCloudBrowser");
     qmlRegisterType<Settings>("harbour.owncloud", 1, 0, "Settings");
-    qmlRegisterType<DownloadManager>("harbour.owncloud", 1, 0, "DownloadManager");
-    qmlRegisterType<DownloadEntry>("harbour.owncloud", 1, 0, "DownloadEntry");
+    qmlRegisterType<TransferManager>("harbour.owncloud", 1, 0, "TransferManager");
+    qmlRegisterType<TransferEntry>("harbour.owncloud", 1, 0, "TransferEntry");
 
     QGuiApplication *app = SailfishApp::application(argc, argv);
     app->setOrganizationName("harbour-owncloud");
@@ -28,11 +28,11 @@ int main(int argc, char *argv[])
 
     Settings *settings = new Settings();
     OwnCloudBrowser *browser = new OwnCloudBrowser(NULL, settings);
-    DownloadManager *downloader = new DownloadManager(0, browser);
+    TransferManager *transfer = new TransferManager(0, browser);
 
     view->rootContext()->setContextProperty("browser", browser);
     view->rootContext()->setContextProperty("settings", settings);
-    view->rootContext()->setContextProperty("downloader", downloader);
+    view->rootContext()->setContextProperty("transfer", transfer);
 
     view->setSource(SailfishApp::pathTo("qml/harbour-owncloud.qml"));
     view->showFullScreen();

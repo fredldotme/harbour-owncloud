@@ -1,47 +1,59 @@
-#include "downloadmanager.h"
+#include "transfermanager.h"
 
-DownloadManager::DownloadManager(QObject *parent, OwnCloudBrowser *browser) :
+TransferManager::TransferManager(QObject *parent, OwnCloudBrowser *browser) :
     QObject(parent)
 {
     this->browser = browser;
 }
 
-DownloadEntry* DownloadManager::enqueueDownload(EntryInfo* entry, bool open)
+void TransferManager::enqueueDownload(EntryInfo* entry, bool open)
 {
     downloadMutex.lock();
 
     QString name = entry->path().mid(entry->path().lastIndexOf("/") + 1);
     QString destination = destinationFromMIME(entry->mimeType()) + "/" + name;
+    TransferEntry::TransferDirection direction = TransferEntry::DOWN;
 
-    DownloadEntry *newDownload = new DownloadEntry(this, browser->getWebdav(), name, entry->path(), destination, entry->size(), open);
+    TransferEntry *newDownload = new TransferEntry(this,
+                                                   browser->getWebdav(),
+                                                   name,
+                                                   entry->path(),
+                                                   destination,
+                                                   entry->size(),
+                                                   direction,
+                                                   open);
+
     connect(newDownload, SIGNAL(downloadCompleted()), this, SLOT(handleDownloadCompleted()), Qt::DirectConnection);
     if(downloadQueue.size() == 0) {
-        newDownload->startDownload();
+        newDownload->startTransfer();
     }
     downloadQueue.enqueue(newDownload);
 
     downloadMutex.unlock();
-
-    return newDownload;
 }
 
-void DownloadManager::handleDownloadCompleted()
+void TransferManager::enqueueUpload(QString localPath, QString remotePath)
+{
+
+}
+
+void TransferManager::handleDownloadCompleted()
 {
     downloadMutex.lock();
 
     if(!downloadQueue.isEmpty()) {
         disconnect(downloadQueue.head(), SIGNAL(downloadCompleted()), this, SLOT(handleDownloadCompleted()));
-        DownloadEntry *entry = downloadQueue.dequeue();
+        TransferEntry *entry = downloadQueue.dequeue();
         delete entry;
     }
 
     if(!downloadQueue.isEmpty() && downloadQueue.head())
-        downloadQueue.head()->startDownload();
+        downloadQueue.head()->startTransfer();
 
     downloadMutex.unlock();
 }
 
-bool DownloadManager::isNotEnqueued(EntryInfo *entry)
+bool TransferManager::isNotEnqueued(EntryInfo *entry)
 {
     downloadMutex.lock();
     for(int i = 0; i < downloadQueue.size(); i++) {
@@ -54,7 +66,7 @@ bool DownloadManager::isNotEnqueued(EntryInfo *entry)
     return true;
 }
 
-QString DownloadManager::destinationFromMIME(QString mime)
+QString TransferManager::destinationFromMIME(QString mime)
 {
     QStandardPaths::StandardLocation location;
 

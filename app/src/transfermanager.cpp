@@ -6,6 +6,32 @@ TransferManager::TransferManager(QObject *parent, OwnCloudBrowser *browser) :
     this->browser = browser;
 }
 
+QVariantList TransferManager::getTransfers()
+{
+    downloadMutex.lock();
+    uploadMutex.lock();
+
+    // Show uploads before downloads in the list
+    QVariantList transfers;
+
+    foreach(TransferEntry *entry, uploadQueue) {
+        QVariant tmpVariant;
+        tmpVariant.setValue(entry);
+        transfers.append(tmpVariant);
+    }
+
+    foreach(TransferEntry *entry, downloadQueue) {
+        QVariant tmpVariant;
+        tmpVariant.setValue(entry);
+        transfers.append(tmpVariant);
+    }
+
+    downloadMutex.unlock();
+    uploadMutex.unlock();
+
+    return transfers;
+}
+
 void TransferManager::enqueueDownload(EntryInfo* entry, bool open)
 {
     downloadMutex.lock();
@@ -24,7 +50,7 @@ void TransferManager::enqueueDownload(EntryInfo* entry, bool open)
                                                    open);
 
     connect(newDownload, SIGNAL(downloadCompleted()), this, SLOT(handleDownloadCompleted()), Qt::DirectConnection);
-    if(downloadQueue.size() == 0) {
+    if(downloadQueue.isEmpty()) {
         newDownload->startTransfer();
     }
     downloadQueue.enqueue(newDownload);

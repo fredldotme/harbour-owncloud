@@ -19,6 +19,7 @@ public:
     Q_INVOKABLE void enqueueDownload(EntryInfo* entry, bool open);
     Q_INVOKABLE void enqueueUpload(QString localPath, QString remotePath);
     Q_INVOKABLE bool isNotEnqueued(EntryInfo* entry);
+    Q_INVOKABLE QVariantList getTransfers();
 
 private:
     OwnCloudBrowser *browser;

@@ -13,7 +13,7 @@ Page {
             MenuItem {
                 id: download
                 text: qsTr("Download")
-                enabled: downloader.isNotEnqueued(entry);
+                enabled: transfer.isNotEnqueued(entry);
                 onClicked: {
                     var download = transfer.enqueueDownload(entry, false)
                     enabled = false;
@@ -23,7 +23,7 @@ Page {
             MenuItem {
                 id: downloadAndOpen
                 text: qsTr("Download and open")
-                enabled: downloader.isNotEnqueued(entry);
+                enabled: transfer.isNotEnqueued(entry);
                 onClicked: {
                     var download = transfer.enqueueDownload(entry, true)
                     enabled = false;

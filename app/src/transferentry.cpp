@@ -7,6 +7,7 @@ TransferEntry::TransferEntry(QObject *parent, QWebdav *webdav,
     QObject(parent)
 {
     this->webdav = webdav;
+    this->networkReply = 0;
 
     m_name = name;
     m_remotePath = remotePath;
@@ -21,6 +22,8 @@ TransferEntry::TransferEntry(QObject *parent, QWebdav *webdav,
 TransferEntry::~TransferEntry()
 {
     disconnect(webdav, SIGNAL(finished(QNetworkReply*)), this, SLOT(handleReadComplete()));
+    if(networkReply)
+        delete networkReply;
 }
 
 QString TransferEntry::getName()
@@ -50,8 +53,16 @@ qreal TransferEntry::getProgress()
 
 void TransferEntry::setProgress(qreal value)
 {
-    m_progress = value;
-    emit progressChanged();
+    if(m_progress != value) {
+        m_progress = value;
+        qDebug() << "progress: " << value;
+        emit progressChanged(m_progress, m_remotePath);
+    }
+}
+
+int TransferEntry::getTransferDirection()
+{
+    return m_direction;
 }
 
 void TransferEntry::startTransfer()
@@ -60,10 +71,19 @@ void TransferEntry::startTransfer()
     localFile->open(QFile::ReadWrite);
     connect(webdav, SIGNAL(finished(QNetworkReply*)), this, SLOT(handleReadComplete()));
     if(m_direction == DOWN) {
-        webdav->get(m_remotePath, localFile);
+        networkReply = webdav->get(m_remotePath, localFile);
+        connect(networkReply, SIGNAL(downloadProgress(qint64,qint64)),
+                this, SLOT(handleProgressChange(qint64,qint64)));
     } else {
-        webdav->put(m_remotePath, localFile);
+        networkReply = webdav->put(m_remotePath, localFile);
+        connect(networkReply, SIGNAL(uploadProgress(qint64,qint64)),
+                this, SLOT(handleProgressChange(qint64,qint64)));
     }
+}
+
+void TransferEntry::handleProgressChange(qint64 bytes, qint64 bytesTotal)
+{
+    setProgress((qreal)bytes/(qreal)bytesTotal);
 }
 
 void TransferEntry::pauseTransfer()

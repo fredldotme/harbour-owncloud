@@ -42,6 +42,7 @@ Page {
             anchors.top: pulley.bottom
             anchors.topMargin: 64
             text: "Login automatically"
+            description: "Automatically log in to your ownCloud server when starting the app"
             checked: settings.autoLogin
             onCheckedChanged: {
                 settings.autoLogin = checked

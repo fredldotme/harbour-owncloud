@@ -43,7 +43,9 @@ OTHER_FILES += qml/harbour-owncloud.qml \
     qml/pages/Login.qml \
     qml/pages/SSLErrorDialog.qml \
     qml/pages/NotificationPopup.qml \
-    qml/pages/SettingsPage.qml
+    qml/pages/SettingsPage.qml \
+    qml/pages/LocalFileBrowser.qml \
+    qml/pages/TransferPage.qml
 
 # to disable building translations every time, comment out the
 # following CONFIG line

@@ -40,7 +40,7 @@ Page {
             id: autoLoginSwitch
             enabled: !loginInProgress
             anchors.top: pulley.bottom
-            anchors.topMargin: 64
+            anchors.topMargin: 96
             text: "Login automatically"
             description: "Automatically log in to your ownCloud server when starting the app"
             checked: settings.autoLogin

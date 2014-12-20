@@ -62,8 +62,8 @@ TransferEntry* TransferManager::enqueueDownload(EntryInfo* entry, bool open)
     emit transferingChanged();
 
     downloadMutex.unlock();
-
     emit transferAdded();
+
     return newDownload;
 }
 
@@ -85,8 +85,8 @@ void TransferManager::handleDownloadCompleted()
     if(!downloadQueue.isEmpty() && downloadQueue.head())
         downloadQueue.head()->startTransfer();
 
-    emit transferingChanged();
     downloadMutex.unlock();
+    emit transferingChanged();
 }
 
 bool TransferManager::isNotEnqueued(EntryInfo *entry)

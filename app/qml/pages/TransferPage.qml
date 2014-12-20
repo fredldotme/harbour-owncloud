@@ -15,6 +15,13 @@ Page {
         }
     }
 
+    Connections {
+        target: transfer
+        onTransferingChanged: {
+            listView.model = transfer.getTransfers();
+        }
+    }
+
     SilicaFlickable {
         anchors.fill: parent
 

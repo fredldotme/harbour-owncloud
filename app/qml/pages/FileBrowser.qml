@@ -33,6 +33,7 @@ Page {
 
             MenuItem {
                 text: qsTr("File transfers")
+                enabled: transfer.transfering
                 onClicked: {
                     pageStack.push("TransferPage.qml")
                 }

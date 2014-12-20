@@ -58,7 +58,6 @@ signals:
     void localPathChanged();
     void sizeChanged();
     void progressChanged(qreal progress, QString remotePath);
-
     void transferCompleted(bool success);
 
 public slots:

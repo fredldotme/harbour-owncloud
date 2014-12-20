@@ -94,6 +94,25 @@ Page {
         Label {
             x: 0
             y: sizeHint.y + sizeHint.height
+            text: "Last modified:"
+            width: (parent.width / 2) - 12
+            horizontalAlignment: Text.AlignRight
+            color: Theme.highlightColor
+        }
+
+        Label {
+            id: modHint
+            x: (parent.width / 2) + 24
+            y: sizeHint.y + sizeHint.height
+            width: (parent.width / 2) - 12
+            text: Qt.formatDateTime(entry.modTime, Qt.SystemLocaleShortDate);
+            horizontalAlignment: Text.AlignLeft
+            wrapMode: Text.Wrap
+        }
+
+        Label {
+            x: 0
+            y: modHint.y + modHint.height
             visible: entry.mimeType != ""
             text: "Type:"
             width: (parent.width / 2) - 12
@@ -104,7 +123,7 @@ Page {
         Label {
             id: typeHint
             x: (parent.width / 2) + 24
-            y: sizeHint.y + sizeHint.height
+            y: modHint.y + modHint.height
             width: (parent.width / 2) - 12
             visible: entry.mimeType != ""
             text: entry.mimeType

@@ -2,6 +2,7 @@
 #define ENTRYINFO_H
 
 #include <QObject>
+#include <QDateTime>
 
 class EntryInfo : public QObject
 {
@@ -12,6 +13,7 @@ class EntryInfo : public QObject
     Q_PROPERTY(bool isDirectory READ isDirectory NOTIFY isDirectoryChanged())
     Q_PROPERTY(qint64 size READ size)
     Q_PROPERTY(QString mimeType READ mimeType)
+    Q_PROPERTY(QDateTime modTime READ modTime)
 
 public:
     EntryInfo(QObject *parent = 0);
@@ -21,12 +23,14 @@ public:
     void setDirectory(bool value);
     void setSize(qint64 value);
     void setMimeType(QString value);
+    void setModTime(QDateTime modTime);
 
     QString path();
     QString name();
     bool isDirectory();
     qint64 size();
     QString mimeType();
+    QDateTime modTime();
 
 private:
     QString m_path;
@@ -34,7 +38,7 @@ private:
     bool m_isDirectory;
     qint64 m_size;
     QString m_mime;
-
+    QDateTime m_modTime;
 
 signals:
     void nameChanged();

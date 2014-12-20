@@ -25,7 +25,7 @@ void OwnCloudBrowser::resetWebdav()
 {
     if(webdav) {
         disconnect(webdav, SIGNAL(errorChanged(QString)), this, SLOT(proxyHandleLoginFailed()));
-        disconnect(&parser, SIGNAL(errorChanged(QString)), this, SLOT(proxyHandleLoginFailed()));
+        disconnect(&parser, 0, 0, 0);
         delete webdav;
     }
     webdav = new QWebdav();
@@ -92,7 +92,7 @@ void OwnCloudBrowser::handleResponse()
         entry->setSize(item.size());
         if(!item.isDir()) {
             entry->setMimeType(item.mimeType());
-            qDebug() << "MIME Type: " << item.mimeType();
+            entry->setModTime(item.lastModified());
         }
 
         QVariant tmpVariant;

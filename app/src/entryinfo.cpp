@@ -54,3 +54,13 @@ QString EntryInfo::mimeType()
 {
     return m_mime;
 }
+
+void EntryInfo::setModTime(QDateTime modTime)
+{
+    m_modTime = modTime;
+}
+
+QDateTime EntryInfo::modTime()
+{
+    return m_modTime;
+}

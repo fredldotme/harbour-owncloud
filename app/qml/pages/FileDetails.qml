@@ -7,6 +7,17 @@ Page {
     property EntryInfo entry;
     property TransferEntry downloadEntry;
 
+    function getHRSize(bytes) {
+        var units = ['bytes', 'kB', 'MB', 'GB', 'TB'];
+        var i = 0;
+
+        for(; i < 5 && bytes >= 1024; i++) {
+            bytes = bytes / 1024;
+        }
+
+        return bytes.toFixed(2) + " " + units[i];
+    }
+
     SilicaFlickable {
         anchors.fill: parent
 
@@ -60,27 +71,45 @@ Page {
         }
 
         Label {
-            id: remotePathLabel
-            text: "Remote path: " + entry.path
+            x: 0
             anchors.top: fileImage.bottom
             anchors.topMargin: 32
-            anchors.horizontalCenter: parent.horizontalCenter
+            text: "Size:"
+            width: (parent.width / 2) - 12
+            horizontalAlignment: Text.AlignRight
+            color: Theme.highlightColor
         }
 
         Label {
-            id: sizeLabel
-            text: "Size: " + entry.size + " bytes"
-            anchors.top: remotePathLabel.bottom
-            anchors.topMargin: 6
-            anchors.horizontalCenter: parent.horizontalCenter
+            id: sizeHint
+            x: (parent.width / 2) + 24
+            anchors.top: fileImage.bottom
+            anchors.topMargin: 32
+            text: getHRSize(entry.size)
+            width: (parent.width / 2) - 12
+            horizontalAlignment: Text.AlignLeft
+            wrapMode: Text.Wrap
         }
 
         Label {
-            text: "MIME type: " + entry.mimeType
+            x: 0
+            y: sizeHint.y + sizeHint.height
             visible: entry.mimeType != ""
-            anchors.top: sizeLabel.bottom
-            anchors.topMargin: 6
-            anchors.horizontalCenter: parent.horizontalCenter
+            text: "Type:"
+            width: (parent.width / 2) - 12
+            horizontalAlignment: Text.AlignRight
+            color: Theme.highlightColor
+        }
+
+        Label {
+            id: typeHint
+            x: (parent.width / 2) + 24
+            y: sizeHint.y + sizeHint.height
+            width: (parent.width / 2) - 12
+            visible: entry.mimeType != ""
+            text: entry.mimeType
+            horizontalAlignment: Text.AlignLeft
+            wrapMode: Text.Wrap
         }
     }
 }

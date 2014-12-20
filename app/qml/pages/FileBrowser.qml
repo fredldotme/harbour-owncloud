@@ -59,8 +59,8 @@ Page {
                 Image {
                     id: icon
                     source: listView.model[index].isDirectory ?
-                                "../images/large-folder.png" :
-                                "../images/large-file.png"
+                                "image://theme/icon-m-folder" :
+                                getIconFromMime(listView.model[index].mimeType)
                     anchors.left: parent.left
                     anchors.leftMargin: Theme.paddingLarge
                     anchors.top: parent.top
@@ -71,7 +71,7 @@ Page {
 
                 Label {
                     id: label
-                    x: icon.x + icon.width
+                    x: icon.x + icon.width + 6
                     y: icon.y - icon.height + 6
                     text: listView.model[index].name
                     anchors.verticalCenter: parent.verticalCenter

@@ -63,7 +63,7 @@ Page {
 
         Image {
             id: fileImage
-            source: "../images/large-file.png"
+            source: getIconFromMime(entry.mimeType)
             width: parent.width / 3
             height: width
             x: (parent.width / 2) - (width / 2)

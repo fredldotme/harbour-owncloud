@@ -40,6 +40,13 @@ Page {
             }
 
             MenuItem {
+                text: qsTr("Upload")
+                onClicked: {
+                    pageStack.push("UploadDialog.qml")
+                }
+            }
+
+            MenuItem {
                 text: qsTr("Refresh")
                 onClicked: {
                     listView.model = undefined

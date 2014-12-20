@@ -59,17 +59,39 @@ TransferEntry* TransferManager::enqueueDownload(EntryInfo* entry, bool open)
         newDownload->startTransfer();
     }
     downloadQueue.enqueue(newDownload);
-    emit transferingChanged();
 
     downloadMutex.unlock();
     emit transferAdded();
+    emit transferingChanged();
 
     return newDownload;
 }
 
 void TransferManager::enqueueUpload(QString localPath, QString remotePath)
 {
+    uploadMutex.lock();
+    QFile localFile(localPath);
+    qint64 size = localFile.size();
 
+    QString name = localPath.mid(localPath.lastIndexOf("/") + 1);
+    TransferEntry::TransferDirection direction = TransferEntry::UP;
+
+    TransferEntry *newUpload = new TransferEntry(this,
+                                                   browser->getWebdav(),
+                                                   name,
+                                                   remotePath,
+                                                   localPath,
+                                                   size,
+                                                   direction);
+
+    connect(newUpload, SIGNAL(transferCompleted(bool)), this, SLOT(handleUploadCompleted()), Qt::DirectConnection);
+    if(uploadQueue.isEmpty()) {
+        newUpload->startTransfer();
+    }
+    uploadQueue.enqueue(newUpload);
+    uploadMutex.unlock();
+    emit transferAdded();
+    emit transferingChanged();
 }
 
 void TransferManager::handleDownloadCompleted()
@@ -86,6 +108,23 @@ void TransferManager::handleDownloadCompleted()
         downloadQueue.head()->startTransfer();
 
     downloadMutex.unlock();
+    emit transferingChanged();
+}
+
+void TransferManager::handleUploadCompleted()
+{
+    uploadMutex.lock();
+
+    if(!uploadQueue.isEmpty()) {
+        disconnect(uploadQueue.head(), SIGNAL(transferCompleted(bool)), this, SLOT(handleDownloadCompleted()));
+        TransferEntry *entry = uploadQueue.dequeue();
+        entry->deleteLater();
+    }
+
+    if(!uploadQueue.isEmpty() && uploadQueue.head())
+        uploadQueue.head()->startTransfer();
+
+    uploadMutex.unlock();
     emit transferingChanged();
 }
 

@@ -15,6 +15,10 @@
         <source>File transfers</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Upload</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FileDetails</name>

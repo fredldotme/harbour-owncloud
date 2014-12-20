@@ -7,10 +7,12 @@
 #include "settings.h"
 #include "transfermanager.h"
 #include "transferentry.h"
+#include "localfilebrowser.h"
 
 Q_DECLARE_METATYPE(EntryInfo*)
 Q_DECLARE_METATYPE(TransferEntry*)
 Q_DECLARE_METATYPE(OwnCloudBrowser*)
+Q_DECLARE_METATYPE(LocalFileBrowser*)
 
 int main(int argc, char *argv[])
 {
@@ -19,6 +21,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<Settings>("harbour.owncloud", 1, 0, "Settings");
     qmlRegisterType<TransferManager>("harbour.owncloud", 1, 0, "TransferManager");
     qmlRegisterType<TransferEntry>("harbour.owncloud", 1, 0, "TransferEntry");
+    qmlRegisterType<LocalFileBrowser>("harbour.owncloud", 1, 0, "LocalFileBrowser");
 
     QGuiApplication *app = SailfishApp::application(argc, argv);
     app->setOrganizationName("harbour-owncloud");

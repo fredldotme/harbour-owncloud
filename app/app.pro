@@ -21,7 +21,8 @@ SOURCES += src/harbour-owncloud.cpp \
     src/settings.cpp \
     src/shellcommand.cpp \
     src/transferentry.cpp \
-    src/transfermanager.cpp
+    src/transfermanager.cpp \
+    src/localfilebrowser.cpp
 
 HEADERS += \
     src/owncloudbrowser.h \
@@ -29,7 +30,8 @@ HEADERS += \
     src/settings.h \
     src/shellcommand.h \
     src/transferentry.h \
-    src/transfermanager.h
+    src/transfermanager.h \
+    src/localfilebrowser.h
 
 OTHER_FILES += qml/harbour-owncloud.qml \
     qml/cover/CoverPage.qml \
@@ -44,8 +46,8 @@ OTHER_FILES += qml/harbour-owncloud.qml \
     qml/pages/SSLErrorDialog.qml \
     qml/pages/NotificationPopup.qml \
     qml/pages/SettingsPage.qml \
-    qml/pages/LocalFileBrowser.qml \
-    qml/pages/TransferPage.qml
+    qml/pages/TransferPage.qml \
+    qml/pages/UploadDialog.qml
 
 # to disable building translations every time, comment out the
 # following CONFIG line

@@ -69,7 +69,7 @@ void TransferEntry::startTransfer()
         connect(networkReply, SIGNAL(downloadProgress(qint64,qint64)),
                 this, SLOT(handleProgressChange(qint64,qint64)), Qt::DirectConnection);
     } else {
-        networkReply = webdav->put(m_remotePath, localFile);
+        networkReply = webdav->put(m_remotePath + m_name, localFile);
         connect(networkReply, SIGNAL(uploadProgress(qint64,qint64)),
                 this, SLOT(handleProgressChange(qint64,qint64)), Qt::DirectConnection);
     }

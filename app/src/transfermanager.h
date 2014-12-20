@@ -40,6 +40,7 @@ signals:
 
 public slots:
     void handleDownloadCompleted();
+    void handleUploadCompleted();
 
 };
 

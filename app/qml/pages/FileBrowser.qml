@@ -5,6 +5,8 @@ import harbour.owncloud 1.0
 
 Page {
     id: pageRoot
+    anchors.fill: parent
+
     property string remotePath : "/"
 
     Component.onCompleted: {
@@ -33,44 +35,47 @@ Page {
     SilicaFlickable {
         anchors.fill: parent
 
-        PullDownMenu {
-            MenuItem {
-                text: qsTr("Settings")
-                onClicked: {
-                    pageStack.push("SettingsPage.qml")
-                }
-            }
-
-            MenuItem {
-                text: qsTr("File transfers")
-                enabled: transfer.transfering
-                onClicked: {
-                    pageStack.push("TransferPage.qml")
-                }
-            }
-
-            MenuItem {
-                text: qsTr("Upload")
-                onClicked: {
-                    pageStack.push("UploadDialog.qml")
-                }
-            }
-
-            MenuItem {
-                text: qsTr("Refresh")
-                onClicked: {
-                    listView.model = undefined
-                    browser.getDirectoryContent(remotePath);
-                }
-            }
-        }
-
         SilicaListView {
             id: listView
             anchors.fill: parent
+
             header: PageHeader {
                 title: remotePath
             }
+
+            PullDownMenu {
+                MenuItem {
+                    text: qsTr("Refresh")
+                    onClicked: {
+                        listView.model = undefined
+                        browser.getDirectoryContent(remotePath);
+                    }
+                }
+
+                MenuItem {
+                    text: qsTr("Upload")
+                    onClicked: {
+                        pageStack.push("UploadDialog.qml")
+                    }
+                }
+            }
+            PushUpMenu {
+                MenuItem {
+                    text: qsTr("File transfers")
+                    enabled: transfer.transfering
+                    onClicked: {
+                        pageStack.push("TransferPage.qml")
+                    }
+                }
+
+                MenuItem {
+                    text: qsTr("Settings")
+                    onClicked: {
+                        pageStack.push("SettingsPage.qml")
+                    }
+                }
+            }
+
             delegate: BackgroundItem {
                 id: delegate
 
@@ -115,6 +120,8 @@ Page {
                 running: listView.model === undefined
             }
         }
+
+
     }
 }
 

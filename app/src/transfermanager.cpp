@@ -113,11 +113,15 @@ void TransferManager::handleDownloadCompleted()
 
 void TransferManager::handleUploadCompleted()
 {
+    QString name;
+    bool success;
     uploadMutex.lock();
 
     if(!uploadQueue.isEmpty()) {
         disconnect(uploadQueue.head(), SIGNAL(transferCompleted(bool)), this, SLOT(handleDownloadCompleted()));
         TransferEntry *entry = uploadQueue.dequeue();
+        name = entry->getName();
+        success = entry->getProgress() == 1.0;
         entry->deleteLater();
     }
 
@@ -125,6 +129,12 @@ void TransferManager::handleUploadCompleted()
         uploadQueue.head()->startTransfer();
 
     uploadMutex.unlock();
+
+    if(success)
+        emit uploadComplete(name);
+    else
+        emit uploadFailed(name);
+
     emit transferingChanged();
 }
 
@@ -140,6 +150,14 @@ bool TransferManager::isNotEnqueued(EntryInfo *entry)
         }
     }
     downloadMutex.unlock();
+
+    uploadMutex.lock();
+    for(int i = 0; i < uploadQueue.size(); i++) {
+        if(uploadQueue.at(i)->getRemotePath() == entry->path()) {
+            return false;
+        }
+    }
+    uploadMutex.unlock();
 
     return true;
 }

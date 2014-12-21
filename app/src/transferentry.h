@@ -32,6 +32,7 @@ public:
     QString getLocalPath();
     QString getRemotePath();
     qint64 getSize();
+    qreal getProgress();
     int getTransferDirection();
 
     void setProgress(qreal value);

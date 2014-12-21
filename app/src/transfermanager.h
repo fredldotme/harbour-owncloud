@@ -37,6 +37,10 @@ private:
 signals:
     void transferAdded();
     void transferingChanged();
+    void downloadComplete(QString name, QString path);
+    void downloadFailed(QString name);
+    void uploadComplete(QString name);
+    void uploadFailed(QString name);
 
 public slots:
     void handleDownloadCompleted();

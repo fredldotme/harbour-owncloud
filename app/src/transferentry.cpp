@@ -46,6 +46,11 @@ qint64 TransferEntry::getSize()
     return m_size;
 }
 
+qreal TransferEntry::getProgress()
+{
+    return m_progress;
+}
+
 void TransferEntry::setProgress(qreal value)
 {
     if(m_progress != value) {

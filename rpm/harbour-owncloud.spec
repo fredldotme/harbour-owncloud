@@ -7,7 +7,7 @@ Name:       harbour-owncloud
 
 # >> macros
 %define debug_package %{nil}
-%define __requires_exclude ^libqwebdav.*$
+%define __requires_exclude ^libqwebdav|libnemonotifications-qt5.*$
 %define __provides_exclude_from ^%{_datadir}/.*$
 # << macros
 

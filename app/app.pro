@@ -13,7 +13,7 @@
 TARGET = harbour-owncloud
 
 CONFIG += sailfishapp
-QT += xml
+QT += xml dbus
 
 SOURCES += src/harbour-owncloud.cpp \
     src/owncloudbrowser.cpp \
@@ -44,7 +44,6 @@ OTHER_FILES += qml/harbour-owncloud.qml \
     qml/pages/FileDetails.qml \
     qml/pages/Login.qml \
     qml/pages/SSLErrorDialog.qml \
-    qml/pages/NotificationPopup.qml \
     qml/pages/SettingsPage.qml \
     qml/pages/TransferPage.qml \
     qml/pages/UploadDialog.qml
@@ -55,14 +54,21 @@ CONFIG += sailfishapp_i18n
 TRANSLATIONS += translations/harbour-owncloud-de.ts
 
 LIBS += $$OUT_PWD/../qwebdavlib/qwebdavlib/libqwebdav.so.1
+LIBS += $$OUT_PWD/../nemo-qml-plugin-notifications/src/libnemonotifications-qt5.so.0
 
 QMAKE_RPATHDIR += /usr/share/harbour-owncloud/lib
 
 qwebdavlib.path = /usr/share/harbour-owncloud/lib
 qwebdavlib.files += $$OUT_PWD/../qwebdavlib/qwebdavlib/libqwebdav.so.1
-INSTALLS += qwebdavlib
+
+notifications.path = /usr/share/harbour-owncloud/lib
+notifications.files += $$OUT_PWD/../nemo-qml-plugin-notifications/src/libnemonotifications-qt5.so.0
+INSTALLS += qwebdavlib notifications
 
 INCLUDEPATH += $$PWD/../qwebdavlib/qwebdavlib
 DEPENDPATH += $$PWD/../qwebdavlib/qwebdavlib
+
+INCLUDEPATH += $$PWD/../nemo-qml-plugin-notifications/src
+DEPENDPATH += $$PWD/../nemo-qml-plugin-notifications/src
 
 DEFINES += QWEBDAVITEM_EXTENDED_PROPERTIES

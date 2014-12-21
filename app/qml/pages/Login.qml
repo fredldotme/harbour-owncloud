@@ -4,9 +4,6 @@ import Sailfish.Silica 1.0
 Page {
     id: pageRoot
 
-    property bool loginFailed : false;
-    property bool invalidURL : false;
-
     Component.onCompleted: {
         settings.readSettings();
         if(settings.autoLogin) {
@@ -28,6 +25,7 @@ Page {
         target: browser
         onLoginFailed: {
             loginInProgress = false;
+            notify("Login failed", "Please check your host address and credentials")
         }
     }
 
@@ -43,20 +41,6 @@ Page {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: parent.top
             anchors.topMargin: 20
-        }
-
-        NotificationPopup {
-            id: loginFailedPopup
-            visible: loginFailed
-            height: topLabel.height + 20
-            notification: "Login failed"
-        }
-
-        NotificationPopup {
-            id: invalidURLPopup
-            visible: invalidURL
-            height: topLabel.height + 20
-            notification: "Invalid URL"
         }
 
         TextField {
@@ -119,7 +103,6 @@ Page {
             anchors.horizontalCenter: parent.horizontalCenter
 
             onClicked: {
-                invalidURL = false;
                 if(settings.parseFromAddressString(hostaddress.text)) {
                     settings.username = username.text;
                     settings.password = password.text;
@@ -130,7 +113,7 @@ Page {
                     loginInProgress = true;
                     browser.testConnection();
                 } else {
-                    invalidURL = true;
+                    notify("Invalid URL", "Please check your host address")
                 }
             }
         }

@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import harbour.owncloud 1.0
 import "pages"
 
 ApplicationWindow
@@ -18,6 +19,12 @@ ApplicationWindow
         }
     }
 
+    function notify(summary, body) {
+        notification.previewSummary = summary
+        notification.previewBody = body
+        notification.publish();
+    }
+
     Connections {
         target: browser
         onSslCertifcateError: {
@@ -33,10 +40,19 @@ ApplicationWindow
         onLoginFailed: {
             pageStack.completeAnimation();
             pageStack.clear();
-            var loginComponent = Qt.createComponent("pages/Login.qml");
-            var loginObject = loginComponent.createObject(applicationWindow, { loginFailed: true})
             pageStack.completeAnimation();
-            pageStack.push(loginObject)
+            pageStack.push("pages/Login.qml")
+        }
+    }
+
+    Notification {
+        id: notification
+    }
+
+    Connections {
+        target: transfer
+        onUploadComplete: {
+            notify("Upload complete", name + " uploaded successfully")
         }
     }
 

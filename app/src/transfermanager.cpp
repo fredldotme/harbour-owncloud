@@ -125,6 +125,7 @@ void TransferManager::handleDownloadCompleted()
 void TransferManager::handleUploadCompleted()
 {
     QString name;
+    QString remotePath;
     bool success;
     uploadMutex.lock();
 
@@ -132,6 +133,7 @@ void TransferManager::handleUploadCompleted()
         disconnect(uploadQueue.head(), SIGNAL(transferCompleted(bool)), this, SLOT(handleDownloadCompleted()));
         TransferEntry *entry = uploadQueue.dequeue();
         name = entry->getName();
+        remotePath = entry->getRemotePath();
         success = entry->getProgress() == 1.0;
         entry->deleteLater();
     }
@@ -142,7 +144,7 @@ void TransferManager::handleUploadCompleted()
     uploadMutex.unlock();
 
     if(success)
-        emit uploadComplete(name);
+        emit uploadComplete(name, remotePath);
     else
         emit uploadFailed(name);
 

@@ -20,6 +20,16 @@ Page {
         }
     }
 
+    Connections {
+        target: transfer
+        onUploadComplete: {
+            if(remotePath === pageRoot.remotePath) {
+                listView.model = undefined
+                browser.getDirectoryContent(remotePath);
+            }
+        }
+    }
+
     SilicaFlickable {
         anchors.fill: parent
 

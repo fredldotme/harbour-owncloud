@@ -37,9 +37,9 @@ private:
 signals:
     void transferAdded();
     void transferingChanged();
-    void downloadComplete(QString name, QString path);
+    void downloadComplete(QString name, QString localPath);
     void downloadFailed(QString name);
-    void uploadComplete(QString name);
+    void uploadComplete(QString name, QString remotePath);
     void uploadFailed(QString name);
 
 public slots:

@@ -55,28 +55,32 @@ ApplicationWindow
     Connections {
         target: transfer
         onUploadComplete: {
-            notify("Upload complete", name + " uploaded successfully")
+            if(settings.notifications)
+                notify("Upload complete", name + " uploaded successfully")
         }
     }
 
     Connections {
         target: transfer
         onDownloadComplete: {
-            notify("Download complete", name + " downloaded successfully")
+            if(settings.notifications)
+                notify("Download complete", name + " downloaded successfully")
         }
     }
 
     Connections {
         target: transfer
         onUploadFailed: {
-            notify("Upload failed!", name + " couldn't be uploaded")
+            if(settings.notifications)
+                notify("Upload failed!", name + " couldn't be uploaded")
         }
     }
 
     Connections {
         target: transfer
         onDownloadFailed: {
-            notify("Download failed!", name + " couldn't be downloaded")
+            if(settings.notifications)
+                notify("Download failed!", name + " couldn't be downloaded")
         }
     }
 

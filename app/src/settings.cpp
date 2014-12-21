@@ -6,6 +6,7 @@ Settings::Settings(QObject *parent) :
     m_hoststring = "https://";
     m_isHttps = true;
     m_autoLogin = false;
+    m_notifications = true;
 }
 
 bool Settings::parseFromAddressString(QString value)
@@ -61,6 +62,14 @@ bool Settings::readSettings()
     }
     emit autoLoginChanged();
 
+    if(settings.allKeys().contains("notifications"))
+    {
+        m_notifications = settings.value("notifications").toBool();
+    } else {
+        m_notifications = true;
+    }
+    emit notificationSettingsChanged();
+
     if(settings.allKeys().contains("username"))
     {
         m_username = settings.value("username").toString();
@@ -94,6 +103,7 @@ void Settings::writeSettings()
     settings.setValue("port", QVariant::fromValue<int>(m_port));
     settings.setValue("isHttps", QVariant::fromValue<bool>(m_isHttps));
     settings.setValue("autoLogin", QVariant::fromValue<bool>(m_autoLogin));
+    settings.setValue("notifications", QVariant::fromValue<bool>(m_notifications));
     settings.setValue("username", QVariant::fromValue<QString>(m_username));
     settings.setValue("password", QVariant::fromValue<QString>(m_password.toLatin1().toBase64()));
     settings.setValue("certMD5", QVariant::fromValue<QString>(m_md5Hex));
@@ -119,6 +129,7 @@ void Settings::resetSettings()
     m_hoststring = "https://";
     m_isHttps = true;
     m_autoLogin = false;
+    m_notifications = true;
 
     emit hoststringChanged();
     emit usernameChanged();
@@ -150,6 +161,17 @@ void Settings::setAutoLogin(bool value)
 {
     m_autoLogin = value;
     emit autoLoginChanged();
+}
+
+bool Settings::notifications()
+{
+    return m_notifications;
+}
+
+void Settings::setNotifications(bool value)
+{
+    m_notifications = value;
+    emit notificationSettingsChanged();
 }
 
 QString Settings::hostname()

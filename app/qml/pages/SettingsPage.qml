@@ -38,7 +38,6 @@ Page {
 
         TextSwitch {
             id: autoLoginSwitch
-            enabled: !loginInProgress
             anchors.top: pulley.bottom
             anchors.topMargin: 96
             text: "Login automatically"
@@ -46,6 +45,18 @@ Page {
             checked: settings.autoLogin
             onCheckedChanged: {
                 settings.autoLogin = checked
+                settings.writeSettings()
+            }
+        }
+
+        TextSwitch {
+            id: notificationSwitch
+            anchors.top: autoLoginSwitch.bottom
+            text: "Notifications"
+            description: "Show global notifications when transfering files"
+            checked: settings.notifications
+            onCheckedChanged: {
+                settings.notifications = checked
                 settings.writeSettings()
             }
         }

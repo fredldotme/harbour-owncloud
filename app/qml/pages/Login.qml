@@ -21,14 +21,6 @@ Page {
         }
     }
 
-    Connections {
-        target: browser
-        onLoginFailed: {
-            loginInProgress = false;
-            notify("Login failed", "Please check your host address and credentials")
-        }
-    }
-
     SilicaFlickable {
         anchors.fill: parent
 

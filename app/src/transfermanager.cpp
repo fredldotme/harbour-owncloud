@@ -96,11 +96,17 @@ void TransferManager::enqueueUpload(QString localPath, QString remotePath)
 
 void TransferManager::handleDownloadCompleted()
 {
+    QString name;
+    QString path;
+    bool success;
     downloadMutex.lock();
 
     if(!downloadQueue.isEmpty()) {
         disconnect(downloadQueue.head(), SIGNAL(transferCompleted(bool)), this, SLOT(handleDownloadCompleted()));
         TransferEntry *entry = downloadQueue.dequeue();
+        name = entry->getName();
+        path = entry->getLocalPath();
+        success = entry->getProgress() == 1.0;
         entry->deleteLater();
     }
 
@@ -108,6 +114,11 @@ void TransferManager::handleDownloadCompleted()
         downloadQueue.head()->startTransfer();
 
     downloadMutex.unlock();
+
+    if(success)
+        emit downloadComplete(name, path);
+    else
+        emit downloadFailed(name);
     emit transferingChanged();
 }
 

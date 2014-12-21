@@ -38,6 +38,9 @@ ApplicationWindow
     Connections {
         target: browser
         onLoginFailed: {
+            loginInProgress = false;
+            notify("Login failed", "Please check your host address and credentials")
+
             pageStack.completeAnimation();
             pageStack.clear();
             pageStack.completeAnimation();
@@ -53,6 +56,27 @@ ApplicationWindow
         target: transfer
         onUploadComplete: {
             notify("Upload complete", name + " uploaded successfully")
+        }
+    }
+
+    Connections {
+        target: transfer
+        onDownloadComplete: {
+            notify("Download complete", name + " downloaded successfully")
+        }
+    }
+
+    Connections {
+        target: transfer
+        onUploadFailed: {
+            notify("Upload failed!", name + " couldn't be uploaded")
+        }
+    }
+
+    Connections {
+        target: transfer
+        onDownloadFailed: {
+            notify("Download failed!", name + " couldn't be downloaded")
         }
     }
 

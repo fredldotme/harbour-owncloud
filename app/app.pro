@@ -54,16 +54,13 @@ CONFIG += sailfishapp_i18n
 TRANSLATIONS += translations/harbour-owncloud-de.ts
 
 LIBS += $$OUT_PWD/../qwebdavlib/qwebdavlib/libqwebdav.so.1
-LIBS += $$OUT_PWD/../nemo-qml-plugin-notifications/src/libnemonotifications-qt5.so.0
 
 QMAKE_RPATHDIR += /usr/share/harbour-owncloud/lib
 
 qwebdavlib.path = /usr/share/harbour-owncloud/lib
 qwebdavlib.files += $$OUT_PWD/../qwebdavlib/qwebdavlib/libqwebdav.so.1
 
-notifications.path = /usr/share/harbour-owncloud/lib
-notifications.files += $$OUT_PWD/../nemo-qml-plugin-notifications/src/libnemonotifications-qt5.so.0
-INSTALLS += qwebdavlib notifications
+INSTALLS += qwebdavlib
 
 INCLUDEPATH += $$PWD/../qwebdavlib/qwebdavlib
 DEPENDPATH += $$PWD/../qwebdavlib/qwebdavlib

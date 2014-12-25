@@ -34,7 +34,6 @@ private:
     QWebdav *webdav;
     QWebdavDirParser parser;
     QString currentPath;
-    QList<QWebdav*> secondaryWebdavs;
 
 signals:
     void directoryContentChanged(QString currentPath, QVariantList entries);
@@ -49,7 +48,6 @@ public slots:
     void testConnectionFinished();
     void proxyHandleSslError(const QList<QSslError> &errors);
     void proxyHandleLoginFailed();
-    void removeSecondaryWebdav(QWebdav* webdav);
     void refreshDirectoryContent(QString path);
 
 public:

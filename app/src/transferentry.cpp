@@ -7,6 +7,7 @@ TransferEntry::TransferEntry(QObject *parent, QWebdav *webdav,
     QObject(parent)
 {
     this->webdav = webdav;
+    webdav->setParent(this);
     this->networkReply = 0;
 
     m_name = name;
@@ -91,9 +92,6 @@ void TransferEntry::cancelTransfer()
         networkReply->abort();
 
     emit transferCompleted(false);
-
-    if(webdav)
-        webdav->deleteLater();
 }
 
 void TransferEntry::handleReadComplete()
@@ -103,7 +101,4 @@ void TransferEntry::handleReadComplete()
     }
 
     emit transferCompleted(true);
-
-    if(webdav)
-        webdav->deleteLater();
 }

@@ -34,15 +34,9 @@ QWebdav* OwnCloudBrowser::getNewWebdav()
                                  settings->port(),
                                  settings->isHttps() ? settings->md5Hex() : "",
                                  settings->isHttps() ? settings->sha1Hex() : "");
-    connect(newWebdav, SIGNAL(destroyed()), this, SLOT(remoteSecondaryWebdav(newWebdav)), Qt::DirectConnection);
-    secondaryWebdavs.append(newWebdav);
     return newWebdav;
 }
 
-void OwnCloudBrowser::removeSecondaryWebdav(QWebdav *webdav)
-{
-    secondaryWebdavs.removeOne(webdav);
-}
 
 void OwnCloudBrowser::resetWebdav()
 {
@@ -160,6 +154,6 @@ void OwnCloudBrowser::makeDirectory(QString dirName)
 {
     QWebdav* mkdirWebdav = getNewWebdav();
     connect(mkdirWebdav, SIGNAL(finished(QNetworkReply*)), this, SLOT(refreshDirectoryContent(currentPath)), Qt::DirectConnection);
-    connect(mkdirWebdav, SIGNAL(finished(QNetworkReply*)), this, SLOT(removeSecondaryWebdav(mkdirWebdav)), Qt::DirectConnection);
+    connect(mkdirWebdav, SIGNAL(finished(QNetworkReply*)), mkdirWebdav, SLOT(deleteLater()), Qt::DirectConnection);
     mkdirWebdav->mkdir(currentPath + dirName);
 }

@@ -123,7 +123,7 @@ void OwnCloudBrowser::handleResponse()
         entries.append(tmpVariant);
     }
 
-    emit directoryContentChanged(currentPath, entries);
+    emit directoryContentChanged(parser.path(), entries);
 }
 
 void OwnCloudBrowser::printError(QString msg)
@@ -136,8 +136,30 @@ QString OwnCloudBrowser::getCurrentPath()
     return currentPath;
 }
 
+void OwnCloudBrowser::goToParentPath()
+{
+    // Called when navigating back in the browser
+    // Keeping path and UI in sync
+
+    QString tmpPath = currentPath.mid(0, currentPath.length() - 1);
+    currentPath = tmpPath.mid(0, tmpPath.lastIndexOf('/') + 1);
+}
+
 void OwnCloudBrowser::getDirectoryContent(QString path)
 {
     currentPath = path;
     parser.listDirectory(webdav, path);
+}
+
+void OwnCloudBrowser::refreshDirectoryContent(QString path)
+{
+    parser.listDirectory(webdav, path);
+}
+
+void OwnCloudBrowser::makeDirectory(QString dirName)
+{
+    QWebdav* mkdirWebdav = getNewWebdav();
+    connect(mkdirWebdav, SIGNAL(finished(QNetworkReply*)), this, SLOT(refreshDirectoryContent(currentPath)), Qt::DirectConnection);
+    connect(mkdirWebdav, SIGNAL(finished(QNetworkReply*)), this, SLOT(removeSecondaryWebdav(mkdirWebdav)), Qt::DirectConnection);
+    mkdirWebdav->mkdir(currentPath + dirName);
 }

@@ -19,6 +19,10 @@
         <source>Upload</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Make directory</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FileDetails</name>

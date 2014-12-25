@@ -32,6 +32,14 @@ Page {
         }
     }
 
+    onStatusChanged: {
+        if (status === PageStatus.Deactivating) {
+            if (_navigation === PageNavigation.Back) {
+                browser.goToParentPath();
+            }
+        }
+    }
+
     SilicaFlickable {
         anchors.fill: parent
 
@@ -49,6 +57,13 @@ Page {
                     onClicked: {
                         listView.model = undefined
                         browser.getDirectoryContent(remotePath);
+                    }
+                }
+
+                MenuItem {
+                    text:qsTr("Make directory")
+                    onClicked: {
+                        pageStack.push("MkDirDialog.qml")
                     }
                 }
 

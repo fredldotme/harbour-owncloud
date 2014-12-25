@@ -21,7 +21,9 @@ public:
 
     Q_INVOKABLE void testConnection();
     Q_INVOKABLE QString getCurrentPath();
+    Q_INVOKABLE void goToParentPath();
     Q_INVOKABLE void getDirectoryContent(QString path);
+    Q_INVOKABLE void makeDirectory(QString dirName);
     Q_INVOKABLE void resetWebdav();
 
     QWebdav* getWebdav();
@@ -48,6 +50,7 @@ public slots:
     void proxyHandleSslError(const QList<QSslError> &errors);
     void proxyHandleLoginFailed();
     void removeSecondaryWebdav(QWebdav* webdav);
+    void refreshDirectoryContent(QString path);
 
 public:
     void start();

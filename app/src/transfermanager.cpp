@@ -46,7 +46,7 @@ TransferEntry* TransferManager::enqueueDownload(EntryInfo* entry, bool open)
     TransferEntry::TransferDirection direction = TransferEntry::DOWN;
 
     TransferEntry *newDownload = new TransferEntry(this,
-                                                   browser->getWebdav(),
+                                                   browser->getNewWebdav(),
                                                    name,
                                                    entry->path(),
                                                    destination,
@@ -77,7 +77,7 @@ void TransferManager::enqueueUpload(QString localPath, QString remotePath)
     TransferEntry::TransferDirection direction = TransferEntry::UP;
 
     TransferEntry *newUpload = new TransferEntry(this,
-                                                   browser->getWebdav(),
+                                                   browser->getNewWebdav(),
                                                    name,
                                                    remotePath,
                                                    localPath,

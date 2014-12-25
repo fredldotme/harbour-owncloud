@@ -22,8 +22,6 @@ TransferEntry::TransferEntry(QObject *parent, QWebdav *webdav,
 TransferEntry::~TransferEntry()
 {
     disconnect(this, 0, 0, 0);
-    if(networkReply)
-        delete networkReply;
 }
 
 QString TransferEntry::getName()
@@ -78,6 +76,7 @@ void TransferEntry::startTransfer()
         connect(networkReply, SIGNAL(uploadProgress(qint64,qint64)),
                 this, SLOT(handleProgressChange(qint64,qint64)), Qt::DirectConnection);
     }
+    connect(this, SIGNAL(destroyed()), networkReply, SLOT(deleteLater()));
 }
 
 void TransferEntry::handleProgressChange(qint64 bytes, qint64 bytesTotal)
@@ -90,7 +89,11 @@ void TransferEntry::cancelTransfer()
 {
     if(networkReply)
         networkReply->abort();
+
     emit transferCompleted(false);
+
+    if(webdav)
+        webdav->deleteLater();
 }
 
 void TransferEntry::handleReadComplete()
@@ -100,4 +103,7 @@ void TransferEntry::handleReadComplete()
     }
 
     emit transferCompleted(true);
+
+    if(webdav)
+        webdav->deleteLater();
 }

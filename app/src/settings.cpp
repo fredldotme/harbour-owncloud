@@ -23,6 +23,7 @@ bool Settings::parseFromAddressString(QString value)
         m_isHttps = value.startsWith("https://") ? true : false;
         m_hostname = url.host();
         m_path = url.path();
+        qDebug() << "PATH:" << m_path;
         m_port = url.port();
 
         if(m_port == -1) {
@@ -181,7 +182,7 @@ QString Settings::hostname()
 
 QString Settings::path()
 {
-    return m_path;
+    return m_path.isEmpty() ? "/" : m_path;
 }
 
 int Settings::port()

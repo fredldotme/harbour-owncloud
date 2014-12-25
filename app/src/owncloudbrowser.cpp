@@ -21,6 +21,29 @@ QWebdav* OwnCloudBrowser::getWebdav()
     return webdav;
 }
 
+QWebdav* OwnCloudBrowser::getNewWebdav()
+{
+    /* Used for file uploads
+     * Helps to not confuse errors of simultaneous file operations */
+    QWebdav* newWebdav = new QWebdav();
+    newWebdav->setConnectionSettings(settings->isHttps() ? QWebdav::HTTPS : QWebdav::HTTP,
+                                 settings->hostname(),
+                                 settings->path() + "remote.php/webdav",
+                                 settings->username(),
+                                 settings->password(),
+                                 settings->port(),
+                                 settings->isHttps() ? settings->md5Hex() : "",
+                                 settings->isHttps() ? settings->sha1Hex() : "");
+    connect(newWebdav, SIGNAL(destroyed()), this, SLOT(remoteSecondaryWebdav(newWebdav)), Qt::DirectConnection);
+    secondaryWebdavs.append(newWebdav);
+    return newWebdav;
+}
+
+void OwnCloudBrowser::removeSecondaryWebdav(QWebdav *webdav)
+{
+    secondaryWebdavs.removeOne(webdav);
+}
+
 void OwnCloudBrowser::resetWebdav()
 {
     if(webdav) {
@@ -36,12 +59,12 @@ void OwnCloudBrowser::resetWebdav()
 void OwnCloudBrowser::reloadSettings() {
     webdav->setConnectionSettings(settings->isHttps() ? QWebdav::HTTPS : QWebdav::HTTP,
                                  settings->hostname(),
-                                 settings->path() + "/remote.php/webdav",
+                                 settings->path() + "remote.php/webdav",
                                  settings->username(),
                                  settings->password(),
                                  settings->port(),
-                                 settings->md5Hex(),
-                                 settings->sha1Hex());
+                                 settings->isHttps() ? settings->md5Hex() : "",
+                                 settings->isHttps() ? settings->sha1Hex() : "");
 }
 
 void OwnCloudBrowser::testConnection()

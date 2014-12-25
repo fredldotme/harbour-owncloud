@@ -1,6 +1,4 @@
-Investigate issues with reading MIME types
-
-File uploads
+Implement Sharing UI
 
 Discuss and implement automatic camera photo uploading
 
@@ -9,7 +7,3 @@ Add missing file/directory operations:
     - move
     - delete
     - mkdir
-
-Relevant information about files and directories in respecive detail pages
-
-[CLAIMED beidl] UI for Transfer Manager

@@ -35,6 +35,8 @@ private:
     QWebdavDirParser parser;
     QString currentPath;
 
+    void applySettingsToWebdav(QWebdav *webdav);
+
 signals:
     void directoryContentChanged(QString currentPath, QVariantList entries);
     void sslCertifcateError(QString md5Digest, QString sha1Digest);

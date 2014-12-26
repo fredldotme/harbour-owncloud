@@ -24,6 +24,7 @@ public:
     Q_INVOKABLE void goToParentPath();
     Q_INVOKABLE void getDirectoryContent(QString path);
     Q_INVOKABLE void makeDirectory(QString dirName);
+    Q_INVOKABLE void remove(QString name);
     Q_INVOKABLE void resetWebdav();
 
     QWebdav* getWebdav();
@@ -42,6 +43,7 @@ signals:
     void sslCertifcateError(QString md5Digest, QString sha1Digest);
     void loginFailed();
     void loginSucceeded();
+    void refreshStarted(QString pathToRefresh);
 
 public slots:
     void handleResponse();
@@ -50,7 +52,7 @@ public slots:
     void testConnectionFinished();
     void proxyHandleSslError(const QList<QSslError> &errors);
     void proxyHandleLoginFailed();
-    void refreshDirectoryContent(QString path);
+    void refreshDirectoryContent();
 
 public:
     void start();

@@ -143,15 +143,27 @@ void OwnCloudBrowser::getDirectoryContent(QString path)
     parser.listDirectory(webdav, path);
 }
 
-void OwnCloudBrowser::refreshDirectoryContent(QString path)
+void OwnCloudBrowser::refreshDirectoryContent()
 {
-    parser.listDirectory(webdav, path);
+    parser.listDirectory(webdav, currentPath);
 }
 
 void OwnCloudBrowser::makeDirectory(QString dirName)
 {
     QWebdav* mkdirWebdav = getNewWebdav();
-    connect(mkdirWebdav, SIGNAL(finished(QNetworkReply*)), this, SLOT(refreshDirectoryContent(currentPath)), Qt::DirectConnection);
+    connect(mkdirWebdav, SIGNAL(finished(QNetworkReply*)), this, SLOT(refreshDirectoryContent()), Qt::DirectConnection);
     connect(mkdirWebdav, SIGNAL(finished(QNetworkReply*)), mkdirWebdav, SLOT(deleteLater()), Qt::DirectConnection);
     mkdirWebdav->mkdir(currentPath + dirName);
+
+    emit refreshStarted(currentPath);
+}
+
+void OwnCloudBrowser::remove(QString name)
+{
+    QWebdav* rmWebdav = getNewWebdav();
+    connect(rmWebdav, SIGNAL(finished(QNetworkReply*)), this, SLOT(refreshDirectoryContent()), Qt::DirectConnection);
+    connect(rmWebdav, SIGNAL(finished(QNetworkReply*)), rmWebdav, SLOT(deleteLater()), Qt::DirectConnection);
+    rmWebdav->remove(currentPath + name);
+
+    emit refreshStarted(currentPath);
 }

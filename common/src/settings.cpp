@@ -1,12 +1,26 @@
 #include "settings.h"
+#include <QStandardPaths>
+
+Settings *Settings::instance()
+{
+    static Settings settings;
+    return &settings;
+}
 
 Settings::Settings(QObject *parent) :
-    QObject(parent)
+    QObject(parent),
+    settings("harbour-owncloud", "harbour-owncloud")
 {
     m_hoststring = "https://";
     m_isHttps = true;
     m_autoLogin = false;
     m_notifications = true;
+
+    connect(this, SIGNAL(hoststringChanged()), SIGNAL(settingsChanged()));
+    connect(this, SIGNAL(usernameChanged()), SIGNAL(settingsChanged()));
+    connect(this, SIGNAL(passwordChanged()), SIGNAL(settingsChanged()));
+    connect(this, SIGNAL(uploadAutomaticallyChanged()), SIGNAL(settingsChanged()));
+    connect(this, SIGNAL(localPicturesPathChanged()), SIGNAL(settingsChanged()));
 }
 
 bool Settings::parseFromAddressString(QString value)
@@ -47,13 +61,19 @@ bool Settings::readSettings()
         m_port = settings.value("port").toInt();
         m_isHttps = settings.value("isHttps").toBool();
 
-        m_hoststring = m_isHttps ? "https://" : "http://";
-        m_hoststring += m_hostname + ":" + QString::number(m_port) + m_path;
+        QString hostString;
+        hostString = m_isHttps ? "https://" : "http://";
+        hostString += m_hostname + ":" + QString::number(m_port) + m_path;
+
+        if (hostString != m_hoststring) {
+            m_hoststring = hostString;
+            emit hoststringChanged();
+        }
     } else {
         m_hoststring = "https://";
         m_isHttps = true;
+        emit hoststringChanged();
     }
-    emit hoststringChanged();
 
     if(settings.allKeys().contains("autoLogin"))
     {
@@ -73,26 +93,41 @@ bool Settings::readSettings()
 
     if(settings.allKeys().contains("username"))
     {
-        m_username = settings.value("username").toString();
+        if (settings.value("username").toString() != m_username) {
+            m_username = settings.value("username").toString();
+            emit usernameChanged();
+        }
     }
     emit usernameChanged();
 
     if(settings.allKeys().contains("password"))
     {
-        m_password = QString(QByteArray::fromBase64(settings.value("password").toByteArray()));
+        QString password = QString(QByteArray::fromBase64(settings.value("password").toByteArray()));
+
+        if (password != m_password) {
+            m_password = password;
+            emit passwordChanged();
+        }
     }
     emit passwordChanged();
 
     if(settings.allKeys().contains("certMD5") &&
             settings.allKeys().contains("certSHA1"))
     {
-        m_md5Hex = settings.value("certMD5").toString();
-        m_sha1Hex = settings.value("certSHA1").toString();
+        QString md5Hex = settings.value("certMD5").toString();
+        QString sha1Hex = settings.value("certSHA1").toString();
+        if (md5Hex != m_md5Hex && sha1Hex != m_sha1Hex) {
+            m_md5Hex = md5Hex;
+            m_sha1Hex = sha1Hex;
+            emit customCertChanged();
+        }
     }
     emit customCertChanged();
 
+    m_uploadAutomatically = settings.value("uploadAutomatically", false).toBool();
+    m_localPicturesPath = settings.value("localPicturesPath", QStandardPaths::writableLocation(QStandardPaths::PicturesLocation)).toString();
+
     settings.endGroup();
-    emit settingsChanged();
     return true;
 }
 
@@ -109,9 +144,9 @@ void Settings::writeSettings()
     settings.setValue("password", QVariant::fromValue<QString>(m_password.toLatin1().toBase64()));
     settings.setValue("certMD5", QVariant::fromValue<QString>(m_md5Hex));
     settings.setValue("certSHA1", QVariant::fromValue<QString>(m_sha1Hex));
+    settings.setValue("uploadAutomatically", QVariant::fromValue<bool>(m_uploadAutomatically));
+    settings.setValue("localPicturesPath", QVariant::fromValue<QString>(m_localPicturesPath));
     settings.endGroup();
-
-    emit settingsChanged();
 }
 
 void Settings::resetSettings()

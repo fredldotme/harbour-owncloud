@@ -20,7 +20,6 @@ int main(int argc, char *argv[])
 {
     qmlRegisterType<EntryInfo>("harbour.owncloud", 1, 0, "EntryInfo");
     qmlRegisterType<OwnCloudBrowser>("harbour.owncloud", 1, 0, "OwnCloudBrowser");
-    qmlRegisterType<Settings>("harbour.owncloud", 1, 0, "Settings");
     qmlRegisterType<TransferManager>("harbour.owncloud", 1, 0, "TransferManager");
     qmlRegisterType<TransferEntry>("harbour.owncloud", 1, 0, "TransferEntry");
     qmlRegisterType<LocalFileBrowser>("harbour.owncloud", 1, 0, "LocalFileBrowser");
@@ -32,7 +31,7 @@ int main(int argc, char *argv[])
     app->setApplicationName("harbour-owncloud");
     QQuickView *view = SailfishApp::createView();
 
-    Settings *settings = new Settings();
+    Settings *settings = Settings::instance();
     OwnCloudBrowser *browser = new OwnCloudBrowser(NULL, settings);
     TransferManager *transfer = new TransferManager(0, browser);
 

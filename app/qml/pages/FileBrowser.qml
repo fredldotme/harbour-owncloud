@@ -80,7 +80,7 @@ Page {
                 }
 
                 MenuItem {
-                    text:qsTr("Make directory")
+                    text:qsTr("Create directory")
                     onClicked: {
                         pageStack.push("MkDirDialog.qml")
                     }

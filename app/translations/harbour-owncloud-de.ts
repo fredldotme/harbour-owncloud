@@ -35,7 +35,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Make directory</source>
+        <source>Create directory</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -47,6 +47,10 @@
     </message>
     <message>
         <source>Download and open</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Details</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

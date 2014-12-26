@@ -58,9 +58,10 @@ Page {
         }
 
         PageHeader {
-            title: entry.name
+            title: qsTr("Details")
         }
 
+        // Icon
         Image {
             id: fileImage
             source: getIconFromMime(entry.mimeType)
@@ -70,10 +71,32 @@ Page {
             y: width
         }
 
+        // File name
         Label {
             x: 0
             anchors.top: fileImage.bottom
             anchors.topMargin: 32
+            text: "File name:"
+            width: (parent.width / 2) - 12
+            horizontalAlignment: Text.AlignRight
+            color: Theme.highlightColor
+        }
+
+        Label {
+            id: nameHint
+            x: (parent.width / 2) + 24
+            anchors.top: fileImage.bottom
+            anchors.topMargin: 32
+            text: entry.name
+            width: (parent.width / 2) - 12
+            horizontalAlignment: Text.AlignLeft
+            wrapMode: Text.Wrap
+        }
+
+        // Size
+        Label {
+            x: 0
+            y: nameHint.y + nameHint.height
             text: "Size:"
             width: (parent.width / 2) - 12
             horizontalAlignment: Text.AlignRight
@@ -83,14 +106,14 @@ Page {
         Label {
             id: sizeHint
             x: (parent.width / 2) + 24
-            anchors.top: fileImage.bottom
-            anchors.topMargin: 32
-            text: getHRSize(entry.size)
+            y: nameHint.y + nameHint.height
             width: (parent.width / 2) - 12
+            text: getHRSize(entry.size)
             horizontalAlignment: Text.AlignLeft
             wrapMode: Text.Wrap
         }
 
+        // Last modified
         Label {
             x: 0
             y: sizeHint.y + sizeHint.height
@@ -110,6 +133,7 @@ Page {
             wrapMode: Text.Wrap
         }
 
+        // Type
         Label {
             x: 0
             y: modHint.y + modHint.height

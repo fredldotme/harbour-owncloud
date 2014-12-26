@@ -8,20 +8,6 @@ class Settings : public QObject
 {
     Q_OBJECT
 
-public:
-    Settings(QObject *parent = 0);
-
-    Q_INVOKABLE bool parseFromAddressString(QString value);
-    Q_INVOKABLE bool readSettings();
-    Q_INVOKABLE void writeSettings();
-    Q_INVOKABLE void resetSettings();
-    Q_INVOKABLE void acceptCertificate(QString md5, QString sha1);
-
-    Q_PROPERTY(QString hostname READ hostname)
-    Q_PROPERTY(QString path READ path)
-    Q_PROPERTY(int port READ port)
-    Q_PROPERTY(bool isHttps READ isHttps)
-
     Q_PROPERTY(bool isCustomCert READ isCustomCert WRITE acceptCertificate(bool) NOTIFY customCertChanged())
     Q_PROPERTY(bool autoLogin READ isAutoLogin WRITE setAutoLogin(bool) NOTIFY autoLoginChanged())
     Q_PROPERTY(bool notifications READ notifications WRITE setNotifications(bool) NOTIFY notificationSettingsChanged())
@@ -29,6 +15,12 @@ public:
     Q_PROPERTY(QString hoststring READ hoststring NOTIFY hoststringChanged())
     Q_PROPERTY(QString username READ username WRITE setUsername(QString) NOTIFY usernameChanged())
     Q_PROPERTY(QString password READ password WRITE setPassword(QString) NOTIFY passwordChanged())
+
+    Q_PROPERTY(bool uploadAutomatically READ uploadAutomatically WRITE setUploadAutomatically NOTIFY uploadAutomaticallyChanged)
+    Q_PROPERTY(QString localPicturesPath READ localPicturesPath WRITE setLocalPicturesPath NOTIFY localPicturesPathChanged)
+
+public:
+    static Settings *instance();
 
     QString hostname();
     QString path();
@@ -45,7 +37,25 @@ public:
     QString md5Hex();
     QString sha1Hex();
 
+    bool uploadAutomatically() { return m_uploadAutomatically; }
+    void setUploadAutomatically(bool enabled) { m_uploadAutomatically = enabled; emit uploadAutomaticallyChanged(); }
+    QString localPicturesPath() { return m_localPicturesPath; }
+    void setLocalPicturesPath(QString newPath) { m_localPicturesPath = newPath; emit localPicturesPathChanged(); }
+
+    Q_INVOKABLE bool parseFromAddressString(QString value);
+    Q_INVOKABLE void acceptCertificate(QString md5, QString sha1);
+    Q_INVOKABLE void writeSettings();
+    Q_INVOKABLE void resetSettings();
+    Q_INVOKABLE bool readSettings();
+
+    Q_PROPERTY(QString hostname READ hostname)
+    Q_PROPERTY(QString path READ path)
+    Q_PROPERTY(int port READ port)
+    Q_PROPERTY(bool isHttps READ isHttps)
+
 private:
+    Settings(QObject *parent = 0);
+
     QSettings settings;
 
     QString m_hostname;
@@ -63,6 +73,9 @@ private:
     QString m_md5Hex;
     QString m_sha1Hex;
 
+    bool m_uploadAutomatically;
+    QString m_localPicturesPath;
+
     void setUsername(QString value);
     void setPassword(QString value);
     void setAutoLogin(bool value);
@@ -73,15 +86,15 @@ private:
 
 signals:
     void settingsChanged();
+
     void usernameChanged();
     void passwordChanged();
     void hoststringChanged();
     void autoLoginChanged();
     void notificationSettingsChanged();
     void customCertChanged();
-
-public slots:
-
+    void uploadAutomaticallyChanged();
+    void localPicturesPathChanged();
 };
 
 #endif // SETTINGS_H

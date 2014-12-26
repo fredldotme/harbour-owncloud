@@ -18,20 +18,20 @@ QT += xml dbus
 SOURCES += src/harbour-owncloud.cpp \
     src/owncloudbrowser.cpp \
     src/entryinfo.cpp \
-    src/settings.cpp \
     src/shellcommand.cpp \
     src/transferentry.cpp \
     src/transfermanager.cpp \
-    src/localfilebrowser.cpp
+    src/localfilebrowser.cpp \
+    ../common/src/settings.cpp
 
 HEADERS += \
     src/owncloudbrowser.h \
     src/entryinfo.h \
-    src/settings.h \
     src/shellcommand.h \
     src/transferentry.h \
     src/transfermanager.h \
-    src/localfilebrowser.h
+    src/localfilebrowser.h \
+    ../common/src/settings.h
 
 OTHER_FILES += qml/harbour-owncloud.qml \
     qml/cover/CoverPage.qml \
@@ -66,5 +66,8 @@ INSTALLS += qwebdavlib
 
 INCLUDEPATH += $$PWD/../qwebdavlib/qwebdavlib
 DEPENDPATH += $$PWD/../qwebdavlib/qwebdavlib
+
+INCLUDEPATH += $$PWD/../common/src
+DEPENDPATH += $$PWD/../common/src
 
 DEFINES += QWEBDAVITEM_EXTENDED_PROPERTIES

@@ -5,5 +5,3 @@ Discuss and implement automatic camera photo uploading
 Add missing file/directory operations:
     - copy
     - move
-    - delete
-    - mkdir

@@ -34,7 +34,7 @@ bool Settings::parseFromAddressString(QString value)
         if(url.host().isEmpty())
             return false;
 
-        m_isHttps = value.startsWith("https://") ? true : false;
+        m_isHttps = value.startsWith("https://");
         m_hostname = url.host();
         m_path = url.path();
         qDebug() << "PATH:" << m_path;
@@ -98,7 +98,6 @@ bool Settings::readSettings()
             emit usernameChanged();
         }
     }
-    emit usernameChanged();
 
     if(settings.allKeys().contains("password"))
     {
@@ -109,7 +108,6 @@ bool Settings::readSettings()
             emit passwordChanged();
         }
     }
-    emit passwordChanged();
 
     if(settings.allKeys().contains("certMD5") &&
             settings.allKeys().contains("certSHA1"))
@@ -122,7 +120,6 @@ bool Settings::readSettings()
             emit customCertChanged();
         }
     }
-    emit customCertChanged();
 
     m_uploadAutomatically = settings.value("uploadAutomatically", false).toBool();
     m_localPicturesPath = settings.value("localPicturesPath", QStandardPaths::writableLocation(QStandardPaths::PicturesLocation)).toString();

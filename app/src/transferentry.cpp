@@ -88,8 +88,9 @@ void TransferEntry::handleProgressChange(qint64 bytes, qint64 bytesTotal)
 
 void TransferEntry::cancelTransfer()
 {
-    if(networkReply)
+    if(networkReply) {
         networkReply->abort();
+    }
 
     emit transferCompleted(false);
 }

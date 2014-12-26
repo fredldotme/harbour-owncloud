@@ -13,6 +13,13 @@ Page {
         remotePath = browser.getCurrentPath();
     }
 
+    property int cancelCounter : 0;
+
+    function refreshListView() {
+        listView.model = undefined
+        browser.getDirectoryContent(remotePath);
+    }
+
     Connections {
         target: browser
         onDirectoryContentChanged: {
@@ -25,7 +32,7 @@ Page {
     Connections {
         target: browser
         onRefreshStarted: {
-            if(remotePath === pathToRefresh)
+            if(remotePath === pathToRefresh && cancelCounter === 0)
                 listView.model = undefined;
         }
     }
@@ -34,8 +41,7 @@ Page {
         target: transfer
         onUploadComplete: {
             if(remotePath === pageRoot.remotePath) {
-                listView.model = undefined
-                browser.getDirectoryContent(remotePath);
+                refreshListView()
             }
         }
     }
@@ -51,6 +57,7 @@ Page {
     property Item fileContextMenu;
     property EntryInfo selectedEntry;
     property BackgroundItem selectedItem;
+    property RemorseItem selectedRemorse;
 
     SilicaFlickable {
         anchors.fill: parent
@@ -108,6 +115,20 @@ Page {
                 property bool menuOpen: fileContextMenu != null && fileContextMenu.parent === delegate
                 height: menuOpen ? fileContextMenu.height + bgItem.height : bgItem.height
 
+                RemorseItem {
+                    id: remorseItem
+                    onCanceled: {
+                        console.log("Canceled...")
+                        var forceRefresh = false;
+                        if(cancelCounter > 0)
+                            forceRefresh = true;
+                        cancelCounter--;
+                        if(forceRefresh) {
+                            refreshListView()
+                        }
+                    }
+                }
+
                 BackgroundItem {
                     id: bgItem
                     Image {
@@ -146,6 +167,7 @@ Page {
                     onPressAndHold: {
                         selectedEntry = listView.model[index];
                         selectedItem = delegate
+                        selectedRemorse = remorseItem;
                         if (!fileContextMenu)
                             fileContextMenu = contextMenuComponent.createObject(listView)
                         fileContextMenu.show(delegate)
@@ -170,19 +192,21 @@ Page {
                     MenuItem {
                         text: "Delete"
 
-                        property string fileName;
+                        property EntryInfo tmpEntry;
 
                         onClicked: {
-                            fileName = selectedEntry.name
-                            remorseItem.execute(selectedItem, "Deleting", function() {
-                                browser.remove(fileName)
-                            })
+                            tmpEntry = selectedEntry
+                            cancelCounter++;
+                            selectedRemorse.execute(selectedItem, "Deleting", function() {
+                                cancelCounter--;
+                                browser.remove(remotePath + tmpEntry.name +
+                                               (tmpEntry.isDirectory ? "/" : ""),
+                                               cancelCounter == 0);
+                            }, 3000)
                         }
                     }
                 }
             }
-
-            RemorseItem { id: remorseItem }
         }
     }
 }

@@ -130,7 +130,7 @@ void TransferManager::handleUploadCompleted()
     uploadMutex.lock();
 
     if(!uploadQueue.isEmpty()) {
-        disconnect(uploadQueue.head(), SIGNAL(transferCompleted(bool)), this, SLOT(handleDownloadCompleted()));
+        disconnect(uploadQueue.head(), SIGNAL(transferCompleted(bool)), this, SLOT(handleUploadCompleted()));
         TransferEntry *entry = uploadQueue.dequeue();
         name = entry->getName();
         remotePath = entry->getRemotePath();

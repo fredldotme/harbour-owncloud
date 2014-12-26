@@ -24,7 +24,7 @@ public:
     Q_INVOKABLE void goToParentPath();
     Q_INVOKABLE void getDirectoryContent(QString path);
     Q_INVOKABLE void makeDirectory(QString dirName);
-    Q_INVOKABLE void remove(QString name);
+    Q_INVOKABLE void remove(QString name, bool refresh);
     Q_INVOKABLE void resetWebdav();
 
     QWebdav* getWebdav();

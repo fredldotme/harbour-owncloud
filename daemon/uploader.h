@@ -22,6 +22,7 @@ signals:
 
 public slots:
     void fileFound(QString filePath);
+    void setSuspended(bool suspended);
 
 private slots:
     void settingsChanged();
@@ -48,8 +49,6 @@ private:
     bool m_fetchedExisting;
     QString m_remotePath;
     QStringList m_dirsToFetch;
-    NetworkMonitor m_netMonitor;
-
     bool m_suspended;
 };
 

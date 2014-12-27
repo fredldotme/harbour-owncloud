@@ -9,7 +9,7 @@ Uploader::Uploader(QObject *parent) : QObject(parent),
     m_uploading(false),
     m_fetchedExisting(false),
     m_remotePath("/Jolla/"),
-    m_suspended(m_netMonitor.shouldDownload())
+    m_suspended()
 {
     connect(&m_remoteDir, SIGNAL(finished()), SLOT(remoteListingFinished()));
 
@@ -32,6 +32,20 @@ void Uploader::fileFound(QString filePath)
     qDebug() << Q_FUNC_INFO << "adding file to upload" << filePath;
     m_uploadQueue.append(filePath);
     uploadFile();
+}
+
+void Uploader::setSuspended(bool suspended)
+{
+    if (m_suspended == suspended) {
+        return;
+    }
+
+    m_suspended = suspended;
+
+    if (!suspended) {
+        // restart uploading
+        uploadFile();
+    }
 }
 
 void Uploader::settingsChanged()
@@ -88,9 +102,7 @@ void Uploader::remoteListingFinished()
 
 void Uploader::onlineChanged(bool online)
 {
-    if (!online) {
-        m_suspended = online;
-    }
+    setSuspended(online);
 }
 
 void Uploader::uploadFile()

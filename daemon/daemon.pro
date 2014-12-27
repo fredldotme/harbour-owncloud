@@ -11,14 +11,16 @@ SOURCES += main.cpp \
     filesystem.cpp \
     ../common/src/settings.cpp \
     uploadentry.cpp \
-    networkmonitor.cpp
+    networkmonitor.cpp \
+    dbushandler.cpp
 
 HEADERS += \
     filesystem.h \
     uploader.h \
     ../common/src/settings.h \
     uploadentry.h \
-    networkmonitor.h
+    networkmonitor.h \
+    dbushandler.h
 
 LIBS += $$OUT_PWD/../qwebdavlib/qwebdavlib/libqwebdav.so.1
 

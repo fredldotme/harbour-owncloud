@@ -10,7 +10,8 @@ UploadEntry::UploadEntry(QString localPath,
     m_connection(connection),
     m_pathsToCreate(pathsToCreate),
     m_localPath(localPath),
-    m_remotePath(remotePath)
+    m_remotePath(remotePath),
+    m_succeeded(true)
 {
     doUpload();
 }
@@ -49,6 +50,7 @@ void UploadEntry::errorHandler(QNetworkReply::NetworkError error)
     Q_ASSERT(reply);
     emit uploadFailed(reply->errorString());
     qWarning() << Q_FUNC_INFO << "error during upload:" << reply->errorString();
+    m_succeeded = false;
 }
 
 void UploadEntry::createDirectory()

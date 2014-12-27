@@ -5,13 +5,11 @@
 
 #include <QNetworkReply>
 
-#include <QNetworkConfigurationManager>
-#include <QNetworkConfiguration>
-
 Uploader::Uploader(QObject *parent) : QObject(parent),
     m_uploading(false),
     m_fetchedExisting(false),
-    m_remotePath("/Jolla/")
+    m_remotePath("/Jolla/"),
+    m_suspended(m_netMonitor.shouldDownload())
 {
     connect(&m_remoteDir, SIGNAL(finished()), SLOT(remoteListingFinished()));
 
@@ -23,17 +21,6 @@ Uploader::Uploader(QObject *parent) : QObject(parent),
     });
 
     QMetaObject::invokeMethod(this, "settingsChanged", Qt::QueuedConnection);
-
-    // TODO: do something useful here
-    switch (QNetworkConfigurationManager().defaultConfiguration().bearerType()) {
-    case QNetworkConfiguration::BearerWLAN:
-    case QNetworkConfiguration::BearerEthernet:
-        qDebug() << "not on cellular";
-        break;
-    default:
-        qDebug() << "on cellular";
-        break;
-    }
 }
 
 void Uploader::fileFound(QString filePath)
@@ -60,15 +47,7 @@ void Uploader::settingsChanged()
                                  settings->md5Hex(),
                                  settings->sha1Hex());
 
-    // Ensure that our remote directory is created
-    QNetworkReply *reply = m_connection.mkdir(m_remotePath);
-    connect(reply, &QNetworkReply::finished, [this]() {
-        m_existingDirs.insert(m_remotePath);
-        // Then list the existing files and folders in it
-        m_remoteDir.listDirectory(&m_connection, m_remotePath);
-    });
-
-
+    getExistingRemote();
     emit localPathUpdated();
 }
 
@@ -78,7 +57,11 @@ void Uploader::uploadFinished()
     m_uploading = false;
     UploadEntry *entry = qobject_cast<UploadEntry*>(sender());
     Q_ASSERT(entry);
-    m_existingFiles.insert(relativeLocalPath(entry->localPath()));
+    if (entry->succeeded()) {
+        m_existingFiles.insert(relativeLocalPath(entry->localPath()));
+    } else {
+        m_uploadQueue.append(entry->localPath());
+    }
     entry->deleteLater();
     uploadFile();
 }
@@ -103,15 +86,27 @@ void Uploader::remoteListingFinished()
     }
 }
 
+void Uploader::onlineChanged(bool online)
+{
+    if (!online) {
+        m_suspended = online;
+    }
+}
+
 void Uploader::uploadFile()
 {
     if (m_uploading) {
         qDebug() << Q_FUNC_INFO << "already uploading";
         return;
     }
+
     if (!m_fetchedExisting) {
         qDebug() << Q_FUNC_INFO << "haven't fetched existing files";
         return;
+    }
+
+    if (m_suspended) {
+        qDebug() << Q_FUNC_INFO << "suspended, not downloading";
     }
 
     QString absolutePath;
@@ -154,7 +149,19 @@ QString Uploader::relativeToRemote(QString path)
 
 void Uploader::getExistingRemote()
 {
+    // Ensure that our remote directory is created
+    QNetworkReply *reply = m_connection.mkdir(m_remotePath);
+    connect(reply, &QNetworkReply::finished, [this, reply]() {
+        if (reply->error() != QNetworkReply::NoError) {
+            qWarning() << Q_FUNC_INFO << reply->errorString();
+            emit connectError(reply->errorString());
+            return;
+        }
 
+        m_existingDirs.insert(m_remotePath);
+        // Then list the existing files and folders in it
+        m_remoteDir.listDirectory(&m_connection, m_remotePath);
+    });
 }
 
 QString Uploader::relativeLocalPath(QString absolutePath)

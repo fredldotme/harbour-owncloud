@@ -98,7 +98,6 @@ bool Settings::readSettings()
             emit usernameChanged();
         }
     }
-    emit usernameChanged();
 
     if(settings.allKeys().contains("password"))
     {
@@ -109,7 +108,6 @@ bool Settings::readSettings()
             emit passwordChanged();
         }
     }
-    emit passwordChanged();
 
     if(settings.allKeys().contains("certMD5") &&
             settings.allKeys().contains("certSHA1"))
@@ -122,12 +120,14 @@ bool Settings::readSettings()
             emit customCertChanged();
         }
     }
-    emit customCertChanged();
 
     m_uploadAutomatically = settings.value("uploadAutomatically", false).toBool();
     m_localPicturesPath = settings.value("localPicturesPath", QStandardPaths::writableLocation(QStandardPaths::PicturesLocation)).toString();
 
     settings.endGroup();
+
+    // Since settings are read, propagate changes to the ownCloud browser object
+    emit settingsChanged();
     return true;
 }
 

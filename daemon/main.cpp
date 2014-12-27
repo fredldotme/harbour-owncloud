@@ -23,7 +23,11 @@ int main(int argc, char *argv[]) {
     QObject::connect(dbusHandler, SIGNAL(suspendedChanged(bool)), &uploader, SLOT(setSuspended(bool)));
     QObject::connect(&netMonitor, SIGNAL(shouldDownloadChanged(bool)), dbusHandler, SLOT(setOffline(bool)));
 
-    QDBusConnection::sessionBus().registerObject("/HarbourOwncloudDaemon", dbusHandler, QDBusConnection::ExportAllProperties | QDBusConnection::ExportAllInvokables);
+    QDBusConnection::sessionBus().registerObject("/HarbourOwncloudDaemon", dbusHandler,
+                                                 QDBusConnection::ExportAllProperties |
+                                                 QDBusConnection::ExportAllInvokables |
+                                                 QDBusConnection::ExportAllSignals);
+
     // assert for poor man's single instance application
     Q_ASSERT(QDBusConnection::sessionBus().registerService("com.github.beidl.harbour-owncloud.daemon"));
 

@@ -25,6 +25,8 @@ signals:
     void fileUploaded(QString filePath);
     void suspendedChanged(bool suspended);
     void offlineChanged(bool offline);
+    void uploadError(QString errorMessage);
+    void connectError(QString errorMessage);
 
 private:
     bool m_suspended;

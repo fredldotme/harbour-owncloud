@@ -73,6 +73,7 @@ void Uploader::uploadFinished()
     Q_ASSERT(entry);
     if (entry->succeeded()) {
         m_existingFiles.insert(relativeLocalPath(entry->localPath()));
+        emit fileUploaded(entry->localPath());
     } else {
         m_uploadQueue.append(entry->localPath());
     }

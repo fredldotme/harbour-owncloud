@@ -19,6 +19,7 @@ signals:
     void uploadError(QString errorMessage);
     void localPathUpdated();
     void connectError(QString errorMessage);
+    void fileUploaded(QString file);
 
 public slots:
     void fileFound(QString filePath);

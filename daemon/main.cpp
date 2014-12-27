@@ -22,6 +22,9 @@ int main(int argc, char *argv[]) {
     QObject::connect(&netMonitor, SIGNAL(shouldDownloadChanged(bool)), &uploader, SLOT(onlineChanged(bool)));
     QObject::connect(dbusHandler, SIGNAL(suspendedChanged(bool)), &uploader, SLOT(setSuspended(bool)));
     QObject::connect(&netMonitor, SIGNAL(shouldDownloadChanged(bool)), dbusHandler, SLOT(setOffline(bool)));
+    QObject::connect(&uploader, SIGNAL(fileUploaded(QString)), dbusHandler, SIGNAL(fileUploaded(QString)));
+    QObject::connect(&uploader, SIGNAL(connectError(QString)), dbusHandler, SIGNAL(connectError(QString)));
+    QObject::connect(&uploader, SIGNAL(uploadError(QString)), dbusHandler, SIGNAL(uploadError(QString)));
 
     QDBusConnection::sessionBus().registerObject("/HarbourOwncloudDaemon", dbusHandler,
                                                  QDBusConnection::ExportAllProperties |

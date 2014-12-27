@@ -33,6 +33,11 @@ BuildRequires:  desktop-file-utils
 %description
 Unofficial ownCloud client for SailfishOS
 
+%package daemon
+Summary:   ownCloud background task for automatic camera backups
+
+%description daemon
+ownCloud background task for automatic camera backups
 
 %prep
 %setup -q -n %{name}-%{version}
@@ -72,3 +77,7 @@ desktop-file-install --delete-original       \
 %{_datadir}/icons/hicolor/86x86/apps/%{name}.png
 # >> files
 # << files
+
+%files daemon
+%defattr(-,root,root,-)
+%{_bindir}/%{name}-daemon

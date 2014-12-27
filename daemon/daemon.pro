@@ -2,6 +2,7 @@ TARGET = harbour-owncloud-daemon
 
 CONFIG -= gui
 CONFIG += c++11
+CONFIG += sailfishapp
 
 QT += dbus network xml
 

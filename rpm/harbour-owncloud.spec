@@ -19,8 +19,8 @@ Summary:    ownCloud
 Version:    0.3
 Release:    1
 Group:      Qt/Qt
-License:    LICENSE
-URL:        http://example.org/
+License:    GPLv2
+URL:        https://github.com/beidl/harbour-owncloud
 Source0:    %{name}-%{version}.tar.bz2
 Source100:  harbour-owncloud.yaml
 Requires:   sailfishsilica-qt5 >= 0.10.9
@@ -31,7 +31,7 @@ BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  desktop-file-utils
 
 %description
-Short description of my SailfishOS Application
+Unofficial ownCloud client for SailfishOS
 
 
 %prep
@@ -66,7 +66,7 @@ desktop-file-install --delete-original       \
 
 %files
 %defattr(-,root,root,-)
-%{_bindir}
+%{_bindir}/%{name}
 %{_datadir}/%{name}
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/86x86/apps/%{name}.png

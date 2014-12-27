@@ -21,12 +21,15 @@ public slots:
     void setOffline(bool offline);
     bool offline() { return m_offline; }
 
+    void reloadConfig() { emit reloadConfig(); }
+
 signals:
     void fileUploaded(QString filePath);
     void suspendedChanged(bool suspended);
     void offlineChanged(bool offline);
     void uploadError(QString errorMessage);
     void connectError(QString errorMessage);
+    void reloadConfig();
 
 private:
     bool m_suspended;

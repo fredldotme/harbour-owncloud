@@ -3,7 +3,6 @@
 DBusHandler::DBusHandler(QObject *parent) : QDBusAbstractAdaptor(parent),
     m_suspended(false)
 {
-
 }
 
 DBusHandler::~DBusHandler()

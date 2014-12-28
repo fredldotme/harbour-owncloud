@@ -12,9 +12,9 @@ bool DaemonControl::daemonInstalled()
 
 void DaemonControl::reloadConfig()
 {
-    QDBusMessage message = QDBusMessage::createMethodCall("com.github.beidl.harbour-owncloud.daemon",
-                                                          "/HarbourOwncloudDaemon",
-                                                          "",
+    QDBusMessage message = QDBusMessage::createMethodCall("com.github.beidl.HarbourOwncloud.Daemon",
+                                                          "/",
+                                                          "com.github.beidl.HarbourOwncloud.Daemon.Uploader",
                                                           "reloadConfig");
     QDBusConnection::sessionBus().send(message);
 }

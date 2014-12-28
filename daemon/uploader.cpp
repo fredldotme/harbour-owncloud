@@ -84,20 +84,30 @@ void Uploader::uploadFinished()
 void Uploader::remoteListingFinished()
 {
     foreach(const QWebdavItem item, m_remoteDir.getList()) {
-        qDebug() << Q_FUNC_INFO << "item path:" << item.path();
         if (item.isDir()) {
-            m_existingDirs.insert(item.path());
-            m_dirsToFetch.append(item.path());
+            if(!m_existingDirs.contains("/" + item.path()))
+                m_dirsToFetch.append("/" + item.path());
         } else {
-            m_existingFiles.insert(relativeRemotePath(item.path()));
+            m_existingFiles.insert("/" + item.path());
         }
     }
 
     if (m_dirsToFetch.isEmpty()) {
         m_fetchedExisting = true;
+
+        qDebug() << "Existing:";
+        foreach(QString tmp, m_existingFiles)
+        {
+            qDebug() << tmp;
+        }
+
         uploadFile();
     } else {
-        m_remoteDir.listDirectory(&m_connection, m_dirsToFetch.takeFirst());
+        QString tmp = m_dirsToFetch.takeFirst();
+        if(!m_existingDirs.contains(tmp)) {
+            m_existingDirs.insert(tmp);
+            m_remoteDir.listDirectory(&m_connection, tmp);
+        }
     }
 }
 
@@ -124,6 +134,7 @@ void Uploader::uploadFile()
 
     QString absolutePath;
     QString relativePath;
+    QString path;
     do {
         if (m_uploadQueue.isEmpty()) {
             qDebug() << Q_FUNC_INFO << "no files to upload";
@@ -132,10 +143,10 @@ void Uploader::uploadFile()
 
         absolutePath = m_uploadQueue.takeFirst();
         relativePath = relativeLocalPath(absolutePath);
-    } while (m_existingFiles.contains(relativePath));
+        path = m_remotePath + relativePath.right(relativePath.length() - 1);
+    } while (m_existingFiles.contains(path));
 
-    QFileInfo fileInfo(absolutePath);
-    QString path = m_remotePath + relativePath.left(relativePath.length() - fileInfo.fileName().length());
+    qDebug() << "destination: " << path;
     QStringList requiredDirs;
 
     if (!m_existingDirs.contains(path)) {
@@ -143,16 +154,18 @@ void Uploader::uploadFile()
     }
     QString curPath = "/";
     QStringList dirsToCreate;
-    for (int i=0; i<requiredDirs.length(); i++) {
+    for (int i=0; i<requiredDirs.length() - 1; i++) {
         curPath += requiredDirs[i] + "/";
         if (!m_existingDirs.contains(curPath)) {
             dirsToCreate.append(curPath);
         }
     }
 
-    m_uploading = true;
-    UploadEntry *entry = new UploadEntry(absolutePath, relativeToRemote(relativePath), dirsToCreate, &m_connection);
-    connect(entry, SIGNAL(finished()), SLOT(uploadFinished()));
+    if(!path.endsWith("/") && !m_existingFiles.contains(path)) {
+        m_uploading = true;
+        UploadEntry *entry = new UploadEntry(absolutePath, path, dirsToCreate, &m_connection);
+        connect(entry, SIGNAL(finished()), SLOT(uploadFinished()));
+    }
 }
 
 QString Uploader::relativeToRemote(QString path)

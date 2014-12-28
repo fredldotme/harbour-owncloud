@@ -22,9 +22,15 @@ HEADERS += \
     networkmonitor.h \
     dbushandler.h
 
+OTHER_FILES += harbour-owncloud-daemon.service
+
 LIBS += $$OUT_PWD/../qwebdavlib/qwebdavlib/libqwebdav.so.1
 
 QMAKE_RPATHDIR += /usr/share/harbour-owncloud/lib
+
+service.path = /usr/lib/systemd/user/
+service.files += harbour-owncloud-daemon.service
+INSTALLS += service
 
 INCLUDEPATH += $$PWD/../common/src
 DEPENDPATH += $$PWD/../common/src

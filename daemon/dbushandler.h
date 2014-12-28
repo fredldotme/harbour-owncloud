@@ -6,12 +6,12 @@
 class DBusHandler : public QDBusAbstractAdaptor
 {
     Q_OBJECT
-    Q_CLASSINFO("dbus interface", "HarbourOwncloudDaemon")
+    Q_CLASSINFO("D-Bus Interface", "com.github.beidl.HarbourOwncloud.Daemon.Uploader")
     Q_PROPERTY(bool suspended READ suspended WRITE setSuspended NOTIFY suspendedChanged(bool))
     Q_PROPERTY(bool offline READ offline NOTIFY offlineChanged(bool))
 
 public:
-    explicit DBusHandler(QObject *parent = 0);
+    explicit DBusHandler(QObject *parent);
     ~DBusHandler();
 
 public slots:
@@ -21,7 +21,7 @@ public slots:
     void setOffline(bool offline);
     bool offline() { return m_offline; }
 
-    void reloadConfig() { emit reloadConfigChanged(); }
+    void reloadConfig() { emit configChanged(); }
 
 signals:
     void fileUploaded(QString filePath);
@@ -29,7 +29,7 @@ signals:
     void offlineChanged(bool offline);
     void uploadError(QString errorMessage);
     void connectError(QString errorMessage);
-    void reloadConfigChanged();
+    void configChanged();
 
 private:
     bool m_suspended;

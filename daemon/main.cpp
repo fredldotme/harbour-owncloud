@@ -27,8 +27,8 @@ int main(int argc, char *argv[]) {
     QObject::connect(&uploader, SIGNAL(fileUploaded(QString)), dbusHandler, SIGNAL(fileUploaded(QString)));
     QObject::connect(&uploader, SIGNAL(connectError(QString)), dbusHandler, SIGNAL(connectError(QString)));
     QObject::connect(&uploader, SIGNAL(uploadError(QString)), dbusHandler, SIGNAL(uploadError(QString)));
-    QObject::connect(dbusHandler, SIGNAL(reloadConfig()), &fsHandler, SLOT(localPathChanged()));
-    QObject::connect(dbusHandler, SIGNAL(reloadConfig()), &uploader, SLOT(settingsChanged());
+    QObject::connect(dbusHandler, SIGNAL(reloadConfigChanged()), &fsHandler, SLOT(localPathChanged()));
+    QObject::connect(dbusHandler, SIGNAL(reloadConfigChanged()), &uploader, SLOT(settingsChanged()));
 
     QDBusConnection::sessionBus().registerObject("/HarbourOwncloudDaemon", dbusHandler,
                                                  QDBusConnection::ExportAllProperties |

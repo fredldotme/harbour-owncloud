@@ -8,6 +8,7 @@
 #include "transfermanager.h"
 #include "transferentry.h"
 #include "localfilebrowser.h"
+#include "daemoncontrol.h"
 
 #include <notification.h>
 
@@ -23,6 +24,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<TransferManager>("harbour.owncloud", 1, 0, "TransferManager");
     qmlRegisterType<TransferEntry>("harbour.owncloud", 1, 0, "TransferEntry");
     qmlRegisterType<LocalFileBrowser>("harbour.owncloud", 1, 0, "LocalFileBrowser");
+    qmlRegisterType<DaemonControl>("harbour.owncloud", 1, 0, "DaemonControl");
     qmlRegisterType<Notification>("harbour.owncloud", 1, 0, "Notification");
 
     QGuiApplication *app = SailfishApp::application(argc, argv);
@@ -34,10 +36,13 @@ int main(int argc, char *argv[])
     Settings *settings = Settings::instance();
     OwnCloudBrowser *browser = new OwnCloudBrowser(NULL, settings);
     TransferManager *transfer = new TransferManager(0, browser);
+    DaemonControl *daemonCtrl = new DaemonControl();
 
+    QObject::connect(settings, SIGNAL(settingsChanged()), daemonCtrl, SLOT(reloadConfig()));
     view->rootContext()->setContextProperty("browser", browser);
     view->rootContext()->setContextProperty("settings", settings);
     view->rootContext()->setContextProperty("transfer", transfer);
+    view->rootContext()->setContextProperty("daemonCtrl", daemonCtrl);
 
     view->setSource(SailfishApp::pathTo("qml/harbour-owncloud.qml"));
     view->showFullScreen();

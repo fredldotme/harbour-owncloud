@@ -22,7 +22,8 @@ SOURCES += src/harbour-owncloud.cpp \
     src/transferentry.cpp \
     src/transfermanager.cpp \
     src/localfilebrowser.cpp \
-    ../common/src/settings.cpp
+    ../common/src/settings.cpp \
+    src/daemoncontrol.cpp
 
 HEADERS += \
     src/owncloudbrowser.h \
@@ -31,7 +32,8 @@ HEADERS += \
     src/transferentry.h \
     src/transfermanager.h \
     src/localfilebrowser.h \
-    ../common/src/settings.h
+    ../common/src/settings.h \
+    src/daemoncontrol.h
 
 OTHER_FILES += qml/harbour-owncloud.qml \
     qml/cover/CoverPage.qml \

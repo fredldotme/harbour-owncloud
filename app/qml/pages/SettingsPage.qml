@@ -60,5 +60,18 @@ Page {
                 settings.writeSettings()
             }
         }
+
+        TextSwitch {
+            id: cameraUploadSwitch
+            anchors.top: autoLoginSwitch.bottom
+            text: "Camera photo backups"
+            description: "Automatically save camera photos to your ownCloud instance when on WiFi"
+            visible: daemonCtrl.daemonInstalled
+            checked: settings.uploadAutomatically
+            onCheckedChanged: {
+                settings.uploadAutomatically = checked
+                settings.writeSettings()
+            }
+        }
     }
 }

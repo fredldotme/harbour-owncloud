@@ -6,6 +6,8 @@ After=lipstick.service
 Type=simple
 ExecStart=/usr/bin/harbour-owncloud-daemon
 Restart=always
+CPUAccounting=true
+CPUQuota=10%
 
 [Install]
 WantedBy=lipstick.service

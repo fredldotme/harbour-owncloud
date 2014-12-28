@@ -27,6 +27,7 @@ int main(int argc, char *argv[]) {
     QObject::connect(&uploader, SIGNAL(fileUploaded(QString)), dbusHandler, SIGNAL(fileUploaded(QString)));
     QObject::connect(&uploader, SIGNAL(connectError(QString)), dbusHandler, SIGNAL(connectError(QString)));
     QObject::connect(&uploader, SIGNAL(uploadError(QString)), dbusHandler, SIGNAL(uploadError(QString)));
+    QObject::connect(&uploader, SIGNAL(uploadingChanged(bool)), dbusHandler, SIGNAL(uploadingChanged(bool)));
     QObject::connect(dbusHandler, SIGNAL(configChanged()), &fsHandler, SLOT(localPathChanged()));
     QObject::connect(dbusHandler, SIGNAL(configChanged()), &uploader, SLOT(settingsChanged()));
 

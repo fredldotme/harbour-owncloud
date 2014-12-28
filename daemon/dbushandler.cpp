@@ -25,3 +25,11 @@ void DBusHandler::setOffline(bool offline)
     emit offlineChanged(offline);
 }
 
+void DBusHandler::setUploading(bool uploading)
+{
+    qDebug() << Q_FUNC_INFO << "setting uploading" << uploading;
+    if (uploading == m_uploading) return;
+    m_uploading = uploading;
+    emit uploadingChanged(uploading);
+}
+

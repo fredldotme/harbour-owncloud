@@ -71,6 +71,7 @@ void Uploader::uploadFinished()
 {
     qDebug() << Q_FUNC_INFO;
     m_uploading = false;
+    emit uploadingChanged(false);
     UploadEntry *entry = qobject_cast<UploadEntry*>(sender());
     Q_ASSERT(entry);
     if (entry->succeeded()) {
@@ -175,6 +176,7 @@ void Uploader::uploadFile()
 
     if(!path.endsWith("/") && !m_existingFiles.contains(path)) {
         m_uploading = true;
+        emit uploadingChanged(true);
         UploadEntry *entry = new UploadEntry(absolutePath, path, dirsToCreate, &m_connection);
         connect(entry, SIGNAL(finished()), SLOT(uploadFinished()));
     }

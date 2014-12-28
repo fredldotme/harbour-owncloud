@@ -1,4 +1,4 @@
-#include "uploadentry.h"
+﻿#include "uploadentry.h"
 #define DEBUG_WEBDAV 1
 #include "qwebdav.h"
 
@@ -25,6 +25,7 @@ void UploadEntry::doUpload()
 {
     if (!m_pathsToCreate.isEmpty()) {
         qDebug() << Q_FUNC_INFO << "need to create dirs:" << m_pathsToCreate;
+        m_createdPaths.append(m_pathsToCreate.at(0));
         createDirectory();
         return;
     }
@@ -58,7 +59,7 @@ void UploadEntry::errorHandler(QNetworkReply::NetworkError error)
 
 void UploadEntry::createDirectory()
 {
-    QNetworkReply *reply = m_connection->mkdir(m_pathsToCreate.at(0));
+    QNetworkReply *reply = m_connection->mkdir(m_pathsToCreate.takeFirst());
     connect(reply, SIGNAL(finished()), SLOT(doUpload()));
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), SLOT(errorHandler(QNetworkReply::NetworkError)));
     connect(reply, SIGNAL(finished()), reply, SLOT(deleteLater()));

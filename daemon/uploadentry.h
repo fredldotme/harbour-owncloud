@@ -16,7 +16,7 @@ public:
 
     QString localPath() { return m_localPath; }
     QString remotePath() { return m_remotePath; }
-    QStringList pathsToCreate() { return m_pathsToCreate; }
+    QStringList pathsToCreate() { return m_createdPaths; }
     bool succeeded() { return m_succeeded; }
 
 signals:
@@ -32,6 +32,7 @@ private:
 
     QWebdav *m_connection;
     QStringList m_pathsToCreate;
+    QStringList m_createdPaths;
     QString m_localPath;
     QString m_remotePath;
     bool m_succeeded;

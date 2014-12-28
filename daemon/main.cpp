@@ -30,12 +30,11 @@ int main(int argc, char *argv[]) {
     QObject::connect(dbusHandler, SIGNAL(configChanged()), &fsHandler, SLOT(localPathChanged()));
     QObject::connect(dbusHandler, SIGNAL(configChanged()), &uploader, SLOT(settingsChanged()));
 
-
-    // assert for poor man's single instance application
-    Q_ASSERT(QDBusConnection::sessionBus().registerService("com.github.beidl.HarbourOwncloud.Daemon"));
-    Q_ASSERT(QDBusConnection::sessionBus().registerObject("/", &uploader));
-
-
+    // We only need one instance
+    if(!QDBusConnection::sessionBus().registerService("com.github.beidl.HarbourOwncloud.Daemon") ||
+            !QDBusConnection::sessionBus().registerObject("/", &uploader)) {
+        exit(1);
+    }
 
     return app.exec();
 }

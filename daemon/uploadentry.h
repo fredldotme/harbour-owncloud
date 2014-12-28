@@ -15,6 +15,7 @@ public:
     ~UploadEntry();
 
     QString localPath() { return m_localPath; }
+    bool succeeded() { return m_succeeded; }
 
 signals:
     void uploadFailed(QString errorMessage);
@@ -31,6 +32,7 @@ private:
     QStringList m_pathsToCreate;
     QString m_localPath;
     QString m_remotePath;
+    bool m_succeeded;
 };
 
 #endif // UPLOADENTRY_H

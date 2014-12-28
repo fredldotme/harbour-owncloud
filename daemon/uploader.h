@@ -3,6 +3,7 @@
 
 #include "qwebdav.h"
 #include "qwebdavdirparser.h"
+#include "networkmonitor.h"
 
 #include <QObject>
 #include <QSet>
@@ -17,15 +18,18 @@ public:
 signals:
     void uploadError(QString errorMessage);
     void localPathUpdated();
+    void connectError(QString errorMessage);
+    void fileUploaded(QString file);
 
 public slots:
     void fileFound(QString filePath);
+    void setSuspended(bool suspended);
 
 private slots:
     void settingsChanged();
     void uploadFinished();
-
     void remoteListingFinished();
+    void onlineChanged(bool online);
 
 private:
     void uploadFile();
@@ -46,6 +50,7 @@ private:
     bool m_fetchedExisting;
     QString m_remotePath;
     QStringList m_dirsToFetch;
+    bool m_suspended;
 };
 
 

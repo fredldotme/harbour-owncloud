@@ -15,7 +15,7 @@ int main(int argc, char *argv[]) {
 
     Filesystem fsHandler;
     Uploader uploader;
-    DBusHandler *dbusHandler = new DBusHandler(&app);
+    DBusHandler * dbusHandler = new DBusHandler(&uploader);
     NetworkMonitor netMonitor;
     QObject::connect(&fsHandler, SIGNAL(fileFound(QString)), &uploader, SLOT(fileFound(QString)));
     QObject::connect(&uploader, SIGNAL(localPathUpdated()), &fsHandler, SLOT(localPathChanged()));
@@ -27,16 +27,14 @@ int main(int argc, char *argv[]) {
     QObject::connect(&uploader, SIGNAL(fileUploaded(QString)), dbusHandler, SIGNAL(fileUploaded(QString)));
     QObject::connect(&uploader, SIGNAL(connectError(QString)), dbusHandler, SIGNAL(connectError(QString)));
     QObject::connect(&uploader, SIGNAL(uploadError(QString)), dbusHandler, SIGNAL(uploadError(QString)));
-    QObject::connect(dbusHandler, SIGNAL(reloadConfigChanged()), &fsHandler, SLOT(localPathChanged()));
-    QObject::connect(dbusHandler, SIGNAL(reloadConfigChanged()), &uploader, SLOT(settingsChanged()));
+    QObject::connect(dbusHandler, SIGNAL(configChanged()), &fsHandler, SLOT(localPathChanged()));
+    QObject::connect(dbusHandler, SIGNAL(configChanged()), &uploader, SLOT(settingsChanged()));
 
-    QDBusConnection::sessionBus().registerObject("/HarbourOwncloudDaemon", dbusHandler,
-                                                 QDBusConnection::ExportAllProperties |
-                                                 QDBusConnection::ExportAllInvokables |
-                                                 QDBusConnection::ExportAllSignals);
 
     // assert for poor man's single instance application
-    Q_ASSERT(QDBusConnection::sessionBus().registerService("com.github.beidl.harbour-owncloud.daemon"));
+    Q_ASSERT(QDBusConnection::sessionBus().registerService("com.github.beidl.HarbourOwncloud.Daemon"));
+    Q_ASSERT(QDBusConnection::sessionBus().registerObject("/", &uploader));
+
 
 
     return app.exec();

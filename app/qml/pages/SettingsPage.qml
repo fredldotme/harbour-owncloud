@@ -63,7 +63,7 @@ Page {
 
         TextSwitch {
             id: cameraUploadSwitch
-            anchors.top: autoLoginSwitch.bottom
+            anchors.top: notificationSwitch.bottom
             text: "Camera photo backups"
             description: "Automatically save camera photos to your ownCloud instance when on WiFi"
             visible: daemonCtrl.daemonInstalled

@@ -15,6 +15,8 @@ public:
     ~UploadEntry();
 
     QString localPath() { return m_localPath; }
+    QString remotePath() { return m_remotePath; }
+    QStringList pathsToCreate() { return m_pathsToCreate; }
     bool succeeded() { return m_succeeded; }
 
 signals:

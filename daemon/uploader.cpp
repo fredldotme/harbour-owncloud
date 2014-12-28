@@ -25,7 +25,9 @@ Uploader::Uploader(QObject *parent) : QObject(parent),
 
 void Uploader::fileFound(QString filePath)
 {
-    if (m_existingFiles.contains(relativeLocalPath(filePath))) {
+    QString remoteEquivalent = relativeLocalPath(filePath);
+    remoteEquivalent =  m_remotePath + remoteEquivalent.right(remoteEquivalent.length() - 1);
+    if (m_existingFiles.contains(remoteEquivalent)) {
         return;
     }
 
@@ -72,7 +74,12 @@ void Uploader::uploadFinished()
     UploadEntry *entry = qobject_cast<UploadEntry*>(sender());
     Q_ASSERT(entry);
     if (entry->succeeded()) {
-        m_existingFiles.insert(relativeLocalPath(entry->localPath()));
+        m_existingFiles.insert(entry->remotePath());
+        foreach(QString createdPath, entry->pathsToCreate()) {
+            qDebug() << "created path: " << createdPath;
+            m_existingDirs.insert(createdPath);
+        }
+
         emit fileUploaded(entry->localPath());
     } else {
         m_uploadQueue.append(entry->localPath());
@@ -97,6 +104,10 @@ void Uploader::remoteListingFinished()
 
         qDebug() << "Existing:";
         foreach(QString tmp, m_existingFiles)
+        {
+            qDebug() << tmp;
+        }
+        foreach(QString tmp, m_existingDirs)
         {
             qDebug() << tmp;
         }
@@ -157,6 +168,7 @@ void Uploader::uploadFile()
     for (int i=0; i<requiredDirs.length() - 1; i++) {
         curPath += requiredDirs[i] + "/";
         if (!m_existingDirs.contains(curPath)) {
+            qDebug() << "got to create: |" << curPath << "|";
             dirsToCreate.append(curPath);
         }
     }
@@ -191,6 +203,7 @@ void Uploader::getExistingRemote()
         // Then list the existing files and folders in it
         m_remoteDir.listDirectory(&m_connection, m_remotePath);
     });
+    connect(reply, SIGNAL(finished()), reply, SLOT(deleteLater()));
 }
 
 QString Uploader::relativeLocalPath(QString absolutePath)

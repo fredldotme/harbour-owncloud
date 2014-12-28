@@ -37,6 +37,7 @@ void UploadEntry::doUpload()
     QNetworkReply *reply = m_connection->put(m_remotePath, file);
     connect(reply, SIGNAL(finished()), SIGNAL(finished()));
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), SLOT(errorHandler(QNetworkReply::NetworkError)));
+    connect(reply, SIGNAL(finished()), reply, SLOT(deleteLater()));
 }
 
 void UploadEntry::errorHandler(QNetworkReply::NetworkError error)
@@ -48,15 +49,18 @@ void UploadEntry::errorHandler(QNetworkReply::NetworkError error)
 
     QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
     Q_ASSERT(reply);
-    emit uploadFailed(reply->errorString());
-    qWarning() << Q_FUNC_INFO << "error during upload:" << reply->errorString();
-    m_succeeded = false;
+    if(!reply->errorString().endsWith("Method Not Allowed")) {
+        emit uploadFailed(reply->errorString());
+        qWarning() << Q_FUNC_INFO << "error during upload:" << reply->errorString();
+        m_succeeded = false;
+    }
 }
 
 void UploadEntry::createDirectory()
 {
-    QNetworkReply *reply = m_connection->mkdir(m_pathsToCreate.takeFirst());
+    QNetworkReply *reply = m_connection->mkdir(m_pathsToCreate.at(0));
     connect(reply, SIGNAL(finished()), SLOT(doUpload()));
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), SLOT(errorHandler(QNetworkReply::NetworkError)));
+    connect(reply, SIGNAL(finished()), reply, SLOT(deleteLater()));
 }
 

@@ -167,8 +167,11 @@ void Uploader::getExistingRemote()
     connect(reply, &QNetworkReply::finished, [this, reply]() {
         if (reply->error() != QNetworkReply::NoError) {
             qWarning() << Q_FUNC_INFO << reply->errorString();
-            emit connectError(reply->errorString());
-            return;
+            // don't fail if directory exists
+            if(!reply->errorString().endsWith("Method Not Allowed")) {
+                emit connectError(reply->errorString());
+                return;
+            }
         }
 
         m_existingDirs.insert(m_remotePath);

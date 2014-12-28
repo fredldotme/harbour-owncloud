@@ -20,7 +20,7 @@ HEADERS += \
 
 LIBS += $$OUT_PWD/../qwebdavlib/qwebdavlib/libqwebdav.so.1
 
-QMAKE_RPATHDIR += /usr/share/harbour-owncloud/libs
+QMAKE_RPATHDIR += /usr/share/harbour-owncloud/lib
 
 INCLUDEPATH += $$PWD/../common/src
 DEPENDPATH += $$PWD/../common/src

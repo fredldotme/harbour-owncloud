@@ -12,18 +12,23 @@ public:
     explicit DaemonControl(QObject *parent = 0);
 
     Q_PROPERTY(bool daemonInstalled READ daemonInstalled NOTIFY daemonInstalledChanged)
+    Q_PROPERTY(bool uploading READ uploading NOTIFY uploadingChanged)
 
 private:
-    bool m_daemonRunning;
+    bool m_uploading;
 
     bool daemonInstalled();
+    bool uploading();
 
 signals:
     void daemonInstalledChanged();
+    void uploadingChanged();
 
 public slots:
     void reloadConfig();
 
+private slots:
+    void setUploading(bool value);
 };
 
 #endif // DAEMONCONTROL_H

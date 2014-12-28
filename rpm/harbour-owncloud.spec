@@ -81,3 +81,4 @@ desktop-file-install --delete-original       \
 %files daemon
 %defattr(-,root,root,-)
 %{_bindir}/%{name}-daemon
+/usr/lib/systemd/user/%{name}-daemon.service

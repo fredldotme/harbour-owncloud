@@ -82,3 +82,7 @@ desktop-file-install --delete-original       \
 %defattr(-,root,root,-)
 %{_bindir}/%{name}-daemon
 /usr/lib/systemd/user/%{name}-daemon.service
+
+%post daemon
+/bin/systemctl-user enable harbour-owncloud-daemon.service >/dev/null 2>&1 || :
+/bin/systemctl-user start harbour-owncloud-daemon.service >/dev/null 2>&1 || :

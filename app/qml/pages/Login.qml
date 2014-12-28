@@ -6,7 +6,7 @@ Page {
 
     Component.onCompleted: {
         settings.readSettings();
-        if(settings.autoLogin) {
+        if(settings.autoLogin && !loginFailed) {
             loginInProgress = true;
             browser.testConnection();
         }
@@ -103,6 +103,7 @@ Page {
                     settings.writeSettings();
 
                     loginInProgress = true;
+                    loginFailed = false;
                     browser.testConnection();
                 } else {
                     notify("Invalid URL", "Please check your host address")

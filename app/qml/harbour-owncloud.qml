@@ -6,6 +6,7 @@ import "pages"
 ApplicationWindow
 {
     property bool loginInProgress : false;
+    property bool loginFailed : false;
 
     function getIconFromMime(mimeType) {
         if(mimeType.indexOf("image") === 0) {
@@ -39,6 +40,7 @@ ApplicationWindow
         target: browser
         onLoginFailed: {
             loginInProgress = false;
+            loginFailed = true;
             notify("Login failed", "Please check your host address and credentials")
 
             pageStack.completeAnimation();

@@ -35,6 +35,10 @@ private:
     QWebdav *webdav;
     QWebdavDirParser parser;
     QString currentPath;
+    QVariantList entries;
+    QStack<QList<EntryInfo*> > entryStack;
+    QMutex deleteMutex;
+    bool abortIntended;
 
     void applySettingsToWebdav(QWebdav *webdav);
 

@@ -16,14 +16,8 @@ Page {
     property int cancelCounter : 0;
 
     function refreshListView() {
-        deleteEntries()
         listView.model = undefined
         browser.getDirectoryContent(remotePath);
-    }
-
-    function deleteEntries() {
-        for(var i = 0; i < listView.model.length; i++)
-            listView.model[i].deleteMe();
     }
 
     Connections {
@@ -39,7 +33,6 @@ Page {
         target: browser
         onRefreshStarted: {
             if(remotePath === pathToRefresh && cancelCounter === 0) {
-                deleteEntries()
                 listView.model = undefined;
             }
         }
@@ -58,7 +51,6 @@ Page {
         if (status === PageStatus.Deactivating) {
             if (_navigation === PageNavigation.Back) {
                 browser.goToParentPath();
-                deleteEntries();
             }
         }
     }
@@ -82,6 +74,7 @@ Page {
             PullDownMenu {
                 MenuItem {
                     text: qsTr("Refresh")
+                    enabled: listView.model !== undefined
                     onClicked: {
                         listView.model = undefined
                         browser.getDirectoryContent(remotePath);
@@ -90,6 +83,7 @@ Page {
 
                 MenuItem {
                     text:qsTr("Create directory")
+                    enabled: listView.model !== undefined
                     onClicked: {
                         pageStack.push("MkDirDialog.qml")
                     }
@@ -97,6 +91,7 @@ Page {
 
                 MenuItem {
                     text: qsTr("Upload")
+                    enabled: listView.model !== undefined
                     onClicked: {
                         pageStack.push("UploadDialog.qml")
                     }

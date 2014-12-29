@@ -5,6 +5,7 @@ OwnCloudBrowser::OwnCloudBrowser(QObject *parent, Settings *settings) :
 {
     this->webdav = 0;
     this->settings = settings;
+    this->abortIntended = false;
     connect(settings, SIGNAL(settingsChanged()), this, SLOT(reloadSettings()));
 
     resetWebdav();
@@ -89,17 +90,24 @@ void OwnCloudBrowser::proxyHandleSslError(const QList<QSslError>& errors)
 
 void OwnCloudBrowser::proxyHandleLoginFailed()
 {
-    qDebug() << "BEIDL Failed";
-    disconnect(&parser, SIGNAL(finished()), this, SLOT(handleResponse()));
+    if(!abortIntended) {
+        qDebug() << "BEIDL Failed";
+        disconnect(&parser, SIGNAL(finished()), this, SLOT(handleResponse()));
 
-    emit loginFailed();
+        emit loginFailed();
+    } else {
+        abortIntended = false;
+    }
 }
 
 void OwnCloudBrowser::handleResponse()
 {
     QList<QWebdavItem> list = parser.getList();
-    QVariantList entries;
 
+    entries.clear();
+    QList<EntryInfo*> deletables;
+
+    deleteMutex.lock();
     QWebdavItem item;
     foreach(item, list) {
         EntryInfo *entry = new EntryInfo();
@@ -115,9 +123,12 @@ void OwnCloudBrowser::handleResponse()
         QVariant tmpVariant;
         tmpVariant.setValue(entry);
         entries.append(tmpVariant);
-    }
 
+        deletables.append(entry);
+    }
+    entryStack.push(deletables);
     emit directoryContentChanged(parser.path(), entries);
+    deleteMutex.unlock();
 }
 
 void OwnCloudBrowser::printError(QString msg)
@@ -137,6 +148,20 @@ void OwnCloudBrowser::goToParentPath()
 
     QString tmpPath = currentPath.mid(0, currentPath.length() - 1);
     currentPath = tmpPath.mid(0, tmpPath.lastIndexOf('/') + 1);
+
+    abortIntended = true;
+    bool busy = parser.isBusy();
+    parser.abort();
+
+    deleteMutex.lock();
+    if(!busy) {
+        QList<EntryInfo*> deletables = entryStack.pop();
+        for(int i = 0; i < deletables.length(); i++) {
+            deletables.at(i)->deleteLater();
+        }
+        deletables.clear();
+    }
+    deleteMutex.unlock();
 }
 
 void OwnCloudBrowser::getDirectoryContent(QString path)

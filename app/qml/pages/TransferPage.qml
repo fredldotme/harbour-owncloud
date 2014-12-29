@@ -50,7 +50,7 @@ Page {
         BusyIndicator {
             id: indicator
             anchors.left: parent.left
-            anchors.leftMargin: Theme.paddingLarge + 78 - parent.height
+            anchors.leftMargin: Theme.paddingLarge + 39 - (parent.height/2)
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             width: parent.height
@@ -60,8 +60,8 @@ Page {
             id: backupText
             text: "Camera backup in progress..."
             anchors.left: indicator.right
-            anchors.leftMargin: 16
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.leftMargin: 16 + 39 - (parent.height/2)
+            anchors.verticalCenter: indicator.verticalCenter
         }
     }
 

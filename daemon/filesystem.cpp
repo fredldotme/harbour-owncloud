@@ -57,13 +57,10 @@ void Filesystem::localPathChanged()
 {
     QString newPath = Settings::instance()->localPicturesPath();
 
-    if (newPath == m_localPath) {
-        return;
-    }
-
     if (!m_watcher.directories().isEmpty()) {
         m_watcher.removePaths(m_watcher.directories());
     }
+    m_existingFiles.clear();
 
     m_localPath = newPath;
     rescan();

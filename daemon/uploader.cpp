@@ -64,7 +64,8 @@ void Uploader::settingsChanged()
                                  settings->port(),
                                  settings->md5Hex(),
                                  settings->sha1Hex());
-
+    m_existingDirs.clear();
+    m_existingFiles.clear();
     getExistingRemote();
     emit localPathUpdated();
 }

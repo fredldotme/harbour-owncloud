@@ -28,15 +28,76 @@ Page {
     property BackgroundItem selectedItem;
     property RemorseItem selectedRemorse;
 
+    PageHeader {
+        id: header
+        title: "File transfers"
+    }
+
+    BackgroundItem {
+        id: daemonProgress
+        anchors.top: header.bottom
+        visible: daemonCtrl.daemonInstalled
+        height: visible ? 96 * opacity : 0
+        opacity: 1.0
+        BusyIndicator {
+            id: indicator
+            anchors.left: parent.left
+            running: parent.visible
+        }
+        Label {
+            id: backupText
+            text: "Camera backup in progress..."
+            anchors.left: indicator.right
+            anchors.leftMargin: 16
+            anchors.verticalCenter: parent.Center
+        }
+    }
+
+    Connections {
+        target: daemonCtrl
+        onUploadingChanged: {
+            if(daemonCtrl.uploading) {
+                daemonAnimationOut.stop()
+                daemonAnimationIn.start()
+            } else {
+                daemonAnimationIn.stop()
+                daemonAnimationOut.start()
+            }
+        }
+    }
+
+    NumberAnimation {
+        id: daemonAnimationIn
+        target: daemonProgress;
+        property: "opacity";
+        duration: 150;
+        from: 0.0
+        to: 1.0
+        easing.type: Easing.InOutQuad
+        running: false
+    }
+
+    NumberAnimation {
+        id: daemonAnimationOut
+        target: daemonProgress;
+        property: "opacity";
+        duration: 150;
+        from: 1.0
+        to: 0.0
+        easing.type: Easing.InOutQuad
+        running: false
+    }
+
     SilicaFlickable {
-        anchors.fill: parent
+        anchors.top: daemonProgress.bottom
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
 
         SilicaListView {
             id: listView
             anchors.fill: parent
-            header: PageHeader {
-                title: "File transfers"
-            }
+            //header:
 
             delegate: BackgroundItem {
                 id: delegate

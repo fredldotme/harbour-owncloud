@@ -96,7 +96,7 @@ Page {
             PushUpMenu {
                 MenuItem {
                     text: qsTr("File transfers")
-                    enabled: transfer.transfering
+                    enabled: transfer.transfering || (daemonCtrl.daemonInstalled && daemonCtrl.uploading)
                     onClicked: {
                         pageStack.push("TransferPage.qml")
                     }

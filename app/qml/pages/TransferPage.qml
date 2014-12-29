@@ -43,15 +43,14 @@ Page {
     BackgroundItem {
         id: daemonProgress
         anchors.top: header.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
+        width: parent.width
         visible: daemonCtrl.daemonInstalled
         height: visible ? 78 * opacity : 0
         anchors.horizontalCenter: parent.horizontalCenter
         BusyIndicator {
             id: indicator
             anchors.left: parent.left
-            anchors.leftMargin: Theme.paddingLarge
+            anchors.leftMargin: Theme.paddingLarge + 78 - parent.height
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             width: parent.height

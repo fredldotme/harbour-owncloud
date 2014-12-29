@@ -38,7 +38,6 @@ int main(int argc, char *argv[])
     TransferManager *transfer = new TransferManager(0, browser);
     DaemonControl *daemonCtrl = new DaemonControl();
 
-    QObject::connect(settings, SIGNAL(settingsChanged()), daemonCtrl, SLOT(reloadConfig()));
     view->rootContext()->setContextProperty("browser", browser);
     view->rootContext()->setContextProperty("settings", settings);
     view->rootContext()->setContextProperty("transfer", transfer);

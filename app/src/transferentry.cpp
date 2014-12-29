@@ -65,6 +65,10 @@ int TransferEntry::getTransferDirection()
 
 void TransferEntry::startTransfer()
 {
+    qDebug() << "Start transfer";
+    qDebug() << "Local path: " << m_localPath;
+    qDebug() << "Remote path: " << m_remotePath;
+
     localFile = new QFile(m_localPath, this);
     localFile->open(QFile::ReadWrite);
     connect(webdav, SIGNAL(finished(QNetworkReply*)), this, SLOT(handleReadComplete()));

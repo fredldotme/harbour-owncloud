@@ -4,6 +4,7 @@ import harbour.owncloud 1.0
 
 Page {
     id: pageRoot
+    objectName: "TransferPage"
 
     Component.onCompleted: {
         listView.model = transfer.getTransfers();
@@ -48,7 +49,7 @@ Page {
         BusyIndicator {
             id: indicator
             anchors.left: parent.left
-            anchors.leftMargin: Theme.paddingLarge + 78 - parent.height
+            anchors.leftMargin: Theme.paddingLarge + 39 - (parent.height/2)
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             width: parent.height
@@ -122,7 +123,7 @@ Page {
                         id: transferTypeIcon
                         x: 16
                         height: parent.height
-                        source: listView.model[index].direction === 0 ?
+                        source: listView.model[index].direction === TransferEntry.DOWN ?
                                     "image://theme/icon-m-download" :
                                     "image://theme/icon-m-upload"
                         fillMode: Image.PreserveAspectFit

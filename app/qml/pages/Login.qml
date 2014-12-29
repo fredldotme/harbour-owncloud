@@ -18,6 +18,7 @@ Page {
             loginInProgress = false;
             browser.getDirectoryContent("/");
             pageStack.replace("FileBrowser.qml");
+            daemonCtrl.reloadConfig()
         }
     }
 

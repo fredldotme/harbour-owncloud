@@ -16,6 +16,15 @@ Page {
         }
     }
 
+    onStatusChanged: {
+        if (status === PageStatus.Deactivating) {
+            if (_navigation === PageNavigation.Back) {
+                settings.writeSettings()
+                daemonCtrl.reloadConfig()
+            }
+        }
+    }
+
     SilicaFlickable {
         anchors.fill: parent
 
@@ -43,10 +52,7 @@ Page {
             text: "Login automatically"
             description: "Automatically log in to your ownCloud server when starting the app"
             checked: settings.autoLogin
-            onCheckedChanged: {
-                settings.autoLogin = checked
-                settings.writeSettings()
-            }
+            onClicked: settings.autoLogin = checked
         }
 
         TextSwitch {
@@ -55,10 +61,7 @@ Page {
             text: "Notifications"
             description: "Show global notifications when transfering files"
             checked: settings.notifications
-            onCheckedChanged: {
-                settings.notifications = checked
-                settings.writeSettings()
-            }
+            onClicked: settings.notifications = checked
         }
 
         TextSwitch {
@@ -68,10 +71,7 @@ Page {
             description: "Automatically save camera photos to your ownCloud instance when on WiFi"
             visible: daemonCtrl.daemonInstalled
             checked: settings.uploadAutomatically
-            onCheckedChanged: {
-                settings.uploadAutomatically = checked
-                settings.writeSettings()
-            }
+            onClicked: settings.uploadAutomatically = checked
         }
     }
 }

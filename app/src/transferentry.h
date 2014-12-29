@@ -21,6 +21,8 @@ public:
         DOWN, UP
     };
 
+    Q_ENUMS(TransferDirection)
+
     TransferEntry(QObject *parent = 0, QWebdav *webdav = 0,
                   QString name = "", QString remotePath = "",
                   QString localPath = "", qint64 size = 0,

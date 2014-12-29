@@ -69,6 +69,8 @@ TransferEntry* TransferManager::enqueueDownload(EntryInfo* entry, bool open)
 
 void TransferManager::enqueueUpload(QString localPath, QString remotePath)
 {
+    qDebug() << "enqeued upload";
+
     uploadMutex.lock();
     QFile localFile(localPath);
     qint64 size = localFile.size();

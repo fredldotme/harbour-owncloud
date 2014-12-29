@@ -14,6 +14,8 @@ public:
     Q_PROPERTY(bool daemonInstalled READ daemonInstalled NOTIFY daemonInstalledChanged)
     Q_PROPERTY(bool uploading READ uploading NOTIFY uploadingChanged)
 
+    Q_INVOKABLE void reloadConfig();
+
 private:
     bool m_uploading;
 
@@ -23,9 +25,6 @@ private:
 signals:
     void daemonInstalledChanged();
     void uploadingChanged();
-
-public slots:
-    void reloadConfig();
 
 private slots:
     void setUploading(bool value);

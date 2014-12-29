@@ -2,7 +2,6 @@ TARGET = harbour-owncloud-daemon
 
 CONFIG -= gui
 CONFIG += c++11
-CONFIG += sailfishapp
 
 QT += dbus network xml
 
@@ -30,7 +29,10 @@ QMAKE_RPATHDIR += /usr/share/harbour-owncloud/lib
 
 service.path = /usr/lib/systemd/user/
 service.files += harbour-owncloud-daemon.service
-INSTALLS += service
+binary.path = /usr/bin/
+binary.files += $$OUT_PWD/harbour-owncloud-daemon
+
+INSTALLS += service binary
 
 INCLUDEPATH += $$PWD/../common/src
 DEPENDPATH += $$PWD/../common/src

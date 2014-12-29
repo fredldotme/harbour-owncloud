@@ -36,8 +36,10 @@ void Filesystem::scan(QString dirPath, bool recursive)
 
         if(!entry.isDir()) {
             emit fileFound(path);
+            m_existingFiles.insert(path);
+        } else if (entry.isDir() && !m_watcher.directories().contains(path)){
+            m_watcher.addPath(path);
         }
-        m_existingFiles.insert(path);
     }
 }
 

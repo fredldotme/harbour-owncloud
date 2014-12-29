@@ -1,9 +1,7 @@
 TARGET = harbour-owncloud-daemon
 
-CONFIG -= gui
-CONFIG += c++11
-
-QT += dbus network xml
+CONFIG = qt c++11
+QT = dbus network xml
 
 SOURCES += main.cpp \
     uploader.cpp \

@@ -83,7 +83,7 @@
 <context>
     <name>TransferPage</name>
     <message>
-        <source>No file transfers pending</source>
+        <source>No pending file transfers</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

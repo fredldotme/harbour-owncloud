@@ -8,11 +8,11 @@ Page {
     Component.onCompleted: {
         listView.model = transfer.getTransfers();
         if(daemonCtrl.uploading) {
-            daemonAnimationOut.stop()
-            daemonAnimationIn.start()
+            daemonAnimationOut.stop();
+            daemonAnimationIn.start();
         } else {
-            daemonAnimationIn.stop()
-            daemonAnimationOut.start()
+            daemonAnimationIn.stop();
+            daemonAnimationOut.start();
         }
     }
 
@@ -32,8 +32,6 @@ Page {
 
     property Item transferContextMenu;
     property TransferEntry selectedEntry;
-    property BackgroundItem selectedItem;
-    property RemorseItem selectedRemorse;
 
     PageHeader {
         id: header
@@ -50,7 +48,7 @@ Page {
         BusyIndicator {
             id: indicator
             anchors.left: parent.left
-            anchors.leftMargin: Theme.paddingLarge + 39 - (parent.height/2)
+            anchors.leftMargin: Theme.paddingLarge + 78 - parent.height
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             width: parent.height
@@ -118,13 +116,12 @@ Page {
 
                 BackgroundItem {
                     id: bgItem
-
-                    RemorseItem { id: remorseItem }
+                    height: transferProgress.y+transferProgress.height - transferTypeIcon.y
 
                     Image {
                         id: transferTypeIcon
                         x: 16
-                        height: label.height + transferProgress.height
+                        height: parent.height
                         source: listView.model[index].direction === 0 ?
                                     "image://theme/icon-m-download" :
                                     "image://theme/icon-m-upload"
@@ -134,6 +131,7 @@ Page {
                     Label {
                         id: label
                         text: listView.model[index].name
+                        anchors.top: bgItem.top
                         anchors.left: transferTypeIcon.right
                         anchors.leftMargin: 16
                         anchors.verticalCenter: parent.verticalCenter
@@ -149,8 +147,6 @@ Page {
 
                     onPressAndHold: {
                         selectedEntry = listView.model[index];
-                        selectedRemorse = remorseItem;
-                        selectedItem = delegate
                         if (!transferContextMenu)
                             transferContextMenu = contextMenuComponent.createObject(listView)
                         transferContextMenu.show(delegate)
@@ -174,7 +170,7 @@ Page {
             Label {
                 id: noTransfersHint
                 anchors.centerIn: parent
-                text: qsTr("No file transfers pending")
+                text: qsTr("No pending file transfers")
                 visible: (listView.model === undefined || listView.model.length === 0) && !daemonCtrl.uploading
             }
 
@@ -183,20 +179,12 @@ Page {
                 ContextMenu {
                     onClosed: {
                         selectedEntry = null
-                        selectedItem = null
                     }
 
                     MenuItem {
                         text: "Cancel"
-
-                        property TransferEntry tmpEntry;
-
                         onClicked: {
-                            tmpEntry = selectedEntry
-                            remorseItem.execute(selectedItem, "Canceling transfer", function() {
-                                tmpEntry.cancelTransfer();
-                                selectedRemorse = null;
-                            })
+                            selectedEntry.cancelTransfer()
                         }
                     }
                 }

@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import "../pages"
 
 CoverBackground {
     anchors.fill: parent
@@ -27,13 +28,22 @@ CoverBackground {
         }
     }
 
+    function findTransfers(page) {
+        if(page.objectName === "TransferPage") {
+            return true;
+        }
+    }
+
     CoverActionList {
         enabled: transfer.transfering || daemonCtrl.uploading
 
         CoverAction {
             iconSource: "image://theme/icon-cover-transfers"
             onTriggered: {
-                pageStack.push("../pages/TransferPage.qml", {}, PageStackAction.Immediate);
+                if(!pageStack.find(findTransfers)) {
+                    pageStack.push("../pages/TransferPage.qml", {}, PageStackAction.Immediate);
+                }
+
                 if (!applicationWindow.applicationActive) {
                     applicationWindow.activate()
                 }

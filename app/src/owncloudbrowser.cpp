@@ -102,12 +102,12 @@ void OwnCloudBrowser::proxyHandleLoginFailed()
 
 void OwnCloudBrowser::handleResponse()
 {
+    deleteMutex.lock();
     QList<QWebdavItem> list = parser.getList();
 
     entries.clear();
     QList<EntryInfo*> deletables;
 
-    deleteMutex.lock();
     QWebdavItem item;
     foreach(item, list) {
         EntryInfo *entry = new EntryInfo();
@@ -145,10 +145,10 @@ void OwnCloudBrowser::goToParentPath()
 {
     // Called when navigating back in the browser
     // Keeping path and UI in sync
-
     QString tmpPath = currentPath.mid(0, currentPath.length() - 1);
     currentPath = tmpPath.mid(0, tmpPath.lastIndexOf('/') + 1);
 
+    // Delete old EntryInfo objects
     abortIntended = true;
     bool busy = parser.isBusy();
     parser.abort();
@@ -172,6 +172,13 @@ void OwnCloudBrowser::getDirectoryContent(QString path)
 
 void OwnCloudBrowser::refreshDirectoryContent()
 {
+    deleteMutex.lock();
+    QList<EntryInfo*> deletables = entryStack.pop();
+    for(int i = 0; i < deletables.length(); i++) {
+        deletables.at(i)->deleteLater();
+    }
+    deletables.clear();
+    deleteMutex.unlock();
     parser.listDirectory(webdav, currentPath);
 }
 

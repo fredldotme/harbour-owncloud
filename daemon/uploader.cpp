@@ -67,6 +67,7 @@ void Uploader::settingsChanged()
     m_existingDirs.clear();
     m_existingFiles.clear();
     m_dirsToFetch.clear();
+    m_uploadQueue.clear();
     m_fetchedExisting = false;
     getExistingRemote();
     emit localPathUpdated();

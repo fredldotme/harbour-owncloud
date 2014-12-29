@@ -78,6 +78,7 @@ void TransferEntry::startTransfer()
                 this, SLOT(handleProgressChange(qint64,qint64)), Qt::DirectConnection);
     }
     connect(this, SIGNAL(destroyed()), networkReply, SLOT(deleteLater()));
+    connect(networkReply, SIGNAL(destroyed()), localFile, SLOT(deleteLater()));
 }
 
 void TransferEntry::handleProgressChange(qint64 bytes, qint64 bytesTotal)
@@ -90,6 +91,11 @@ void TransferEntry::cancelTransfer()
 {
     if(networkReply) {
         networkReply->abort();
+    }
+
+    if(m_direction == DOWN) {
+        QFile tmpFile(m_localPath);
+        tmpFile.remove();
     }
 
     emit transferCompleted(false);

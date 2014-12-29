@@ -7,6 +7,13 @@ Page {
 
     Component.onCompleted: {
         listView.model = transfer.getTransfers();
+        if(daemonCtrl.uploading) {
+            daemonAnimationOut.stop()
+            daemonAnimationIn.start()
+        } else {
+            daemonAnimationIn.stop()
+            daemonAnimationOut.start()
+        }
     }
 
     Connections {
@@ -37,11 +44,14 @@ Page {
         id: daemonProgress
         anchors.top: header.bottom
         visible: daemonCtrl.daemonInstalled
-        height: visible ? 96 * opacity : 0
-        opacity: 1.0
+        height: visible ? 78 * opacity : 0
+        anchors.horizontalCenter: parent.horizontalCenter
         BusyIndicator {
             id: indicator
             anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            width: parent.height
             running: parent.visible
         }
         Label {
@@ -49,7 +59,7 @@ Page {
             text: "Camera backup in progress..."
             anchors.left: indicator.right
             anchors.leftMargin: 16
-            anchors.verticalCenter: parent.Center
+            anchors.verticalCenter: parent.verticalCenter
         }
     }
 
@@ -163,7 +173,7 @@ Page {
                 id: noTransfersHint
                 anchors.centerIn: parent
                 text: qsTr("No file transfers pending")
-                visible: listView.model === undefined || listView.model.length === 0
+                visible: (listView.model === undefined || listView.model.length === 0) && !daemonCtrl.uploading
             }
 
             Component {

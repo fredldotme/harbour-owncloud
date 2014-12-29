@@ -48,7 +48,7 @@ void Uploader::setSuspended(bool suspended)
         // restart uploading
         uploadFile();
     } else {
-        emit uploadingChanged(false)
+        emit uploadingChanged(false);
     }
 }
 

@@ -16,8 +16,14 @@ Page {
     property int cancelCounter : 0;
 
     function refreshListView() {
+        deleteEntries()
         listView.model = undefined
         browser.getDirectoryContent(remotePath);
+    }
+
+    function deleteEntries() {
+        for(var i = 0; i < listView.model.length; i++)
+            listView.model[i].deleteMe();
     }
 
     Connections {
@@ -32,8 +38,10 @@ Page {
     Connections {
         target: browser
         onRefreshStarted: {
-            if(remotePath === pathToRefresh && cancelCounter === 0)
+            if(remotePath === pathToRefresh && cancelCounter === 0) {
+                deleteEntries()
                 listView.model = undefined;
+            }
         }
     }
 
@@ -50,6 +58,7 @@ Page {
         if (status === PageStatus.Deactivating) {
             if (_navigation === PageNavigation.Back) {
                 browser.goToParentPath();
+                deleteEntries();
             }
         }
     }

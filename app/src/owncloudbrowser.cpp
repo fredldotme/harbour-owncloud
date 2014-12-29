@@ -38,6 +38,8 @@ QWebdav* OwnCloudBrowser::getNewWebdav()
     /* Used for file uploads
      * Helps to not confuse error signals of simultaneous file operations */
     QWebdav* newWebdav = new QWebdav();
+    connect(newWebdav, SIGNAL(finished(QNetworkReply*)), newWebdav, SLOT(deleteLater()), Qt::DirectConnection);
+
     applySettingsToWebdav(newWebdav);
     return newWebdav;
 }

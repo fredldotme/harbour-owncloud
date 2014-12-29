@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QDateTime>
+#include <QDebug>
 
 class EntryInfo : public QObject
 {
@@ -17,6 +18,7 @@ class EntryInfo : public QObject
 
 public:
     EntryInfo(QObject *parent = 0);
+    Q_INVOKABLE void deleteMe();
 
     void setPath(QString value);
     void setName(QString value);

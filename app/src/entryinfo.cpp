@@ -5,6 +5,11 @@ EntryInfo::EntryInfo(QObject *parent) :
 {
 }
 
+void EntryInfo::deleteMe()
+{
+    deleteLater();
+}
+
 QString EntryInfo::path()
 {
     return m_path;

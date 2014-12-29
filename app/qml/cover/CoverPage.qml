@@ -21,19 +21,22 @@ CoverBackground {
         }
 
         BusyIndicator {
-            visible: transfer.transfering
-            running: transfer.transfering
+            visible: transfer.transfering || daemonCtrl.uploading
+            running: transfer.transfering || daemonCtrl.uploading
             anchors.horizontalCenter: parent.horizontalCenter
         }
     }
 
     CoverActionList {
-        enabled: transfer.transfering
+        enabled: transfer.transfering || daemonCtrl.uploading
 
         CoverAction {
             iconSource: "image://theme/icon-cover-transfers"
             onTriggered: {
-                pageStack.push("TransferPage.qml")
+                pageStack.push("../pages/TransferPage.qml", {}, PageStackAction.Immediate);
+                if (!applicationWindow.applicationActive) {
+                    applicationWindow.activate()
+                }
             }
         }
     }

@@ -47,6 +47,8 @@ void Uploader::setSuspended(bool suspended)
     if (!suspended) {
         // restart uploading
         uploadFile();
+    } else {
+        emit uploadingChanged(false)
     }
 }
 
@@ -71,7 +73,6 @@ void Uploader::uploadFinished()
 {
     qDebug() << Q_FUNC_INFO;
     m_uploading = false;
-    emit uploadingChanged(false);
     UploadEntry *entry = qobject_cast<UploadEntry*>(sender());
     Q_ASSERT(entry);
     if (entry->succeeded()) {
@@ -150,6 +151,7 @@ void Uploader::uploadFile()
     do {
         if (m_uploadQueue.isEmpty()) {
             qDebug() << Q_FUNC_INFO << "no files to upload";
+            emit uploadingChanged(false);
             return;
         }
 

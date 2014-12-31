@@ -11,7 +11,8 @@ UploadEntry::UploadEntry(QString localPath,
     m_pathsToCreate(pathsToCreate),
     m_localPath(localPath),
     m_remotePath(remotePath),
-    m_succeeded(true)
+    m_succeeded(true),
+    m_currentReply(0)
 {
     doUpload();
 }
@@ -19,6 +20,11 @@ UploadEntry::UploadEntry(QString localPath,
 UploadEntry::~UploadEntry()
 {
 
+}
+
+void UploadEntry::resetReply()
+{
+    m_currentReply = 0;
 }
 
 void UploadEntry::doUpload()
@@ -36,9 +42,11 @@ void UploadEntry::doUpload()
         emit finished();
     }
     QNetworkReply *reply = m_connection->put(m_remotePath, file);
+    m_currentReply = reply;
     connect(reply, SIGNAL(finished()), SIGNAL(finished()));
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), SLOT(errorHandler(QNetworkReply::NetworkError)));
-    connect(reply, SIGNAL(finished()), reply, SLOT(deleteLater()));
+    connect(reply, SIGNAL(finished()), this, SLOT(resetReply()), Qt::DirectConnection);
+    connect(reply, SIGNAL(finished()), reply, SLOT(deleteLater()), Qt::DirectConnection);
 }
 
 void UploadEntry::errorHandler(QNetworkReply::NetworkError error)
@@ -60,8 +68,10 @@ void UploadEntry::errorHandler(QNetworkReply::NetworkError error)
 void UploadEntry::createDirectory()
 {
     QNetworkReply *reply = m_connection->mkdir(m_pathsToCreate.takeFirst());
+    m_currentReply = reply;
     connect(reply, SIGNAL(finished()), SLOT(doUpload()));
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), SLOT(errorHandler(QNetworkReply::NetworkError)));
-    connect(reply, SIGNAL(finished()), reply, SLOT(deleteLater()));
+    connect(reply, SIGNAL(finished()), this, SLOT(resetReply()), Qt::DirectConnection);
+    connect(reply, SIGNAL(finished()), reply, SLOT(deleteLater()), Qt::DirectConnection);
 }
 

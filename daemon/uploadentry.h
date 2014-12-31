@@ -18,6 +18,7 @@ public:
     QString remotePath() { return m_remotePath; }
     QStringList pathsToCreate() { return m_createdPaths; }
     bool succeeded() { return m_succeeded; }
+    void abort() { if(m_currentReply) m_currentReply->abort(); }
 
 signals:
     void uploadFailed(QString errorMessage);
@@ -26,10 +27,11 @@ signals:
 private slots:
     void doUpload();
     void errorHandler(QNetworkReply::NetworkError);
+    void resetReply();
 
 private:
     void createDirectory();
-
+    QNetworkReply *m_currentReply;
     QWebdav *m_connection;
     QStringList m_pathsToCreate;
     QStringList m_createdPaths;

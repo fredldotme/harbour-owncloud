@@ -4,6 +4,7 @@
 #include "qwebdav.h"
 #include "qwebdavdirparser.h"
 #include "networkmonitor.h"
+#include "uploadentry.h"
 
 #include <QObject>
 #include <QSet>
@@ -14,6 +15,9 @@ class Uploader : public QObject
 
 public:
     Uploader(QObject *parent = 0);
+
+private:
+    void abort();
 
 signals:
     void uploadError(QString errorMessage);
@@ -31,6 +35,7 @@ private slots:
     void uploadFinished();
     void remoteListingFinished();
     void onlineChanged(bool online);
+    void resetReply();
 
 private:
     void uploadFile();
@@ -44,6 +49,8 @@ private:
     QSet<QString> m_existingFiles;
     QSet<QString> m_existingDirs;
 
+    QNetworkReply *m_currentReply;
+    UploadEntry *m_currentEntry;
     QList<QString> m_uploadQueue;
     QWebdav m_connection;
     QWebdavDirParser m_remoteDir;

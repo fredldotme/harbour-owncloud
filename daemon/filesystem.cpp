@@ -23,7 +23,7 @@ void Filesystem::scan(QString dirPath, bool recursive)
                                                     QDir::Readable);
 
     foreach(const QFileInfo &entry, entries) {
-        QString path = entry.canonicalFilePath();
+        QString path = entry.absoluteFilePath();
         if (entry.isDir() && recursive) {
             scan(path, recursive);
             continue;
@@ -50,7 +50,7 @@ void Filesystem::rescan()
         qWarning() << "invalid path for watching";
     }
 
-    scan(dirInfo.canonicalFilePath(), true);
+    scan(dirInfo.absoluteFilePath(), true);
 }
 
 void Filesystem::localPathChanged()

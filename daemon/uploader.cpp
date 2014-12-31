@@ -32,8 +32,10 @@ void Uploader::fileFound(QString filePath)
     }
 
     qDebug() << Q_FUNC_INFO << "adding file to upload" << filePath;
+
     m_uploadQueue.append(filePath);
-    uploadFile();
+    if(!m_uploading)
+        uploadFile();
 }
 
 void Uploader::setSuspended(bool suspended)
@@ -160,7 +162,6 @@ void Uploader::uploadFile()
 
     if (m_suspended) {
         qDebug() << Q_FUNC_INFO << "suspended, not downloading";
-        return;
     }
 
     QString absolutePath;

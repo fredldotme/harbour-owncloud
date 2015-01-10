@@ -62,6 +62,8 @@ void UploadEntry::errorHandler(QNetworkReply::NetworkError error)
         emit uploadFailed(reply->errorString());
         qWarning() << Q_FUNC_INFO << "error during upload:" << reply->errorString();
         m_succeeded = false;
+    } else {
+        qDebug() << "The error code is: " << reply->error();
     }
 }
 

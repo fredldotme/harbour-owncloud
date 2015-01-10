@@ -9,7 +9,8 @@ Uploader::Uploader(QObject *parent) : QObject(parent),
     m_fetchedExisting(false),
     m_remotePath("/Jolla/"),
     m_suspended(false),
-    m_currentReply(0)
+    m_currentReply(0),
+    m_currentEntry(0)
 {
     connect(&m_remoteDir, SIGNAL(finished()), SLOT(remoteListingFinished()));
 
@@ -220,6 +221,8 @@ void Uploader::getExistingRemote()
             if(!reply->errorString().endsWith("Method Not Allowed")) {
                 emit connectError(reply->errorString());
                 return;
+            } else {
+                qDebug() << "The error code is: " << reply->error();
             }
         }
 

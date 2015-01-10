@@ -4,7 +4,17 @@
 
 Filesystem::Filesystem()
 {
-    connect(&m_watcher, SIGNAL(directoryChanged(QString)), SLOT(scan(QString)));
+    //connect(&m_watcher, SIGNAL(directoryChanged(QString)), SLOT(scan(QString)));
+    connect(&m_watcher, SIGNAL(directoryChanged(QString)), SLOT(prepareScan(QString)));
+}
+
+void Filesystem::prepareScan(QString dirPath)
+{
+    if(isDelayActive(dirPath)) {
+        resetDelay(dirPath);
+    } else {
+        insertDelay(dirPath);
+    }
 }
 
 void Filesystem::scan(QString dirPath, bool recursive)
@@ -65,3 +75,55 @@ void Filesystem::localPathChanged()
     m_localPath = newPath;
     rescan();
 }
+
+void Filesystem::resetDelay(QString path)
+{
+    m_delayLock.lock();
+    for(int i = 0; i < m_delayers.count(); i++) {
+        if(m_delayers.at(i).path == path) {
+            m_delayers.at(i).timer->stop();
+            m_delayers.at(i).timer->start();
+            m_delayLock.unlock();
+            return;
+        }
+    }
+    m_delayLock.unlock();
+}
+
+void Filesystem::insertDelay(QString path)
+{
+    m_delayLock.lock();
+
+    WatchDelay delay;
+    delay.path = path;
+    delay.timer = new QTimer(this);
+    delay.timer->setInterval(3000);
+    delay.timer->setSingleShot(true);
+    connect(delay.timer, &QTimer::timeout, [this, path]() {
+        m_delayLock.lock();
+        for(int i = 0; i < m_delayers.count(); i++) {
+            if(m_delayers.at(i).path == path)
+                m_delayers.removeAt(i);
+        }
+        m_delayLock.unlock();
+        scan(path);
+    });
+    connect(delay.timer, SIGNAL(timeout()), delay.timer, SLOT(deleteLater()));
+    m_delayers.append(delay);
+
+    m_delayLock.unlock();
+}
+
+bool Filesystem::isDelayActive(QString path)
+{
+    m_delayLock.lock();
+    for(int i = 0; i < m_delayers.count(); i++) {
+        if(m_delayers.at(i).path == path) {
+            m_delayLock.unlock();
+            return true;
+        }
+    }
+    m_delayLock.unlock();
+    return false;
+}
+

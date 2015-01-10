@@ -4,7 +4,6 @@
 
 Filesystem::Filesystem()
 {
-    //connect(&m_watcher, SIGNAL(directoryChanged(QString)), SLOT(scan(QString)));
     connect(&m_watcher, SIGNAL(directoryChanged(QString)), SLOT(prepareScan(QString)));
 }
 
@@ -71,6 +70,7 @@ void Filesystem::localPathChanged()
         m_watcher.removePaths(m_watcher.directories());
     }
     m_existingFiles.clear();
+    clearDelays();
 
     m_localPath = newPath;
     rescan();
@@ -127,3 +127,13 @@ bool Filesystem::isDelayActive(QString path)
     return false;
 }
 
+void Filesystem::clearDelays()
+{
+    m_delayLock.lock();
+    for(int i = 0; i < m_delayers.count(); i++) {
+        m_delayers.at(i).timer->stop();
+        m_delayers.at(i).timer->deleteLater();
+    }
+    m_delayers.clear();
+    m_delayLock.unlock();
+}

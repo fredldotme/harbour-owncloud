@@ -29,9 +29,6 @@ private slots:
 
 private:
     void rescan();
-    bool isDelayActive(QString path);
-    void resetDelay(QString path);
-    void insertDelay(QString path);
 
     QFileSystemWatcher m_watcher;
     QString m_localPath;
@@ -44,6 +41,11 @@ private:
      * situations where a user shoots multiple pics repeatedly.*/
     QList<WatchDelay> m_delayers;
     QMutex m_delayLock;
+
+    bool isDelayActive(QString path);
+    void resetDelay(QString path);
+    void insertDelay(QString path);
+    void clearDelays();
 };
 
 #endif//FILESYSTEM_H

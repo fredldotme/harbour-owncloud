@@ -8,7 +8,7 @@ Uploader::Uploader(QObject *parent) : QObject(parent),
     m_uploading(false),
     m_fetchedExisting(false),
     m_remotePath("/Jolla/"),
-    m_suspended(false),
+    m_suspended(true),
     m_currentReply(0),
     m_currentEntry(0)
 {
@@ -48,8 +48,8 @@ void Uploader::setSuspended(bool suspended)
     m_suspended = suspended;
 
     if (!suspended) {
-        // restart uploading
-        uploadFile();
+        if(m_dirsToFetch.isEmpty())
+            getExistingRemote();
     } else {
         abort();
         emit uploadingChanged(false);
@@ -146,7 +146,7 @@ void Uploader::remoteListingFinished()
 
 void Uploader::onlineChanged(bool online)
 {
-    setSuspended(online);
+    setSuspended(!online);
 }
 
 void Uploader::uploadFile()

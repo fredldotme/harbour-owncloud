@@ -21,6 +21,7 @@ Page {
     }
 
     Connections {
+        id: fillListviewConnection
         target: browser
         onDirectoryContentChanged: {
             if(currentPath == remotePath) {
@@ -50,6 +51,8 @@ Page {
     onStatusChanged: {
         if (status === PageStatus.Deactivating) {
             if (_navigation === PageNavigation.Back) {
+                fillListviewConnection.destroy()
+                listView.model = undefined
                 browser.goToParentPath();
             }
         }

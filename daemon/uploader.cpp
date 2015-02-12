@@ -41,10 +41,6 @@ void Uploader::fileFound(QString filePath)
 
 void Uploader::setSuspended(bool suspended)
 {
-    if (m_suspended == suspended) {
-        return;
-    }
-
     m_suspended = suspended;
 
     if (!suspended) {
@@ -76,13 +72,13 @@ void Uploader::settingsChanged()
 
     Settings *settings = Settings::instance();
     m_connection.setConnectionSettings(settings->isHttps() ? QWebdav::HTTPS : QWebdav::HTTP,
-                                 settings->hostname(),
-                                 settings->path() + "/remote.php/webdav",
-                                 settings->username(),
-                                 settings->password(),
-                                 settings->port(),
-                                 settings->md5Hex(),
-                                 settings->sha1Hex());
+                                       settings->hostname(),
+                                       settings->path() + "remote.php/webdav",
+                                       settings->username(),
+                                       settings->password(),
+                                       settings->port(),
+                                       settings->isHttps() ? settings->md5Hex() : "",
+                                       settings->isHttps() ? settings->sha1Hex() : "");
 
     getExistingRemote();
     emit localPathUpdated();
@@ -114,10 +110,10 @@ void Uploader::remoteListingFinished()
 {
     foreach(const QWebdavItem item, m_remoteDir.getList()) {
         if (item.isDir()) {
-            if(!m_existingDirs.contains("/" + item.path()))
-                m_dirsToFetch.append("/" + item.path());
+            if(!m_existingDirs.contains(item.path()))
+                m_dirsToFetch.append(item.path());
         } else {
-            m_existingFiles.insert("/" + item.path());
+            m_existingFiles.insert(item.path());
         }
     }
 

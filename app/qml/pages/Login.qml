@@ -102,6 +102,7 @@ Page {
                     settings.autoLogin = autoLoginSwitch.checked;
                     settings.isCustomCert = certSwitch.checked;
                     settings.writeSettings();
+                    settings.readSettings()
 
                     loginInProgress = true;
                     loginFailed = false;

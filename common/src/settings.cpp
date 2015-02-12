@@ -60,6 +60,9 @@ bool Settings::readSettings()
     {
         m_hostname = settings.value("hostname").toString();
         m_path = settings.value("path").toString();
+        if(m_path.isEmpty())
+            m_path = "/";
+
         m_port = settings.value("port").toInt();
         m_isHttps = settings.value("isHttps").toBool();
 

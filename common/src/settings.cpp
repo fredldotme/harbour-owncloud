@@ -37,6 +37,8 @@ bool Settings::parseFromAddressString(QString value)
         m_isHttps = value.startsWith("https://");
         m_hostname = url.host();
         m_path = url.path();
+        if(m_path.isEmpty())
+            m_path = "/";
         qDebug() << "PATH:" << m_path;
         m_port = url.port();
 
@@ -165,6 +167,7 @@ void Settings::resetSettings()
     m_hoststring = "https://";
     m_isHttps = true;
     m_autoLogin = false;
+    m_uploadAutomatically = false;
     m_notifications = true;
 
     emit hoststringChanged();

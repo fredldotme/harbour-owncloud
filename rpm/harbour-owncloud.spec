@@ -17,7 +17,7 @@ Name:       harbour-owncloud
 %{?qtc_builddir:%define _builddir %qtc_builddir}
 Summary:    ownCloud
 Version:    0.4
-Release:    1
+Release:    2
 Group:      Qt/Qt
 License:    GPLv2
 URL:        https://github.com/beidl/harbour-owncloud

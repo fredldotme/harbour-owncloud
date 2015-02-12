@@ -2,6 +2,8 @@
 
 NetworkMonitor::NetworkMonitor(QObject *parent) : QObject(parent)
 {
+    m_shouldDownload = false;
+    m_uploadOverCellular = false;
     connect(&m_configManager, SIGNAL(configurationAdded(QNetworkConfiguration)), SLOT(recheckNetworks()));
     connect(&m_configManager, SIGNAL(configurationChanged(QNetworkConfiguration)), SLOT(recheckNetworks()));
     connect(&m_configManager, SIGNAL(configurationRemoved(QNetworkConfiguration)), SLOT(recheckNetworks()));

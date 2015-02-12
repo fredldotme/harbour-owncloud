@@ -59,5 +59,6 @@ Dialog {
 
     onAccepted: {
         settings.acceptCertificate(md5Digest, sha1Digest);
+        settings.readSettings()
     }
 }

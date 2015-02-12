@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
 
     // DBus connections
     QObject::connect(dbusHandler, SIGNAL(suspendedChanged(bool)), &uploader, SLOT(setSuspended(bool)));
-    QObject::connect(&netMonitor, SIGNAL(shouldDownloadChanged(bool)), dbusHandler, SLOT(setOffline(bool)));
+    QObject::connect(&netMonitor, SIGNAL(shouldDownloadChanged(bool)), dbusHandler, SLOT(setOnline(bool)));
     QObject::connect(&uploader, SIGNAL(fileUploaded(QString)), dbusHandler, SIGNAL(fileUploaded(QString)));
     QObject::connect(&uploader, SIGNAL(connectError(QString)), dbusHandler, SIGNAL(connectError(QString)));
     QObject::connect(&uploader, SIGNAL(uploadError(QString)), dbusHandler, SIGNAL(uploadError(QString)));

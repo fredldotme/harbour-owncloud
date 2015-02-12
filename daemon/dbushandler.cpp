@@ -17,12 +17,12 @@ void DBusHandler::setSuspended(bool suspended) {
     emit suspendedChanged(suspended);
 }
 
-void DBusHandler::setOffline(bool offline)
+void DBusHandler::setOnline(bool online)
 {
-    qDebug() << Q_FUNC_INFO << "setting offline" << offline;
-    if (offline == m_offline) return;
-    m_offline = offline;
-    emit offlineChanged(offline);
+    qDebug() << Q_FUNC_INFO << "setting online" << online;
+    if (online == m_online) return;
+    m_online = online;
+    emit onlineChanged(online);
 }
 
 void DBusHandler::setUploading(bool uploading)

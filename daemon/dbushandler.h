@@ -8,7 +8,7 @@ class DBusHandler : public QDBusAbstractAdaptor
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "com.github.beidl.HarbourOwncloud.Daemon.Uploader")
     Q_PROPERTY(bool suspended READ suspended WRITE setSuspended NOTIFY suspendedChanged(bool))
-    Q_PROPERTY(bool offline READ offline NOTIFY offlineChanged(bool))
+    Q_PROPERTY(bool online READ online NOTIFY onlineChanged(bool))
     Q_PROPERTY(bool uploading READ uploading NOTIFY uploadingChanged(bool))
 
 public:
@@ -19,8 +19,8 @@ public slots:
     void setSuspended(bool suspended);
     bool suspended() { return m_suspended; }
 
-    void setOffline(bool offline);
-    bool offline() { return m_offline; }
+    void setOnline(bool online);
+    bool online() { return m_online; }
 
     void setUploading(bool uploading);
     bool uploading() { return m_uploading; }
@@ -30,7 +30,7 @@ public slots:
 signals:
     void fileUploaded(QString filePath);
     void suspendedChanged(bool suspended);
-    void offlineChanged(bool offline);
+    void onlineChanged(bool online);
     void uploadingChanged(bool uploading);
     void uploadError(QString errorMessage);
     void connectError(QString errorMessage);
@@ -38,7 +38,7 @@ signals:
 
 private:
     bool m_suspended;
-    bool m_offline;
+    bool m_online;
     bool m_uploading;
 };
 

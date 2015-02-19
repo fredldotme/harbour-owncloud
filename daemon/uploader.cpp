@@ -5,23 +5,22 @@
 #include <QNetworkReply>
 
 Uploader::Uploader(QObject *parent) : QObject(parent),
+    m_currentReply(0),
+    m_currentEntry(0),
     m_uploading(false),
     m_fetchedExisting(false),
     m_remotePath("/Jolla/"),
-    m_suspended(true),
-    m_currentReply(0),
-    m_currentEntry(0)
+    m_online(false)
 {
-    connect(&m_remoteDir, SIGNAL(finished()), SLOT(remoteListingFinished()));
+    applySettings();
 
+    connect(&m_remoteDir, SIGNAL(finished()), SLOT(remoteListingFinished()));
     connect(&m_remoteDir, &QWebdavDirParser::errorChanged, [](QString error) {
         qDebug() <<  "dir parser error:" << error;
     });
     connect(&m_connection, &QWebdav::errorChanged, [](QString error) {
         qDebug() << "webdav error:" << error;
     });
-
-    QMetaObject::invokeMethod(this, "settingsChanged", Qt::QueuedConnection);
 }
 
 void Uploader::fileFound(QString filePath)
@@ -39,13 +38,14 @@ void Uploader::fileFound(QString filePath)
         uploadFile();
 }
 
-void Uploader::setSuspended(bool suspended)
+void Uploader::setOnline(bool online)
 {
-    m_suspended = suspended;
+    m_online = online;
 
-    if (!suspended) {
-        if(m_dirsToFetch.isEmpty())
+    if (online) {
+        if(m_dirsToFetch.isEmpty()) {
             getExistingRemote();
+        }
     } else {
         abort();
         emit uploadingChanged(false);
@@ -66,10 +66,8 @@ void Uploader::abort()
     m_uploadQueue.clear();
 }
 
-void Uploader::settingsChanged()
+void Uploader::applySettings()
 {
-    abort();
-
     Settings *settings = Settings::instance();
     m_connection.setConnectionSettings(settings->isHttps() ? QWebdav::HTTPS : QWebdav::HTTP,
                                        settings->hostname(),
@@ -79,7 +77,12 @@ void Uploader::settingsChanged()
                                        settings->port(),
                                        settings->isHttps() ? settings->md5Hex() : "",
                                        settings->isHttps() ? settings->sha1Hex() : "");
+}
 
+void Uploader::settingsChanged()
+{
+    abort();
+    applySettings();
     getExistingRemote();
     emit localPathUpdated();
 }
@@ -140,11 +143,6 @@ void Uploader::remoteListingFinished()
     }
 }
 
-void Uploader::onlineChanged(bool online)
-{
-    setSuspended(!online);
-}
-
 void Uploader::uploadFile()
 {
     if (m_uploading) {
@@ -157,8 +155,10 @@ void Uploader::uploadFile()
         return;
     }
 
-    if (m_suspended) {
-        qDebug() << Q_FUNC_INFO << "suspended, not downloading";
+    if (m_online) {
+        qDebug() << Q_FUNC_INFO << "online, uploading";
+    } else {
+        return;
     }
 
     QString absolutePath;
@@ -207,6 +207,9 @@ QString Uploader::relativeToRemote(QString path)
 
 void Uploader::getExistingRemote()
 {
+    if(!m_online)
+        return;
+
     // Ensure that our remote directory is created
     QNetworkReply *reply = m_connection.mkdir(m_remotePath);
     m_currentReply = reply;
@@ -215,6 +218,7 @@ void Uploader::getExistingRemote()
             qWarning() << Q_FUNC_INFO << reply->errorString();
             // don't fail if directory exists
             if(!reply->errorString().endsWith("Method Not Allowed")) {
+                qDebug() << "Error: " << reply->errorString();
                 emit connectError(reply->errorString());
                 return;
             } else {

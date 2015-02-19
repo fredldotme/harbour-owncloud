@@ -28,21 +28,21 @@ signals:
 
 public slots:
     void fileFound(QString filePath);
-    void setSuspended(bool suspended);
+    void setOnline(bool online);
+    void settingsChanged();
 
 private slots:
-    void settingsChanged();
     void uploadFinished();
     void remoteListingFinished();
-    void onlineChanged(bool online);
     void resetReply();
 
 private:
     void uploadFile();
     void getExistingRemote();
     void remotePathCreated();
-    QString relativeToRemote(QString path);
+    void applySettings();
 
+    QString relativeToRemote(QString path);
     QString relativeLocalPath(QString absolutePath);
     QString relativeRemotePath(QString absolutePath);
 
@@ -58,7 +58,7 @@ private:
     bool m_fetchedExisting;
     QString m_remotePath;
     QStringList m_dirsToFetch;
-    bool m_suspended;
+    bool m_online;
 };
 
 

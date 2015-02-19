@@ -22,8 +22,10 @@ public:
 signals:
     void fileFound(QString fullPath);
 
-private slots:
+public slots:
     void localPathChanged();
+
+private slots:
     void scan(QString dirPath, bool recursive = false);
     void prepareScan(QString dirPath);
 

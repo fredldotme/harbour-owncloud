@@ -19,10 +19,11 @@ int main(int argc, char *argv[]) {
     NetworkMonitor netMonitor;
     QObject::connect(&fsHandler, SIGNAL(fileFound(QString)), &uploader, SLOT(fileFound(QString)));
     QObject::connect(&uploader, SIGNAL(localPathUpdated()), &fsHandler, SLOT(localPathChanged()));
-    QObject::connect(&netMonitor, SIGNAL(shouldDownloadChanged(bool)), &uploader, SLOT(onlineChanged(bool)));
+    QObject::connect(&netMonitor, SIGNAL(shouldDownloadChanged(bool)), &uploader, SLOT(setOnline(bool)), Qt::DirectConnection);
+    QObject::connect(&netMonitor, SIGNAL(shouldDownloadChanged(bool)), &fsHandler, SLOT(localPathChanged()), Qt::DirectConnection);
 
     // DBus connections
-    QObject::connect(dbusHandler, SIGNAL(suspendedChanged(bool)), &uploader, SLOT(setSuspended(bool)));
+    QObject::connect(dbusHandler, SIGNAL(suspendedChanged(bool)), &uploader, SLOT(setOnline(bool)));
     QObject::connect(&netMonitor, SIGNAL(shouldDownloadChanged(bool)), dbusHandler, SLOT(setOnline(bool)));
     QObject::connect(&uploader, SIGNAL(fileUploaded(QString)), dbusHandler, SIGNAL(fileUploaded(QString)));
     QObject::connect(&uploader, SIGNAL(connectError(QString)), dbusHandler, SIGNAL(connectError(QString)));
@@ -36,6 +37,10 @@ int main(int argc, char *argv[]) {
             !QDBusConnection::sessionBus().registerObject("/", &uploader)) {
         exit(1);
     }
+
+    netMonitor.recheckNetworks();
+    fsHandler.localPathChanged();
+    uploader.settingsChanged();
 
     return app.exec();
 }

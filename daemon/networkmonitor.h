@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QNetworkConfigurationManager>
+#include <QMutex>
 
 class NetworkMonitor : public QObject
 {
@@ -18,13 +19,14 @@ public:
 signals:
     void shouldDownloadChanged(bool);
 
-private slots:
+public slots:
     void recheckNetworks();
 
 private:
     QNetworkConfigurationManager m_configManager;
     bool m_shouldDownload;
     bool m_uploadOverCellular;
+    QMutex checkerMutex;
 };
 
 #endif // NETWORKMONITOR_H

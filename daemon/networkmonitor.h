@@ -11,6 +11,7 @@ class NetworkMonitor : public QObject
 public:
     explicit NetworkMonitor(QObject *parent = 0);
     ~NetworkMonitor();
+    static NetworkMonitor* instance();
 
     void setUploadOverCellullar(bool enabled);
 

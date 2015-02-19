@@ -18,6 +18,7 @@ class Filesystem : public QObject
 
 public:
     Filesystem();
+    static Filesystem* instance();
 
 signals:
     void fileFound(QString fullPath);

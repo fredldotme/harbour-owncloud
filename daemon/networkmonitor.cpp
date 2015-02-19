@@ -15,6 +15,12 @@ NetworkMonitor::~NetworkMonitor()
 
 }
 
+NetworkMonitor* NetworkMonitor::instance()
+{
+    static NetworkMonitor monitor;
+    return &monitor;
+}
+
 void NetworkMonitor::recheckNetworks()
 {
     checkerMutex.lock();

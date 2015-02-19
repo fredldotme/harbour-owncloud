@@ -16,12 +16,15 @@ class Uploader : public QObject
 public:
     Uploader(QObject *parent = 0);
 
+    static Uploader* instance();
+    bool isOnline() { return m_online; }
+
 private:
     void abort();
 
 signals:
     void uploadError(QString errorMessage);
-    void localPathUpdated();
+    void pokeFilesystemScanner();
     void connectError(QString errorMessage);
     void fileUploaded(QString file);
     void uploadingChanged(bool uploading);

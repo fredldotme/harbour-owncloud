@@ -23,6 +23,13 @@ Uploader::Uploader(QObject *parent) : QObject(parent),
     });
 }
 
+
+Uploader *Uploader::instance()
+{
+    static Uploader uploader;
+    return &uploader;
+}
+
 void Uploader::fileFound(QString filePath)
 {
     QString remoteEquivalent = relativeLocalPath(filePath);
@@ -31,25 +38,19 @@ void Uploader::fileFound(QString filePath)
         return;
     }
 
-    qDebug() << Q_FUNC_INFO << "adding file to upload" << filePath;
+    if(!m_uploadQueue.contains(filePath)) {
+        qDebug() << Q_FUNC_INFO << "adding file to upload" << filePath;
+        m_uploadQueue.append(filePath);
+    }
 
-    m_uploadQueue.append(filePath);
-    if(!m_uploading)
+    if(!m_uploading && m_fetchedExisting)
         uploadFile();
 }
 
 void Uploader::setOnline(bool online)
 {
     m_online = online;
-
-    if (online) {
-        if(m_dirsToFetch.isEmpty()) {
-            getExistingRemote();
-        }
-    } else {
-        abort();
-        emit uploadingChanged(false);
-    }
+    settingsChanged();
 }
 
 void Uploader::abort()
@@ -83,8 +84,8 @@ void Uploader::settingsChanged()
 {
     abort();
     applySettings();
-    getExistingRemote();
-    emit localPathUpdated();
+    if(m_online)
+        getExistingRemote();
 }
 
 void Uploader::uploadFinished()
@@ -133,7 +134,8 @@ void Uploader::remoteListingFinished()
             qDebug() << tmp;
         }
 
-        uploadFile();
+        qDebug() << "poking filesystem scanner";
+        emit pokeFilesystemScanner();
     } else {
         QString tmp = m_dirsToFetch.takeFirst();
         if(!m_existingDirs.contains(tmp)) {
@@ -145,6 +147,11 @@ void Uploader::remoteListingFinished()
 
 void Uploader::uploadFile()
 {
+    if (!m_online) {
+        qDebug() << Q_FUNC_INFO << "not online, abort";
+        return;
+    }
+
     if (m_uploading) {
         qDebug() << Q_FUNC_INFO << "already uploading";
         return;
@@ -152,12 +159,6 @@ void Uploader::uploadFile()
 
     if (!m_fetchedExisting) {
         qDebug() << Q_FUNC_INFO << "haven't fetched existing files";
-        return;
-    }
-
-    if (m_online) {
-        qDebug() << Q_FUNC_INFO << "online, uploading";
-    } else {
         return;
     }
 

@@ -1,14 +1,25 @@
 #include "filesystem.h"
 
 #include "settings.h"
+#include "uploader.h"
 
 Filesystem::Filesystem()
 {
     connect(&m_watcher, SIGNAL(directoryChanged(QString)), SLOT(prepareScan(QString)));
 }
 
+Filesystem* Filesystem::instance()
+{
+    static Filesystem fs;
+    return &fs;
+}
+
 void Filesystem::prepareScan(QString dirPath)
 {
+
+    if(!Uploader::instance()->isOnline())
+        return;
+
     if(isDelayActive(dirPath)) {
         resetDelay(dirPath);
     } else {
@@ -18,6 +29,9 @@ void Filesystem::prepareScan(QString dirPath)
 
 void Filesystem::scan(QString dirPath, bool recursive)
 {
+    if(!Uploader::instance()->isOnline())
+        return;
+
     qDebug() << "scanning" << dirPath;
 
     QDir dir(dirPath);
@@ -41,6 +55,8 @@ void Filesystem::scan(QString dirPath, bool recursive)
         if (m_existingFiles.contains(path)) {
             qDebug() << "existing found" << path;
             continue;
+        } else if (!m_existingFiles.contains(path) && !entry.isDir()) {
+            qDebug() << "New file: " << path;
         }
 
         if(!entry.isDir()) {
@@ -54,6 +70,9 @@ void Filesystem::scan(QString dirPath, bool recursive)
 
 void Filesystem::rescan()
 {
+    if(!Uploader::instance()->isOnline())
+        return;
+
     QFileInfo dirInfo(m_localPath);
     if (!dirInfo.exists() || !dirInfo.isDir()) {
         qWarning() << "invalid path for watching";

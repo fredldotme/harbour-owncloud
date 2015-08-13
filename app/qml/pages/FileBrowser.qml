@@ -8,9 +8,21 @@ Page {
     anchors.fill: parent
 
     property string remotePath : "/"
+    property string pageHeaderText : "/"
 
     Component.onCompleted: {
         remotePath = browser.getCurrentPath();
+    }
+
+    onRemotePathChanged: {
+        if(remotePath === "/") {
+            pageHeaderText = "/";
+        } else {
+            var dirs = remotePath.split("/")
+            if(dirs.length > 1) {
+                pageHeaderText = dirs[dirs.length - 2]
+            }
+        }
     }
 
     property int cancelCounter : 0;
@@ -71,7 +83,7 @@ Page {
             anchors.fill: parent
 
             header: PageHeader {
-                title: remotePath
+                title: pageHeaderText
             }
 
             PullDownMenu {

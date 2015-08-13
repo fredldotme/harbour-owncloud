@@ -11,12 +11,6 @@ DBusHandler::~DBusHandler()
 
 }
 
-DBusHandler* DBusHandler::instance()
-{
-    static DBusHandler handler;
-    return &handler;
-}
-
 void DBusHandler::setOnline(bool online)
 {
     qDebug() << Q_FUNC_INFO << "setting online" << online;

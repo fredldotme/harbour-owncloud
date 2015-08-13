@@ -15,7 +15,7 @@ int main(int argc, char *argv[]) {
 
     Filesystem *fsHandler = Filesystem::instance();
     Uploader *uploader = Uploader::instance();
-    DBusHandler *dbusHandler = DBusHandler::instance();
+    DBusHandler *dbusHandler = new DBusHandler(uploader);
     NetworkMonitor *netMonitor = NetworkMonitor::instance();
 
     QObject::connect(fsHandler, SIGNAL(fileFound(QString)), uploader, SLOT(fileFound(QString)));

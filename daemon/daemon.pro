@@ -2,6 +2,7 @@ TARGET = harbour-owncloud-daemon
 
 CONFIG = qt c++11
 QT = dbus network xml
+DEFINES += QWEBDAVITEM_EXTENDED_PROPERTIES
 
 SOURCES += main.cpp \
     uploader.cpp \
@@ -37,5 +38,3 @@ DEPENDPATH += $$PWD/../common/src
 
 INCLUDEPATH += $$PWD/../qwebdavlib/qwebdavlib
 DEPENDPATH += $$PWD/../qwebdavlib/qwebdavlib
-
-DEFINES += QWEBDAVITEM_EXTENDED_PROPERTIES

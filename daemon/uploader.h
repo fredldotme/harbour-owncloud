@@ -44,6 +44,7 @@ private:
     void getExistingRemote();
     void remotePathCreated();
     void applySettings();
+    void setRemoteDirectory();
 
     QString relativeToRemote(QString path);
     QString relativeLocalPath(QString absolutePath);

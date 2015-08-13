@@ -9,9 +9,9 @@ Uploader::Uploader(QObject *parent) : QObject(parent),
     m_currentEntry(0),
     m_uploading(false),
     m_fetchedExisting(false),
-    m_remotePath("/Jolla/"),
     m_online(false)
 {
+    setRemoteDirectory();
     applySettings();
 
     connect(&m_remoteDir, SIGNAL(finished()), SLOT(remoteListingFinished()));
@@ -28,6 +28,23 @@ Uploader *Uploader::instance()
 {
     static Uploader uploader;
     return &uploader;
+}
+
+void Uploader::setRemoteDirectory()
+{
+    QFile hwRelease("/etc/hw-release");
+    if(hwRelease.open(QFile::ReadOnly)) {
+        QString allLines = QString(hwRelease.readAll());
+        hwRelease.close();
+        QStringList lineArray = allLines.split("\n");
+        foreach(QString line, lineArray) {
+            if(line.startsWith("NAME=")) {
+                m_remotePath = "/" + line.replace("NAME=", "").replace("\"", "") + "/";
+                return;
+            }
+        }
+    }
+    m_remotePath = "/Jolla/";
 }
 
 void Uploader::fileFound(QString filePath)

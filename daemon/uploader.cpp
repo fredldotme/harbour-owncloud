@@ -39,7 +39,7 @@ void Uploader::setRemoteDirectory()
         QStringList lineArray = allLines.split("\n");
         foreach(QString line, lineArray) {
             if(line.startsWith("NAME=")) {
-                m_remotePath = "/" + line.replace("NAME=", "").replace("\"", "") + "/";
+                m_remotePath = "/" + line.replace("NAME=", "").replace("\"", "").trimmed() + "/";
                 return;
             }
         }

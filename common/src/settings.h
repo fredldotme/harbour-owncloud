@@ -17,6 +17,7 @@ class Settings : public QObject
     Q_PROPERTY(QString password READ password WRITE setPassword(QString) NOTIFY passwordChanged())
 
     Q_PROPERTY(bool uploadAutomatically READ uploadAutomatically WRITE setUploadAutomatically NOTIFY uploadAutomaticallyChanged)
+    Q_PROPERTY(bool mobileUpload READ mobileUpload WRITE setMobileUpload NOTIFY mobileUploadChanged)
     Q_PROPERTY(QString localPicturesPath READ localPicturesPath WRITE setLocalPicturesPath NOTIFY localPicturesPathChanged)
 
 public:
@@ -39,6 +40,8 @@ public:
 
     bool uploadAutomatically() { return m_uploadAutomatically; }
     void setUploadAutomatically(bool enabled) { m_uploadAutomatically = enabled; emit uploadAutomaticallyChanged(); }
+    bool mobileUpload() { return m_mobileUpload; }
+    void setMobileUpload(bool enabled) { m_mobileUpload = enabled; emit mobileUploadChanged(); }
     QString localPicturesPath() { return m_localPicturesPath; }
     void setLocalPicturesPath(QString newPath) { m_localPicturesPath = newPath; emit localPicturesPathChanged(); }
 
@@ -74,6 +77,7 @@ private:
     QString m_sha1Hex;
 
     bool m_uploadAutomatically;
+    bool m_mobileUpload;
     QString m_localPicturesPath;
 
     void setUsername(QString value);
@@ -94,6 +98,7 @@ signals:
     void notificationSettingsChanged();
     void customCertChanged();
     void uploadAutomaticallyChanged();
+    void mobileUploadChanged();
     void localPicturesPathChanged();
 };
 

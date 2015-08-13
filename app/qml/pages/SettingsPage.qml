@@ -73,5 +73,15 @@ Page {
             checked: settings.uploadAutomatically
             onClicked: settings.uploadAutomatically = checked
         }
+
+        TextSwitch {
+            id: mobileCameraUploadSwitch
+            anchors.top: cameraUploadSwitch.bottom
+            text: "Photo backups via mobile internet connection"
+            description: "Also automatically backup camera photos when connected via 2G, 3G or LTE"
+            visible: daemonCtrl.daemonInstalled
+            checked: settings.mobileUpload
+            onClicked: settings.mobileUpload = checked
+        }
     }
 }

@@ -130,6 +130,7 @@ bool Settings::readSettings()
     }
 
     m_uploadAutomatically = settings.value("uploadAutomatically", false).toBool();
+    m_mobileUpload = settings.value("mobileUpload", false).toBool();
     m_localPicturesPath = settings.value("localPicturesPath", QStandardPaths::writableLocation(QStandardPaths::PicturesLocation)).toString();
 
     settings.endGroup();
@@ -153,6 +154,7 @@ void Settings::writeSettings()
     settings.setValue("certMD5", QVariant::fromValue<QString>(m_md5Hex));
     settings.setValue("certSHA1", QVariant::fromValue<QString>(m_sha1Hex));
     settings.setValue("uploadAutomatically", QVariant::fromValue<bool>(m_uploadAutomatically));
+    settings.setValue("mobileUpload", QVariant::fromValue<bool>(m_mobileUpload));
     settings.setValue("localPicturesPath", QVariant::fromValue<QString>(m_localPicturesPath));
     settings.endGroup();
 }
@@ -175,6 +177,7 @@ void Settings::resetSettings()
     m_isHttps = true;
     m_autoLogin = false;
     m_uploadAutomatically = false;
+    m_mobileUpload = false;
     m_notifications = true;
 
     emit hoststringChanged();

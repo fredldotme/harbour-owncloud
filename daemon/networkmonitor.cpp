@@ -3,7 +3,6 @@
 NetworkMonitor::NetworkMonitor(QObject *parent) : QObject(parent)
 {
     m_shouldDownload = false;
-    m_uploadOverCellular = false;
     connect(&m_configManager, SIGNAL(configurationAdded(QNetworkConfiguration)), SLOT(recheckNetworks()));
     connect(&m_configManager, SIGNAL(configurationChanged(QNetworkConfiguration)), SLOT(recheckNetworks()));
     connect(&m_configManager, SIGNAL(configurationRemoved(QNetworkConfiguration)), SLOT(recheckNetworks()));
@@ -23,29 +22,28 @@ NetworkMonitor* NetworkMonitor::instance()
 
 void NetworkMonitor::recheckNetworks()
 {
-    checkerMutex.lock();
+    QMutexLocker locker(&checkerMutex);
+
+    bool uploadOverCellular = Settings::instance()->mobileUpload();
+
     if (!m_configManager.isOnline()) {
         if (!m_shouldDownload) {
-            checkerMutex.unlock();
             return;
         }
 
         m_shouldDownload = false;
         emit shouldDownloadChanged(false);
-        checkerMutex.unlock();
         return;
     }
 
     // we are online, and we don't care what we upload over
-    if (m_uploadOverCellular) {
+    if (uploadOverCellular) {
         if (m_shouldDownload) {
-            checkerMutex.unlock();
             return;
         }
 
         m_shouldDownload = true;
         emit shouldDownloadChanged(true);
-        checkerMutex.unlock();
         return;
     }
 
@@ -60,23 +58,19 @@ void NetworkMonitor::recheckNetworks()
 
     if (hasNonCellular) {
         if (m_shouldDownload) {
-            checkerMutex.unlock();
             return;
         }
 
         m_shouldDownload = true;
         emit shouldDownloadChanged(true);
-        checkerMutex.unlock();
         return;
     }
 
     if (!m_shouldDownload) {
-        checkerMutex.unlock();
         return;
     }
 
     m_shouldDownload = false;
     emit shouldDownloadChanged(false);
-    checkerMutex.unlock();
 }
 

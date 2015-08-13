@@ -11,8 +11,9 @@ class DBusHandler : public QDBusAbstractAdaptor
     Q_PROPERTY(bool uploading READ uploading NOTIFY uploadingChanged(bool))
 
 public:
-    explicit DBusHandler(QObject *parent);
+    explicit DBusHandler(QObject *parent = 0);
     ~DBusHandler();
+    static DBusHandler* instance();
 
 public slots:
     void setOnline(bool online);

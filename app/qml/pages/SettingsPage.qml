@@ -80,6 +80,7 @@ Page {
             text: "Photo backups via mobile internet connection"
             description: "Also automatically backup camera photos when connected via 2G, 3G or LTE"
             visible: daemonCtrl.daemonInstalled
+            enabled: cameraUploadSwitch.checked
             checked: settings.mobileUpload
             onClicked: settings.mobileUpload = checked
         }

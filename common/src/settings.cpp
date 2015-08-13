@@ -39,6 +39,8 @@ bool Settings::parseFromAddressString(QString value)
         m_path = url.path();
         if(m_path.isEmpty())
             m_path = "/";
+        if(!m_path.endsWith("/"))
+            m_path += "/";
         qDebug() << "PATH:" << m_path;
         m_port = url.port();
 
@@ -62,7 +64,8 @@ bool Settings::readSettings()
         m_path = settings.value("path").toString();
         if(m_path.isEmpty())
             m_path = "/";
-
+        if(!m_path.endsWith("/"))
+            m_path += "/";
         m_port = settings.value("port").toInt();
         m_isHttps = settings.value("isHttps").toBool();
 
@@ -161,6 +164,7 @@ void Settings::resetSettings()
     settings.endGroup();
 
     m_hostname = "";
+    m_path = "/";
     m_port = 443;
     m_username = "";
     m_password = "";

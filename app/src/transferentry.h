@@ -30,9 +30,10 @@ public:
 
     ~TransferEntry();
 
-    QString getName();
+    Q_INVOKABLE QString getName();
     QString getLocalPath();
-    QString getRemotePath();
+    // XXX: Q_INVOKABLE getRemotePath can be called in QML if navigation gets fixed, see FileBrowser.qml
+    Q_INVOKABLE QString getRemotePath();
     qint64 getSize();
     QDateTime getLastModified();
     qreal getProgress();

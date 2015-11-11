@@ -54,6 +54,8 @@ Page {
     Connections {
         target: transfer
         onUploadComplete: {
+            /// XXX: Would like to pass `entry` in the signal, but it confuses navigation!
+            //remotePath = entry.getRemotePath();
             if(remotePath === pageRoot.remotePath) {
                 refreshListView()
             }

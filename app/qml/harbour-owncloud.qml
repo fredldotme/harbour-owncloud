@@ -58,7 +58,7 @@ ApplicationWindow
         target: transfer
         onUploadComplete: {
             if(settings.notifications)
-                notify("Upload complete", name + " uploaded successfully")
+                notify("Upload complete", entry.getName() + " uploaded successfully")
         }
     }
 
@@ -66,7 +66,7 @@ ApplicationWindow
         target: transfer
         onDownloadComplete: {
             if(settings.notifications)
-                notify("Download complete", name + " downloaded successfully")
+                notify("Download complete", entry.getName() + " downloaded successfully")
         }
     }
 
@@ -74,7 +74,7 @@ ApplicationWindow
         target: transfer
         onUploadFailed: {
             if(settings.notifications)
-                notify("Upload failed!", name + " couldn't be uploaded")
+                notify("Upload failed!", entry.getName() + " couldn't be uploaded")
         }
     }
 
@@ -82,7 +82,7 @@ ApplicationWindow
         target: transfer
         onDownloadFailed: {
             if(settings.notifications)
-                notify("Download failed!", name + " couldn't be downloaded")
+                notify("Download failed!", entry.getName() + " couldn't be downloaded")
         }
     }
 

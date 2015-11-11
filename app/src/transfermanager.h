@@ -37,10 +37,10 @@ private:
 signals:
     void transferAdded();
     void transferingChanged();
-    void downloadComplete(QString name, QString localPath);
-    void downloadFailed(QString name);
-    void uploadComplete(QString name, QString remotePath);
-    void uploadFailed(QString name);
+    void downloadComplete(TransferEntry* entry);
+    void downloadFailed(TransferEntry* entry);
+    void uploadComplete(TransferEntry* entry, QString remotePath); // Retain remotePath for QML magic
+    void uploadFailed(TransferEntry* entry);
 
 public slots:
     void handleDownloadCompleted();

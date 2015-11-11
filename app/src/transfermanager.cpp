@@ -98,17 +98,15 @@ void TransferManager::enqueueUpload(QString localPath, QString remotePath)
 
 void TransferManager::handleDownloadCompleted()
 {
-    QString name;
-    QString path;
+    TransferEntry* entry;
     bool success;
     downloadMutex.lock();
 
     if(!downloadQueue.isEmpty()) {
         disconnect(downloadQueue.head(), SIGNAL(transferCompleted(bool)), this, SLOT(handleDownloadCompleted()));
-        TransferEntry *entry = downloadQueue.dequeue();
-        name = entry->getName();
-        path = entry->getLocalPath();
+        entry = downloadQueue.dequeue();
         success = entry->getProgress() == 1.0;
+        connect(this, SIGNAL(downloadComplete(TransferEntry*)), this, SLOT(setLocalLastModified(TransferEntry*)));
         entry->deleteLater();
     }
 
@@ -118,25 +116,23 @@ void TransferManager::handleDownloadCompleted()
     downloadMutex.unlock();
 
     if(success)
-        emit downloadComplete(name, path);
+        emit downloadComplete(entry);
     else
-        emit downloadFailed(name);
+        emit downloadFailed(entry);
     emit transferingChanged();
 }
 
 void TransferManager::handleUploadCompleted()
 {
-    QString name;
-    QString remotePath;
+    TransferEntry* entry;
     bool success;
     uploadMutex.lock();
 
     if(!uploadQueue.isEmpty()) {
         disconnect(uploadQueue.head(), SIGNAL(transferCompleted(bool)), this, SLOT(handleUploadCompleted()));
-        TransferEntry *entry = uploadQueue.dequeue();
-        name = entry->getName();
-        remotePath = entry->getRemotePath();
+        entry = uploadQueue.dequeue();
         success = entry->getProgress() == 1.0;
+        connect(this, SIGNAL(uploadComplete(TransferEntry*, QString)), this, SLOT(setRemoteLastModified(TransferEntry*, QString)));
         entry->deleteLater();
     }
 
@@ -145,10 +141,11 @@ void TransferManager::handleUploadCompleted()
 
     uploadMutex.unlock();
 
+    Q_ASSERT(entry); // To ensure entry->deleteLater(); hasn't reaped yet
     if(success)
-        emit uploadComplete(name, remotePath);
+        emit uploadComplete(entry, entry->getRemotePath());
     else
-        emit uploadFailed(name);
+        emit uploadFailed(entry);
 
     emit transferingChanged();
 }
@@ -157,12 +154,14 @@ void TransferManager::setLocalLastModified(TransferEntry* entry)
 {
     // TODO: set last modified
     qDebug() << "Last modified?" << entry->getLastModified().toString("yyyy-MM-ddThh:mm:ss.zzz+t");
+    disconnect(this, SIGNAL(downloadComplete(TransferEntry*)), this, SLOT(setLocalLastModified(TransferEntry*)));
 }
 
 void TransferManager::setRemoteLastModified(TransferEntry *entry, QString remotePath)
 {
     // TODO: webdav request
     qDebug() << "Last modified?" << entry->getLastModified().toString("yyyy-MM-ddThh:mm:ss.zzz+t");
+    disconnect(this, SIGNAL(uploadComplete(TransferEntry*, QString)), this, SLOT(setRemoteLastModified(TransferEntry*, QString)));
 }
 
 bool TransferManager::isNotEnqueued(EntryInfo *entry)

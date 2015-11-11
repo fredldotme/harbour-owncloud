@@ -45,7 +45,8 @@ signals:
 public slots:
     void handleDownloadCompleted();
     void handleUploadCompleted();
-
+    void setLocalLastModified(TransferEntry* entry);
+    void setRemoteLastModified(TransferEntry* entry, QString remotePath);
 };
 
 #endif // TRANSFERMANAGER_H

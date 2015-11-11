@@ -153,6 +153,18 @@ void TransferManager::handleUploadCompleted()
     emit transferingChanged();
 }
 
+void TransferManager::setLocalLastModified(TransferEntry* entry)
+{
+    // TODO: set last modified
+    qDebug() << "Last modified?" << entry->getLastModified().toString("yyyy-MM-ddThh:mm:ss.zzz+t");
+}
+
+void TransferManager::setRemoteLastModified(TransferEntry *entry, QString remotePath)
+{
+    // TODO: webdav request
+    qDebug() << "Last modified?" << entry->getLastModified().toString("yyyy-MM-ddThh:mm:ss.zzz+t");
+}
+
 bool TransferManager::isNotEnqueued(EntryInfo *entry)
 {
     if(entry == NULL)

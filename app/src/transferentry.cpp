@@ -16,7 +16,6 @@ TransferEntry::TransferEntry(QObject *parent, QWebdav *webdav,
     m_size = size;
     m_progress = 0.0;
     m_direction = direction;
-
     m_open = open;
 }
 
@@ -45,6 +44,11 @@ qint64 TransferEntry::getSize()
     return m_size;
 }
 
+QDateTime TransferEntry::getLastModified()
+{
+    return m_lastModified;
+}
+
 qreal TransferEntry::getProgress()
 {
     return m_progress;
@@ -70,6 +74,11 @@ void TransferEntry::startTransfer()
     qDebug() << "Remote path: " << m_remotePath;
 
     localFile = new QFile(m_localPath, this);
+    localFileInfo = new QFileInfo(*localFile);
+
+    this->m_lastModified = localFileInfo->lastModified();
+    qDebug() << "Start last modified: " << getLastModified().toString("yyyy-MM-ddThh:mm:ss.zzz+t");
+
     localFile->open(QFile::ReadWrite);
     connect(webdav, SIGNAL(finished(QNetworkReply*)), this, SLOT(handleReadComplete()));
     if(m_direction == DOWN) {

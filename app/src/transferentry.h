@@ -34,6 +34,7 @@ public:
     QString getLocalPath();
     QString getRemotePath();
     qint64 getSize();
+    QDateTime getLastModified();
     qreal getProgress();
     int getTransferDirection();
 
@@ -46,6 +47,7 @@ private:
     QWebdav *webdav;
     QNetworkReply *networkReply;
     QFile *localFile;
+    QFileInfo *localFileInfo;
 
     bool m_open;
 
@@ -53,6 +55,7 @@ private:
     QString m_localPath;
     QString m_remotePath;
     qint64 m_size;
+    QDateTime m_lastModified;
     qreal m_progress;
     TransferDirection m_direction;
 

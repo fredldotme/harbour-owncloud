@@ -41,12 +41,14 @@ signals:
     void downloadFailed(TransferEntry* entry);
     void uploadComplete(TransferEntry* entry, QString remotePath); // Retain remotePath for QML magic
     void uploadFailed(TransferEntry* entry);
+    void remoteMtimeFailed(int status);
 
 public slots:
     void handleDownloadCompleted();
     void handleUploadCompleted();
     void setLocalLastModified(TransferEntry* entry);
     void setRemoteLastModified(TransferEntry* entry, QString remotePath);
+    void setRemoteMtimeFinished(QNetworkReply* networkReply);
 };
 
 #endif // TRANSFERMANAGER_H

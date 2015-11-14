@@ -159,8 +159,22 @@ void TransferManager::setLocalLastModified(TransferEntry* entry)
 
 void TransferManager::setRemoteLastModified(TransferEntry *entry, QString remotePath)
 {
-    // TODO: webdav request
-    qDebug() << "Last modified?" << entry->getLastModified().toString("yyyy-MM-ddThh:mm:ss.zzz+t");
+    Q_ASSERT(remotePath == entry->getRemotePath()); // Technicality for QML
+
+    QWebdav::PropValues props;
+    QMap<QString, QVariant> propMap;
+    QString remoteName = remotePath + entry->getName();
+    qint64 lastModified = entry->getLastModified().toMSecsSinceEpoch() / 1000; // seconds
+    QWebdav* webdav = this->browser->getNewWebdav(); // entry's webdav is private
+
+    webdav->setParent(this);
+    connect(webdav, &QWebdav::finished, this, &TransferManager::setRemoteMtimeFinished);
+
+    propMap["lastmodified"] = (QVariant) lastModified;
+    props["DAV:"] = propMap;
+
+    webdav->proppatch(remoteName, props);
+    qDebug() << "Remote last modified " << lastModified;
     disconnect(this, SIGNAL(uploadComplete(TransferEntry*, QString)), this, SLOT(setRemoteLastModified(TransferEntry*, QString)));
 }
 
@@ -203,4 +217,15 @@ QString TransferManager::destinationFromMIME(QString mime)
     }
 
     return QStandardPaths::writableLocation(location);
+}
+
+
+void TransferManager::setRemoteMtimeFinished(QNetworkReply *networkReply)
+{
+    QVariant attr = networkReply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
+    int status = attr.toInt();
+    qDebug() << "setting mtime status " << status;
+    if (status < 200 || status >= 300) {
+        emit remoteMtimeFailed(status);
+    }
 }

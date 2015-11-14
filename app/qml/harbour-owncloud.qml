@@ -86,6 +86,14 @@ ApplicationWindow
         }
     }
 
+    Connections {
+        target: transfer
+        onRemoteMtimeFailed: {
+            if(settings.notifications)
+                notify("Modification time failed!", "Setting mtime failed, status " + status)
+        }
+    }
+
     id: applicationWindow
     initialPage: Component { Login { id: loginPage } }
     cover: Qt.resolvedUrl("cover/CoverPage.qml")

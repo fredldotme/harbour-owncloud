@@ -39,6 +39,7 @@ public:
     qreal getProgress();
     int getTransferDirection();
 
+    void setLastModified(QDateTime lastModified);
     void setProgress(qreal value);
 
     void startTransfer();

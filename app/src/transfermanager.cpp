@@ -54,6 +54,8 @@ TransferEntry* TransferManager::enqueueDownload(EntryInfo* entry, bool open)
                                                    direction,
                                                    open);
 
+    newDownload->setLastModified(entry->modTime());
+
     connect(newDownload, SIGNAL(transferCompleted(bool)), this, SLOT(handleDownloadCompleted()), Qt::DirectConnection);
     if(downloadQueue.isEmpty()) {
         newDownload->startTransfer();
@@ -152,8 +154,15 @@ void TransferManager::handleUploadCompleted()
 
 void TransferManager::setLocalLastModified(TransferEntry* entry)
 {
-    // TODO: set last modified
-    qDebug() << "Last modified?" << entry->getLastModified().toString("yyyy-MM-ddThh:mm:ss.zzz+t");
+    QString localName = entry->getLocalPath() + entry->getName();
+    struct utimbuf newTimes;
+
+    newTimes.actime = time(NULL);
+    newTimes.modtime = entry->getLastModified().toMSecsSinceEpoch() / 1000; // seconds
+
+    utime(localName.toStdString().c_str(), &newTimes);
+
+    qDebug() << "Local last modified " << newTimes.modtime;
     disconnect(this, SIGNAL(downloadComplete(TransferEntry*)), this, SLOT(setLocalLastModified(TransferEntry*)));
 }
 

@@ -236,5 +236,8 @@ void TransferManager::setRemoteMtimeFinished(QNetworkReply *networkReply)
     qDebug() << "setting mtime status " << status;
     if (status < 200 || status >= 300) {
         emit remoteMtimeFailed(status);
+    } else {
+        // Refresh to see the current, new mtime
+        this->browser->getDirectoryContent(this->browser->getCurrentPath());
     }
 }

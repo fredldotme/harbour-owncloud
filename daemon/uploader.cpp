@@ -14,7 +14,7 @@ Uploader::Uploader(QObject *parent) : QObject(parent),
     setRemoteDirectory();
     applySettings();
 
-    connect(&m_remoteDir, SIGNAL(finished()), SLOT(remoteListingFinished()));
+    connect(&m_remoteDir, &QWebdavDirParser::finished, this, &Uploader::remoteListingFinished);
     connect(&m_remoteDir, &QWebdavDirParser::errorChanged, [](QString error) {
         qDebug() <<  "dir parser error:" << error;
     });
@@ -214,7 +214,7 @@ void Uploader::uploadFile()
         m_uploading = true;
         emit uploadingChanged(true);
         m_currentEntry = new UploadEntry(absolutePath, path, dirsToCreate, &m_connection);
-        connect(m_currentEntry, SIGNAL(finished()), SLOT(uploadFinished()));
+        connect(m_currentEntry, &UploadEntry::finished, this, &Uploader::uploadFinished);
     }
 }
 
@@ -248,8 +248,8 @@ void Uploader::getExistingRemote()
         // Then list the existing files and folders in it
         m_remoteDir.listDirectory(&m_connection, m_remotePath);
     });
-    connect(reply, SIGNAL(finished()), this, SLOT(resetReply()), Qt::DirectConnection);
-    connect(reply, SIGNAL(finished()), reply, SLOT(deleteLater()), Qt::DirectConnection);
+    connect(reply, &QNetworkReply::finished, this, &Uploader::resetReply, Qt::DirectConnection);
+    connect(reply, &QNetworkReply::finished, reply, &QObject::deleteLater, Qt::DirectConnection);
 }
 
 void Uploader::resetReply()

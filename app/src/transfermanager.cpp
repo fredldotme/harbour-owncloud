@@ -56,7 +56,7 @@ TransferEntry* TransferManager::enqueueDownload(EntryInfo* entry, bool open)
 
     newDownload->setLastModified(entry->modTime());
 
-    connect(newDownload, SIGNAL(transferCompleted(bool)), this, SLOT(handleDownloadCompleted()), Qt::DirectConnection);
+    connect(newDownload, &TransferEntry::transferCompleted, this, &TransferManager::handleDownloadCompleted, Qt::DirectConnection);
     if(downloadQueue.isEmpty()) {
         newDownload->startTransfer();
     }
@@ -88,7 +88,7 @@ void TransferManager::enqueueUpload(QString localPath, QString remotePath)
                                                    size,
                                                    direction);
 
-    connect(newUpload, SIGNAL(transferCompleted(bool)), this, SLOT(handleUploadCompleted()), Qt::DirectConnection);
+    connect(newUpload, &TransferEntry::transferCompleted, this, &TransferManager::handleUploadCompleted, Qt::DirectConnection);
     if(uploadQueue.isEmpty()) {
         newUpload->startTransfer();
     }
@@ -108,7 +108,7 @@ void TransferManager::handleDownloadCompleted()
         disconnect(downloadQueue.head(), SIGNAL(transferCompleted(bool)), this, SLOT(handleDownloadCompleted()));
         entry = downloadQueue.dequeue();
         success = entry->getProgress() == 1.0;
-        connect(this, SIGNAL(downloadComplete(TransferEntry*)), this, SLOT(setLocalLastModified(TransferEntry*)));
+        connect(this, &TransferManager::downloadComplete, this, &TransferManager::setLocalLastModified);
         entry->deleteLater();
     }
 
@@ -134,7 +134,7 @@ void TransferManager::handleUploadCompleted()
         disconnect(uploadQueue.head(), SIGNAL(transferCompleted(bool)), this, SLOT(handleUploadCompleted()));
         entry = uploadQueue.dequeue();
         success = entry->getProgress() == 1.0;
-        connect(this, SIGNAL(uploadComplete(TransferEntry*, QString)), this, SLOT(setRemoteLastModified(TransferEntry*, QString)));
+        connect(this, &TransferManager::uploadComplete, this, &TransferManager::setRemoteLastModified);
         entry->deleteLater();
     }
 
@@ -167,7 +167,7 @@ void TransferManager::setLocalLastModified(TransferEntry* entry)
     }
 
     qDebug() << "Local last modified " << newTimes.modtime;
-    disconnect(this, SIGNAL(downloadComplete(TransferEntry*)), this, SLOT(setLocalLastModified(TransferEntry*)));
+    disconnect(this, &TransferManager::downloadComplete, this, &TransferManager::setLocalLastModified);
 }
 
 void TransferManager::setRemoteLastModified(TransferEntry *entry, QString remotePath)
@@ -188,7 +188,7 @@ void TransferManager::setRemoteLastModified(TransferEntry *entry, QString remote
 
     webdav->proppatch(remoteName, props);
     qDebug() << "Remote last modified " << lastModified;
-    disconnect(this, SIGNAL(uploadComplete(TransferEntry*, QString)), this, SLOT(setRemoteLastModified(TransferEntry*, QString)));
+    disconnect(this, &TransferManager::uploadComplete, this, &TransferManager::setRemoteLastModified);
 }
 
 bool TransferManager::isNotEnqueued(EntryInfo *entry)

@@ -154,13 +154,17 @@ void TransferManager::handleUploadCompleted()
 
 void TransferManager::setLocalLastModified(TransferEntry* entry)
 {
-    QString localName = entry->getLocalPath() + entry->getName();
+    QString localName = entry->getLocalPath();
     struct utimbuf newTimes;
+    int retval;
 
     newTimes.actime = time(NULL);
     newTimes.modtime = entry->getLastModified().toMSecsSinceEpoch() / 1000; // seconds
 
-    utime(localName.toStdString().c_str(), &newTimes);
+    retval = utime(localName.toStdString().c_str(), &newTimes);
+    if (retval != 0 ) {
+        emit localMtimeFailed(errno);
+    }
 
     qDebug() << "Local last modified " << newTimes.modtime;
     disconnect(this, SIGNAL(downloadComplete(TransferEntry*)), this, SLOT(setLocalLastModified(TransferEntry*)));

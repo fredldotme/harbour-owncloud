@@ -6,6 +6,7 @@
 #include <QMutex>
 #include <QStandardPaths>
 
+#include <errno.h>
 #include <time.h>
 #include <unistd.h>
 #include <utime.h>
@@ -46,6 +47,7 @@ signals:
     void downloadFailed(TransferEntry* entry);
     void uploadComplete(TransferEntry* entry, QString remotePath); // Retain remotePath for QML magic
     void uploadFailed(TransferEntry* entry);
+    void localMtimeFailed(int status);
     void remoteMtimeFailed(int status);
 
 public slots:

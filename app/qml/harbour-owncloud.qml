@@ -88,6 +88,14 @@ ApplicationWindow
 
     Connections {
         target: transfer
+        onLocalMtimeFailed: {
+            if(settings.notifications)
+                notify("Modification time failed!", "Setting mtime failed, errno " + status)
+        }
+    }
+
+    Connections {
+        target: transfer
         onRemoteMtimeFailed: {
             if(settings.notifications)
                 notify("Modification time failed!", "Setting mtime failed, status " + status)

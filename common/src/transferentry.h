@@ -44,6 +44,7 @@ public:
 
     void startTransfer();
     Q_INVOKABLE void cancelTransfer();
+    bool succeeded();
 
 private:
     QWebdav *webdav;

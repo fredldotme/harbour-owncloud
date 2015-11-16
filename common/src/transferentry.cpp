@@ -127,3 +127,8 @@ void TransferEntry::handleReadComplete()
 
     emit transferCompleted(true);
 }
+
+bool TransferEntry::succeeded()
+{
+    return this->getProgress() == 1.0;
+}

@@ -107,7 +107,7 @@ void TransferManager::handleDownloadCompleted()
     if(!downloadQueue.isEmpty()) {
         disconnect(downloadQueue.head(), SIGNAL(transferCompleted(bool)), this, SLOT(handleDownloadCompleted()));
         entry = downloadQueue.dequeue();
-        success = entry->getProgress() == 1.0;
+        success = entry->succeeded();
         connect(this, &TransferManager::downloadComplete, this, &TransferManager::setLocalLastModified);
         entry->deleteLater();
     }
@@ -133,7 +133,7 @@ void TransferManager::handleUploadCompleted()
     if(!uploadQueue.isEmpty()) {
         disconnect(uploadQueue.head(), SIGNAL(transferCompleted(bool)), this, SLOT(handleUploadCompleted()));
         entry = uploadQueue.dequeue();
-        success = entry->getProgress() == 1.0;
+        success = entry->succeeded();
         connect(this, &TransferManager::uploadComplete, this, &TransferManager::setRemoteLastModified);
         entry->deleteLater();
     }

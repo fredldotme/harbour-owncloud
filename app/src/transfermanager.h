@@ -13,7 +13,7 @@
 #include <sys/stat.h>
 
 #include "owncloudbrowser.h"
-#include "transferentry.h"
+#include "../common/src/transferentry.h"
 #include "entryinfo.h"
 
 class TransferManager : public QObject

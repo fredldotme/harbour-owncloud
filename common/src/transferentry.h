@@ -5,7 +5,7 @@
 #include <QNetworkReply>
 #include <qwebdav.h>
 
-#include "shellcommand.h"
+#include "../common/src/shellcommand.h"
 
 class TransferEntry : public QObject
 {

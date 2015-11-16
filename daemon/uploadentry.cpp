@@ -44,7 +44,7 @@ void UploadEntry::doUpload()
     QNetworkReply *reply = m_connection->put(m_remotePath, file);
     m_currentReply = reply;
     connect(reply, &QNetworkReply::finished, this, &UploadEntry::finished);
-    connect(reply, &QNetworkReply::error, this, &UploadEntry::errorHandler);
+    connect(reply, static_cast<void(QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), this, &UploadEntry::errorHandler);
     connect(reply, &QNetworkReply::finished, this, &UploadEntry::resetReply, Qt::DirectConnection);
     connect(reply, &QNetworkReply::finished, reply, &QObject::deleteLater, Qt::DirectConnection);
 }
@@ -72,7 +72,7 @@ void UploadEntry::createDirectory()
     QNetworkReply *reply = m_connection->mkdir(m_pathsToCreate.takeFirst());
     m_currentReply = reply;
     connect(reply, &QNetworkReply::finished, this, &UploadEntry::doUpload);
-    connect(reply, &QNetworkReply::error, this, &UploadEntry::errorHandler);
+    connect(reply, static_cast<void(QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), this, &UploadEntry::errorHandler);
     connect(reply, &QNetworkReply::finished, this, &UploadEntry::resetReply, Qt::DirectConnection);
     connect(reply, &QNetworkReply::finished, reply, &QObject::deleteLater, Qt::DirectConnection);
 }

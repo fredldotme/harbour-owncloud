@@ -6,6 +6,12 @@
 #include <QMutex>
 #include <QStandardPaths>
 
+#include <errno.h>
+#include <time.h>
+#include <unistd.h>
+#include <utime.h>
+#include <sys/stat.h>
+
 #include "owncloudbrowser.h"
 #include "transferentry.h"
 #include "entryinfo.h"
@@ -37,15 +43,19 @@ private:
 signals:
     void transferAdded();
     void transferingChanged();
-    void downloadComplete(QString name, QString localPath);
-    void downloadFailed(QString name);
-    void uploadComplete(QString name, QString remotePath);
-    void uploadFailed(QString name);
+    void downloadComplete(TransferEntry* entry);
+    void downloadFailed(TransferEntry* entry);
+    void uploadComplete(TransferEntry* entry, QString remotePath); // Retain remotePath for QML magic
+    void uploadFailed(TransferEntry* entry);
+    void localMtimeFailed(int status);
+    void remoteMtimeFailed(int status);
 
 public slots:
     void handleDownloadCompleted();
     void handleUploadCompleted();
-
+    void setLocalLastModified(TransferEntry* entry);
+    void setRemoteLastModified(TransferEntry* entry, QString remotePath);
+    void setRemoteMtimeFinished(QNetworkReply* networkReply);
 };
 
 #endif // TRANSFERMANAGER_H

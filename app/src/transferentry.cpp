@@ -16,7 +16,6 @@ TransferEntry::TransferEntry(QObject *parent, QWebdav *webdav,
     m_size = size;
     m_progress = 0.0;
     m_direction = direction;
-
     m_open = open;
 }
 
@@ -45,9 +44,19 @@ qint64 TransferEntry::getSize()
     return m_size;
 }
 
+QDateTime TransferEntry::getLastModified()
+{
+    return m_lastModified;
+}
+
 qreal TransferEntry::getProgress()
 {
     return m_progress;
+}
+
+void TransferEntry::setLastModified(QDateTime lastModified)
+{
+    this->m_lastModified = lastModified;
 }
 
 void TransferEntry::setProgress(qreal value)
@@ -70,19 +79,24 @@ void TransferEntry::startTransfer()
     qDebug() << "Remote path: " << m_remotePath;
 
     localFile = new QFile(m_localPath, this);
+
     localFile->open(QFile::ReadWrite);
-    connect(webdav, SIGNAL(finished(QNetworkReply*)), this, SLOT(handleReadComplete()));
+    connect(webdav, &QNetworkAccessManager::finished, this, &TransferEntry::handleReadComplete);
     if(m_direction == DOWN) {
+        qDebug() << "Start dl last modified: " << getLastModified().toString("yyyy-MM-ddThh:mm:ss.zzz+t");
         networkReply = webdav->get(m_remotePath, localFile);
-        connect(networkReply, SIGNAL(downloadProgress(qint64,qint64)),
-                this, SLOT(handleProgressChange(qint64,qint64)), Qt::DirectConnection);
+        connect(networkReply, &QNetworkReply::downloadProgress,
+                this, &TransferEntry::handleProgressChange, Qt::DirectConnection);
     } else {
+        localFileInfo = new QFileInfo(*localFile);
+        this->setLastModified(localFileInfo->lastModified());
+        qDebug() << "Start up last modified: " << getLastModified().toString("yyyy-MM-ddThh:mm:ss.zzz+t");
         networkReply = webdav->put(m_remotePath + m_name, localFile);
-        connect(networkReply, SIGNAL(uploadProgress(qint64,qint64)),
-                this, SLOT(handleProgressChange(qint64,qint64)), Qt::DirectConnection);
+        connect(networkReply, &QNetworkReply::uploadProgress,
+                this, &TransferEntry::handleProgressChange, Qt::DirectConnection);
     }
-    connect(this, SIGNAL(destroyed()), networkReply, SLOT(deleteLater()));
-    connect(networkReply, SIGNAL(destroyed()), localFile, SLOT(deleteLater()));
+    connect(this, &QObject::destroyed, networkReply, &QObject::deleteLater);
+    connect(networkReply, &QObject::destroyed, localFile, &QObject::deleteLater);
 }
 
 void TransferEntry::handleProgressChange(qint64 bytes, qint64 bytesTotal)

@@ -30,13 +30,16 @@ public:
 
     ~TransferEntry();
 
-    QString getName();
+    Q_INVOKABLE QString getName();
     QString getLocalPath();
-    QString getRemotePath();
+    // XXX: Q_INVOKABLE getRemotePath can be called in QML if navigation gets fixed, see FileBrowser.qml
+    Q_INVOKABLE QString getRemotePath();
     qint64 getSize();
+    QDateTime getLastModified();
     qreal getProgress();
     int getTransferDirection();
 
+    void setLastModified(QDateTime lastModified);
     void setProgress(qreal value);
 
     void startTransfer();
@@ -46,6 +49,7 @@ private:
     QWebdav *webdav;
     QNetworkReply *networkReply;
     QFile *localFile;
+    QFileInfo *localFileInfo;
 
     bool m_open;
 
@@ -53,6 +57,7 @@ private:
     QString m_localPath;
     QString m_remotePath;
     qint64 m_size;
+    QDateTime m_lastModified;
     qreal m_progress;
     TransferDirection m_direction;
 

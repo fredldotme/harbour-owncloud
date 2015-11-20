@@ -76,7 +76,7 @@ void Uploader::abort()
     if(m_currentReply)
         m_currentReply->abort();
     if(m_currentEntry)
-        m_currentEntry->abort();
+        m_currentEntry->cancelTransfer();
     m_remoteDir.abort();
     m_existingDirs.clear();
     m_existingFiles.clear();
@@ -109,20 +109,21 @@ void Uploader::uploadFinished()
 {
     qDebug() << Q_FUNC_INFO;
     m_uploading = false;
-    UploadEntry *entry = qobject_cast<UploadEntry*>(sender());
+    TransferEntry *entry = qobject_cast<TransferEntry*>(sender());
     Q_ASSERT(entry);
     if (entry->succeeded()) {
-        m_existingFiles.insert(entry->remotePath());
-        foreach(QString createdPath, entry->pathsToCreate()) {
-            qDebug() << "created path: " << createdPath;
+        qDebug() << Q_FUNC_INFO << "remote path: " << entry->getRemotePath();
+        m_existingFiles.insert(entry->getRemotePath());
+        foreach(QString createdPath, entry->getCreatedPaths()) {
+            qDebug() << Q_FUNC_INFO << "created path: " << createdPath;
             m_existingDirs.insert(createdPath);
         }
 
-        emit fileUploaded(entry->localPath());
+        emit fileUploaded(entry->getLocalPath());
     } else {
-        m_uploadQueue.append(entry->localPath());
+        qDebug() << Q_FUNC_INFO << "NOT SUCCEEDED!" << entry->getLocalPath();
+        m_uploadQueue.append(entry->getLocalPath());
     }
-    entry->deleteLater();
     m_currentEntry = 0;
     uploadFile();
 }
@@ -179,9 +180,9 @@ void Uploader::uploadFile()
         return;
     }
 
-    QString absolutePath;
+    QString absolutePath; // local path with file name in it
     QString relativePath;
-    QString path;
+    QString path; // remote path with file name in it
     do {
         if (m_uploadQueue.isEmpty()) {
             qDebug() << Q_FUNC_INFO << "no files to upload";
@@ -211,10 +212,28 @@ void Uploader::uploadFile()
     }
 
     if(!path.endsWith("/") && !m_existingFiles.contains(path)) {
+        qDebug() << "Uploading path " << path << " (absolutepath " << absolutePath << ")";
+
         m_uploading = true;
         emit uploadingChanged(true);
-        m_currentEntry = new UploadEntry(absolutePath, path, dirsToCreate, &m_connection);
-        connect(m_currentEntry, &UploadEntry::finished, this, &Uploader::uploadFinished);
+
+        // Abuse QFileInfo to make this easy
+        QString remoteDir = QFileInfo(QFile(path)).dir().path() + QString("/");
+        QFileInfo localFileInfo = QFileInfo(QFile(absolutePath));
+
+        bool open = false;
+        m_currentEntry = new TransferEntry(this,
+                                           &m_connection,
+                                           localFileInfo.fileName(),
+                                           remoteDir,
+                                           absolutePath,
+                                           localFileInfo.size(),
+                                           TransferEntry::TransferDirection::UP,
+                                           open,
+                                           dirsToCreate);
+        m_currentEntry->startTransfer();
+        connect(m_currentEntry, &TransferEntry::transferCompleted, this, &Uploader::uploadFinished);
+        connect(m_currentEntry, &TransferEntry::transferCompleted, m_currentEntry, &TransferEntry::deleteLater);
     }
 }
 

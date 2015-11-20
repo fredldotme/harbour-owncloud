@@ -5,10 +5,12 @@ TransferEntry::TransferEntry(QObject *parent, QWebdav *webdav,
                              QString localPath, qint64 size,
                              TransferDirection direction, bool open,
                              QStringList pathsToCreate) :
-    QObject(parent)
+    QObject(parent),
+    m_pathsToCreate(pathsToCreate)
 {
     this->webdav = webdav;
-    webdav->setParent(this);
+    // XXX: With this call, the daemon dies on an invalid pointer free
+    //webdav->setParent(this);
     this->networkReply = 0;
 
     m_name = name;
@@ -23,6 +25,10 @@ TransferEntry::TransferEntry(QObject *parent, QWebdav *webdav,
 TransferEntry::~TransferEntry()
 {
     disconnect(this, 0, 0, 0);
+}
+
+QStringList TransferEntry::getCreatedPaths() {
+    return m_createdPaths;
 }
 
 QString TransferEntry::getName()
@@ -73,11 +79,25 @@ int TransferEntry::getTransferDirection()
     return m_direction;
 }
 
+bool TransferEntry::hasPathsToCreate()
+{
+    // Passing NULL in the constructor creates a QStringList("")
+    return !m_pathsToCreate.isEmpty() && m_pathsToCreate != QStringList("");
+}
+
 void TransferEntry::startTransfer()
 {
     qDebug() << "Start transfer";
     qDebug() << "Local path: " << m_localPath;
     qDebug() << "Remote path: " << m_remotePath;
+
+    if (this->hasPathsToCreate()) {
+        qDebug() << Q_FUNC_INFO << "need to create dirs:" << m_pathsToCreate;
+        // XXX: This should be in createDirectory after it's actually created
+        m_createdPaths.append(m_pathsToCreate.at(0));
+        createDirectory();
+        return;
+    }
 
     localFile = new QFile(m_localPath, this);
 
@@ -98,6 +118,7 @@ void TransferEntry::startTransfer()
     }
     connect(this, &QObject::destroyed, networkReply, &QObject::deleteLater);
     connect(networkReply, &QObject::destroyed, localFile, &QObject::deleteLater);
+    connect(networkReply, &QNetworkReply::finished, this, &TransferEntry::resetReply);
 }
 
 void TransferEntry::handleProgressChange(qint64 bytes, qint64 bytesTotal)
@@ -136,4 +157,38 @@ void TransferEntry::handleReadComplete()
 bool TransferEntry::succeeded()
 {
     return this->getProgress() == 1.0;
+}
+
+void TransferEntry::createDirectory()
+{
+    QString toCreate = m_pathsToCreate.takeFirst();
+    Q_ASSERT(toCreate.length() > 0);
+
+    QNetworkReply *reply = webdav->mkdir(toCreate);
+    connect(reply, &QNetworkReply::finished, this, &TransferEntry::startTransfer);
+    connect(reply, static_cast<void(QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), this, &TransferEntry::errorHandler);
+    connect(reply, &QNetworkReply::finished, reply, &QObject::deleteLater, Qt::DirectConnection);
+}
+
+void TransferEntry::errorHandler(QNetworkReply::NetworkError error)
+{
+    if (error == QNetworkReply::NoError) {
+        qDebug() << Q_FUNC_INFO << "error handler got no error";
+        return;
+    }
+
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
+    Q_ASSERT(reply);
+    if(!reply->errorString().endsWith("Method Not Allowed")) {
+        emit transferCompleted(false);
+        qWarning() << Q_FUNC_INFO << "error during upload:" << reply->errorString();
+        setProgress((qreal) 0);
+    } else {
+        qDebug() << "The error code is: " << reply->error();
+    }
+}
+
+void TransferEntry::resetReply()
+{
+    networkReply = 0;
 }

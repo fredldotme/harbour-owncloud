@@ -32,6 +32,9 @@ public:
 
     ~TransferEntry();
 
+    QStringList getCreatedPaths();
+    bool hasPathsToCreate();
+
     Q_INVOKABLE QString getName();
     QString getLocalPath();
     // XXX: Q_INVOKABLE getRemotePath can be called in QML if navigation gets fixed, see FileBrowser.qml
@@ -49,12 +52,17 @@ public:
     bool succeeded();
 
 private:
+    void createDirectory();
+
     QWebdav *webdav;
     QNetworkReply *networkReply;
     QFile *localFile;
     QFileInfo *localFileInfo;
 
     bool m_open;
+
+    QStringList m_pathsToCreate;
+    QStringList m_createdPaths;
 
     QString m_name;
     QString m_localPath;
@@ -74,6 +82,10 @@ signals:
 public slots:
     void handleReadComplete();
     void handleProgressChange(qint64 bytes, qint64 bytesTotal);
+
+private slots:
+    void errorHandler(QNetworkReply::NetworkError);
+    void resetReply();
 
 };
 

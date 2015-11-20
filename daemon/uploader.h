@@ -4,7 +4,7 @@
 #include "qwebdav.h"
 #include "qwebdavdirparser.h"
 #include "networkmonitor.h"
-#include "uploadentry.h"
+#include "transferentry.h"
 
 #include <QObject>
 #include <QSet>
@@ -54,7 +54,7 @@ private:
     QSet<QString> m_existingDirs;
 
     QNetworkReply *m_currentReply;
-    UploadEntry *m_currentEntry;
+    TransferEntry *m_currentEntry;
     QList<QString> m_uploadQueue;
     QWebdav m_connection;
     QWebdavDirParser m_remoteDir;

@@ -26,7 +26,9 @@ public:
     TransferEntry(QObject *parent = 0, QWebdav *webdav = 0,
                   QString name = "", QString remotePath = "",
                   QString localPath = "", qint64 size = 0,
-                  TransferDirection direction = DOWN, bool open = false);
+                  TransferDirection direction = DOWN,
+                  bool open = false,
+                  QStringList pathsToCreate = (QStringList) NULL);
 
     ~TransferEntry();
 

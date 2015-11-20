@@ -3,7 +3,8 @@
 TransferEntry::TransferEntry(QObject *parent, QWebdav *webdav,
                              QString name, QString remotePath,
                              QString localPath, qint64 size,
-                             TransferDirection direction, bool open) :
+                             TransferDirection direction, bool open,
+                             QStringList pathsToCreate) :
     QObject(parent)
 {
     this->webdav = webdav;

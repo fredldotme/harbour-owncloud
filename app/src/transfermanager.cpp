@@ -52,7 +52,8 @@ TransferEntry* TransferManager::enqueueDownload(EntryInfo* entry, bool open)
                                                    destination,
                                                    entry->size(),
                                                    direction,
-                                                   open);
+                                                   open,
+                                                   (QStringList) NULL);
 
     newDownload->setLastModified(entry->modTime());
 
@@ -76,6 +77,7 @@ void TransferManager::enqueueUpload(QString localPath, QString remotePath)
     uploadMutex.lock();
     QFile localFile(localPath);
     qint64 size = localFile.size();
+    bool open = false;
 
     QString name = localPath.mid(localPath.lastIndexOf("/") + 1);
     TransferEntry::TransferDirection direction = TransferEntry::UP;
@@ -86,7 +88,9 @@ void TransferManager::enqueueUpload(QString localPath, QString remotePath)
                                                    remotePath,
                                                    localPath,
                                                    size,
-                                                   direction);
+                                                   direction,
+                                                   open,
+                                                   (QStringList) NULL);
 
     connect(newUpload, &TransferEntry::transferCompleted, this, &TransferManager::handleUploadCompleted, Qt::DirectConnection);
     if(uploadQueue.isEmpty()) {

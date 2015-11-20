@@ -102,8 +102,12 @@ void TransferEntry::startTransfer()
 
 void TransferEntry::handleProgressChange(qint64 bytes, qint64 bytesTotal)
 {
-    if(bytesTotal > 0)
+    if(bytesTotal > 0) {
         setProgress((qreal)bytes/(qreal)bytesTotal);
+    } else {
+        // An empty file is considered a success if we make it this far
+        setProgress((qreal) 1.0);
+    }
 }
 
 void TransferEntry::cancelTransfer()

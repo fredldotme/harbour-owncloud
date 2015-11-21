@@ -23,6 +23,7 @@ SOURCES += src/harbour-owncloud.cpp \
     ../common/src/settings.cpp \
     ../common/src/shellcommand.cpp \
     ../common/src/transferentry.cpp \
+    ../common/src/webdav_utils.cpp \
     src/daemoncontrol.cpp
 
 HEADERS += \
@@ -33,6 +34,7 @@ HEADERS += \
     ../common/src/settings.h \
     ../common/src/shellcommand.h \
     ../common/src/transferentry.h \
+    ../common/src/webdav_utils.h \
     src/daemoncontrol.h
 
 OTHER_FILES += qml/harbour-owncloud.qml \

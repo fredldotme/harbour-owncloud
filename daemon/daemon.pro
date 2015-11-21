@@ -10,6 +10,7 @@ SOURCES += main.cpp \
     ../common/src/settings.cpp \
     ../common/src/shellcommand.cpp \
     ../common/src/transferentry.cpp \
+    ../common/src/webdav_utils.cpp \
     networkmonitor.cpp \
     dbushandler.cpp
 
@@ -19,6 +20,7 @@ HEADERS += \
     ../common/src/settings.h \
     ../common/src/shellcommand.h \
     ../common/src/transferentry.h \
+    ../common/src/webdav_utils.h \
     networkmonitor.h \
     dbushandler.h
 

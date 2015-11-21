@@ -8,7 +8,6 @@ SOURCES += main.cpp \
     uploader.cpp \
     filesystem.cpp \
     ../common/src/settings.cpp \
-    uploadentry.cpp \
     ../common/src/shellcommand.cpp \
     ../common/src/transferentry.cpp \
     networkmonitor.cpp \
@@ -20,7 +19,6 @@ HEADERS += \
     ../common/src/settings.h \
     ../common/src/shellcommand.h \
     ../common/src/transferentry.h \
-    uploadentry.h \
     networkmonitor.h \
     dbushandler.h
 

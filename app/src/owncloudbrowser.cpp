@@ -36,30 +36,12 @@ void OwnCloudBrowser::resetWebdav()
 
 QWebdav* OwnCloudBrowser::getNewWebdav()
 {
-    /* Used for file uploads
-     * Helps to not confuse error signals of simultaneous file operations */
-    QWebdav* newWebdav = new QWebdav();
-    connect(newWebdav, &QNetworkAccessManager::finished, newWebdav, &QObject::deleteLater, Qt::DirectConnection);
-
-    applySettingsToWebdav(newWebdav);
-    return newWebdav;
+    return getNewWebDav(this->settings);
 }
 
 void OwnCloudBrowser::reloadSettings()
 {
-    applySettingsToWebdav(webdav);
-}
-
-void OwnCloudBrowser::applySettingsToWebdav(QWebdav *webdav)
-{
-    webdav->setConnectionSettings(settings->isHttps() ? QWebdav::HTTPS : QWebdav::HTTP,
-                                 settings->hostname(),
-                                 settings->path() + "remote.php/webdav",
-                                 settings->username(),
-                                 settings->password(),
-                                 settings->port(),
-                                 settings->isHttps() ? settings->md5Hex() : "",
-                                 settings->isHttps() ? settings->sha1Hex() : "");
+    applySettingsToWebdav(this->settings, webdav);
 }
 
 void OwnCloudBrowser::testConnection()

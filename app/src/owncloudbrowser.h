@@ -3,13 +3,12 @@
 
 #include <QObject>
 
-#include <qwebdav.h>
+#include "../common/src/webdav_utils.h"
 #include <qwebdavdirparser.h>
 #include <qwebdavitem.h>
 #include <QVariant>
 
 #include "entryinfo.h"
-#include "settings.h"
 
 class OwnCloudBrowser : public QObject
 {
@@ -39,8 +38,6 @@ private:
     QStack<QList<EntryInfo*> > entryStack;
     QMutex deleteMutex;
     bool abortIntended;
-
-    void applySettingsToWebdav(QWebdav *webdav);
 
 signals:
     void directoryContentChanged(QString currentPath, QVariantList entries);

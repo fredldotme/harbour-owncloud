@@ -6,12 +6,6 @@
 #include <QMutex>
 #include <QStandardPaths>
 
-#include <errno.h>
-#include <time.h>
-#include <unistd.h>
-#include <utime.h>
-#include <sys/stat.h>
-
 #include "owncloudbrowser.h"
 #include "../common/src/transferentry.h"
 #include "entryinfo.h"
@@ -53,9 +47,7 @@ signals:
 public slots:
     void handleDownloadCompleted();
     void handleUploadCompleted();
-    void setLocalLastModified(TransferEntry* entry);
-    void setRemoteLastModified(TransferEntry* entry, QString remotePath);
-    void setRemoteMtimeFinished(QNetworkReply* networkReply);
+    void refreshDirectoryContents();
 };
 
 #endif // TRANSFERMANAGER_H

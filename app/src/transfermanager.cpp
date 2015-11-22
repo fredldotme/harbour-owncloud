@@ -112,7 +112,7 @@ void TransferManager::handleDownloadCompleted()
         disconnect(downloadQueue.head(), SIGNAL(transferCompleted(bool)), this, SLOT(handleDownloadCompleted()));
         entry = downloadQueue.dequeue();
         success = entry->succeeded();
-        connect(this, &TransferManager::downloadComplete, this, &TransferManager::setLocalLastModified);
+        connect(entry, &TransferEntry::localMtimeFailed, this, &TransferManager::localMtimeFailed);
         entry->deleteLater();
     }
 
@@ -138,7 +138,8 @@ void TransferManager::handleUploadCompleted()
         disconnect(uploadQueue.head(), SIGNAL(transferCompleted(bool)), this, SLOT(handleUploadCompleted()));
         entry = uploadQueue.dequeue();
         success = entry->succeeded();
-        connect(this, &TransferManager::uploadComplete, this, &TransferManager::setRemoteLastModified);
+        connect(entry, &TransferEntry::remoteMtimeSucceeded, this, &TransferManager::refreshDirectoryContents);
+        connect(entry, &TransferEntry::remoteMtimeFailed, this, &TransferManager::remoteMtimeFailed);
         entry->deleteLater();
     }
 
@@ -156,43 +157,11 @@ void TransferManager::handleUploadCompleted()
     emit transferingChanged();
 }
 
-void TransferManager::setLocalLastModified(TransferEntry* entry)
+void TransferManager::refreshDirectoryContents()
 {
-    QString localName = entry->getLocalPath();
-    struct utimbuf newTimes;
-    int retval;
-
-    newTimes.actime = time(NULL);
-    newTimes.modtime = entry->getLastModified().toMSecsSinceEpoch() / 1000; // seconds
-
-    retval = utime(localName.toStdString().c_str(), &newTimes);
-    if (retval != 0 ) {
-        emit localMtimeFailed(errno);
-    }
-
-    qDebug() << "Local last modified " << newTimes.modtime;
-    disconnect(this, &TransferManager::downloadComplete, this, &TransferManager::setLocalLastModified);
-}
-
-void TransferManager::setRemoteLastModified(TransferEntry *entry, QString remotePath)
-{
-    Q_ASSERT(remotePath == entry->getRemotePath()); // Technicality for QML
-
-    QWebdav::PropValues props;
-    QMap<QString, QVariant> propMap;
-    QString remoteName = remotePath + entry->getName();
-    qint64 lastModified = entry->getLastModified().toMSecsSinceEpoch() / 1000; // seconds
-    QWebdav* webdav = this->browser->getNewWebdav(); // entry's webdav is private
-
-    webdav->setParent(this);
-    connect(webdav, &QWebdav::finished, this, &TransferManager::setRemoteMtimeFinished);
-
-    propMap["lastmodified"] = (QVariant) lastModified;
-    props["DAV:"] = propMap;
-
-    webdav->proppatch(remoteName, props);
-    qDebug() << "Remote last modified " << lastModified;
-    disconnect(this, &TransferManager::uploadComplete, this, &TransferManager::setRemoteLastModified);
+    qDebug() << Q_FUNC_INFO << "gonna refresh due to succeeded";
+    // Refresh to see the current, new mtime
+    this->browser->getDirectoryContent(this->browser->getCurrentPath());
 }
 
 bool TransferManager::isNotEnqueued(EntryInfo *entry)
@@ -236,16 +205,3 @@ QString TransferManager::destinationFromMIME(QString mime)
     return QStandardPaths::writableLocation(location);
 }
 
-
-void TransferManager::setRemoteMtimeFinished(QNetworkReply *networkReply)
-{
-    QVariant attr = networkReply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
-    int status = attr.toInt();
-    qDebug() << "setting mtime status " << status;
-    if (status < 200 || status >= 300) {
-        emit remoteMtimeFailed(status);
-    } else {
-        // Refresh to see the current, new mtime
-        this->browser->getDirectoryContent(this->browser->getCurrentPath());
-    }
-}

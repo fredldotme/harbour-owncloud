@@ -8,7 +8,9 @@ SOURCES += main.cpp \
     uploader.cpp \
     filesystem.cpp \
     ../common/src/settings.cpp \
-    uploadentry.cpp \
+    ../common/src/shellcommand.cpp \
+    ../common/src/transferentry.cpp \
+    ../common/src/webdav_utils.cpp \
     networkmonitor.cpp \
     dbushandler.cpp
 
@@ -16,7 +18,9 @@ HEADERS += \
     filesystem.h \
     uploader.h \
     ../common/src/settings.h \
-    uploadentry.h \
+    ../common/src/shellcommand.h \
+    ../common/src/transferentry.h \
+    ../common/src/webdav_utils.h \
     networkmonitor.h \
     dbushandler.h
 

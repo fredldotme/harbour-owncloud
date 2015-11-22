@@ -18,21 +18,23 @@ QT += xml dbus
 SOURCES += src/harbour-owncloud.cpp \
     src/owncloudbrowser.cpp \
     src/entryinfo.cpp \
-    src/shellcommand.cpp \
-    src/transferentry.cpp \
     src/transfermanager.cpp \
     src/localfilebrowser.cpp \
     ../common/src/settings.cpp \
+    ../common/src/shellcommand.cpp \
+    ../common/src/transferentry.cpp \
+    ../common/src/webdav_utils.cpp \
     src/daemoncontrol.cpp
 
 HEADERS += \
     src/owncloudbrowser.h \
     src/entryinfo.h \
-    src/shellcommand.h \
-    src/transferentry.h \
     src/transfermanager.h \
     src/localfilebrowser.h \
     ../common/src/settings.h \
+    ../common/src/shellcommand.h \
+    ../common/src/transferentry.h \
+    ../common/src/webdav_utils.h \
     src/daemoncontrol.h
 
 OTHER_FILES += qml/harbour-owncloud.qml \

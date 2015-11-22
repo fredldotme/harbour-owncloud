@@ -52,9 +52,12 @@ TransferEntry* TransferManager::enqueueDownload(EntryInfo* entry, bool open)
                                                    destination,
                                                    entry->size(),
                                                    direction,
-                                                   open);
+                                                   open,
+                                                   (QStringList) NULL);
 
-    connect(newDownload, SIGNAL(transferCompleted(bool)), this, SLOT(handleDownloadCompleted()), Qt::DirectConnection);
+    newDownload->setLastModified(entry->modTime());
+
+    connect(newDownload, &TransferEntry::transferCompleted, this, &TransferManager::handleDownloadCompleted, Qt::DirectConnection);
     if(downloadQueue.isEmpty()) {
         newDownload->startTransfer();
     }
@@ -74,6 +77,7 @@ void TransferManager::enqueueUpload(QString localPath, QString remotePath)
     uploadMutex.lock();
     QFile localFile(localPath);
     qint64 size = localFile.size();
+    bool open = false;
 
     QString name = localPath.mid(localPath.lastIndexOf("/") + 1);
     TransferEntry::TransferDirection direction = TransferEntry::UP;
@@ -84,9 +88,11 @@ void TransferManager::enqueueUpload(QString localPath, QString remotePath)
                                                    remotePath,
                                                    localPath,
                                                    size,
-                                                   direction);
+                                                   direction,
+                                                   open,
+                                                   (QStringList) NULL);
 
-    connect(newUpload, SIGNAL(transferCompleted(bool)), this, SLOT(handleUploadCompleted()), Qt::DirectConnection);
+    connect(newUpload, &TransferEntry::transferCompleted, this, &TransferManager::handleUploadCompleted, Qt::DirectConnection);
     if(uploadQueue.isEmpty()) {
         newUpload->startTransfer();
     }
@@ -98,17 +104,15 @@ void TransferManager::enqueueUpload(QString localPath, QString remotePath)
 
 void TransferManager::handleDownloadCompleted()
 {
-    QString name;
-    QString path;
+    TransferEntry* entry;
     bool success;
     downloadMutex.lock();
 
     if(!downloadQueue.isEmpty()) {
         disconnect(downloadQueue.head(), SIGNAL(transferCompleted(bool)), this, SLOT(handleDownloadCompleted()));
-        TransferEntry *entry = downloadQueue.dequeue();
-        name = entry->getName();
-        path = entry->getLocalPath();
-        success = entry->getProgress() == 1.0;
+        entry = downloadQueue.dequeue();
+        success = entry->succeeded();
+        connect(entry, &TransferEntry::localMtimeFailed, this, &TransferManager::localMtimeFailed);
         entry->deleteLater();
     }
 
@@ -118,25 +122,24 @@ void TransferManager::handleDownloadCompleted()
     downloadMutex.unlock();
 
     if(success)
-        emit downloadComplete(name, path);
+        emit downloadComplete(entry);
     else
-        emit downloadFailed(name);
+        emit downloadFailed(entry);
     emit transferingChanged();
 }
 
 void TransferManager::handleUploadCompleted()
 {
-    QString name;
-    QString remotePath;
+    TransferEntry* entry;
     bool success;
     uploadMutex.lock();
 
     if(!uploadQueue.isEmpty()) {
         disconnect(uploadQueue.head(), SIGNAL(transferCompleted(bool)), this, SLOT(handleUploadCompleted()));
-        TransferEntry *entry = uploadQueue.dequeue();
-        name = entry->getName();
-        remotePath = entry->getRemotePath();
-        success = entry->getProgress() == 1.0;
+        entry = uploadQueue.dequeue();
+        success = entry->succeeded();
+        connect(entry, &TransferEntry::remoteMtimeSucceeded, this, &TransferManager::refreshDirectoryContents);
+        connect(entry, &TransferEntry::remoteMtimeFailed, this, &TransferManager::remoteMtimeFailed);
         entry->deleteLater();
     }
 
@@ -145,12 +148,20 @@ void TransferManager::handleUploadCompleted()
 
     uploadMutex.unlock();
 
+    Q_ASSERT(entry); // To ensure entry->deleteLater(); hasn't reaped yet
     if(success)
-        emit uploadComplete(name, remotePath);
+        emit uploadComplete(entry, entry->getRemotePath());
     else
-        emit uploadFailed(name);
+        emit uploadFailed(entry);
 
     emit transferingChanged();
+}
+
+void TransferManager::refreshDirectoryContents()
+{
+    qDebug() << Q_FUNC_INFO << "gonna refresh due to succeeded";
+    // Refresh to see the current, new mtime
+    this->browser->getDirectoryContent(this->browser->getCurrentPath());
 }
 
 bool TransferManager::isNotEnqueued(EntryInfo *entry)
@@ -193,3 +204,4 @@ QString TransferManager::destinationFromMIME(QString mime)
 
     return QStandardPaths::writableLocation(location);
 }
+

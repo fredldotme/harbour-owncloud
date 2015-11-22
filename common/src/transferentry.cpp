@@ -10,6 +10,8 @@ TransferEntry::TransferEntry(QObject *parent, QWebdav *webdav,
 {
     this->webdav = webdav;
     // XXX: With this call, the daemon dies on an invalid pointer free
+    // XXX: Probably due to passing &m_connection, need to figure out
+    //      if a new webdav instance would help in uploader.cpp
     //webdav->setParent(this);
     this->networkReply = 0;
 

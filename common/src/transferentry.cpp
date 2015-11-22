@@ -105,6 +105,7 @@ void TransferEntry::startTransfer()
 
     localFile->open(QFile::ReadWrite);
     connect(webdav, &QNetworkAccessManager::finished, this, &TransferEntry::handleReadComplete);
+
     if(m_direction == DOWN) {
         qDebug() << "Start dl last modified: " << getLastModified().toString("yyyy-MM-ddThh:mm:ss.zzz+t");
         networkReply = webdav->get(m_remotePath, localFile);
@@ -133,6 +134,61 @@ void TransferEntry::handleProgressChange(qint64 bytes, qint64 bytesTotal)
     }
 }
 
+void TransferEntry::setLocalLastModified()
+{
+    // entry passed in because of QML expecting it in onDownloadComplete
+    /* Q_ASSERT(entry->getLocalPath() == this->getLocalPath()); */
+
+    QString localName = this->getLocalPath();
+    struct utimbuf newTimes;
+    int retval;
+
+    newTimes.actime = time(NULL);
+    newTimes.modtime = this->getLastModified().toMSecsSinceEpoch() / 1000; // seconds
+
+    retval = utime(localName.toStdString().c_str(), &newTimes);
+    if (retval != 0 ) {
+        emit localMtimeFailed(errno);
+    }
+
+    qDebug() << "Local last modified " << newTimes.modtime;
+}
+
+void TransferEntry::setRemoteLastModified()
+{
+    Settings *settings = Settings::instance();
+
+    QWebdav::PropValues props;
+    QMap<QString, QVariant> propMap;
+    QString remoteName = this->getRemotePath() + this->getName();
+    qint64 lastModified = this->getLastModified().toMSecsSinceEpoch() / 1000; // seconds
+
+    QWebdav* mtimeWebdav = getNewWebDav(settings);
+    // XXX: Setting the parent here breaks PROPPATCH:
+    //      Debugging webdav looks like a PROPPATCH is sent, but
+    //      nothing in access.logs, wtaf!
+    //mtimeWebdav->setParent(this);
+
+    propMap["lastmodified"] = (QVariant) lastModified;
+    props["DAV:"] = propMap;
+
+    mtimeWebdav->proppatch(remoteName, props);
+    connect(mtimeWebdav, &QNetworkAccessManager::finished, this, &TransferEntry::setRemoteMtimeFinished, Qt::DirectConnection);
+}
+
+void TransferEntry::setRemoteMtimeFinished(QNetworkReply* networkReply)
+{
+    qDebug() << Q_FUNC_INFO << networkReply;
+    QVariant attr = networkReply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
+    int status = attr.toInt();
+    qDebug() << "setting mtime status " << status;
+    if (status < 200 || status >= 300) {
+        emit remoteMtimeFailed(status);
+    } else {
+        emit remoteMtimeSucceeded();
+    }
+}
+
 void TransferEntry::cancelTransfer()
 {
     if(networkReply) {
@@ -149,11 +205,19 @@ void TransferEntry::cancelTransfer()
 
 void TransferEntry::handleReadComplete()
 {
+    disconnect(webdav, &QNetworkAccessManager::finished, this, &TransferEntry::handleReadComplete);
+
     if(m_open) {
         ShellCommand::runCommand("xdg-open", QStringList(getLocalPath()));
     }
 
-    emit transferCompleted(true);
+    emit transferCompleted(true); // The manager's connected to handle upload/download
+
+    if (m_direction == DOWN) {
+        this->setLocalLastModified();
+    } else {
+        this->setRemoteLastModified();
+    }
 }
 
 bool TransferEntry::succeeded()

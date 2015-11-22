@@ -3,9 +3,17 @@
 
 #include <QObject>
 #include <QNetworkReply>
-#include <qwebdav.h>
 
-#include "../common/src/shellcommand.h"
+#include <qwebdav.h>
+#include <errno.h>
+#include <time.h>
+#include <unistd.h>
+#include <utime.h>
+#include <sys/stat.h>
+
+#include "settings.h"
+#include "shellcommand.h"
+#include "webdav_utils.h"
 
 class TransferEntry : public QObject
 {
@@ -53,6 +61,8 @@ public:
 
 private:
     void createDirectory();
+    void setRemoteLastModified();
+    void setLocalLastModified();
 
     QWebdav *webdav;
     QNetworkReply *networkReply;
@@ -78,10 +88,14 @@ signals:
     void sizeChanged();
     void progressChanged(qreal progress, QString remotePath);
     void transferCompleted(bool success);
+    void localMtimeFailed(int status);
+    void remoteMtimeFailed(int status);
+    void remoteMtimeSucceeded();
 
 public slots:
     void handleReadComplete();
     void handleProgressChange(qint64 bytes, qint64 bytesTotal);
+    void setRemoteMtimeFinished(QNetworkReply* networkReply);
 
 private slots:
     void errorHandler(QNetworkReply::NetworkError);

@@ -41,7 +41,7 @@ ApplicationWindow
         onLoginFailed: {
             loginInProgress = false;
             loginFailed = true;
-            notify("Login failed", "Please check your host address and credentials")
+            notify(qsTr("Login failed"), qsTr("Please check your host address and credentials"))
 
             pageStack.completeAnimation();
             pageStack.clear();
@@ -58,7 +58,7 @@ ApplicationWindow
         target: transfer
         onUploadComplete: {
             if(settings.notifications)
-                notify("Upload complete", name + " uploaded successfully")
+                notify(qsTr("Upload complete"), qsTr("%1 uploaded successfully").arg(name))
         }
     }
 
@@ -66,7 +66,7 @@ ApplicationWindow
         target: transfer
         onDownloadComplete: {
             if(settings.notifications)
-                notify("Download complete", name + " downloaded successfully")
+                notify(qsTr("Download complete"), qsTr("%1 downloaded successfully").arg(name))
         }
     }
 
@@ -74,7 +74,7 @@ ApplicationWindow
         target: transfer
         onUploadFailed: {
             if(settings.notifications)
-                notify("Upload failed!", name + " couldn't be uploaded")
+                notify(qsTr("Upload failed!"), qsTr("%1 couldn't be uploaded").arg(name))
         }
     }
 
@@ -82,7 +82,7 @@ ApplicationWindow
         target: transfer
         onDownloadFailed: {
             if(settings.notifications)
-                notify("Download failed!", name + " couldn't be downloaded")
+                notify(qsTr("Download failed!"), qsTr("%1 couldn't be downloaded").arg(name))
         }
     }
 

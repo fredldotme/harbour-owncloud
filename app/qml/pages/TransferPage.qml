@@ -36,7 +36,7 @@ Page {
 
     PageHeader {
         id: header
-        title: "File transfers"
+        title: qsTr("File transfers")
     }
 
     BackgroundItem {
@@ -57,7 +57,7 @@ Page {
         }
         Label {
             id: backupText
-            text: "Camera backup in progress..."
+            text: qsTr("Camera backup in progress...")
             anchors.left: indicator.right
             anchors.leftMargin: 16 + 39 - (parent.height/2)
             anchors.verticalCenter: indicator.verticalCenter
@@ -183,7 +183,7 @@ Page {
                     }
 
                     MenuItem {
-                        text: "Cancel"
+                        text: qsTr("Cancel")
                         onClicked: {
                             selectedEntry.cancelTransfer()
                         }

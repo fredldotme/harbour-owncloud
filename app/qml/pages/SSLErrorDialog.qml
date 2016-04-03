@@ -18,7 +18,7 @@ Dialog {
 
         Label {
             id: hintLabel
-            text: "Do you want to accept this certificate?"
+            text: qsTr("Do you want to accept this certificate?")
             anchors.top: header.bottom
             anchors.topMargin: 32
             anchors.horizontalCenter: parent.horizontalCenter
@@ -28,7 +28,7 @@ Dialog {
             id: md5Hint
             anchors.top: hintLabel.bottom
             anchors.topMargin: 32
-            text: "MD5 fingerprint:"
+            text: qsTr("MD5 fingerprint:")
         }
 
         Label {
@@ -44,7 +44,7 @@ Dialog {
             id: sha1Hint
             anchors.top: md5Label.bottom
             anchors.topMargin: 20
-            text: "SHA1 fingerprint:"
+            text: qsTr("SHA1 fingerprint:")
         }
 
         Label {

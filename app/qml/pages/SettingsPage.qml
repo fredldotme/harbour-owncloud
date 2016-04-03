@@ -29,13 +29,13 @@ Page {
         anchors.fill: parent
 
         PageHeader {
-            title: "Settings"
+            title: qsTr("Settings")
         }
 
         PullDownMenu {
             id: pulley
             MenuItem {
-                text: "Reset connection settings"
+                text: qsTr("Reset connection settings")
                 onClicked: {
                     browser.resetWebdav();
                     settings.resetSettings();
@@ -49,8 +49,8 @@ Page {
             id: autoLoginSwitch
             anchors.top: pulley.bottom
             anchors.topMargin: 96
-            text: "Login automatically"
-            description: "Automatically log in to your ownCloud server when starting the app"
+            text: qsTr("Login automatically")
+            description: qsTr("Automatically log in to your ownCloud server when starting the app", "Login automatically description")
             checked: settings.autoLogin
             onClicked: settings.autoLogin = checked
         }
@@ -58,8 +58,8 @@ Page {
         TextSwitch {
             id: notificationSwitch
             anchors.top: autoLoginSwitch.bottom
-            text: "Notifications"
-            description: "Show global notifications when transfering files"
+            text: qsTr("Notifications")
+            description: qsTr("Show global notifications when transfering files", "Notifications description")
             checked: settings.notifications
             onClicked: settings.notifications = checked
         }
@@ -67,8 +67,8 @@ Page {
         TextSwitch {
             id: cameraUploadSwitch
             anchors.top: notificationSwitch.bottom
-            text: "Camera photo backups"
-            description: "Automatically save camera photos to your ownCloud instance when on WiFi"
+            text: qsTr("Camera photo backups")
+            description: qsTr("Automatically save camera photos to your ownCloud instance when on WiFi", "Camera photo backups escription")
             visible: daemonCtrl.daemonInstalled
             checked: settings.uploadAutomatically
             onClicked: settings.uploadAutomatically = checked
@@ -77,8 +77,8 @@ Page {
         TextSwitch {
             id: mobileCameraUploadSwitch
             anchors.top: cameraUploadSwitch.bottom
-            text: "Photo backups via mobile internet connection"
-            description: "Also automatically backup camera photos when connected via 2G, 3G or LTE"
+            text: qsTr("Photo backups via mobile internet connection")
+            description: qsTr("Also automatically backup camera photos when connected via 2G, 3G or LTE", "hoto backups via mobile internet connection description")
             visible: daemonCtrl.daemonInstalled
             enabled: cameraUploadSwitch.checked
             checked: settings.mobileUpload

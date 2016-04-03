@@ -208,14 +208,14 @@ Page {
                     }
 
                     MenuItem {
-                        text: "Delete"
+                        text: qsTr("Delete")
 
                         property EntryInfo tmpEntry;
 
                         onClicked: {
                             tmpEntry = selectedEntry
                             cancelCounter++;
-                            selectedRemorse.execute(selectedItem, "Deleting", function() {
+                            selectedRemorse.execute(selectedItem, qsTr("Deleting", "RemorseItem text"), function() {
                                 cancelCounter--;
                                 browser.remove(remotePath + tmpEntry.name +
                                                (tmpEntry.isDirectory ? "/" : ""),

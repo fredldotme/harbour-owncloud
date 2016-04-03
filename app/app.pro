@@ -56,6 +56,26 @@ OTHER_FILES += qml/harbour-owncloud.qml \
 CONFIG += sailfishapp_i18n
 TRANSLATIONS += translations/harbour-owncloud-de.ts
 
+
+icon86.files += icons/86x86/harbour-owncloud.png
+icon86.path = /usr/share/icons/hicolor/86x86/apps
+INSTALLS += icon86
+
+#icon108.files += icons/108x108/harbour-owncloud.png
+#icon108.path = /usr/share/icons/hicolor/108x108/apps
+#INSTALLS += icon108
+
+icon128.files += icons/128x128/harbour-owncloud.png
+icon128.path = /usr/share/icons/hicolor/128x128/apps
+INSTALLS += icon128
+
+#icon256.files += icons/256x256/harbour-owncloud.png
+#icon256.path = /usr/share/icons/hicolor/256x256/apps
+#INSTALLS += icon256
+
+#iconsvg.files += icons/scalable/harbour-owncloud.svgz
+#iconsvg.path = /usr/share/icons/hicolor/scalable/apps
+
 include(../notifications.pri)
 
 LIBS += $$OUT_PWD/../qwebdavlib/qwebdavlib/libqwebdav.so.1

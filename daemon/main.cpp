@@ -18,17 +18,17 @@ int main(int argc, char *argv[]) {
     DBusHandler *dbusHandler = new DBusHandler(uploader);
     NetworkMonitor *netMonitor = NetworkMonitor::instance();
 
-    QObject::connect(fsHandler, SIGNAL(fileFound(QString)), uploader, SLOT(fileFound(QString)));
-    QObject::connect(uploader, SIGNAL(pokeFilesystemScanner()), fsHandler, SLOT(localPathChanged()));
-    QObject::connect(netMonitor, SIGNAL(shouldDownloadChanged(bool)), uploader, SLOT(setOnline(bool)));
+    QObject::connect(fsHandler, &Filesystem::fileFound, uploader, &Uploader::fileFound);
+    QObject::connect(uploader, &Uploader::pokeFilesystemScanner, fsHandler, &Filesystem::localPathChanged);
+    QObject::connect(netMonitor, &NetworkMonitor::shouldDownloadChanged, uploader, &Uploader::setOnline);
 
     // DBus connections
-    QObject::connect(netMonitor, SIGNAL(shouldDownloadChanged(bool)), dbusHandler, SLOT(setOnline(bool)));
-    QObject::connect(uploader, SIGNAL(fileUploaded(QString)), dbusHandler, SIGNAL(fileUploaded(QString)));
-    QObject::connect(uploader, SIGNAL(connectError(QString)), dbusHandler, SIGNAL(connectError(QString)));
-    QObject::connect(uploader, SIGNAL(uploadError(QString)), dbusHandler, SIGNAL(uploadError(QString)));
-    QObject::connect(uploader, SIGNAL(uploadingChanged(bool)), dbusHandler, SIGNAL(uploadingChanged(bool)));
-    QObject::connect(dbusHandler, SIGNAL(configChanged()), uploader, SLOT(settingsChanged()));
+    QObject::connect(netMonitor, &NetworkMonitor::shouldDownloadChanged, dbusHandler, &DBusHandler::setOnline);
+    QObject::connect(uploader, &Uploader::fileUploaded, dbusHandler, &DBusHandler::fileUploaded);
+    QObject::connect(uploader, &Uploader::connectError, dbusHandler, &DBusHandler::connectError);
+    QObject::connect(uploader, &Uploader::uploadError, dbusHandler, &DBusHandler::uploadError);
+    QObject::connect(uploader, &Uploader::uploadingChanged, dbusHandler, &DBusHandler::uploadingChanged);
+    QObject::connect(dbusHandler, &DBusHandler::configChanged, uploader, &Uploader::settingsChanged);
 
     // We only need one instance
     if(!QDBusConnection::sessionBus().registerService("com.github.beidl.HarbourOwncloud.Daemon") ||

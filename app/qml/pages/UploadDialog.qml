@@ -53,8 +53,8 @@ Dialog {
 
         DialogHeader {
             id: header
-            acceptText: "Upload"
-            cancelText: "Cancel"
+            acceptText: qsTr("Upload")
+            cancelText: qsTr("Cancel")
         }
 
         SilicaListView {

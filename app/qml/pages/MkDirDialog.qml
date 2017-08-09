@@ -17,8 +17,8 @@ Dialog {
 
         DialogHeader {
             id: header
-            acceptText: "Accept"
-            cancelText: "Cancel"
+            acceptText: qsTr("Accept")
+            cancelText: qsTr("Cancel")
         }
 
         TextField {
@@ -26,7 +26,7 @@ Dialog {
             anchors.centerIn: parent
             width: parent.width - 64
             focus: true
-            placeholderText: "Directory name"
+            placeholderText: qsTr("Directory name")
             label: placeholderText
         }
 

@@ -76,7 +76,7 @@ Page {
             x: 0
             anchors.top: fileImage.bottom
             anchors.topMargin: 32
-            text: "File name:"
+            text: qsTr("File name:")
             width: (parent.width / 2) - 12
             horizontalAlignment: Text.AlignRight
             color: Theme.highlightColor
@@ -97,7 +97,7 @@ Page {
         Label {
             x: 0
             y: nameHint.y + nameHint.height
-            text: "Size:"
+            text: qsTr("Size:")
             width: (parent.width / 2) - 12
             horizontalAlignment: Text.AlignRight
             color: Theme.highlightColor
@@ -117,7 +117,7 @@ Page {
         Label {
             x: 0
             y: sizeHint.y + sizeHint.height
-            text: "Last modified:"
+            text: qsTr("Last modified:")
             width: (parent.width / 2) - 12
             horizontalAlignment: Text.AlignRight
             color: Theme.highlightColor
@@ -138,7 +138,7 @@ Page {
             x: 0
             y: modHint.y + modHint.height
             visible: entry.mimeType != ""
-            text: "Type:"
+            text: qsTr("Type:")
             width: (parent.width / 2) - 12
             horizontalAlignment: Text.AlignRight
             color: Theme.highlightColor

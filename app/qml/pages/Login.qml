@@ -42,7 +42,7 @@ Page {
             width: parent.width
             anchors.top: topLabel.bottom
             anchors.topMargin: 20
-            placeholderText: "Host address"
+            placeholderText: qsTr("Host address")
             label: placeholderText
             text: settings.hoststring;
         }
@@ -55,7 +55,7 @@ Page {
             anchors.topMargin: 30
             text: settings.username;
             inputMethodHints: Qt.ImhNoAutoUppercase
-            placeholderText: "User name"
+            placeholderText: qsTr("User name")
             label: placeholderText
         }
 
@@ -66,7 +66,7 @@ Page {
             width: parent.width
             anchors.top: username.bottom
             echoMode: TextInput.Password
-            placeholderText: "Password"
+            placeholderText: qsTr("Password")
             label: placeholderText
         }
 
@@ -74,7 +74,7 @@ Page {
             id: autoLoginSwitch
             enabled: !loginInProgress
             anchors.top: password.bottom
-            text: "Login automatically"
+            text: qsTr("Login automatically")
             checked: settings.autoLogin
         }
 
@@ -82,7 +82,7 @@ Page {
             id: certSwitch
             enabled: !loginInProgress
             anchors.top: autoLoginSwitch.bottom
-            text: "Accept certificate"
+            text: qsTr("Accept certificate")
             visible: settings.isCustomCert
             checked: settings.isCustomCert
         }
@@ -90,7 +90,7 @@ Page {
         Button {
             id: continueButton
             enabled: !loginInProgress
-            text: "Continue"
+            text: qsTr("Continue")
             anchors.top: certSwitch.bottom
             anchors.topMargin: 30
             anchors.horizontalCenter: parent.horizontalCenter
@@ -108,7 +108,7 @@ Page {
                     loginFailed = false;
                     browser.testConnection();
                 } else {
-                    notify("Invalid URL", "Please check your host address")
+                    notify(qsTr("Invalid URL"), qsTr("Please check your host address"))
                 }
             }
         }

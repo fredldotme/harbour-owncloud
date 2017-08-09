@@ -80,8 +80,9 @@ desktop-file-install --delete-original       \
 # << files
 
 %files daemon
-%defattr(-,root,root,-)
+%defattr(755,root,root,-)
 %{_bindir}/%{name}-daemon
+%defattr(-,root,root,-)
 /usr/lib/systemd/user/%{name}-daemon.service
 
 %post daemon

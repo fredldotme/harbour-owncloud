@@ -16,11 +16,11 @@ Settings::Settings(QObject *parent) :
     m_autoLogin = false;
     m_notifications = true;
 
-    connect(this, SIGNAL(hoststringChanged()), SIGNAL(settingsChanged()));
-    connect(this, SIGNAL(usernameChanged()), SIGNAL(settingsChanged()));
-    connect(this, SIGNAL(passwordChanged()), SIGNAL(settingsChanged()));
-    connect(this, SIGNAL(uploadAutomaticallyChanged()), SIGNAL(settingsChanged()));
-    connect(this, SIGNAL(localPicturesPathChanged()), SIGNAL(settingsChanged()));
+    connect(this, &Settings::hoststringChanged, this, &Settings::settingsChanged);
+    connect(this, &Settings::usernameChanged, this, &Settings::settingsChanged);
+    connect(this, &Settings::passwordChanged, this, &Settings::settingsChanged);
+    connect(this, &Settings::uploadAutomaticallyChanged, this, &Settings::settingsChanged);
+    connect(this, &Settings::localPicturesPathChanged, this, &Settings::settingsChanged);
 }
 
 bool Settings::parseFromAddressString(QString value)

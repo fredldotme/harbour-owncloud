@@ -7,7 +7,7 @@
 #include <QStandardPaths>
 
 #include "owncloudbrowser.h"
-#include "transferentry.h"
+#include "../common/src/transferentry.h"
 #include "entryinfo.h"
 
 class TransferManager : public QObject
@@ -37,15 +37,17 @@ private:
 signals:
     void transferAdded();
     void transferingChanged();
-    void downloadComplete(QString name, QString localPath);
-    void downloadFailed(QString name);
-    void uploadComplete(QString name, QString remotePath);
-    void uploadFailed(QString name);
+    void downloadComplete(TransferEntry* entry);
+    void downloadFailed(TransferEntry* entry);
+    void uploadComplete(TransferEntry* entry, QString remotePath); // Retain remotePath for QML magic
+    void uploadFailed(TransferEntry* entry);
+    void localMtimeFailed(int status);
+    void remoteMtimeFailed(int status);
 
 public slots:
     void handleDownloadCompleted();
     void handleUploadCompleted();
-
+    void refreshDirectoryContents();
 };
 
 #endif // TRANSFERMANAGER_H

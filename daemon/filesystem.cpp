@@ -5,7 +5,7 @@
 
 Filesystem::Filesystem()
 {
-    connect(&m_watcher, SIGNAL(directoryChanged(QString)), SLOT(prepareScan(QString)));
+    connect(&m_watcher, &QFileSystemWatcher::directoryChanged, this, &Filesystem::prepareScan);
 }
 
 Filesystem* Filesystem::instance()
@@ -127,7 +127,7 @@ void Filesystem::insertDelay(QString path)
         m_delayLock.unlock();
         scan(path);
     });
-    connect(delay.timer, SIGNAL(timeout()), delay.timer, SLOT(deleteLater()));
+    connect(delay.timer, &QTimer::timeout, delay.timer, &QObject::deleteLater);
     m_delayers.append(delay);
 
     m_delayLock.unlock();

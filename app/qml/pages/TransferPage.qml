@@ -100,10 +100,18 @@ Page {
     }
 
     SilicaFlickable {
+        id: flickableRoot
         anchors.top: daemonProgress.bottom
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
+
+        ViewPlaceholder {
+            id: noTransfersHint
+            anchors.centerIn: parent
+            text: qsTr("No pending file transfers")
+            enabled: (listView.model === undefined || listView.model.length === 0) && !daemonCtrl.uploading
+        }
 
         SilicaListView {
             id: listView
@@ -167,13 +175,6 @@ Page {
                 }
             }
             VerticalScrollDecorator {}
-
-            Label {
-                id: noTransfersHint
-                anchors.centerIn: parent
-                text: qsTr("No pending file transfers")
-                visible: (listView.model === undefined || listView.model.length === 0) && !daemonCtrl.uploading
-            }
 
             Component {
                 id: contextMenuComponent

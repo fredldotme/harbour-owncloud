@@ -141,6 +141,8 @@ void TransferManager::handleUploadCompleted()
         connect(entry, &TransferEntry::remoteMtimeSucceeded, this, &TransferManager::refreshDirectoryContents);
         connect(entry, &TransferEntry::remoteMtimeFailed, this, &TransferManager::remoteMtimeFailed);
         entry->deleteLater();
+    } else {
+        entry = Q_NULLPTR;
     }
 
     if(!uploadQueue.isEmpty() && uploadQueue.head())
@@ -148,11 +150,12 @@ void TransferManager::handleUploadCompleted()
 
     uploadMutex.unlock();
 
-    Q_ASSERT(entry); // To ensure entry->deleteLater(); hasn't reaped yet
-    if(success)
-        emit uploadComplete(entry, entry->getRemotePath());
-    else
-        emit uploadFailed(entry);
+    if (entry) {
+        if(success)
+            emit uploadComplete(entry, entry->getRemotePath());
+        else
+            emit uploadFailed(entry);
+    }
 
     emit transferingChanged();
 }

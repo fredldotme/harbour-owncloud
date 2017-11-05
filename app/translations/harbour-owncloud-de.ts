@@ -155,7 +155,7 @@
     <message>
         <source>Show global notifications when transfering files</source>
         <comment>Notifications description</comment>
-        <translation>Zeige globale Benachrichtigungen when Dateiübertragungen stattfinden</translation>
+        <translation>Zeige globale Benachrichtigungen wenn Dateiübertragungen stattfinden</translation>
     </message>
     <message>
         <source>Camera photo backups</source>

@@ -15,7 +15,8 @@ TARGET = harbour-owncloud
 CONFIG += sailfishapp
 QT += xml dbus
 
-SOURCES += src/harbour-owncloud.cpp \
+SOURCES += \
+    src/harbour-owncloud.cpp \
     src/owncloudbrowser.cpp \
     src/entryinfo.cpp \
     src/transfermanager.cpp \

@@ -179,8 +179,8 @@ void TransferEntry::setRemoteLastModified()
 void TransferEntry::setRemoteMtimeFinished(QNetworkReply* networkReply)
 {
     qDebug() << Q_FUNC_INFO << networkReply;
-    QVariant attr = networkReply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
-    int status = attr.toInt();
+    const QVariant attr = networkReply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
+    const int status = attr.toInt();
     qDebug() << "setting mtime status " << status;
     if (status < 200 || status >= 300) {
         emit remoteMtimeFailed(status);
@@ -227,7 +227,7 @@ bool TransferEntry::succeeded()
 
 void TransferEntry::createDirectory()
 {
-    QString toCreate = m_pathsToCreate.takeFirst();
+    const QString toCreate = m_pathsToCreate.takeFirst();
     Q_ASSERT(toCreate.length() > 0);
 
     QNetworkReply *reply = webdav->mkdir(toCreate);

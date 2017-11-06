@@ -36,7 +36,7 @@ public:
                   QString localPath = "", qint64 size = 0,
                   TransferDirection direction = DOWN,
                   bool open = false,
-                  QStringList pathsToCreate = (QStringList) NULL);
+                  QStringList pathsToCreate = QStringList());
 
     ~TransferEntry();
 

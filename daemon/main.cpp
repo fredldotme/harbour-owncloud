@@ -1,14 +1,18 @@
 #define DEBUG_WEBDAV 1
+
+#include <QCoreApplication>
+#include <QDBusConnection>
+
+#include <ownclouddbusconsts.h>
+
 #include "filesystem.h"
 #include "uploader.h"
 #include "settings.h"
 #include "dbushandler.h"
 #include "networkmonitor.h"
 
-#include <QCoreApplication>
-#include <QDBusConnection>
-
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     QCoreApplication app(argc, argv);
 
     Settings::instance()->readSettings();
@@ -31,8 +35,8 @@ int main(int argc, char *argv[]) {
     QObject::connect(dbusHandler, &DBusHandler::configChanged, uploader, &Uploader::settingsChanged);
 
     // We only need one instance
-    if(!QDBusConnection::sessionBus().registerService("com.github.beidl.HarbourOwncloud.Daemon") ||
-            !QDBusConnection::sessionBus().registerObject("/", uploader)) {
+    if(!QDBusConnection::sessionBus().registerService(HarbourOwncloud::DBusConsts::DBUS_SERVICE) ||
+            !QDBusConnection::sessionBus().registerObject(HarbourOwncloud::DBusConsts::DBUS_PATH, uploader)) {
         exit(1);
     }
 

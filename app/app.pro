@@ -12,8 +12,10 @@
 # The name of your application
 TARGET = harbour-owncloud
 
-CONFIG += sailfishapp
-QT += xml dbus
+CONFIG += sailfishapp qt
+QT += xml dbus quick qml
+
+include(../common/common.pri)
 
 SOURCES += \
     src/harbour-owncloud.cpp \
@@ -21,10 +23,6 @@ SOURCES += \
     src/entryinfo.cpp \
     src/transfermanager.cpp \
     src/localfilebrowser.cpp \
-    ../common/src/settings.cpp \
-    ../common/src/shellcommand.cpp \
-    ../common/src/transferentry.cpp \
-    ../common/src/webdav_utils.cpp \
     src/daemoncontrol.cpp
 
 HEADERS += \
@@ -32,10 +30,6 @@ HEADERS += \
     src/entryinfo.h \
     src/transfermanager.h \
     src/localfilebrowser.h \
-    ../common/src/settings.h \
-    ../common/src/shellcommand.h \
-    ../common/src/transferentry.h \
-    ../common/src/webdav_utils.h \
     src/daemoncontrol.h
 
 OTHER_FILES += qml/harbour-owncloud.qml \
@@ -88,11 +82,5 @@ QMAKE_RPATHDIR += /usr/share/harbour-owncloud/lib
 qwebdavlib.path = /usr/share/harbour-owncloud/lib
 qwebdavlib.files += $$OUT_PWD/../qwebdavlib/qwebdavlib/libqwebdav.so.1
 INSTALLS += qwebdavlib
-
-INCLUDEPATH += $$PWD/../qwebdavlib/qwebdavlib
-DEPENDPATH += $$PWD/../qwebdavlib/qwebdavlib
-
-INCLUDEPATH += $$PWD/../common/src
-DEPENDPATH += $$PWD/../common/src
 
 DEFINES += QWEBDAVITEM_EXTENDED_PROPERTIES

@@ -1,12 +1,14 @@
 #include "daemoncontrol.h"
 
+#include <ownclouddbusconsts.h>
+
 DaemonControl::DaemonControl(QObject *parent) : QObject(parent)
 {
     m_uploading = false;
-    QDBusConnection::sessionBus().connect("com.github.beidl.HarbourOwncloud.Daemon",
-                                          "/",
-                                          "com.github.beidl.HarbourOwncloud.Daemon.Uploader",
-                                          "uploadingChanged",
+    QDBusConnection::sessionBus().connect(HarbourOwncloud::DBusConsts::DBUS_SERVICE,
+                                          HarbourOwncloud::DBusConsts::DBUS_PATH,
+                                          HarbourOwncloud::DBusConsts::DBUS_INTERFACE,
+                                          HarbourOwncloud::DBusConsts::DBUS_SIGNAL_UPLOADINGCHANGED,
                                           this,
                                           SLOT(setUploading(bool)));
 }
@@ -32,9 +34,9 @@ void DaemonControl::setUploading(bool value)
 
 void DaemonControl::reloadConfig()
 {
-    QDBusMessage message = QDBusMessage::createMethodCall("com.github.beidl.HarbourOwncloud.Daemon",
-                                                          "/",
-                                                          "com.github.beidl.HarbourOwncloud.Daemon.Uploader",
-                                                          "reloadConfig");
+    QDBusMessage message = QDBusMessage::createMethodCall(HarbourOwncloud::DBusConsts::DBUS_SERVICE,
+                                                          HarbourOwncloud::DBusConsts::DBUS_PATH,
+                                                          HarbourOwncloud::DBusConsts::DBUS_INTERFACE,
+                                                          HarbourOwncloud::DBusConsts::DBUS_METHOD_RELOADCONFIG);
     QDBusConnection::sessionBus().send(message);
 }

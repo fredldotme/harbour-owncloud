@@ -89,6 +89,7 @@ bool TransferEntry::hasPathsToCreate()
 
 void TransferEntry::startTransfer()
 {
+    qDebug() << Q_FUNC_INFO;
     qDebug() << "Start transfer";
     qDebug() << "Local path: " << m_localPath;
     qDebug() << "Remote path: " << m_remotePath;
@@ -106,15 +107,17 @@ void TransferEntry::startTransfer()
     localFile->open(QFile::ReadWrite);
     connect(webdav, &QNetworkAccessManager::finished, this, &TransferEntry::handleReadComplete);
 
+    const QString mtimeFormat = QStringLiteral("yyyy-MM-ddThh:mm:ss.zzz+t");
+
     if(m_direction == DOWN) {
-        qDebug() << "Start dl last modified: " << getLastModified().toString("yyyy-MM-ddThh:mm:ss.zzz+t");
+        qDebug() << "Start dl last modified: " << getLastModified().toString(mtimeFormat);
         networkReply = webdav->get(m_remotePath, localFile);
         connect(networkReply, &QNetworkReply::downloadProgress,
                 this, &TransferEntry::handleProgressChange, Qt::DirectConnection);
     } else {
         localFileInfo = new QFileInfo(*localFile);
         this->setLastModified(localFileInfo->lastModified());
-        qDebug() << "Start up last modified: " << getLastModified().toString("yyyy-MM-ddThh:mm:ss.zzz+t");
+        qDebug() << "Start up last modified: " << getLastModified().toString(mtimeFormat);
         networkReply = webdav->put(m_remotePath + m_name, localFile);
         connect(networkReply, &QNetworkReply::uploadProgress,
                 this, &TransferEntry::handleProgressChange, Qt::DirectConnection);
@@ -139,7 +142,7 @@ void TransferEntry::setLocalLastModified()
     // entry passed in because of QML expecting it in onDownloadComplete
     /* Q_ASSERT(entry->getLocalPath() == this->getLocalPath()); */
 
-    QString localName = this->getLocalPath();
+    const QString localName = this->getLocalPath();
     struct utimbuf newTimes;
     int retval;
 

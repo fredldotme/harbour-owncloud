@@ -1,5 +1,5 @@
-Implement Sharing UI
-
-Add missing file/directory operations:
+* Fix double uploading of files
+* Implement Sharing UI
+* Add missing file/directory operations:
     - copy
     - move

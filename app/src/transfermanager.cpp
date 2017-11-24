@@ -53,7 +53,7 @@ TransferEntry* TransferManager::enqueueDownload(EntryInfo* entry, bool open)
                                                    entry->size(),
                                                    direction,
                                                    open,
-                                                   (QStringList) NULL);
+                                                   QStringList());
 
     newDownload->setLastModified(entry->modTime());
 
@@ -90,7 +90,7 @@ void TransferManager::enqueueUpload(QString localPath, QString remotePath)
                                                    size,
                                                    direction,
                                                    open,
-                                                   (QStringList) NULL);
+                                                   QStringList());
 
     connect(newUpload, &TransferEntry::transferCompleted, this, &TransferManager::handleUploadCompleted, Qt::DirectConnection);
     if(uploadQueue.isEmpty()) {

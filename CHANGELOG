@@ -1,0 +1,24 @@
+0.5-dev:
+mtime preservation and refactoring work, thanks to mjtorn
+German translation and icon enhancements, thanks to cnlpete
+Slovenian translation, thanks to silverhook
+Further unification and improvement of code and packaging
+- use default permissions for daemon service file
+- fix potential nullptr crash
+- fix compilation for SailfishOS SDK 2.1
+
+0.4:
+Fixed connection issues and corner-cases where the path was not provided to the host.
+
+0.3:
+Proper directory creation and file uploading
+Delete remote files and directories
+Improved File Details page
+Additional: Photo backup (requires harbour-owncloud-daemon from OpenRepos)
+
+0.2:
+Bugfixes in eror handling
+Reworked settings
+
+0.1:
+Initial release

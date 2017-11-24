@@ -14,7 +14,7 @@ Fixed connection issues and corner-cases where the path was not provided to the 
 Proper directory creation and file uploading
 Delete remote files and directories
 Improved File Details page
-Additional: Photo backup (requires harbour-owncloud-daemon from OpenRepos)
+Additional: Photo backup (requires harbour-owncloud-daemon from OpenRepos, thanks to contributions by sandsmark)
 
 0.2:
 Bugfixes in eror handling

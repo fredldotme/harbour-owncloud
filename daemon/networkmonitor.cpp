@@ -36,7 +36,8 @@ void NetworkMonitor::recheckNetworks()
         return;
     }
 
-    // we are online, and we don't care what we upload over
+    // Don't explicitly check for bearer types in case cellular
+    // upload is enabled, fall through otherwise
     if (uploadOverCellular) {
         if (m_shouldDownload) {
             return;

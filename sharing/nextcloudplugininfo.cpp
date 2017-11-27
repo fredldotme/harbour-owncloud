@@ -1,23 +1,23 @@
 #include "nextcloudplugininfo.h"
 #include "nextcloudconsts.h"
 
-ExamplePluginInfo::ExamplePluginInfo()
+NextcloudPluginInfo::NextcloudPluginInfo()
     : m_ready(false)
 {
 
 }
 
-ExamplePluginInfo::~ExamplePluginInfo()
+NextcloudPluginInfo::~NextcloudPluginInfo()
 {
 
 }
 
-QList<TransferMethodInfo> ExamplePluginInfo::info() const
+QList<TransferMethodInfo> NextcloudPluginInfo::info() const
 {
     return m_infoList;
 }
 
-void ExamplePluginInfo::query()
+void NextcloudPluginInfo::query()
 {
     TransferMethodInfo info;
     QStringList capabilities;
@@ -54,7 +54,7 @@ void ExamplePluginInfo::query()
 }
 
 
-bool ExamplePluginInfo::ready() const
+bool NextcloudPluginInfo::ready() const
 {
     return m_ready;
 }

@@ -4,30 +4,30 @@
 #include "nextcloudconsts.h"
 #include <QtPlugin>
 
-ExampleSharePlugin::ExampleSharePlugin()
+NextcloudSharePlugin::NextcloudSharePlugin()
 {
 }
 
-ExampleSharePlugin::~ExampleSharePlugin()
+NextcloudSharePlugin::~NextcloudSharePlugin()
 {
 }
 
-MediaTransferInterface * ExampleSharePlugin::transferObject()
+MediaTransferInterface * NextcloudSharePlugin::transferObject()
 {
-    return new ExampleUploader;
+    return new NextcloudUploader;
 }
 
-TransferPluginInfo *ExampleSharePlugin::infoObject()
+TransferPluginInfo *NextcloudSharePlugin::infoObject()
 {
-    return new ExamplePluginInfo;
+    return new NextcloudPluginInfo;
 }
 
-QString ExampleSharePlugin::pluginId() const
+QString NextcloudSharePlugin::pluginId() const
 {
     return harourowncloud::consts::SHARE_ID;
 }
 
-bool ExampleSharePlugin::enabled() const
+bool NextcloudSharePlugin::enabled() const
 {
     return true;
 }

@@ -31,10 +31,10 @@ BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  desktop-file-utils
 
 %description
-Unofficial ownCloud client for SailfishOS
+Unofficial NextCloud/ownCloud client for SailfishOS
 
 %package daemon
-Summary:   ownCloud background task for automatic camera backups
+Summary:   NextCloud/ownCloud background task for automatic camera backups
 
 %description daemon
 ownCloud background task for automatic camera backups
@@ -76,14 +76,17 @@ desktop-file-install --delete-original       \
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/86x86/apps/%{name}.png
 %{_datadir}/icons/hicolor/128x128/apps/%{name}.png
-# >> files
-# << files
 
 %files daemon
 %defattr(755,root,root,-)
 %{_bindir}/%{name}-daemon
 %defattr(-,root,root,-)
 /usr/lib/systemd/user/%{name}-daemon.service
+%{_datadir}/nemo-transferengine/plugins/
+/usr/lib/nemo-transferengine/plugins/libowncloudshareplugin.so
+
+# >> files
+# << files
 
 %post daemon
 /bin/systemctl-user enable harbour-owncloud-daemon.service >/dev/null 2>&1 || :

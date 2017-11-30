@@ -19,16 +19,10 @@ include(../common/common.pri)
 
 SOURCES += \
     src/harbour-owncloud.cpp \
-    src/owncloudbrowser.cpp \
-    src/entryinfo.cpp \
-    src/transfermanager.cpp \
     src/localfilebrowser.cpp \
     src/daemoncontrol.cpp
 
 HEADERS += \
-    src/owncloudbrowser.h \
-    src/entryinfo.h \
-    src/transfermanager.h \
     src/localfilebrowser.h \
     src/daemoncontrol.h
 
@@ -51,7 +45,9 @@ OTHER_FILES += qml/harbour-owncloud.qml \
 # to disable building translations every time, comment out the
 # following CONFIG line
 CONFIG += sailfishapp_i18n
-TRANSLATIONS += translations/harbour-owncloud-de.ts
+TRANSLATIONS += \
+    translations/harbour-owncloud-de.ts \
+    translations/harbour-owncloud-sl.ts
 
 
 icon86.files += icons/86x86/harbour-owncloud.png
@@ -70,8 +66,9 @@ INSTALLS += icon128
 #icon256.path = /usr/share/icons/hicolor/256x256/apps
 #INSTALLS += icon256
 
-#iconsvg.files += icons/scalable/harbour-owncloud.svgz
-#iconsvg.path = /usr/share/icons/hicolor/scalable/apps
+iconsvg.files += icons/harbour-owncloud.svg
+iconsvg.path = /usr/share/icons/hicolor/scalable/apps
+INSTALLS += iconsvg
 
 include(../notifications.pri)
 

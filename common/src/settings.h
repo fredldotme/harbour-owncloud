@@ -8,13 +8,13 @@ class Settings : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(bool isCustomCert READ isCustomCert WRITE acceptCertificate(bool) NOTIFY customCertChanged())
-    Q_PROPERTY(bool autoLogin READ isAutoLogin WRITE setAutoLogin(bool) NOTIFY autoLoginChanged())
-    Q_PROPERTY(bool notifications READ notifications WRITE setNotifications(bool) NOTIFY notificationSettingsChanged())
+    Q_PROPERTY(bool isCustomCert READ isCustomCert WRITE acceptCertificate NOTIFY customCertChanged)
+    Q_PROPERTY(bool autoLogin READ isAutoLogin WRITE setAutoLogin NOTIFY autoLoginChanged)
+    Q_PROPERTY(bool notifications READ notifications WRITE setNotifications NOTIFY notificationSettingsChanged)
 
-    Q_PROPERTY(QString hoststring READ hoststring NOTIFY hoststringChanged())
-    Q_PROPERTY(QString username READ username WRITE setUsername(QString) NOTIFY usernameChanged())
-    Q_PROPERTY(QString password READ password WRITE setPassword(QString) NOTIFY passwordChanged())
+    Q_PROPERTY(QString hoststring READ hoststring NOTIFY hoststringChanged)
+    Q_PROPERTY(QString username READ username WRITE setUsername NOTIFY usernameChanged)
+    Q_PROPERTY(QString password READ password WRITE setPassword NOTIFY passwordChanged)
 
     Q_PROPERTY(bool uploadAutomatically READ uploadAutomatically WRITE setUploadAutomatically NOTIFY uploadAutomaticallyChanged)
     Q_PROPERTY(bool mobileUpload READ mobileUpload WRITE setMobileUpload NOTIFY mobileUploadChanged)

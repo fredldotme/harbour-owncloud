@@ -164,7 +164,7 @@
     <message>
         <source>Automatically save camera photos to your ownCloud instance when on WiFi</source>
         <comment>Camera photo backups escription</comment>
-        <translation>Speichere die Kamerabilder automatisch in deiner ownCloud when du im WLAN bist</translation>
+        <translation>Speichere die Kamerabilder automatisch in deiner ownCloud wenn du im WLAN bist</translation>
     </message>
     <message>
         <source>Photo backups via mobile internet connection</source>

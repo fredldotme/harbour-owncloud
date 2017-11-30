@@ -1,8 +1,10 @@
 
 #include <QtQuick>
 #include <sailfishapp.h>
+#include <notification.h>
 
-#include "owncloudbrowser.h"
+#include <owncloudbrowser.h>
+
 #include "entryinfo.h"
 #include "settings.h"
 #include "transfermanager.h"
@@ -10,7 +12,6 @@
 #include "localfilebrowser.h"
 #include "daemoncontrol.h"
 
-#include <notification.h>
 
 Q_DECLARE_METATYPE(EntryInfo*)
 Q_DECLARE_METATYPE(TransferEntry*)

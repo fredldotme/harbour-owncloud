@@ -1,22 +1,12 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import harbour.owncloud 1.0
+import "qrc:/qml/nextcloudcommon.js" as NextcloudCommon
 
 Page {
     id: pageRoot
     property EntryInfo entry;
     property TransferEntry downloadEntry;
-
-    function getHRSize(bytes) {
-        var units = ['bytes', 'kB', 'MB', 'GB', 'TB'];
-        var i = 0;
-
-        for(; i < 5 && bytes >= 1024; i++) {
-            bytes = bytes / 1024;
-        }
-
-        return bytes.toFixed(2) + " " + units[i];
-    }
 
     SilicaFlickable {
         anchors.fill: parent
@@ -64,7 +54,7 @@ Page {
         // Icon
         Image {
             id: fileImage
-            source: getIconFromMime(entry.mimeType)
+            source: NextcloudCommon.getIconFromMime(entry.mimeType)
             width: parent.width / 3
             height: width
             x: (parent.width / 2) - (width / 2)
@@ -108,7 +98,7 @@ Page {
             x: (parent.width / 2) + 24
             y: nameHint.y + nameHint.height
             width: (parent.width / 2) - 12
-            text: getHRSize(entry.size)
+            text: NextcloudCommon.getHRSize(entry.size)
             horizontalAlignment: Text.AlignLeft
             wrapMode: Text.Wrap
         }

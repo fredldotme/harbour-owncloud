@@ -8,18 +8,6 @@ ApplicationWindow
     property bool loginInProgress : false;
     property bool loginFailed : false;
 
-    function getIconFromMime(mimeType) {
-        if(mimeType.indexOf("image") === 0) {
-            return "image://theme/icon-l-image";
-        } else if(mimeType.indexOf("audio") === 0) {
-            return "image://theme/icon-l-music";
-        } else if(mimeType.indexOf("video") === 0) {
-            return "image://theme/icon-l-video";
-        } else {
-            return "image://theme/icon-l-document";
-        }
-    }
-
     function notify(summary, body) {
         notification.previewSummary = summary
         notification.previewBody = body

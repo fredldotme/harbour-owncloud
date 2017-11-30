@@ -1,7 +1,7 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import harbour.owncloud 1.0
-
+import "qrc:/qml/nextcloudcommon.js" as NextcloudCommon
 
 Page {
     id: pageRoot
@@ -36,7 +36,7 @@ Page {
         id: fillListviewConnection
         target: browser
         onDirectoryContentChanged: {
-            if(currentPath == remotePath) {
+            if(currentPath === browser.getCanonicalPath(remotePath)) {
                 listView.model = entries;
             }
         }
@@ -155,7 +155,7 @@ Page {
                         id: icon
                         source: listView.model[index].isDirectory ?
                                     "image://theme/icon-m-folder" :
-                                    getIconFromMime(listView.model[index].mimeType)
+                                    NextcloudCommon.getIconFromMime(listView.model[index].mimeType)
                         anchors.left: parent.left
                         anchors.leftMargin: Theme.paddingLarge
                         anchors.top: parent.top

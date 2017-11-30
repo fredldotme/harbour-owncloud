@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import harbour.owncloud 1.0
+import "qrc:/qml/nextcloudcommon.js" as NextcloudCommon
 
 Dialog {
     id: fileUploadDialog
@@ -81,7 +82,7 @@ Dialog {
                                     "image://theme/icon-m-folder" :
                                     "image://theme/icon-m-back"
                                  ) :
-                                getIconFromMime(listView.model[index].mimeType)
+                                NextcloudCommon.getIconFromMime(listView.model[index].mimeType)
                     anchors.left: parent.left
                     anchors.leftMargin: Theme.paddingLarge
                     anchors.top: parent.top

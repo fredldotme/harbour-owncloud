@@ -104,7 +104,7 @@ void TransferManager::enqueueUpload(QString localPath, QString remotePath)
 
 void TransferManager::handleDownloadCompleted()
 {
-    TransferEntry* entry;
+    TransferEntry* entry = Q_NULLPTR;;
     bool success;
     downloadMutex.lock();
 
@@ -130,7 +130,7 @@ void TransferManager::handleDownloadCompleted()
 
 void TransferManager::handleUploadCompleted()
 {
-    TransferEntry* entry;
+    TransferEntry* entry = Q_NULLPTR;;
     bool success;
     uploadMutex.lock();
 
@@ -141,8 +141,6 @@ void TransferManager::handleUploadCompleted()
         connect(entry, &TransferEntry::remoteMtimeSucceeded, this, &TransferManager::refreshDirectoryContents);
         connect(entry, &TransferEntry::remoteMtimeFailed, this, &TransferManager::remoteMtimeFailed);
         entry->deleteLater();
-    } else {
-        entry = Q_NULLPTR;
     }
 
     if(!uploadQueue.isEmpty() && uploadQueue.head())

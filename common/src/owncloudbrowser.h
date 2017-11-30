@@ -3,19 +3,21 @@
 
 #include <QObject>
 
-#include "../common/src/webdav_utils.h"
+#include <webdav_utils.h>
 #include <qwebdavdirparser.h>
 #include <qwebdavitem.h>
 #include <QVariant>
 
-#include "entryinfo.h"
+#include <entryinfo.h>
 
 class OwnCloudBrowser : public QObject
 {
     Q_OBJECT
 
 public:
-    OwnCloudBrowser(QObject* parent = 0, Settings* settings = 0);
+    Q_PROPERTY(Settings* settings READ getSettings)
+
+    OwnCloudBrowser(QObject* parent = 0, Settings* settings = Settings::instance());
     ~OwnCloudBrowser();
 
     Q_INVOKABLE void testConnection();
@@ -25,6 +27,8 @@ public:
     Q_INVOKABLE void makeDirectory(QString dirName);
     Q_INVOKABLE void remove(QString name, bool refresh);
     Q_INVOKABLE void resetWebdav();
+    Q_INVOKABLE QString getCanonicalPath(const QString& path);
+    Q_INVOKABLE Settings* getSettings();
 
     QWebdav* getWebdav();
     QWebdav* getNewWebdav();
@@ -38,6 +42,7 @@ private:
     QStack<QList<EntryInfo*> > entryStack;
     QMutex deleteMutex;
     bool abortIntended;
+
 
 signals:
     void directoryContentChanged(QString currentPath, QVariantList entries);

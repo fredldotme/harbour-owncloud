@@ -9,10 +9,13 @@ OwnCloudBrowser::OwnCloudBrowser(QObject *parent, Settings *settings) :
     connect(settings, &Settings::settingsChanged, this, &OwnCloudBrowser::reloadSettings);
 
     resetWebdav();
+    if (this->settings)
+        this->settings->readSettings();
 }
 
 OwnCloudBrowser::~OwnCloudBrowser()
 {
+    parser.abort();
     if(webdav)
         delete webdav;
 }
@@ -109,8 +112,34 @@ void OwnCloudBrowser::handleResponse()
         deletables.append(entry);
     }
     entryStack.push(deletables);
-    emit directoryContentChanged(parser.path(), entries);
+    emit directoryContentChanged(getCanonicalPath(parser.path()), entries);
     deleteMutex.unlock();
+}
+
+QString OwnCloudBrowser::getCanonicalPath(const QString &path)
+{
+    const QString token = QStringLiteral("..");
+    const QString slash = QStringLiteral("/");
+    const QStringList dirs = path.split(slash, QString::SkipEmptyParts);
+
+    QStringList newDirs;
+    for (const QString &dir : dirs) {
+        if (dir == token)
+            newDirs.pop_back();
+        else
+            newDirs.push_back(dir);
+    }
+
+    QString ret = slash;
+    if (newDirs.length() > 0)
+        ret += newDirs.join(slash) + slash;
+
+    return ret;
+}
+
+Settings* OwnCloudBrowser::getSettings()
+{
+    return this->settings;
 }
 
 void OwnCloudBrowser::printError(QString msg)

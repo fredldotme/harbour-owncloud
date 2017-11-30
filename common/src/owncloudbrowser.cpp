@@ -215,3 +215,29 @@ void OwnCloudBrowser::remove(QString name, bool refresh)
     if(refresh)
         emit refreshStarted(currentPath);
 }
+
+void OwnCloudBrowser::move(QString from, QString to, bool refresh)
+{
+    qDebug() << "Moving" << from << "to" << to;
+    QWebdav* moveWebdav = getNewWebdav();
+    if(refresh)
+        connect(moveWebdav, &QNetworkAccessManager::finished, this, &OwnCloudBrowser::refreshDirectoryContent, Qt::DirectConnection);
+    connect(moveWebdav, &QNetworkAccessManager::finished, moveWebdav, &QObject::deleteLater, Qt::DirectConnection);
+    moveWebdav->move(from, to);
+
+    if(refresh)
+        emit refreshStarted(currentPath);
+}
+
+void OwnCloudBrowser::copy(QString from, QString to, bool refresh)
+{
+    qDebug() << "Copying" << from << "to" << to;
+    QWebdav* copyWebdav = getNewWebdav();
+    if(refresh)
+        connect(copyWebdav, &QNetworkAccessManager::finished, this, &OwnCloudBrowser::refreshDirectoryContent, Qt::DirectConnection);
+    connect(copyWebdav, &QNetworkAccessManager::finished, copyWebdav, &QObject::deleteLater, Qt::DirectConnection);
+    copyWebdav->copy(from, to);
+
+    if(refresh)
+        emit refreshStarted(currentPath);
+}

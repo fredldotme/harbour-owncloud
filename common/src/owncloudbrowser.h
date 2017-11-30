@@ -26,6 +26,8 @@ public:
     Q_INVOKABLE void getDirectoryContent(QString path);
     Q_INVOKABLE void makeDirectory(QString dirName);
     Q_INVOKABLE void remove(QString name, bool refresh);
+    Q_INVOKABLE void move(QString from, QString to, bool refresh);
+    Q_INVOKABLE void copy(QString from, QString to, bool refresh);
     Q_INVOKABLE void resetWebdav();
     Q_INVOKABLE QString getCanonicalPath(const QString& path);
     Q_INVOKABLE Settings* getSettings();

@@ -2,6 +2,7 @@
 #define NEXTCLOUDUPLOADER_H
 
 #include <TransferEngine-qt5/mediatransferinterface.h>
+#include <TransferEngine-qt5/mediaitem.h>
 
 class NextcloudUploader : public MediaTransferInterface
 {

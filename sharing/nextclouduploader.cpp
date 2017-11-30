@@ -1,9 +1,15 @@
 #include "nextclouduploader.h"
 
-NextcloudUploader::NextcloudUploader(QObject *parent):
-    MediaTransferInterface(parent)
-{
+#include <QDebug>
+#include <globaltransfermanager.h>
+#include <globalowncloudbrowser.h>
 
+#define GLOBAL_TRANSFER_MANAGER GlobalTransferManager::instance(GlobalOwncloudBrowser::instance())
+
+NextcloudUploader::NextcloudUploader(QObject *parent) : MediaTransferInterface(parent)
+{
+    // Initialize singletons
+    GLOBAL_TRANSFER_MANAGER;
 }
 
 NextcloudUploader::~NextcloudUploader()
@@ -12,40 +18,76 @@ NextcloudUploader::~NextcloudUploader()
 
 QString NextcloudUploader::displayName() const
 {
-    return tr("Example");
+    return tr("Nextcloud");
 }
 
 QUrl NextcloudUploader::serviceIcon() const
 {
-    // Url to the icon which should be shown in the transfer UI
-    return QUrl("image://theme/icon-s-message");
+    return QUrl("image://theme/icon-s-cloud-upload");
 }
 
 bool NextcloudUploader::cancelEnabled() const
 {
-    // Return true if cancelling ongoing upload is supported
-    // Return false if cancelling ongoing upload is not supported
     return true;
 }
 
 bool NextcloudUploader::restartEnabled() const
 {
-    // Return true, if restart is  supported.
-    // Return false, if restart is not supported
-    return true;
+    return false;
 }
 
 void NextcloudUploader::start()
 {
-    // This is called by the sharing framework to start sharing
+    if (!mediaItem())
+        return;
 
-    // TODO: Add your code here to start uploading
+    const QMap<QString, QVariant> userData = mediaItem()->value(MediaItem::UserData).toMap();
+    QString localPath = userData.value("localPath").toString();
+    if (localPath.startsWith("file://"))
+        localPath = localPath.mid(7);
+    const QString remotePath = userData.value("remoteDir").toString();
+
+    GLOBAL_TRANSFER_MANAGER->enqueueUpload(localPath, remotePath);
+    setStatus(MediaTransferInterface::TransferStarted);
+
+    for (QVariant entry : GLOBAL_TRANSFER_MANAGER->getTransfers()) {
+        TransferEntry* transferEntry = entry.value<TransferEntry*>();
+        if (!transferEntry)
+            continue;
+
+        if (transferEntry->getRemotePath() == remotePath) {
+            connect(transferEntry, &TransferEntry::progressChanged, this, [=](qreal progress, QString remotePath) {
+                setProgress(progress);
+            });
+            connect(transferEntry, &TransferEntry::transferCompleted, this, [=](bool success) {
+                if (success)
+                    setStatus(MediaTransferInterface::TransferFinished);
+                else
+                    setStatus(MediaTransferInterface::TransferInterrupted);
+            });
+
+            break;
+        }
+    }
 }
 
 void NextcloudUploader::cancel()
 {
-    // This is called by the sharing framework to cancel on going transfer
+    if (!mediaItem())
+        return;
 
-    // TODO: Add your code here to cancel ongoing upload
+    const QMap<QString, QVariant> userData = mediaItem()->value(MediaItem::UserData).toMap();
+    const QString remotePath = userData.value("remoteDir").toString();
+
+    for (QVariant entry : GLOBAL_TRANSFER_MANAGER->getTransfers()) {
+        TransferEntry* transferEntry = entry.value<TransferEntry*>();
+        if (!transferEntry)
+            continue;
+
+        if (transferEntry->getRemotePath() == remotePath) {
+            setStatus(MediaTransferInterface::TransferCanceled);
+            transferEntry->cancelTransfer();
+            break;
+        }
+    }
 }
-

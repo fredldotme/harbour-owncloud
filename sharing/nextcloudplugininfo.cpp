@@ -4,12 +4,10 @@
 NextcloudPluginInfo::NextcloudPluginInfo()
     : m_ready(false)
 {
-
 }
 
 NextcloudPluginInfo::~NextcloudPluginInfo()
 {
-
 }
 
 QList<TransferMethodInfo> NextcloudPluginInfo::info() const
@@ -24,15 +22,14 @@ void NextcloudPluginInfo::query()
 
     // Capabilites ie. what mimetypes this plugin supports
     capabilities << QLatin1String("image/*")
-                 << QLatin1String("video/*")
-                 << QLatin1String("text/*");
+                 << QLatin1String("video/*");
 
     // TODO: Translations for 3rd party plugins is not yet supported by Sailfish OS.
     //       Adding support there later, but for now just use what ever non-translated
     //       string here. This string will be visible in the share method list.
     //: Display name for example share plugin
     //% "Example plugin"
-    info.displayName     = QStringLiteral("Nextcloud");
+    info.displayName     = QStringLiteral("Nextcloud/ownCloud");
 
     // Method ID is a unique identifier for this plugin. It is used to identify which share plugin should be
     // used for starting the sharing.

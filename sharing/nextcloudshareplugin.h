@@ -8,7 +8,7 @@
 class Q_DECL_EXPORT NextcloudSharePlugin : public QObject, public TransferPluginInterface
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID HARBOUROWNCLOUD_PLUGINID)
+    Q_PLUGIN_METADATA(IID "com.github.beidl.harbour-owncloud.sharing")
     Q_INTERFACES(TransferPluginInterface)
 public:
     NextcloudSharePlugin();

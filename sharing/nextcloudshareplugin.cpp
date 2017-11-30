@@ -2,6 +2,7 @@
 #include "nextclouduploader.h"
 #include "nextcloudplugininfo.h"
 #include "nextcloudconsts.h"
+
 #include <QtPlugin>
 
 NextcloudSharePlugin::NextcloudSharePlugin()

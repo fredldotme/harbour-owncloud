@@ -37,7 +37,7 @@ Unofficial NextCloud/ownCloud client for SailfishOS
 Summary:   NextCloud/ownCloud background task for automatic camera backups
 
 %description daemon
-ownCloud background task for automatic camera backups
+Nextcloud/ownCloud background task for automatic camera backups
 
 %prep
 %setup -q -n %{name}-%{version}
@@ -49,7 +49,7 @@ ownCloud background task for automatic camera backups
 # >> build pre
 # << build pre
 
-%qtc_qmake5 
+%qtc_qmake5
 
 %qtc_make %{?_smp_mflags}
 
@@ -76,6 +76,7 @@ desktop-file-install --delete-original       \
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/86x86/apps/%{name}.png
 %{_datadir}/icons/hicolor/128x128/apps/%{name}.png
+%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
 %files daemon
 %defattr(755,root,root,-)
@@ -84,6 +85,8 @@ desktop-file-install --delete-original       \
 /usr/lib/systemd/user/%{name}-daemon.service
 %{_datadir}/nemo-transferengine/plugins/
 /usr/lib/nemo-transferengine/plugins/libowncloudshareplugin.so
+/usr/lib/qt5/qml/com/github/beidl/harbourowncloud/libharbourowncloudqmlplugin.so
+/usr/lib/qt5/qml/com/github/beidl/harbourowncloud/qmldir
 
 # >> files
 # << files

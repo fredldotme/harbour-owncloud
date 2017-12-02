@@ -10,6 +10,8 @@ Page {
     property string remotePath : "/"
     property string pageHeaderText : "/"
 
+    readonly property Component dialogComponent : Qt.createComponent("RemoteDirSelectDialog.qml");
+
     Component.onCompleted: {
         remotePath = browser.getCurrentPath();
     }
@@ -83,6 +85,7 @@ Page {
         SilicaListView {
             id: listView
             anchors.fill: parent
+            clip: true
 
             header: PageHeader {
                 title: pageHeaderText
@@ -208,12 +211,53 @@ Page {
                         selectedEntry = null
                         selectedItem = null
                     }
-
                     MenuItem {
-                        text: qsTr("Delete")
-
                         property EntryInfo tmpEntry;
+                        property var dialogObj : null
 
+                        function moveFile() {
+                            var fromPath = remotePath + tmpEntry.name +
+                                    (tmpEntry.isDirectory ? "/" : "")
+                            var toPath = dialogObj.remotePath + tmpEntry.name +
+                                    (tmpEntry.isDirectory ? "/" : "")
+                            browser.move(fromPath, toPath, true)
+                            dialogObj = null
+                            tmpEntry = null
+                        }
+
+                        text: qsTr("Move")
+                        onClicked: {
+                            tmpEntry = selectedEntry
+                            dialogObj = dialogComponent.createObject(pageRoot, {entry: tmpEntry});
+                            dialogObj.accepted.connect(moveFile);
+                            pageStack.push(dialogObj);
+                        }
+                    }
+                    MenuItem {
+                        property EntryInfo tmpEntry;
+                        property var dialogObj : null
+
+                        function copyFile() {
+                            var fromPath = remotePath + tmpEntry.name +
+                                    (tmpEntry.isDirectory ? "/" : "")
+                            var toPath = dialogObj.remotePath + tmpEntry.name +
+                                    (tmpEntry.isDirectory ? "/" : "")
+                            browser.copy(fromPath, toPath, true)
+                            dialogObj = null
+                            tmpEntry = null
+                        }
+
+                        text: qsTr("Copy")
+                        onClicked: {
+                            tmpEntry = selectedEntry
+                            dialogObj = dialogComponent.createObject(pageRoot, {entry: tmpEntry});
+                            dialogObj.accepted.connect(copyFile);
+                            pageStack.push(dialogObj);
+                        }
+                    }
+                    MenuItem {
+                        property EntryInfo tmpEntry;
+                        text: qsTr("Delete")
                         onClicked: {
                             tmpEntry = selectedEntry
                             cancelCounter++;

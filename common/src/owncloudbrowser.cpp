@@ -225,6 +225,7 @@ void OwnCloudBrowser::move(QString from, QString to, bool refresh)
     connect(moveWebdav, &QNetworkAccessManager::finished, moveWebdav, &QObject::deleteLater, Qt::DirectConnection);
     moveWebdav->move(from, to);
 
+    // TODO: refresh destination dir listing
     if(refresh)
         emit refreshStarted(currentPath);
 }
@@ -238,6 +239,7 @@ void OwnCloudBrowser::copy(QString from, QString to, bool refresh)
     connect(copyWebdav, &QNetworkAccessManager::finished, copyWebdav, &QObject::deleteLater, Qt::DirectConnection);
     copyWebdav->copy(from, to);
 
+    // TODO: refresh destination dir listing
     if(refresh)
         emit refreshStarted(currentPath);
 }

@@ -45,7 +45,6 @@ private:
     QMutex deleteMutex;
     bool abortIntended;
 
-
 signals:
     void directoryContentChanged(QString currentPath, QVariantList entries);
     void sslCertifcateError(QString md5Digest, QString sha1Digest);

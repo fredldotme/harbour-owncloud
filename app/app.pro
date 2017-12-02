@@ -40,7 +40,8 @@ OTHER_FILES += qml/harbour-owncloud.qml \
     qml/pages/SettingsPage.qml \
     qml/pages/TransferPage.qml \
     qml/pages/UploadDialog.qml \
-    qml/pages/MkDirDialog.qml
+    qml/pages/MkDirDialog.qml \
+    qml/pages/RemoteDirSelectDialog.qml
 
 # to disable building translations every time, comment out the
 # following CONFIG line

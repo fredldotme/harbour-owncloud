@@ -1,10 +1,10 @@
 #ifndef DBUSHANDLER_H
 #define DBUSHANDLER_H
 
-#include <QDBusAbstractAdaptor>
+#include <QObject>
 #include <ownclouddbusconsts.h>
 
-class DBusHandler : public QDBusAbstractAdaptor
+class DBusHandler : public QObject
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", HARBOUR_OWNCLOUD_DAEMON_IFACE)
@@ -12,7 +12,7 @@ class DBusHandler : public QDBusAbstractAdaptor
     Q_PROPERTY(bool uploading READ uploading NOTIFY uploadingChanged)
 
 public:
-    explicit DBusHandler(QObject *parent);
+    explicit DBusHandler(QObject *parent = nullptr);
     ~DBusHandler();
 
 public slots:

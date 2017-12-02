@@ -1,6 +1,7 @@
 #include "dbushandler.h"
 #include <QDebug>
-DBusHandler::DBusHandler(QObject *parent) : QDBusAbstractAdaptor(parent),
+
+DBusHandler::DBusHandler(QObject *parent) : QObject(parent),
     m_online(false),
     m_uploading(false)
 {

@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 
     Filesystem *fsHandler = Filesystem::instance();
     Uploader *uploader = Uploader::instance();
-    DBusHandler *dbusHandler = new DBusHandler(uploader);
+    DBusHandler *dbusHandler = new DBusHandler();
     NetworkMonitor *netMonitor = NetworkMonitor::instance();
 
     QObject::connect(fsHandler, &Filesystem::fileFound, uploader, &Uploader::fileFound);
@@ -36,7 +36,8 @@ int main(int argc, char *argv[])
 
     // We only need one instance
     if(!QDBusConnection::sessionBus().registerService(HarbourOwncloud::DBusConsts::DBUS_SERVICE) ||
-            !QDBusConnection::sessionBus().registerObject(HarbourOwncloud::DBusConsts::DBUS_PATH, uploader)) {
+            !QDBusConnection::sessionBus().registerObject(HarbourOwncloud::DBusConsts::DBUS_PATH, dbusHandler,
+                                                          QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllProperties)) {
         exit(1);
     }
 

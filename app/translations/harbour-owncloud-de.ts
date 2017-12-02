@@ -32,6 +32,14 @@
         <comment>RemorseItem text</comment>
         <translation>Löschen</translation>
     </message>
+    <message>
+        <source>Move</source>
+        <translation>Verschieben</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation>Kopieren</translation>
+    </message>
 </context>
 <context>
     <name>FileDetails</name>

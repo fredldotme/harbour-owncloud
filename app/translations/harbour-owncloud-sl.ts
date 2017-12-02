@@ -32,6 +32,14 @@
         <comment>RemorseItem text</comment>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Move</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FileDetails</name>

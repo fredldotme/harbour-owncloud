@@ -1,4 +1,3 @@
 * Fix double uploading of files
-* Add missing file/directory operations:
-    - copy
-    - move
+* Select multiple files for upload
+* Offline support/syncing

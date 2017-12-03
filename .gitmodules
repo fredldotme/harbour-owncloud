@@ -4,3 +4,6 @@
 [submodule "nemo-qml-plugin-notifications"]
 	path = nemo-qml-plugin-notifications
 	url = https://github.com/nemomobile/nemo-qml-plugin-notifications
+[submodule "sailfish-ui-set"]
+	path = sailfish-ui-set
+	url = https://github.com/beidl/sailfish-ui-set

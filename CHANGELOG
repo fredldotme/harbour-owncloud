@@ -1,3 +1,7 @@
+0.5.2:
+Fix validation for Harbour Store compatibility
+Fix "Upload" translations in file upload dialog
+
 0.5.1-dev:
 Share UI (upload images & videos from Gallery)
 Enqueue multiple files for upload at once

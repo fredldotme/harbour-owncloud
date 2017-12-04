@@ -4,9 +4,10 @@
 #include <notification.h>
 
 #include <owncloudbrowser.h>
+#include <sailfish-ui-set.h>
 
 #include "entryinfo.h"
-#include "settings.h"
+#include "nextcloudsettings.h"
 #include "transfermanager.h"
 #include "transferentry.h"
 #include "localfilebrowser.h"
@@ -16,15 +17,14 @@
 Q_DECLARE_METATYPE(EntryInfo*)
 Q_DECLARE_METATYPE(TransferEntry*)
 Q_DECLARE_METATYPE(OwnCloudBrowser*)
-Q_DECLARE_METATYPE(LocalFileBrowser*)
 
 int main(int argc, char *argv[])
 {
+    SailfishUiSet::registerQmlTypes();
     qmlRegisterType<EntryInfo>("harbour.owncloud", 1, 0, "EntryInfo");
     qmlRegisterType<OwnCloudBrowser>("harbour.owncloud", 1, 0, "OwnCloudBrowser");
     qmlRegisterType<TransferManager>("harbour.owncloud", 1, 0, "TransferManager");
     qmlRegisterType<TransferEntry>("harbour.owncloud", 1, 0, "TransferEntry");
-    qmlRegisterType<LocalFileBrowser>("harbour.owncloud", 1, 0, "LocalFileBrowser");
     qmlRegisterType<DaemonControl>("harbour.owncloud", 1, 0, "DaemonControl");
     qmlRegisterType<Notification>("harbour.owncloud", 1, 0, "Notification");
 
@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
     app->setApplicationName("harbour-owncloud");
     QQuickView *view = SailfishApp::createView();
 
-    Settings *settings = Settings::instance();
+    NextcloudSettings *settings = NextcloudSettings::instance();
     OwnCloudBrowser *browser = new OwnCloudBrowser(NULL, settings);
     TransferManager *transfer = new TransferManager(0, browser);
     DaemonControl *daemonCtrl = new DaemonControl();

@@ -13,26 +13,28 @@ ShareDialog {
     property int viewWidth: root.isPortrait ? Screen.width : Screen.width / 2
     property string remotePath : "/"
     property string localPath : root.source
-    property bool isLoadingDirectory : (browser.settings.autoLogin)
+    property bool isLoadingDirectory : true
     property bool errorOccured : false
     property bool thumbnailErrorOccured : false
 
-    readonly property bool shouldShowList : (browser.settings.autoLogin && !errorOccured)
+    readonly property bool shouldShowList : (!errorOccured)
 
     readonly property string loginHint :
-         "Please log in to your Nextcloud/ownCloud and enable automatic login"
+         "Please log in to your Nextcloud/ownCloud"
 
     readonly property string errorHint :
          "An error occured while contacting the Nextcloud/ownCloud instance"
 
-    Component.onCompleted: {
-        browser.settings.readSettings()
-        if (browser.settings.autoLogin)
-            browser.testConnection()
-    }
+    Component.onCompleted: browser.settings.readSettings()
 
     OwnCloudBrowser {
         id: browser
+        settings: PermittedSettings {
+            onSettingsChanged: {
+                browser.reloadSettings()
+                browser.testConnection()
+            }
+        }
 
         onLoginFailed: {
             placeholderHint.text = errorHint

@@ -2,6 +2,7 @@
 #include <QtQml/QtQml>
 
 #include <owncloudbrowser.h>
+#include <permittedsettings.h>
 
 class HarbourOwncloudQmlPlugin : public QQmlExtensionPlugin
 {
@@ -13,5 +14,7 @@ public:
     {
         Q_ASSERT(uri == QLatin1String("com.github.beidl.harbourowncloud"));
         qmlRegisterType<OwnCloudBrowser>(uri, 1, 0, "OwnCloudBrowser");
+        qmlRegisterType<NextcloudSettingsBase>(uri, 1, 0, "NextcloudSettingsBase");
+        qmlRegisterType<PermittedSettings>(uri, 1, 0, "PermittedSettings");
     }
 };

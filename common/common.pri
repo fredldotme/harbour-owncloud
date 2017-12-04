@@ -3,19 +3,23 @@ QT += dbus network xml
 DEFINES += QWEBDAVITEM_EXTENDED_PROPERTIES
 
 SOURCES += \
+    $$PWD/src/nextcloudsettingsbase.cpp \
+    $$PWD/src/nextcloudsettings.cpp \
+    $$PWD/src/permittedsettings.cpp \
     $$PWD/src/owncloudbrowser.cpp \
     $$PWD/src/transfermanager.cpp \
     $$PWD/src/entryinfo.cpp \
-    $$PWD/src/settings.cpp \
     $$PWD/src/shellcommand.cpp \
     $$PWD/src/transferentry.cpp \
     $$PWD/src/webdav_utils.cpp
 
 HEADERS += \
+    $$PWD/src/nextcloudsettingsbase.h \
+    $$PWD/src/nextcloudsettings.h \
+    $$PWD/src/permittedsettings.h \
     $$PWD/src/owncloudbrowser.h \
     $$PWD/src/transfermanager.h \
     $$PWD/src/entryinfo.h \
-    $$PWD/src/settings.h \
     $$PWD/src/shellcommand.h \
     $$PWD/src/transferentry.h \
     $$PWD/src/webdav_utils.h \

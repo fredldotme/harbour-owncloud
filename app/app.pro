@@ -16,14 +16,13 @@ CONFIG += sailfishapp qt
 QT += xml dbus quick qml
 
 include(../common/common.pri)
+include(../sailfish-ui-set/sailfish-ui-set.pri)
 
 SOURCES += \
     src/harbour-owncloud.cpp \
-    src/localfilebrowser.cpp \
     src/daemoncontrol.cpp
 
 HEADERS += \
-    src/localfilebrowser.h \
     src/daemoncontrol.h
 
 OTHER_FILES += qml/harbour-owncloud.qml \

@@ -65,9 +65,9 @@ INSTALLS += icon128
 #icon256.path = /usr/share/icons/hicolor/256x256/apps
 #INSTALLS += icon256
 
-iconsvg.files += icons/harbour-owncloud.svg
-iconsvg.path = /usr/share/icons/hicolor/scalable/apps
-INSTALLS += iconsvg
+#iconsvg.files += icons/harbour-owncloud.svg
+#iconsvg.path = /usr/share/icons/hicolor/scalable/apps
+#INSTALLS += iconsvg
 
 include(../notifications.pri)
 

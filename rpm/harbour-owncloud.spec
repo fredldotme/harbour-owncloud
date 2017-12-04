@@ -81,8 +81,10 @@ desktop-file-install --delete-original       \
 %files daemon
 %defattr(755,root,root,-)
 %{_bindir}/%{name}-daemon
+%{_bindir}/%{name}-permissiond
 %defattr(-,root,root,-)
 /usr/lib/systemd/user/%{name}-daemon.service
+/usr/lib/systemd/user/%{name}-permissiond.service
 %{_datadir}/nemo-transferengine/plugins/
 /usr/lib/nemo-transferengine/plugins/libowncloudshareplugin.so
 /usr/lib/qt5/qml/com/github/beidl/harbourowncloud/libharbourowncloudqmlplugin.so
@@ -93,4 +95,6 @@ desktop-file-install --delete-original       \
 
 %post daemon
 /bin/systemctl-user enable harbour-owncloud-daemon.service >/dev/null 2>&1 || :
+/bin/systemctl-user enable harbour-owncloud-permissiond.service >/dev/null 2>&1 || :
 /bin/systemctl-user restart harbour-owncloud-daemon.service >/dev/null 2>&1 || :
+/bin/systemctl-user restart harbour-owncloud-permissiond.service >/dev/null 2>&1 || :

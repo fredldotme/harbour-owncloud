@@ -1,0 +1,11 @@
+[Unit]
+Description=ownCloud photo backup
+After=lipstick.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/harbour-owncloud-permissiond
+Restart=always
+
+[Install]
+WantedBy=lipstick.service

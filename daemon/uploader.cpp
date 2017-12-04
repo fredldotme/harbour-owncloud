@@ -1,6 +1,6 @@
 #define DEBUG_WEBDAV 1
 #include "uploader.h"
-#include "settings.h"
+#include "nextcloudsettings.h"
 
 #include <QNetworkReply>
 
@@ -86,7 +86,7 @@ void Uploader::abort()
 
 void Uploader::applySettings()
 {
-    Settings *settings = Settings::instance();
+    NextcloudSettings *settings = NextcloudSettings::instance();
     m_connection.setConnectionSettings(settings->isHttps() ? QWebdav::HTTPS : QWebdav::HTTP,
                                        settings->hostname(),
                                        settings->path() + "remote.php/webdav",
@@ -239,7 +239,7 @@ void Uploader::uploadFile()
 
 QString Uploader::relativeToRemote(QString path)
 {
-    return Settings::instance()->path() + m_remotePath + path;
+    return NextcloudSettings::instance()->path() + m_remotePath + path;
 }
 
 void Uploader::getExistingRemote()
@@ -278,7 +278,7 @@ void Uploader::resetReply()
 
 QString Uploader::relativeLocalPath(QString absolutePath)
 {
-    return absolutePath.right(absolutePath.length() - Settings::instance()->localPicturesPath().length());
+    return absolutePath.right(absolutePath.length() - NextcloudSettings::instance()->localPicturesPath().length());
 }
 
 QString Uploader::relativeRemotePath(QString absolutePath)

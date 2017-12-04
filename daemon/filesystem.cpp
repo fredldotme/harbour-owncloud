@@ -1,6 +1,6 @@
 #include "filesystem.h"
 
-#include "settings.h"
+#include "nextcloudsettings.h"
 #include "uploader.h"
 
 Filesystem::Filesystem()
@@ -83,7 +83,7 @@ void Filesystem::rescan()
 
 void Filesystem::localPathChanged()
 {
-    QString newPath = Settings::instance()->localPicturesPath();
+    QString newPath = NextcloudSettings::instance()->localPicturesPath();
 
     if (!m_watcher.directories().isEmpty()) {
         m_watcher.removePaths(m_watcher.directories());

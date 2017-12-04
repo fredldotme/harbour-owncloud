@@ -6,7 +6,7 @@
 #include <QMutex>
 #include <QMutexLocker>
 
-#include "settings.h"
+#include "nextcloudsettings.h"
 
 class NetworkMonitor : public QObject
 {
@@ -18,7 +18,7 @@ public:
 
     void setUploadOverCellullar(bool enabled);
 
-    bool shouldDownload() { return Settings::instance()->mobileUpload() || m_shouldDownload; }
+    bool shouldDownload() { return NextcloudSettings::instance()->mobileUpload() || m_shouldDownload; }
 
 signals:
     void shouldDownloadChanged(bool);

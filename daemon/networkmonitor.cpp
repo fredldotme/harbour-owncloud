@@ -24,7 +24,7 @@ void NetworkMonitor::recheckNetworks()
 {
     QMutexLocker locker(&checkerMutex);
 
-    bool uploadOverCellular = Settings::instance()->mobileUpload();
+    bool uploadOverCellular = NextcloudSettings::instance()->mobileUpload();
 
     if (!m_configManager.isOnline()) {
         if (!m_shouldDownload) {

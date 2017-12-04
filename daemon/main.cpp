@@ -7,7 +7,7 @@
 
 #include "filesystem.h"
 #include "uploader.h"
-#include "settings.h"
+#include "nextcloudsettings.h"
 #include "dbushandler.h"
 #include "networkmonitor.h"
 
@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
 
-    Settings::instance()->readSettings();
+    NextcloudSettings::instance()->readSettings();
 
     Filesystem *fsHandler = Filesystem::instance();
     Uploader *uploader = Uploader::instance();
@@ -37,7 +37,9 @@ int main(int argc, char *argv[])
     // We only need one instance
     if(!QDBusConnection::sessionBus().registerService(HarbourOwncloud::DBusConsts::DBUS_SERVICE) ||
             !QDBusConnection::sessionBus().registerObject(HarbourOwncloud::DBusConsts::DBUS_PATH, dbusHandler,
-                                                          QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllProperties)) {
+                                                          QDBusConnection::ExportAllSlots |
+                                                          QDBusConnection::ExportAllProperties |
+                                                          QDBusConnection::ExportAllSignals)) {
         exit(1);
     }
 

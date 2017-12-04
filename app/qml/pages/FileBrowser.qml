@@ -123,6 +123,7 @@ Page {
                     enabled: listView.model !== undefined
                     onClicked: {
                         selectionDialogObj = selectionDialogComponent.createObject(pageRoot, {maximumSelections:Number.MAX_VALUE});
+                        selectionDialogObj.acceptText = qsTr("Upload")
                         selectionDialogObj.accepted.connect(enqueueSelectedFiles)
                         pageStack.push(selectionDialogObj)
                     }

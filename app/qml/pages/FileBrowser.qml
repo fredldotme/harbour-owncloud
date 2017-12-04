@@ -11,6 +11,7 @@ Page {
     property string pageHeaderText : "/"
 
     readonly property Component dialogComponent : Qt.createComponent("RemoteDirSelectDialog.qml");
+    readonly property Component selectionDialogComponent : Qt.createComponent("qrc:/sailfish-ui-set/ui/FileSelectionDialog.qml");
 
     Component.onCompleted: {
         remotePath = browser.getCurrentPath();
@@ -110,10 +111,20 @@ Page {
                 }
 
                 MenuItem {
+                    property var selectionDialogObj : null
+                    function enqueueSelectedFiles() {
+                        var selectedFiles = selectionDialogObj.filesToSelect
+                        for (var i = 0; i < selectedFiles.length; i++) {
+                            transfer.enqueueUpload(selectedFiles[i], browser.getCurrentPath());
+                        }
+                    }
+
                     text: qsTr("Upload")
                     enabled: listView.model !== undefined
                     onClicked: {
-                        pageStack.push("UploadDialog.qml")
+                        selectionDialogObj = selectionDialogComponent.createObject(pageRoot, {maximumSelections:Number.MAX_VALUE});
+                        selectionDialogObj.accepted.connect(enqueueSelectedFiles)
+                        pageStack.push(selectionDialogObj)
                     }
                 }
             }

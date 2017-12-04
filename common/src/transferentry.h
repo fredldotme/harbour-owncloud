@@ -11,7 +11,7 @@
 #include <utime.h>
 #include <sys/stat.h>
 
-#include "settings.h"
+#include "nextcloudsettings.h"
 #include "shellcommand.h"
 #include "webdav_utils.h"
 

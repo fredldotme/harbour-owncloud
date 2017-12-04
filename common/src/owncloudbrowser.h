@@ -9,15 +9,16 @@
 #include <QVariant>
 
 #include <entryinfo.h>
+#include <nextcloudsettingsbase.h>
 
 class OwnCloudBrowser : public QObject
 {
     Q_OBJECT
 
 public:
-    Q_PROPERTY(Settings* settings READ getSettings)
+    Q_PROPERTY(NextcloudSettingsBase* settings READ getSettings WRITE setSettings NOTIFY settingsObjChanged)
 
-    OwnCloudBrowser(QObject* parent = 0, Settings* settings = Settings::instance());
+    OwnCloudBrowser(QObject* parent = 0, NextcloudSettingsBase* settings = nullptr);
     ~OwnCloudBrowser();
 
     Q_INVOKABLE void testConnection();
@@ -30,13 +31,14 @@ public:
     Q_INVOKABLE void copy(QString from, QString to, bool refresh);
     Q_INVOKABLE void resetWebdav();
     Q_INVOKABLE QString getCanonicalPath(const QString& path);
-    Q_INVOKABLE Settings* getSettings();
+    Q_INVOKABLE NextcloudSettingsBase* getSettings();
+    Q_INVOKABLE void setSettings(NextcloudSettingsBase* settings);
 
     QWebdav* getWebdav();
     QWebdav* getNewWebdav();
 
 private:
-    Settings *settings;
+    NextcloudSettingsBase *settings;
     QWebdav *webdav;
     QWebdavDirParser parser;
     QString currentPath;
@@ -51,6 +53,7 @@ signals:
     void loginFailed();
     void loginSucceeded();
     void refreshStarted(QString pathToRefresh);
+    void settingsObjChanged();
 
 public slots:
     void handleResponse();

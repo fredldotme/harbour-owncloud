@@ -1,4 +1,5 @@
 #include "transfermanager.h"
+#include <QStandardPaths>
 
 TransferManager::TransferManager(QObject *parent, OwnCloudBrowser *browser) :
     QObject(parent)
@@ -105,7 +106,7 @@ void TransferManager::enqueueUpload(QString localPath, QString remotePath)
 void TransferManager::handleDownloadCompleted()
 {
     TransferEntry* entry = Q_NULLPTR;;
-    bool success;
+    bool success = false;
     downloadMutex.lock();
 
     if(!downloadQueue.isEmpty()) {

@@ -1,16 +1,12 @@
 #include "owncloudbrowser.h"
 
-OwnCloudBrowser::OwnCloudBrowser(QObject *parent, Settings *settings) :
+OwnCloudBrowser::OwnCloudBrowser(QObject *parent, NextcloudSettingsBase *settings) :
     QObject(parent)
 {
     this->webdav = 0;
-    this->settings = settings;
     this->abortIntended = false;
-    connect(settings, &Settings::settingsChanged, this, &OwnCloudBrowser::reloadSettings);
-
+    setSettings(settings);
     resetWebdav();
-    if (this->settings)
-        this->settings->readSettings();
 }
 
 OwnCloudBrowser::~OwnCloudBrowser()
@@ -44,6 +40,9 @@ QWebdav* OwnCloudBrowser::getNewWebdav()
 
 void OwnCloudBrowser::reloadSettings()
 {
+    if (!this->settings || !this->webdav)
+        return;
+
     applySettingsToWebdav(this->settings, webdav);
 }
 
@@ -137,9 +136,26 @@ QString OwnCloudBrowser::getCanonicalPath(const QString &path)
     return ret;
 }
 
-Settings* OwnCloudBrowser::getSettings()
+NextcloudSettingsBase* OwnCloudBrowser::getSettings()
 {
     return this->settings;
+}
+
+void OwnCloudBrowser::setSettings(NextcloudSettingsBase* settings)
+{
+    if (this->settings != settings) {
+        if (this->settings)
+            disconnect(this->settings);
+
+        this->settings = settings;
+
+        if (this->settings) {
+            connect(this->settings, &NextcloudSettingsBase::settingsChanged, this, &OwnCloudBrowser::reloadSettings);
+            this->settings->readSettings();
+        }
+
+        emit settingsObjChanged();
+    }
 }
 
 void OwnCloudBrowser::printError(QString msg)

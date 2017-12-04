@@ -4,15 +4,15 @@
 #include <QObject>
 #include <QQueue>
 #include <QMutex>
-#include <QStandardPaths>
 
-#include "owncloudbrowser.h"
-#include "../common/src/transferentry.h"
+#include "transferentry.h"
 #include "entryinfo.h"
+#include "owncloudbrowser.h"
 
 class TransferManager : public QObject
 {
     Q_OBJECT
+
 public:
     TransferManager(QObject *parent = 0, OwnCloudBrowser *browser = 0);
 

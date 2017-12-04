@@ -1,58 +1,20 @@
-#include "settings.h"
+#include "nextcloudsettings.h"
+
 #include <QStandardPaths>
 
-Settings *Settings::instance()
+NextcloudSettings* NextcloudSettings::instance()
 {
-    static Settings settings;
+    static NextcloudSettings settings;
     return &settings;
 }
 
-Settings::Settings(QObject *parent) :
-    QObject(parent),
+NextcloudSettings::NextcloudSettings(QObject *parent) :
+    NextcloudSettingsBase(parent),
     settings("harbour-owncloud", "harbour-owncloud")
 {
-    m_hoststring = "https://";
-    m_isHttps = true;
-    m_autoLogin = false;
-    m_notifications = true;
-
-    connect(this, &Settings::hoststringChanged, this, &Settings::settingsChanged);
-    connect(this, &Settings::usernameChanged, this, &Settings::settingsChanged);
-    connect(this, &Settings::passwordChanged, this, &Settings::settingsChanged);
-    connect(this, &Settings::uploadAutomaticallyChanged, this, &Settings::settingsChanged);
-    connect(this, &Settings::localPicturesPathChanged, this, &Settings::settingsChanged);
 }
 
-bool Settings::parseFromAddressString(QString value)
-{
-    if(!value.startsWith("https://") && !value.startsWith("http://")) {
-        return false;
-    }
-
-    QUrl url(value, QUrl::StrictMode);
-    if(url.isValid()) {
-        if(url.host().isEmpty())
-            return false;
-
-        m_isHttps = value.startsWith("https://");
-        m_hostname = url.host();
-        m_path = url.path();
-        if(m_path.isEmpty())
-            m_path = "/";
-        if(!m_path.endsWith("/"))
-            m_path += "/";
-        qDebug() << "PATH:" << m_path;
-        m_port = url.port();
-
-        if(m_port == -1) {
-            m_port = m_isHttps ? 443 : 80;
-        }
-    }
-
-    return url.isValid();
-}
-
-bool Settings::readSettings()
+bool NextcloudSettings::readSettings()
 {
     settings.beginGroup("Settings");
     if(settings.allKeys().contains("hostname") &&
@@ -69,14 +31,7 @@ bool Settings::readSettings()
         m_port = settings.value("port").toInt();
         m_isHttps = settings.value("isHttps").toBool();
 
-        QString hostString;
-        hostString = m_isHttps ? "https://" : "http://";
-        hostString += m_hostname + ":" + QString::number(m_port) + m_path;
-
-        if (hostString != m_hoststring) {
-            m_hoststring = hostString;
-            emit hoststringChanged();
-        }
+        refreshHostString();
     } else {
         m_hoststring = "https://";
         m_isHttps = true;
@@ -137,10 +92,11 @@ bool Settings::readSettings()
 
     // Since settings are read, propagate changes to the ownCloud browser object
     emit settingsChanged();
-    return true;
+
+    return NextcloudSettingsBase::readSettings();
 }
 
-void Settings::writeSettings()
+void NextcloudSettings::writeSettings()
 {
     settings.beginGroup("Settings");
     settings.setValue("hostname", QVariant::fromValue<QString>(m_hostname));
@@ -159,35 +115,16 @@ void Settings::writeSettings()
     settings.endGroup();
 }
 
-void Settings::resetSettings()
+void NextcloudSettings::resetSettings()
 {
     settings.beginGroup("Settings");
     settings.clear();
     settings.endGroup();
 
-    m_hostname = "";
-    m_path = "/";
-    m_port = 443;
-    m_username = "";
-    m_password = "";
-    m_md5Hex = "";
-    m_sha1Hex = "";
-
-    m_hoststring = "https://";
-    m_isHttps = true;
-    m_autoLogin = false;
-    m_uploadAutomatically = false;
-    m_mobileUpload = false;
-    m_notifications = true;
-
-    emit hoststringChanged();
-    emit usernameChanged();
-    emit passwordChanged();
-
-    emit settingsChanged();
+    NextcloudSettingsBase::resetSettings();
 }
 
-void Settings::acceptCertificate(QString md5, QString sha1)
+void NextcloudSettings::acceptCertificate(QString md5, QString sha1)
 {
     m_md5Hex = md5;
     m_sha1Hex = sha1;
@@ -195,90 +132,13 @@ void Settings::acceptCertificate(QString md5, QString sha1)
     emit customCertChanged();
 }
 
-void Settings::acceptCertificate(bool value)
+void NextcloudSettings::acceptCertificate(bool value)
 {
     if(!value)
         acceptCertificate("", "");
 }
 
-bool Settings::isAutoLogin()
-{
-    return m_autoLogin;
-}
-
-void Settings::setAutoLogin(bool value)
-{
-    m_autoLogin = value;
-    emit autoLoginChanged();
-}
-
-bool Settings::notifications()
-{
-    return m_notifications;
-}
-
-void Settings::setNotifications(bool value)
-{
-    m_notifications = value;
-    emit notificationSettingsChanged();
-}
-
-QString Settings::hostname()
-{
-    return m_hostname;
-}
-
-QString Settings::path()
-{
-    return m_path.isEmpty() ? "/" : m_path;
-}
-
-int Settings::port()
-{
-    return m_port;
-}
-
-bool Settings::isHttps()
-{
-    return m_isHttps;
-}
-
-QString Settings::hoststring()
-{
-    return m_hoststring;
-}
-
-QString Settings::username()
-{
-    return m_username;
-}
-
-void Settings::setUsername(QString value)
-{
-    m_username = value;
-}
-
-QString Settings::password()
-{
-    return m_password;
-}
-
-void Settings::setPassword(QString value)
-{
-    m_password = value;
-}
-
-QString Settings::md5Hex()
-{
-    return m_md5Hex;
-}
-
-QString Settings::sha1Hex()
-{
-    return m_sha1Hex;
-}
-
-bool Settings::isCustomCert()
+bool NextcloudSettings::isCustomCert()
 {
     return !m_md5Hex.isEmpty() && !m_sha1Hex.isEmpty();
 }

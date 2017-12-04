@@ -1,6 +1,6 @@
 #include "webdav_utils.h"
 
-QWebdav* getNewWebDav(Settings *settings)
+QWebdav* getNewWebDav(NextcloudSettingsBase *settings)
 {
     /* Used for file uploads
      * Helps to not confuse error signals of simultaneous file operations */
@@ -12,7 +12,7 @@ QWebdav* getNewWebDav(Settings *settings)
     return newWebdav;
 }
 
-void applySettingsToWebdav(Settings *settings, QWebdav *webdav)
+void applySettingsToWebdav(NextcloudSettingsBase *settings, QWebdav *webdav)
 {
     webdav->setConnectionSettings(settings->isHttps() ? QWebdav::HTTPS : QWebdav::HTTP,
                                  settings->hostname(),

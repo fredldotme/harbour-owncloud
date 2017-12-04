@@ -5,10 +5,10 @@
 #include <QNetworkAccessManager>
 
 #include <qwebdav.h>
-#include "settings.h"
+#include <nextcloudsettingsbase.h>
 
-QWebdav* getNewWebDav(Settings *settings);
-void applySettingsToWebdav(Settings *settings, QWebdav *webdav);
+QWebdav* getNewWebDav(NextcloudSettingsBase *settings);
+void applySettingsToWebdav(NextcloudSettingsBase *settings, QWebdav *webdav);
 
 #endif // WEBDAV_UTILS_H
 

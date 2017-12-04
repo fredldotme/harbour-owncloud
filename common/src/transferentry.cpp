@@ -159,7 +159,7 @@ void TransferEntry::setLocalLastModified()
 
 void TransferEntry::setRemoteLastModified()
 {
-    Settings *settings = Settings::instance();
+    NextcloudSettings *settings = NextcloudSettings::instance();
 
     QWebdav::PropValues props;
     QMap<QString, QVariant> propMap;

@@ -205,17 +205,6 @@
     </message>
 </context>
 <context>
-    <name>UploadDialog</name>
-    <message>
-        <source>Upload</source>
-        <translation type="unfinished">Naloži</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>harbour-owncloud</name>
     <message>
         <source>Login failed</source>

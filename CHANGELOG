@@ -1,3 +1,9 @@
+0.5.1-dev:
+Share UI (upload images & videos from Gallery)
+Enqueue multiple files for upload at once
+Support for move & copy
+Fix upload & download notifications
+
 0.5-dev:
 mtime preservation and refactoring work, thanks to mjtorn
 German translation and icon enhancements, thanks to cnlpete

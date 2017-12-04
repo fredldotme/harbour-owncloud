@@ -46,7 +46,7 @@ ApplicationWindow
         target: transfer
         onUploadComplete: {
             if(settings.notifications)
-                notify(qsTr("Upload complete"), qsTr("%1 uploaded successfully").arg(name))
+                notify(qsTr("Upload complete"), qsTr("%1 uploaded successfully").arg(entry.name))
         }
     }
 
@@ -54,7 +54,7 @@ ApplicationWindow
         target: transfer
         onDownloadComplete: {
             if(settings.notifications)
-                notify(qsTr("Download complete"), qsTr("%1 downloaded successfully").arg(name))
+                notify(qsTr("Download complete"), qsTr("%1 downloaded successfully").arg(entry.name))
         }
     }
 
@@ -62,7 +62,7 @@ ApplicationWindow
         target: transfer
         onUploadFailed: {
             if(settings.notifications)
-                notify(qsTr("Upload failed!"), qsTr("%1 couldn't be uploaded").arg(name))
+                notify(qsTr("Upload failed!"), qsTr("%1 couldn't be uploaded").arg(entry.name))
         }
     }
 
@@ -70,7 +70,7 @@ ApplicationWindow
         target: transfer
         onDownloadFailed: {
             if(settings.notifications)
-                notify(qsTr("Download failed!"), qsTr("%1 couldn't be downloaded").arg(name))
+                notify(qsTr("Download failed!"), qsTr("%1 couldn't be downloaded").arg(entry.name))
         }
     }
 

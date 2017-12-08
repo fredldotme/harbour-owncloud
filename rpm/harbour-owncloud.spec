@@ -16,7 +16,7 @@ Name:       harbour-owncloud
 %{!?qtc_make:%define qtc_make make}
 %{?qtc_builddir:%define _builddir %qtc_builddir}
 Summary:    ownCloud
-Version:    0.5.2
+Version:    0.5.3
 Release:    1
 Group:      Qt/Qt
 License:    GPLv2
@@ -63,6 +63,9 @@ rm -rf %{buildroot}
 %qmake5_install
 
 # >> install post
+mkdir -p %{buildroot}%{_libdir}/systemd/user/user-session.target.wants
+ln -sf %{_libdir}/systemd/user/%{name}-daemon.service %{buildroot}%{_libdir}/systemd/user/user-session.target.wants/%{name}-daemon.service
+ln -sf %{_libdir}/systemd/user/%{name}-permissiond.service %{buildroot}%{_libdir}/systemd/user/user-session.target.wants/%{name}-permissiond.service
 # << install post
 
 desktop-file-install --delete-original       \
@@ -82,18 +85,21 @@ desktop-file-install --delete-original       \
 %{_bindir}/%{name}-daemon
 %{_bindir}/%{name}-permissiond
 %defattr(-,root,root,-)
-/usr/lib/systemd/user/%{name}-daemon.service
-/usr/lib/systemd/user/%{name}-permissiond.service
+%{_libdir}/systemd/user/%{name}-daemon.service
+%{_libdir}/systemd/user/%{name}-permissiond.service
+%{_libdir}/systemd/user/user-session.target.wants/%{name}-daemon.service
+%{_libdir}/systemd/user/user-session.target.wants/%{name}-permissiond.service
 %{_datadir}/nemo-transferengine/plugins/
-/usr/lib/nemo-transferengine/plugins/libowncloudshareplugin.so
-/usr/lib/qt5/qml/com/github/beidl/harbourowncloud/libharbourowncloudqmlplugin.so
-/usr/lib/qt5/qml/com/github/beidl/harbourowncloud/qmldir
+%{_libdir}/nemo-transferengine/plugins/libowncloudshareplugin.so
+%{_libdir}/qt5/qml/com/github/beidl/harbourowncloud/libharbourowncloudqmlplugin.so
+%{_libdir}/qt5/qml/com/github/beidl/harbourowncloud/qmldir
 
 # >> files
 # << files
 
 %post daemon
-/bin/systemctl-user enable harbour-owncloud-daemon.service >/dev/null 2>&1 || :
-/bin/systemctl-user enable harbour-owncloud-permissiond.service >/dev/null 2>&1 || :
+rm -f /home/nemo/.config/systemd/user/lipstick.service.wants/harbour-owncloud-daemon.service >/dev/null 2>&1 || :
+rm -f /home/nemo/.config/systemd/user/lipstick.service.wants/harbour-owncloud-permission.service >/dev/null 2>&1 || :
+/bin/systemctl-user daemon-reload >/dev/null 2>&1 || :
 /bin/systemctl-user restart harbour-owncloud-daemon.service >/dev/null 2>&1 || :
 /bin/systemctl-user restart harbour-owncloud-permissiond.service >/dev/null 2>&1 || :

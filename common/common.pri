@@ -34,8 +34,3 @@ DEPENDPATH += $$PWD/src
 
 INCLUDEPATH += $$PWD/../qwebdavlib/qwebdavlib
 DEPENDPATH += $$PWD/../qwebdavlib/qwebdavlib
-
-DISTFILES +=
-
-RESOURCES += \
-    $$PWD/qml.qrc

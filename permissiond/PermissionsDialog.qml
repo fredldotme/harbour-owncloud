@@ -11,8 +11,10 @@ ApplicationWindow
         onPermissionRequested: pageStack.openDialog(dialog)
     }
 
-    initialPage: Page {
-        SilicaFlickable { }
+    initialPage: Component {
+        Page {
+            SilicaFlickable { }
+        }
     }
 
     Dialog {

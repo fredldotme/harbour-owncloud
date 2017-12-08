@@ -7,7 +7,7 @@ class GlobalOwncloudBrowser : public OwnCloudBrowser
 {
     Q_OBJECT
 public:
-    explicit GlobalOwncloudBrowser(QObject *parent = 0);
+    explicit GlobalOwncloudBrowser(QObject *parent = 0, NextcloudSettingsBase* settings = nullptr);
     static GlobalOwncloudBrowser* instance();
 };
 

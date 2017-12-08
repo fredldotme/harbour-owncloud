@@ -1,7 +1,7 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import harbour.owncloud 1.0
-import "qrc:/qml/nextcloudcommon.js" as NextcloudCommon
+import SailfishUiSet 1.0
 
 Page {
     id: pageRoot
@@ -10,6 +10,7 @@ Page {
     property string remotePath : "/"
     property string pageHeaderText : "/"
 
+    FileDetailsHelper { id: fileDetailsHelper }
     readonly property Component dialogComponent : Qt.createComponent("RemoteDirSelectDialog.qml");
     readonly property Component selectionDialogComponent : Qt.createComponent("qrc:/sailfish-ui-set/ui/FileSelectionDialog.qml");
 
@@ -170,7 +171,7 @@ Page {
                         id: icon
                         source: listView.model[index].isDirectory ?
                                     "image://theme/icon-m-folder" :
-                                    NextcloudCommon.getIconFromMime(listView.model[index].mimeType)
+                                    fileDetailsHelper.getIconFromMime(listView.model[index].mimeType)
                         anchors.left: parent.left
                         anchors.leftMargin: Theme.paddingLarge
                         anchors.top: parent.top

@@ -1,3 +1,6 @@
+0.5.3:
+Fix crashes while uploading from Share UI
+
 0.5.2:
 Fix validation for Harbour Store compatibility
 Fix "Upload" translations in file upload dialog

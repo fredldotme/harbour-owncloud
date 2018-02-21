@@ -2,9 +2,9 @@
 #define SETTINGS_H
 
 #include <QObject>
-#include "nextcloudsettingsbase.h"
-
 #include <QSettings>
+
+#include "nextcloudsettingsbase.h"
 
 class NextcloudSettings : public NextcloudSettingsBase
 {

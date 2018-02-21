@@ -16,6 +16,7 @@ const QString NEXTCLOUD_SETTINGS_KEY_PICTURESPATH = QStringLiteral("localPicture
 const QString NEXTCLOUD_SETTINGS_KEY_MOBILEUPLOAD = QStringLiteral("mobileUpload");
 const QString NEXTCLOUD_SETTINGS_KEY_NOTIFICATIONS = QStringLiteral("notifications");
 const QString NEXTCLOUD_SETTINGS_KEY_UPLOADAUTOMATICALLY = QStringLiteral("uploadAutomatically");
+const QString NEXTCLOUD_SETTINGS_KEY_AUTOLOGIN = QStringLiteral("autoLogin");
 const QString NEXTCLOUD_PERMD_REQUESTDENIED = QStringLiteral("requestDenied");
 
 class NextcloudSettingsBase : public QObject
@@ -48,8 +49,6 @@ public:
     void setLocalPicturesPath(QString newPath) { m_localPicturesPath = newPath; emit localPicturesPathChanged(); }
 
     Q_INVOKABLE bool parseFromAddressString(QString value);
-    Q_INVOKABLE void resetSettings();
-    Q_INVOKABLE bool readSettings();
 
     Q_PROPERTY(bool autoLogin READ isAutoLogin WRITE setAutoLogin NOTIFY autoLoginChanged)
     Q_PROPERTY(bool notifications READ notifications WRITE setNotifications NOTIFY notificationSettingsChanged)
@@ -66,6 +65,10 @@ public:
     Q_PROPERTY(QString path READ path)
     Q_PROPERTY(int port READ port)
     Q_PROPERTY(bool isHttps READ isHttps)
+
+public slots:
+    void resetSettings();
+    bool readSettings();
 
 protected:
     void refreshHostString();

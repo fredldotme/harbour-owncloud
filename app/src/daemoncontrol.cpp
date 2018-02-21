@@ -34,9 +34,12 @@ void DaemonControl::setUploading(bool value)
 
 void DaemonControl::reloadConfig()
 {
-    QDBusMessage message = QDBusMessage::createMethodCall(HarbourOwncloud::DBusConsts::DBUS_SERVICE,
-                                                          HarbourOwncloud::DBusConsts::DBUS_PATH,
-                                                          HarbourOwncloud::DBusConsts::DBUS_INTERFACE,
-                                                          HarbourOwncloud::DBusConsts::DBUS_METHOD_RELOADCONFIG);
-    QDBusConnection::sessionBus().send(message);
+    if (!daemonInstalled())
+        return;
+
+    QProcess restartCmd;
+    restartCmd.setProgram(QStringLiteral("/bin/systemctl"));
+    restartCmd.setArguments(QStringList() << "--user" << "restart" << "harbour-owncloud-daemon");
+    restartCmd.start();
+    restartCmd.waitForFinished(3000);
 }

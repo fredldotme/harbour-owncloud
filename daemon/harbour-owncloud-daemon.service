@@ -5,7 +5,7 @@ After=lipstick.service
 [Service]
 Type=simple
 ExecStart=/usr/bin/harbour-owncloud-daemon
-Restart=always
+Restart=on-failure
 
 [Install]
 WantedBy=lipstick.service

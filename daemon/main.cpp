@@ -17,6 +17,12 @@ int main(int argc, char *argv[])
 
     NextcloudSettings::instance()->readSettings();
 
+    // No need for the daemon to run in case "uploadAutomatically" is disabled
+    if (!NextcloudSettings::instance()->uploadAutomatically()) {
+        exit(0);
+    }
+
+
     Filesystem *fsHandler = Filesystem::instance();
     Uploader *uploader = Uploader::instance();
     DBusHandler *dbusHandler = new DBusHandler();

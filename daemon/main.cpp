@@ -2,6 +2,7 @@
 
 #include <QCoreApplication>
 #include <QDBusConnection>
+#include <QTimer>
 
 #include <ownclouddbusconsts.h>
 
@@ -22,11 +23,24 @@ int main(int argc, char *argv[])
         exit(0);
     }
 
-
     Filesystem *fsHandler = Filesystem::instance();
     Uploader *uploader = Uploader::instance();
     DBusHandler *dbusHandler = new DBusHandler();
     NetworkMonitor *netMonitor = NetworkMonitor::instance();
+
+    // Periodically check for existance of the local pictures path until found.
+    // Don't stop the timer as the external storage could be ejected anytime.
+    // Every 10 minutes should be enough in this specific case.
+    QDir localPath(NextcloudSettings::instance()->localPicturesPath());
+    QTimer localPathCheck;
+    localPathCheck.setInterval(60000 * 10);
+    localPathCheck.setSingleShot(false);
+    QObject::connect(&localPathCheck, &QTimer::timeout, &localPathCheck,
+                     [&localPath, &localPathCheck, fsHandler]() {
+        if (localPath.exists())
+            fsHandler->localPathChanged();
+    });
+    localPathCheck.start();
 
     QObject::connect(fsHandler, &Filesystem::fileFound, uploader, &Uploader::fileFound);
     QObject::connect(uploader, &Uploader::pokeFilesystemScanner, fsHandler, &Filesystem::localPathChanged);

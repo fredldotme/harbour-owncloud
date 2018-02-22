@@ -1,3 +1,8 @@
+0.5.4:
+Fix photo backups over cellular not respecting the setting
+Periodically check for existance of local pictures directory
+Don't start the daemon service when automatic photo backup is disabled
+
 0.5.3:
 Fix crashes while uploading from Share UI
 

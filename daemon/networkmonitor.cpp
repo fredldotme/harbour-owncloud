@@ -24,7 +24,7 @@ void NetworkMonitor::recheckNetworks()
 {
     QMutexLocker locker(&checkerMutex);
 
-    bool uploadOverCellular = NextcloudSettings::instance()->mobileUpload();
+    const bool uploadOverCellular = NextcloudSettings::instance()->mobileUpload();
 
     if (!m_configManager.isOnline()) {
         if (!m_shouldDownload) {
@@ -50,8 +50,9 @@ void NetworkMonitor::recheckNetworks()
 
     bool hasNonCellular = false;
     foreach (const QNetworkConfiguration &config, m_configManager.allConfigurations()) {
-        if (config.bearerType() == QNetworkConfiguration::BearerWLAN ||
-            config.bearerType() == QNetworkConfiguration::BearerEthernet) {
+        if ((config.bearerType() == QNetworkConfiguration::BearerWLAN ||
+            config.bearerType() == QNetworkConfiguration::BearerEthernet) &&
+                config.state() == QNetworkConfiguration::Active) {
             hasNonCellular = true;
             break;
         }
@@ -74,4 +75,3 @@ void NetworkMonitor::recheckNetworks()
     m_shouldDownload = false;
     emit shouldDownloadChanged(false);
 }
-

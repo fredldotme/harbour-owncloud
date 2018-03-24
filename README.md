@@ -1,7 +1,7 @@
 # harbour-owncloud
 Unofficial Nextcloud/ownCloud client for SailfishOS
 
-![Login](/readme/login.png) ![File browser](/readme/filebrowser.png)
+![Login](/readme/login.png) ![File browser](/readme/filebrowser.png) ![File details](/readme/filedetails.png)
 
 Allows you to easily access your ownCloud instance with a native open source application.
 

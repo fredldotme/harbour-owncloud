@@ -1,3 +1,6 @@
+0.5.5:
+Fix copy & move operations in the app
+
 0.5.4:
 Fix photo backups over cellular not respecting the setting
 Periodically check for existance of local pictures directory

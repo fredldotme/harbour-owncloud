@@ -16,6 +16,7 @@ Dialog {
 
     OwnCloudBrowser {
         id: tmpBrowser
+        settings: browser.settings
 
         onLoginFailed: {
             dialogRoot.close()

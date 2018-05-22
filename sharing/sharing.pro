@@ -7,7 +7,6 @@ CONFIG += link_pkgconfig
 PKGCONFIG += nemotransferengine-qt5
 
 include(../common/common.pri)
-QT += qml
 
 # Input
 HEADERS += \

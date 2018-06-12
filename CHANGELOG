@@ -1,3 +1,6 @@
+0.5.6:
+Release build with SailfishOS SDK 2.2.0.29
+
 0.5.5:
 Fix copy & move operations in the app
 

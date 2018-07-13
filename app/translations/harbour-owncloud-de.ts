@@ -40,6 +40,18 @@
         <source>Copy</source>
         <translation>Kopieren</translation>
     </message>
+    <message>
+        <source>Rename</source>
+        <translation>Umbenennen</translation>
+    </message>
+    <message>
+        <source>Directory name</source>
+        <translation>Ordnername</translation>
+    </message>
+    <message>
+        <source>New name</source>
+        <translation>Neuer Name</translation>
+    </message>
 </context>
 <context>
     <name>FileDetails</name>
@@ -105,21 +117,6 @@
     <message>
         <source>Please check your host address</source>
         <translation>Bitte überprüfe deine Serveradresse</translation>
-    </message>
-</context>
-<context>
-    <name>MkDirDialog</name>
-    <message>
-        <source>Accept</source>
-        <translation>Aktzeptieren</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>Abbrechen</translation>
-    </message>
-    <message>
-        <source>Directory name</source>
-        <translation>Ordnerpfad</translation>
     </message>
 </context>
 <context>

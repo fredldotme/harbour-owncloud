@@ -40,6 +40,18 @@
         <source>Copy</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Rename</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Directory name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New name</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FileDetails</name>
@@ -104,21 +116,6 @@
     </message>
     <message>
         <source>Please check your host address</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>MkDirDialog</name>
-    <message>
-        <source>Accept</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Directory name</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

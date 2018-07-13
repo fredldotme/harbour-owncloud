@@ -11,8 +11,9 @@ Page {
     property string pageHeaderText : "/"
 
     FileDetailsHelper { id: fileDetailsHelper }
-    readonly property Component dialogComponent : Qt.createComponent("RemoteDirSelectDialog.qml");
+    readonly property Component remoteDirDialogComponent : Qt.createComponent("RemoteDirSelectDialog.qml");
     readonly property Component selectionDialogComponent : Qt.createComponent("qrc:/sailfish-ui-set/ui/FileSelectionDialog.qml");
+    readonly property Component textEntryDialogComponent : Qt.createComponent("qrc:/sailfish-ui-set/ui/TextEntryDialog.qml");
 
     Component.onCompleted: {
         remotePath = browser.getCurrentPath();
@@ -81,6 +82,33 @@ Page {
     property BackgroundItem selectedItem;
     property RemorseItem selectedRemorse;
 
+    property var dialogObj : null
+
+    function renameEntry(tmpEntry, newName) {
+        var fromPath = remotePath + tmpEntry.name +
+                (tmpEntry.isDirectory ? "/" : "")
+        var toPath = remotePath + newName +
+                (tmpEntry.isDirectory ? "/" : "")
+        browser.move(fromPath, toPath, true)
+    }
+
+    function moveEntry(tmpEntry, remotePath) {
+        var fromPath = remotePath + tmpEntry.name +
+                (tmpEntry.isDirectory ? "/" : "")
+        var toPath = dialogObj.remotePath + tmpEntry.name +
+                (tmpEntry.isDirectory ? "/" : "")
+        browser.move(fromPath, toPath, true)
+    }
+
+    function copyEntry(tmpEntry, remotePath) {
+        var fromPath = remotePath + tmpEntry.name +
+                (tmpEntry.isDirectory ? "/" : "")
+        var toPath = dialogObj.remotePath + tmpEntry.name +
+                (tmpEntry.isDirectory ? "/" : "")
+        browser.copy(fromPath, toPath, true)
+    }
+
+
     SilicaFlickable {
         anchors.fill: parent
 
@@ -107,26 +135,33 @@ Page {
                     text:qsTr("Create directory")
                     enabled: listView.model !== undefined
                     onClicked: {
-                        pageStack.push("MkDirDialog.qml")
+                        dialogObj = textEntryDialogComponent.createObject(pageRoot);
+                        dialogObj.placeholderText = qsTr("Directory name")
+                        dialogObj.labelText = dialogObj.placeholderText
+                        dialogObj.accepted.connect(function () {
+                            browser.makeDirectory(dialogObj.selectedText)
+                            dialogObj = null
+                        })
+                        pageStack.push(dialogObj)
                     }
                 }
 
                 MenuItem {
-                    property var selectionDialogObj : null
                     function enqueueSelectedFiles() {
-                        var selectedFiles = selectionDialogObj.filesToSelect
+                        var selectedFiles = dialogObj.filesToSelect
                         for (var i = 0; i < selectedFiles.length; i++) {
                             transfer.enqueueUpload(selectedFiles[i], browser.getCurrentPath());
                         }
+                        dialogObj = null
                     }
 
                     text: qsTr("Upload")
                     enabled: listView.model !== undefined
                     onClicked: {
-                        selectionDialogObj = selectionDialogComponent.createObject(pageRoot, {maximumSelections:Number.MAX_VALUE});
-                        selectionDialogObj.acceptText = qsTr("Upload")
-                        selectionDialogObj.accepted.connect(enqueueSelectedFiles)
-                        pageStack.push(selectionDialogObj)
+                        dialogObj = selectionDialogComponent.createObject(pageRoot, {maximumSelections:Number.MAX_VALUE});
+                        dialogObj.acceptText = qsTr("Upload")
+                        dialogObj.accepted.connect(enqueueSelectedFiles)
+                        pageStack.push(dialogObj)
                     }
                 }
             }
@@ -219,6 +254,7 @@ Page {
 
             Component {
                 id: contextMenuComponent
+
                 ContextMenu {
                     onClosed: {
                         selectedEntry = null
@@ -226,14 +262,29 @@ Page {
                     }
                     MenuItem {
                         property EntryInfo tmpEntry;
-                        property var dialogObj : null
 
-                        function moveFile() {
-                            var fromPath = remotePath + tmpEntry.name +
-                                    (tmpEntry.isDirectory ? "/" : "")
-                            var toPath = dialogObj.remotePath + tmpEntry.name +
-                                    (tmpEntry.isDirectory ? "/" : "")
-                            browser.move(fromPath, toPath, true)
+                        function renameSelectedEntry() {
+                            renameEntry(tmpEntry, dialogObj.selectedText)
+                            dialogObj = null
+                            tmpEntry = null
+                        }
+
+                        text: qsTr("Rename")
+                        onClicked: {
+                            tmpEntry = selectedEntry
+                            dialogObj = textEntryDialogComponent.createObject(pageRoot);
+                            dialogObj.acceptText = qsTr("Rename")
+                            dialogObj.placeholderText = qsTr("New name")
+                            dialogObj.labelText = dialogObj.placeholderText
+                            dialogObj.accepted.connect(renameSelectedEntry);
+                            pageStack.push(dialogObj);
+                        }
+                    }
+                    MenuItem {
+                        property EntryInfo tmpEntry;
+
+                        function moveSelectedEntry() {
+                            moveEntry(tmpEntry, remotePath)
                             dialogObj = null
                             tmpEntry = null
                         }
@@ -241,21 +292,16 @@ Page {
                         text: qsTr("Move")
                         onClicked: {
                             tmpEntry = selectedEntry
-                            dialogObj = dialogComponent.createObject(pageRoot, {entry: tmpEntry});
-                            dialogObj.accepted.connect(moveFile);
+                            dialogObj = remoteDirDialogComponent.createObject(pageRoot, {entry: tmpEntry});
+                            dialogObj.accepted.connect(moveSelectedEntry);
                             pageStack.push(dialogObj);
                         }
                     }
                     MenuItem {
                         property EntryInfo tmpEntry;
-                        property var dialogObj : null
 
-                        function copyFile() {
-                            var fromPath = remotePath + tmpEntry.name +
-                                    (tmpEntry.isDirectory ? "/" : "")
-                            var toPath = dialogObj.remotePath + tmpEntry.name +
-                                    (tmpEntry.isDirectory ? "/" : "")
-                            browser.copy(fromPath, toPath, true)
+                        function copySelectedEntry() {
+                            copyEntry(tmpEntry, remotePath)
                             dialogObj = null
                             tmpEntry = null
                         }
@@ -263,8 +309,8 @@ Page {
                         text: qsTr("Copy")
                         onClicked: {
                             tmpEntry = selectedEntry
-                            dialogObj = dialogComponent.createObject(pageRoot, {entry: tmpEntry});
-                            dialogObj.accepted.connect(copyFile);
+                            dialogObj = remoteDirDialogComponent.createObject(pageRoot, {entry: tmpEntry});
+                            dialogObj.accepted.connect(copySelectedEntry);
                             pageStack.push(dialogObj);
                         }
                     }

@@ -27,9 +27,11 @@ SOURCES += \
 OTHER_FILES += \
     NextcloudShareUI.qml
 
-shareui.files = *.qml
-shareui.path = /usr/share/nemo-transferengine/plugins
-
 target.path = /usr/lib/nemo-transferengine/plugins
-INSTALLS += target shareui
+shareui.files = $$PWD/*.qml
+shareui.path = /usr/share/nemo-transferengine/plugins
+shareui_icon.files = $$PWD/icons/harbour-owncloud.png
+shareui_icon.path = /usr/share/nextcloud-additionals/icons
+
+INSTALLS += target shareui shareui_icon
 

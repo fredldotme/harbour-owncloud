@@ -38,6 +38,8 @@ void NextcloudPluginInfo::query()
     // Path to the Sharing UI which this plugin provides.
     info.shareUIPath     = QStringLiteral("/usr/share/nemo-transferengine/plugins/NextcloudShareUI.qml");
 
+    info.accountIcon     = QStringLiteral("/usr/share/nextcloud-additionals/icons/harbour-owncloud.png");
+
     // Pass information about capabilities. This info is used for filtering share plugins
     // which don't support defined types. For example, this plugin won't appear in the
     // share method list, if someone tries to share content which isn't image or vcard type,

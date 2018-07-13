@@ -79,7 +79,7 @@ Page {
 
     property Item fileContextMenu;
     property EntryInfo selectedEntry;
-    property BackgroundItem selectedItem;
+    property ListItem selectedItem;
     property RemorseItem selectedRemorse;
 
     property var dialogObj : null
@@ -139,7 +139,7 @@ Page {
                         dialogObj.placeholderText = qsTr("Directory name")
                         dialogObj.labelText = dialogObj.placeholderText
                         dialogObj.accepted.connect(function () {
-                            browser.makeDirectory(dialogObj.selectedText)
+                            browser.makeDirectory(dialogObj.text)
                             dialogObj = null
                         })
                         pageStack.push(dialogObj)
@@ -181,10 +181,86 @@ Page {
                 }
             }
 
-            delegate: BackgroundItem {
+            delegate: ListItem {
                 id: delegate
-                property bool menuOpen: fileContextMenu != null && fileContextMenu.parent === delegate
-                height: menuOpen ? fileContextMenu.height + bgItem.height : bgItem.height
+
+                menu: Component {
+                    ContextMenu {
+                        onClosed: {
+                            selectedEntry = null
+                            selectedItem = null
+                        }
+                        MenuItem {
+                            property EntryInfo tmpEntry;
+
+                            function renameSelectedEntry() {
+                                renameEntry(tmpEntry, dialogObj.text)
+                                dialogObj = null
+                                tmpEntry = null
+                            }
+
+                            text: qsTr("Rename")
+                            onClicked: {
+                                tmpEntry = selectedEntry
+                                dialogObj = textEntryDialogComponent.createObject(pageRoot);
+                                dialogObj.text = tmpEntry.name
+                                dialogObj.acceptText = qsTr("Rename")
+                                dialogObj.placeholderText = qsTr("New name")
+                                dialogObj.labelText = dialogObj.placeholderText
+                                dialogObj.accepted.connect(renameSelectedEntry);
+                                pageStack.push(dialogObj);
+                            }
+                        }
+                        MenuItem {
+                            property EntryInfo tmpEntry;
+
+                            function moveSelectedEntry() {
+                                moveEntry(tmpEntry, remotePath)
+                                dialogObj = null
+                                tmpEntry = null
+                            }
+
+                            text: qsTr("Move")
+                            onClicked: {
+                                tmpEntry = selectedEntry
+                                dialogObj = remoteDirDialogComponent.createObject(pageRoot, {entry: tmpEntry});
+                                dialogObj.accepted.connect(moveSelectedEntry);
+                                pageStack.push(dialogObj);
+                            }
+                        }
+                        MenuItem {
+                            property EntryInfo tmpEntry;
+
+                            function copySelectedEntry() {
+                                copyEntry(tmpEntry, remotePath)
+                                dialogObj = null
+                                tmpEntry = null
+                            }
+
+                            text: qsTr("Copy")
+                            onClicked: {
+                                tmpEntry = selectedEntry
+                                dialogObj = remoteDirDialogComponent.createObject(pageRoot, {entry: tmpEntry});
+                                dialogObj.accepted.connect(copySelectedEntry);
+                                pageStack.push(dialogObj);
+                            }
+                        }
+                        MenuItem {
+                            property EntryInfo tmpEntry;
+                            text: qsTr("Delete")
+                            onClicked: {
+                                tmpEntry = selectedEntry
+                                cancelCounter++;
+                                selectedRemorse.execute(selectedItem, qsTr("Deleting", "RemorseItem text"), function() {
+                                    cancelCounter--;
+                                    browser.remove(remotePath + tmpEntry.name +
+                                                   (tmpEntry.isDirectory ? "/" : ""),
+                                                   cancelCounter == 0);
+                                }, 3000)
+                            }
+                        }
+                    }
+                }
 
                 RemorseItem {
                     id: remorseItem
@@ -200,135 +276,51 @@ Page {
                     }
                 }
 
-                BackgroundItem {
-                    id: bgItem
-                    Image {
-                        id: icon
-                        source: listView.model[index].isDirectory ?
-                                    "image://theme/icon-m-folder" :
-                                    fileDetailsHelper.getIconFromMime(listView.model[index].mimeType)
-                        anchors.left: parent.left
-                        anchors.leftMargin: Theme.paddingLarge
-                        anchors.top: parent.top
-                        anchors.topMargin: 18
-                        height: label.height
-                        fillMode: Image.PreserveAspectFit
-                    }
+                Image {
+                    id: icon
+                    source: listView.model[index].isDirectory ?
+                                "image://theme/icon-m-folder" :
+                                fileDetailsHelper.getIconFromMime(listView.model[index].mimeType)
+                    anchors.left: parent.left
+                    anchors.leftMargin: Theme.paddingLarge
+                    anchors.top: parent.top
+                    anchors.topMargin: 18
+                    height: label.height
+                    fillMode: Image.PreserveAspectFit
+                }
 
-                    Label {
-                        id: label
-                        x: icon.x + icon.width + 6
-                        y: icon.y - icon.height + 6
-                        text: listView.model[index].name
-                        anchors.verticalCenter: parent.verticalCenter
-                        color: bgItem.highlighted ? Theme.highlightColor : Theme.primaryColor
-                    }
+                Label {
+                    id: label
+                    x: icon.x + icon.width + 6
+                    y: icon.y - icon.height + 6
+                    text: listView.model[index].name
+                    anchors.verticalCenter: parent.verticalCenter
+                }
 
-                    onClicked: {
-                        if(listView.model[index].isDirectory) {
-                            var nextDirectory = Qt.createComponent("FileBrowser.qml");
-                            browser.getDirectoryContent(remotePath + listView.model[index].name + "/");
-                            pageStack.push(nextDirectory)
-                        } else {
-                            var fileComponent = Qt.createComponent("FileDetails.qml");
-                            var fileDetails = fileComponent.createObject(pageRoot, {entry: listView.model[index]});
-                            pageStack.push(fileDetails);
-                        }
-                    }
-                    onPressAndHold: {
-                        selectedEntry = listView.model[index];
-                        selectedItem = delegate
-                        selectedRemorse = remorseItem;
-                        if (!fileContextMenu)
-                            fileContextMenu = contextMenuComponent.createObject(listView)
-                        fileContextMenu.show(delegate)
+                onClicked: {
+                    if(listView.model[index].isDirectory) {
+                        var nextDirectory = Qt.createComponent("FileBrowser.qml");
+                        browser.getDirectoryContent(remotePath + listView.model[index].name + "/");
+                        pageStack.push(nextDirectory)
+                    } else {
+                        var fileComponent = Qt.createComponent("FileDetails.qml");
+                        var fileDetails = fileComponent.createObject(pageRoot, {entry: listView.model[index]});
+                        pageStack.push(fileDetails);
                     }
                 }
+                onPressAndHold: {
+                    selectedEntry = listView.model[index];
+                    selectedItem = delegate
+                    selectedRemorse = remorseItem;
+                    showMenu()
+                }
+
             }
             VerticalScrollDecorator {}
 
             BusyIndicator {
                 anchors.centerIn: parent
                 running: listView.model === undefined
-            }
-
-            Component {
-                id: contextMenuComponent
-
-                ContextMenu {
-                    onClosed: {
-                        selectedEntry = null
-                        selectedItem = null
-                    }
-                    MenuItem {
-                        property EntryInfo tmpEntry;
-
-                        function renameSelectedEntry() {
-                            renameEntry(tmpEntry, dialogObj.selectedText)
-                            dialogObj = null
-                            tmpEntry = null
-                        }
-
-                        text: qsTr("Rename")
-                        onClicked: {
-                            tmpEntry = selectedEntry
-                            dialogObj = textEntryDialogComponent.createObject(pageRoot);
-                            dialogObj.acceptText = qsTr("Rename")
-                            dialogObj.placeholderText = qsTr("New name")
-                            dialogObj.labelText = dialogObj.placeholderText
-                            dialogObj.accepted.connect(renameSelectedEntry);
-                            pageStack.push(dialogObj);
-                        }
-                    }
-                    MenuItem {
-                        property EntryInfo tmpEntry;
-
-                        function moveSelectedEntry() {
-                            moveEntry(tmpEntry, remotePath)
-                            dialogObj = null
-                            tmpEntry = null
-                        }
-
-                        text: qsTr("Move")
-                        onClicked: {
-                            tmpEntry = selectedEntry
-                            dialogObj = remoteDirDialogComponent.createObject(pageRoot, {entry: tmpEntry});
-                            dialogObj.accepted.connect(moveSelectedEntry);
-                            pageStack.push(dialogObj);
-                        }
-                    }
-                    MenuItem {
-                        property EntryInfo tmpEntry;
-
-                        function copySelectedEntry() {
-                            copyEntry(tmpEntry, remotePath)
-                            dialogObj = null
-                            tmpEntry = null
-                        }
-
-                        text: qsTr("Copy")
-                        onClicked: {
-                            tmpEntry = selectedEntry
-                            dialogObj = remoteDirDialogComponent.createObject(pageRoot, {entry: tmpEntry});
-                            dialogObj.accepted.connect(copySelectedEntry);
-                            pageStack.push(dialogObj);
-                        }
-                    }
-                    MenuItem {
-                        property EntryInfo tmpEntry;
-                        text: qsTr("Delete")
-                        onClicked: {
-                            tmpEntry = selectedEntry
-                            cancelCounter++;
-                            selectedRemorse.execute(selectedItem, qsTr("Deleting", "RemorseItem text"), function() {
-                                cancelCounter--;
-                                browser.remove(remotePath + tmpEntry.name +
-                                               (tmpEntry.isDirectory ? "/" : ""),
-                                               cancelCounter == 0);
-                            }, 3000)
-                        }
-                    }
-                }
             }
         }
     }

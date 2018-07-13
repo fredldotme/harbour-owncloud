@@ -94,6 +94,7 @@ desktop-file-install --delete-original       \
 %{_libdir}/nemo-transferengine/plugins/libowncloudshareplugin.so
 %{_libdir}/qt5/qml/com/github/beidl/harbourowncloud/libharbourowncloudqmlplugin.so
 %{_libdir}/qt5/qml/com/github/beidl/harbourowncloud/qmldir
+%{_datadir}/nextcloud-additionals/icons/%{name}.png
 
 # >> files
 # << files

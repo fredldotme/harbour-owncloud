@@ -77,12 +77,11 @@ Page {
         }
     }
 
-    property Item fileContextMenu;
-    property EntryInfo selectedEntry;
-    property BackgroundItem selectedItem;
-    property RemorseItem selectedRemorse;
-
-    property var dialogObj : null
+    property Item fileContextMenu : null;
+    property EntryInfo selectedEntry : null;
+    property BackgroundItem selectedItem : null;
+    property RemorseItem selectedRemorse : null;
+    property Dialog dialogObj : null
 
     function renameEntry(tmpEntry, newName) {
         var fromPath = remotePath + tmpEntry.name +
@@ -107,7 +106,6 @@ Page {
                 (tmpEntry.isDirectory ? "/" : "")
         browser.copy(fromPath, toPath, true)
     }
-
 
     SilicaFlickable {
         anchors.fill: parent
@@ -139,7 +137,7 @@ Page {
                         dialogObj.placeholderText = qsTr("Directory name")
                         dialogObj.labelText = dialogObj.placeholderText
                         dialogObj.accepted.connect(function () {
-                            browser.makeDirectory(dialogObj.selectedText)
+                            browser.makeDirectory(dialogObj.text)
                             dialogObj = null
                         })
                         pageStack.push(dialogObj)
@@ -161,6 +159,9 @@ Page {
                         dialogObj = selectionDialogComponent.createObject(pageRoot, {maximumSelections:Number.MAX_VALUE});
                         dialogObj.acceptText = qsTr("Upload")
                         dialogObj.accepted.connect(enqueueSelectedFiles)
+                        dialogObj.rejected.connect(function() {
+                            dialogObj = null
+                        });
                         pageStack.push(dialogObj)
                     }
                 }
@@ -190,9 +191,7 @@ Page {
                     id: remorseItem
                     onCanceled: {
                         console.log("Canceled...")
-                        var forceRefresh = false;
-                        if(cancelCounter > 0)
-                            forceRefresh = true;
+                        var forceRefresh = (cancelCounter > 0);
                         cancelCounter--;
                         if(forceRefresh) {
                             refreshListView()
@@ -238,10 +237,11 @@ Page {
                     onPressAndHold: {
                         selectedEntry = listView.model[index];
                         selectedItem = delegate
-                        selectedRemorse = remorseItem;
                         if (!fileContextMenu)
                             fileContextMenu = contextMenuComponent.createObject(listView)
-                        fileContextMenu.show(delegate)
+
+                        if (selectedRemorse === null)
+                            fileContextMenu.show(delegate)
                     }
                 }
             }
@@ -264,7 +264,7 @@ Page {
                         property EntryInfo tmpEntry;
 
                         function renameSelectedEntry() {
-                            renameEntry(tmpEntry, dialogObj.selectedText)
+                            renameEntry(tmpEntry, dialogObj.text)
                             dialogObj = null
                             tmpEntry = null
                         }
@@ -273,10 +273,15 @@ Page {
                         onClicked: {
                             tmpEntry = selectedEntry
                             dialogObj = textEntryDialogComponent.createObject(pageRoot);
+                            dialogObj.text = tmpEntry.name
                             dialogObj.acceptText = qsTr("Rename")
                             dialogObj.placeholderText = qsTr("New name")
                             dialogObj.labelText = dialogObj.placeholderText
                             dialogObj.accepted.connect(renameSelectedEntry);
+                            dialogObj.rejected.connect(function() {
+                                dialogObj = null
+                                tmpEntry = null
+                            });
                             pageStack.push(dialogObj);
                         }
                     }
@@ -294,6 +299,10 @@ Page {
                             tmpEntry = selectedEntry
                             dialogObj = remoteDirDialogComponent.createObject(pageRoot, {entry: tmpEntry});
                             dialogObj.accepted.connect(moveSelectedEntry);
+                            dialogObj.rejected.connect(function() {
+                                dialogObj = null
+                                tmpEntry = null
+                            });
                             pageStack.push(dialogObj);
                         }
                     }
@@ -311,6 +320,10 @@ Page {
                             tmpEntry = selectedEntry
                             dialogObj = remoteDirDialogComponent.createObject(pageRoot, {entry: tmpEntry});
                             dialogObj.accepted.connect(copySelectedEntry);
+                            dialogObj.rejected.connect(function() {
+                                dialogObj = null
+                                tmpEntry = null
+                            });
                             pageStack.push(dialogObj);
                         }
                     }
@@ -318,6 +331,7 @@ Page {
                         property EntryInfo tmpEntry;
                         text: qsTr("Delete")
                         onClicked: {
+                            selectedRemorse = remorseItem;
                             tmpEntry = selectedEntry
                             cancelCounter++;
                             selectedRemorse.execute(selectedItem, qsTr("Deleting", "RemorseItem text"), function() {
@@ -325,7 +339,11 @@ Page {
                                 browser.remove(remotePath + tmpEntry.name +
                                                (tmpEntry.isDirectory ? "/" : ""),
                                                cancelCounter == 0);
-                            }, 3000)
+                                selectedRemorse = null;
+                            })
+                            selectedRemorse.canceled.connect(function() {
+                                selectedRemorse = null
+                            })
                         }
                     }
                 }

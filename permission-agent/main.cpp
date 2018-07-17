@@ -19,8 +19,8 @@ int main(int argc, char *argv[])
                      requestQueue, &PermissionRequestQueue::enqueueRequest);
 
     // We only need one instance
-    if(!QDBusConnection::sessionBus().registerService(HarbourOwncloud::DBusConsts::PermD::DBUS_SERVICE) ||
-            !QDBusConnection::sessionBus().registerObject(HarbourOwncloud::DBusConsts::PermD::DBUS_PATH, dbusHandler,
+    if(!QDBusConnection::sessionBus().registerService(HarbourOwncloud::DBusConsts::PermAgent::DBUS_SERVICE) ||
+            !QDBusConnection::sessionBus().registerObject(HarbourOwncloud::DBusConsts::PermAgent::DBUS_PATH, dbusHandler,
                                                           QDBusConnection::ExportAllSlots)) {
         exit(1);
     }

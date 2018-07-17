@@ -29,8 +29,8 @@ const QString DBUS_INTERFACE    = QStringLiteral(HARBOUR_OWNCLOUD_DAEMON_IFACE);
 const QString DBUS_METHOD_RELOADCONFIG     = QStringLiteral("reloadConfig");
 const QString DBUS_SIGNAL_UPLOADINGCHANGED = QStringLiteral("uploadingChanged");
 
-// Systemwide permission dialog
-namespace PermD {
+// User-session-wide permission dialog
+namespace PermAgent {
 const QString DBUS_SERVICE      = QStringLiteral(HARBOUR_OWNCLOUD_PERMD_IFACE);
 const QString DBUS_PATH         = QStringLiteral("/");
 const QString DBUS_INTERFACE    = QStringLiteral(HARBOUR_OWNCLOUD_PERMD_IFACE);

@@ -13,12 +13,12 @@ PermittedSettings::PermittedSettings(QObject *parent) :
 
 bool PermittedSettings::readSettings()
 {
-    QDBusInterface permissiondIface(HarbourOwncloud::DBusConsts::PermD::DBUS_SERVICE,
-                                    HarbourOwncloud::DBusConsts::PermD::DBUS_PATH,
-                                    HarbourOwncloud::DBusConsts::PermD::DBUS_INTERFACE,
+    QDBusInterface permissiondIface(HarbourOwncloud::DBusConsts::PermAgent::DBUS_SERVICE,
+                                    HarbourOwncloud::DBusConsts::PermAgent::DBUS_PATH,
+                                    HarbourOwncloud::DBusConsts::PermAgent::DBUS_INTERFACE,
                                     QDBusConnection::sessionBus());
 
-    QDBusPendingCall pcall = permissiondIface.asyncCall(HarbourOwncloud::DBusConsts::PermD::DBUS_METHOD_REQUESTCONFIG);
+    QDBusPendingCall pcall = permissiondIface.asyncCall(HarbourOwncloud::DBusConsts::PermAgent::DBUS_METHOD_REQUESTCONFIG);
     QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(pcall, this);
     connect(watcher, &QDBusPendingCallWatcher::finished, [=](QDBusPendingCallWatcher* wtchr) {
         QDBusPendingReply<QMap<QString, QVariant> > reply = *wtchr;

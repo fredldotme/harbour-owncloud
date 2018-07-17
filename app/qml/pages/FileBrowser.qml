@@ -77,7 +77,6 @@ Page {
         }
     }
 
-    property Item fileContextMenu : null;
     property EntryInfo selectedEntry : null;
     property BackgroundItem selectedItem : null;
     property RemorseItem selectedRemorse : null;
@@ -182,10 +181,8 @@ Page {
                 }
             }
 
-            delegate: BackgroundItem {
+            delegate: ListItem {
                 id: delegate
-                property bool menuOpen: fileContextMenu != null && fileContextMenu.parent === delegate
-                height: menuOpen ? fileContextMenu.height + bgItem.height : bgItem.height
 
                 RemorseItem {
                     id: remorseItem
@@ -199,49 +196,48 @@ Page {
                     }
                 }
 
-                BackgroundItem {
-                    id: bgItem
-                    Image {
-                        id: icon
-                        source: listView.model[index].isDirectory ?
-                                    "image://theme/icon-m-folder" :
-                                    fileDetailsHelper.getIconFromMime(listView.model[index].mimeType)
-                        anchors.left: parent.left
-                        anchors.leftMargin: Theme.paddingLarge
-                        anchors.top: parent.top
-                        anchors.topMargin: 18
-                        height: label.height
-                        fillMode: Image.PreserveAspectFit
-                    }
+                Image {
+                    id: icon
+                    source: listView.model[index].isDirectory ?
+                                "image://theme/icon-m-folder" :
+                                fileDetailsHelper.getIconFromMime(listView.model[index].mimeType)
+                    anchors.left: parent.left
+                    anchors.leftMargin: Theme.paddingLarge
+                    anchors.top: parent.top
+                    anchors.topMargin: 18
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 18
+                    fillMode: Image.PreserveAspectFit
+                }
 
-                    Label {
-                        id: label
-                        x: icon.x + icon.width + 6
-                        y: icon.y - icon.height + 6
-                        text: listView.model[index].name
-                        anchors.verticalCenter: parent.verticalCenter
-                        color: bgItem.highlighted ? Theme.highlightColor : Theme.primaryColor
-                    }
+                Label {
+                    id: label
+                    x: icon.x + icon.width + 12
+                    y: icon.y - icon.height + 6
+                    text: listView.model[index].name
+                    anchors.verticalCenter: parent.verticalCenter
+                    color: delegate.highlighted ? Theme.highlightColor : Theme.primaryColor
+                }
 
-                    onClicked: {
-                        if(listView.model[index].isDirectory) {
-                            var nextDirectory = Qt.createComponent("FileBrowser.qml");
-                            browser.getDirectoryContent(remotePath + listView.model[index].name + "/");
-                            pageStack.push(nextDirectory)
-                        } else {
-                            var fileComponent = Qt.createComponent("FileDetails.qml");
-                            var fileDetails = fileComponent.createObject(pageRoot, {entry: listView.model[index]});
-                            pageStack.push(fileDetails);
-                        }
+                onClicked: {
+                    if(listView.model[index].isDirectory) {
+                        var nextDirectory = Qt.createComponent("FileBrowser.qml");
+                        browser.getDirectoryContent(remotePath + listView.model[index].name + "/");
+                        pageStack.push(nextDirectory)
+                    } else {
+                        var fileComponent = Qt.createComponent("FileDetails.qml");
+                        var fileDetails = fileComponent.createObject(pageRoot, {entry: listView.model[index]});
+                        pageStack.push(fileDetails);
                     }
-                    onPressAndHold: {
-                        selectedEntry = listView.model[index];
-                        selectedItem = delegate
-                        if (!fileContextMenu)
-                            fileContextMenu = contextMenuComponent.createObject(listView)
+                }
+                onPressAndHold: {
+                    selectedEntry = listView.model[index];
+                    selectedItem = delegate
+                    if (!menu)
+                        menu = contextMenuComponent.createObject(listView)
 
-                        if (selectedRemorse === null)
-                            fileContextMenu.show(delegate)
+                    if (selectedRemorse === null) {
+                        openMenu()
                     }
                 }
             }

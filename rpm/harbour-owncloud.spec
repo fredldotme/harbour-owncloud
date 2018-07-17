@@ -66,7 +66,7 @@ rm -rf %{buildroot}
 # >> install post
 mkdir -p %{buildroot}%{_libdir}/systemd/user/user-session.target.wants
 ln -sf %{_libdir}/systemd/user/%{name}-daemon.service %{buildroot}%{_libdir}/systemd/user/user-session.target.wants/%{name}-daemon.service
-ln -sf %{_libdir}/systemd/user/%{name}-permissiond.service %{buildroot}%{_libdir}/systemd/user/user-session.target.wants/%{name}-permissiond.service
+ln -sf %{_libdir}/systemd/user/%{name}-permission-agent.service %{buildroot}%{_libdir}/systemd/user/user-session.target.wants/%{name}-permission-agent.service
 # << install post
 
 desktop-file-install --delete-original       \
@@ -84,12 +84,12 @@ desktop-file-install --delete-original       \
 %files daemon
 %defattr(755,root,root,-)
 %{_bindir}/%{name}-daemon
-%{_bindir}/%{name}-permissiond
+%{_bindir}/%{name}-permission-agent
 %defattr(-,root,root,-)
 %{_libdir}/systemd/user/%{name}-daemon.service
-%{_libdir}/systemd/user/%{name}-permissiond.service
+%{_libdir}/systemd/user/%{name}-permission-agent.service
 %{_libdir}/systemd/user/user-session.target.wants/%{name}-daemon.service
-%{_libdir}/systemd/user/user-session.target.wants/%{name}-permissiond.service
+%{_libdir}/systemd/user/user-session.target.wants/%{name}-permission-agent.service
 %{_datadir}/nemo-transferengine/plugins/
 %{_libdir}/nemo-transferengine/plugins/libowncloudshareplugin.so
 %{_libdir}/qt5/qml/com/github/beidl/harbourowncloud/libharbourowncloudqmlplugin.so
@@ -102,9 +102,12 @@ desktop-file-install --delete-original       \
 # >> files
 # << files
 
+%pre daemon
+/bin/systemctl-user stop harbour-owncloud-permissiond.service >/dev/null 2>&1 || :
+
 %post daemon
 rm -f /home/nemo/.config/systemd/user/lipstick.service.wants/harbour-owncloud-daemon.service >/dev/null 2>&1 || :
 rm -f /home/nemo/.config/systemd/user/lipstick.service.wants/harbour-owncloud-permission.service >/dev/null 2>&1 || :
 /bin/systemctl-user daemon-reload >/dev/null 2>&1 || :
 /bin/systemctl-user restart harbour-owncloud-daemon.service >/dev/null 2>&1 || :
-/bin/systemctl-user restart harbour-owncloud-permissiond.service >/dev/null 2>&1 || :
+/bin/systemctl-user restart harbour-owncloud-permission-agent.service >/dev/null 2>&1 || :

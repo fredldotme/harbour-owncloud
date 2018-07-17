@@ -120,8 +120,10 @@ ShareDialog {
                 anchors.fill: parent
                 enabled: !isLoadingDirectory
 
-                delegate: BackgroundItem {
+                delegate: ListItem {
                     id: bgItem
+                    contentHeight: Theme.itemSizeSmall
+
                     Image {
                         id: icon
                         source: listView.model[index].name !== ".." ?
@@ -131,17 +133,19 @@ ShareDialog {
                         anchors.leftMargin: Theme.paddingLarge
                         anchors.top: parent.top
                         anchors.topMargin: 18
-                        height: label.height
+                        anchors.bottom: parent.bottom
+                        anchors.bottomMargin: 18
                         fillMode: Image.PreserveAspectFit
                     }
 
                     Label {
                         id: label
                         x: icon.x + icon.width + 6
-                        y: icon.y - icon.height + 6
+                        y: icon.y - icon.height + 12
                         text: listView.model[index].name
                         anchors.verticalCenter: parent.verticalCenter
                         color: bgItem.highlighted ? Theme.highlightColor : Theme.primaryColor
+                        enabled: listView.enabled
                     }
 
                     onClicked: {

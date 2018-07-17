@@ -94,7 +94,10 @@ desktop-file-install --delete-original       \
 %{_libdir}/nemo-transferengine/plugins/libowncloudshareplugin.so
 %{_libdir}/qt5/qml/com/github/beidl/harbourowncloud/libharbourowncloudqmlplugin.so
 %{_libdir}/qt5/qml/com/github/beidl/harbourowncloud/qmldir
-%{_datadir}/nextcloud-additionals/icons/%{name}.png
+%{_datadir}/themes/sailfish-default/meegotouch/z1.0/icons/icon-m-share-%{name}.png
+%{_datadir}/themes/sailfish-default/meegotouch/z1.25/icons/icon-m-share-%{name}.png
+%{_datadir}/themes/sailfish-default/meegotouch/z1.5-large/icons/icon-m-share-%{name}.png
+%{_datadir}/themes/sailfish-default/meegotouch/z1.75/icons/icon-m-share-%{name}.png
 
 # >> files
 # << files

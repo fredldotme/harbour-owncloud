@@ -4,7 +4,7 @@ After=lipstick.service
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/harbour-owncloud-permissiond
+ExecStart=/usr/bin/harbour-owncloud-permission-agent
 Restart=always
 
 [Install]

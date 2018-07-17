@@ -3,6 +3,6 @@ QMAKE_CXXFLAGS += -std=gnu++0x
 
 TEMPLATE = subdirs
 CONFIG += ordered
-SUBDIRS = qwebdavlib/qwebdavlib app daemon permissiond qmlextension sharing
+SUBDIRS = qwebdavlib/qwebdavlib app daemon permission-agent qmlextension sharing
 
 OTHER_FILES += rpm

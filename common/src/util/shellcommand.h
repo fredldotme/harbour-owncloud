@@ -7,7 +7,6 @@
 class ShellCommand : public QObject
 {
 public:
-    ShellCommand(QObject *parent = 0);
     static void runCommand(QString command, QStringList args);
 };
 

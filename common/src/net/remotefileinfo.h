@@ -1,11 +1,11 @@
-#ifndef ENTRYINFO_H
-#define ENTRYINFO_H
+#ifndef REMOTEFILEINFO_H
+#define REMOTEFILEINFO_H
 
 #include <QObject>
+#include <QString>
 #include <QDateTime>
-#include <QDebug>
 
-class EntryInfo : public QObject
+class RemoteFileInfo : public QObject
 {
     Q_OBJECT
 
@@ -17,7 +17,7 @@ class EntryInfo : public QObject
     Q_PROPERTY(QDateTime modTime READ modTime NOTIFY modTimeChanged())
 
 public:
-    EntryInfo(QObject *parent = 0);
+    RemoteFileInfo(QObject *parent = 0);
 
     void setPath(QString value);
     void setName(QString value);
@@ -52,5 +52,6 @@ signals:
 public slots:
 
 };
+Q_DECLARE_METATYPE(RemoteFileInfo*)
 
-#endif // ENTRYINFO_H
+#endif // REMOTEFILEINFO_H

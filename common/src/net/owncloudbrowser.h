@@ -3,13 +3,13 @@
 
 #include <QObject>
 
-#include <webdav_utils.h>
+#include <net/webdav_utils.h>
 #include <qwebdavdirparser.h>
 #include <qwebdavitem.h>
 #include <QVariant>
 
-#include <entryinfo.h>
-#include <nextcloudsettingsbase.h>
+#include <net/remotefileinfo.h>
+#include <settings/nextcloudsettingsbase.h>
 
 class OwnCloudBrowser : public QObject
 {
@@ -35,7 +35,6 @@ public:
     Q_INVOKABLE void setSettings(NextcloudSettingsBase* settings);
 
     QWebdav* getWebdav();
-    QWebdav* getNewWebdav();
 
 private:
     NextcloudSettingsBase *settings;
@@ -43,7 +42,7 @@ private:
     QWebdavDirParser parser;
     QString currentPath;
     QVariantList entries;
-    QStack<QList<EntryInfo*> > entryStack;
+    QStack<QList<RemoteFileInfo*> > entryStack;
     QMutex deleteMutex;
     bool abortIntended;
 
@@ -68,5 +67,6 @@ public:
     void start();
 
 };
+Q_DECLARE_METATYPE(OwnCloudBrowser*)
 
 #endif // OWNCLOUDBROWSER_H

@@ -11,9 +11,9 @@
 #include <utime.h>
 #include <sys/stat.h>
 
-#include "nextcloudsettings.h"
-#include "shellcommand.h"
-#include "webdav_utils.h"
+#include <settings/nextcloudsettings.h>
+#include <util/shellcommand.h>
+#include <net/webdav_utils.h>
 
 class TransferEntry : public QObject
 {
@@ -102,5 +102,6 @@ private slots:
     void resetReply();
 
 };
+Q_DECLARE_METATYPE(TransferEntry*)
 
 #endif // TRANSFERENTRY_H

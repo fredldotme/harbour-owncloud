@@ -1,9 +1,5 @@
 #include "shellcommand.h"
 
-ShellCommand::ShellCommand(QObject *parent) : QObject(parent)
-{
-}
-
 void ShellCommand::runCommand(QString command, QStringList args)
 {
     QProcess *proc = new QProcess();

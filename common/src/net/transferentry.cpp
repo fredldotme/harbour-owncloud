@@ -167,10 +167,6 @@ void TransferEntry::setRemoteLastModified()
     qint64 lastModified = this->getLastModified().toMSecsSinceEpoch() / 1000; // seconds
 
     QWebdav* mtimeWebdav = getNewWebDav(settings);
-    // XXX: Setting the parent here breaks PROPPATCH:
-    //      Debugging webdav looks like a PROPPATCH is sent, but
-    //      nothing in access.logs, wtaf!
-    //mtimeWebdav->setParent(this);
 
     propMap["lastmodified"] = (QVariant) lastModified;
     props["DAV:"] = propMap;

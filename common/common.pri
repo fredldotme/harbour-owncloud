@@ -3,27 +3,40 @@ QT += dbus network xml
 DEFINES += QWEBDAVITEM_EXTENDED_PROPERTIES
 
 SOURCES += \
-    $$PWD/src/nextcloudsettingsbase.cpp \
-    $$PWD/src/nextcloudsettings.cpp \
-    $$PWD/src/permittedsettings.cpp \
-    $$PWD/src/owncloudbrowser.cpp \
-    $$PWD/src/transfermanager.cpp \
-    $$PWD/src/entryinfo.cpp \
-    $$PWD/src/shellcommand.cpp \
-    $$PWD/src/transferentry.cpp \
-    $$PWD/src/webdav_utils.cpp
+    $$PWD/src/settings/nextcloudsettingsbase.cpp \
+    $$PWD/src/settings/nextcloudsettings.cpp \
+    $$PWD/src/settings/permittedsettings.cpp \
+    $$PWD/src/net/owncloudbrowser.cpp \
+    $$PWD/src/net/transfermanager.cpp \
+    $$PWD/src/net/transferentry.cpp \
+    $$PWD/src/net/remotefileinfo.cpp \
+    $$PWD/src/net/webdav_utils.cpp \
+    $$PWD/src/util/shellcommand.cpp \
+    $$PWD/src/commandqueue.cpp \
+    $$PWD/src/commandentity.cpp \
+    $$PWD/src/commands/fileuploadcommandentity.cpp \
+    $$PWD/src/commands/filedownloadcommandentity.cpp \
+    $$PWD/src/commands/remotedirectorycommandentity.cpp \
+    $$PWD/src/net/thumbnailfetcher.cpp
 
 HEADERS += \
-    $$PWD/src/nextcloudsettingsbase.h \
-    $$PWD/src/nextcloudsettings.h \
-    $$PWD/src/permittedsettings.h \
-    $$PWD/src/owncloudbrowser.h \
-    $$PWD/src/transfermanager.h \
-    $$PWD/src/entryinfo.h \
-    $$PWD/src/shellcommand.h \
-    $$PWD/src/transferentry.h \
-    $$PWD/src/webdav_utils.h \
-    $$PWD/src/ownclouddbusconsts.h
+    $$PWD/src/settings/nextcloudsettingsbase.h \
+    $$PWD/src/settings/nextcloudsettings.h \
+    $$PWD/src/settings/permittedsettings.h \
+    $$PWD/src/net/owncloudbrowser.h \
+    $$PWD/src/net/transfermanager.h \
+    $$PWD/src/net/transferentry.h \
+    $$PWD/src/net/remotefileinfo.h \
+    $$PWD/src/net/webdav_utils.h \
+    $$PWD/src/util/shellcommand.h \
+    $$PWD/src/ownclouddbusconsts.h \
+    $$PWD/src/commandqueue.h \
+    $$PWD/src/commandentityinfo.h \
+    $$PWD/src/commandentity.h \
+    $$PWD/src/commands/fileuploadcommandentity.h \
+    $$PWD/src/commands/filedownloadcommandentity.h \
+    $$PWD/src/commands/remotedirectorycommandentity.h \
+    $$PWD/src/net/thumbnailfetcher.h
 
 LIBS += $$OUT_PWD/../qwebdavlib/qwebdavlib/libqwebdav.so.1
 

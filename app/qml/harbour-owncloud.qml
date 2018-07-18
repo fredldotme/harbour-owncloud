@@ -43,50 +43,30 @@ ApplicationWindow
     }
 
     Connections {
-        target: transfer
-        onUploadComplete: {
-            if(settings.notifications)
-                notify(qsTr("Upload complete"), qsTr("%1 uploaded successfully").arg(entry.name))
+        target: transfer.downloadQueue
+        onCommandFinished: {
+            if (!settings.notifications)
+                return;
+
+            var fileName = receipt.info.properties()["fileName"]
+            if (receipt.finished)
+                notify(qsTr("Download complete"), qsTr("%1 downloaded successfully").arg(fileName))
+            else
+                notify(qsTr("Download failed!"), qsTr("%1 couldn't be downloaded").arg(fileName))
         }
     }
 
     Connections {
-        target: transfer
-        onDownloadComplete: {
-            if(settings.notifications)
-                notify(qsTr("Download complete"), qsTr("%1 downloaded successfully").arg(entry.name))
-        }
-    }
+        target: transfer.uploadQueue
+        onCommandFinished: {
+            if (!settings.notifications)
+                return;
 
-    Connections {
-        target: transfer
-        onUploadFailed: {
-            if(settings.notifications)
-                notify(qsTr("Upload failed!"), qsTr("%1 couldn't be uploaded").arg(entry.name))
-        }
-    }
-
-    Connections {
-        target: transfer
-        onDownloadFailed: {
-            if(settings.notifications)
-                notify(qsTr("Download failed!"), qsTr("%1 couldn't be downloaded").arg(entry.name))
-        }
-    }
-
-    Connections {
-        target: transfer
-        onLocalMtimeFailed: {
-            if(settings.notifications)
-                notify("Modification time failed!", "Setting mtime failed, errno " + status)
-        }
-    }
-
-    Connections {
-        target: transfer
-        onRemoteMtimeFailed: {
-            if(settings.notifications)
-                notify("Modification time failed!", "Setting mtime failed, status " + status)
+            var fileName = receipt.info.properties()["fileName"]
+            if (receipt.finished)
+                notify(qsTr("Upload complete"), qsTr("%1 uploaded successfully").arg(fileName))
+            else
+                notify(qsTr("Upload failed!"), qsTr("%1 couldn't be uploaded").arg(fileName))
         }
     }
 

@@ -1,5 +1,5 @@
 #include "globalowncloudbrowser.h"
-#include <nextcloudsettings.h>
+#include <settings/nextcloudsettings.h>
 
 GlobalOwncloudBrowser::GlobalOwncloudBrowser(QObject *parent, NextcloudSettingsBase* settings) :
     OwnCloudBrowser(parent, settings)

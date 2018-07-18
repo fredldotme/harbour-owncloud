@@ -23,7 +23,6 @@ OTHER_FILES += harbour-owncloud-daemon.service
 
 service.path = /usr/lib/systemd/user/
 service.files += harbour-owncloud-daemon.service
-binary.path = /usr/bin/
-binary.files += $$OUT_PWD/harbour-owncloud-daemon
+target.path = /usr/bin/
 
-INSTALLS += service binary
+INSTALLS += target service

@@ -1,8 +1,8 @@
 #include <QtQml/QQmlExtensionPlugin>
 #include <QtQml/QtQml>
 
-#include <owncloudbrowser.h>
-#include <permittedsettings.h>
+#include <net/owncloudbrowser.h>
+#include <settings/permittedsettings.h>
 
 class HarbourOwncloudQmlPlugin : public QQmlExtensionPlugin
 {

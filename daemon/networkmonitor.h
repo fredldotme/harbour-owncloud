@@ -6,7 +6,7 @@
 #include <QMutex>
 #include <QMutexLocker>
 
-#include "nextcloudsettings.h"
+#include "settings/nextcloudsettings.h"
 
 class NetworkMonitor : public QObject
 {

@@ -83,6 +83,10 @@
         <source>Type:</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Loading thumbnail</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Login</name>

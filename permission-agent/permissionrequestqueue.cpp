@@ -2,7 +2,7 @@
 
 #include <QDebug>
 #include <QDBusConnection>
-#include <nextcloudsettings.h>
+#include <settings/nextcloudsettings.h>
 
 PermissionRequestQueue::PermissionRequestQueue(QObject *parent) : QObject(parent)
 {

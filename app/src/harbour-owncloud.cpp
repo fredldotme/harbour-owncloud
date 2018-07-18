@@ -1,27 +1,25 @@
-
 #include <QtQuick>
 #include <sailfishapp.h>
 #include <notification.h>
 
-#include <owncloudbrowser.h>
+#include <commandqueue.h>
+#include <settings/nextcloudsettings.h>
+#include <net/owncloudbrowser.h>
+#include <net/transfermanager.h>
+#include <net/transferentry.h>
+#include <net/thumbnailfetcher.h>
+#include <entryinfo.h>
+#include <localfilebrowser.h>
 #include <sailfish-ui-set.h>
-
-#include "entryinfo.h"
-#include "nextcloudsettings.h"
-#include "transfermanager.h"
-#include "transferentry.h"
-#include "localfilebrowser.h"
 #include "daemoncontrol.h"
-
-
-Q_DECLARE_METATYPE(EntryInfo*)
-Q_DECLARE_METATYPE(TransferEntry*)
-Q_DECLARE_METATYPE(OwnCloudBrowser*)
 
 int main(int argc, char *argv[])
 {
     SailfishUiSet::registerQmlTypes();
-    qmlRegisterType<EntryInfo>("harbour.owncloud", 1, 0, "EntryInfo");
+    qmlRegisterType<RemoteFileInfo>("harbour.owncloud", 1, 0, "RemoteFileInfo");
+    qmlRegisterType<CommandEntity>("harbour.owncloud", 1, 0, "CommandEntity");
+    qmlRegisterType<CommandQueue>("harbour.owncloud", 1, 0, "CommandQueue");
+    qmlRegisterType<ThumbnailFetcher>("harbour.owncloud", 1, 0, "ThumbnailFetcher");
     qmlRegisterType<OwnCloudBrowser>("harbour.owncloud", 1, 0, "OwnCloudBrowser");
     qmlRegisterType<TransferManager>("harbour.owncloud", 1, 0, "TransferManager");
     qmlRegisterType<TransferEntry>("harbour.owncloud", 1, 0, "TransferEntry");

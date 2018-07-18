@@ -1,6 +1,6 @@
 #include "filesystem.h"
 
-#include "nextcloudsettings.h"
+#include "settings/nextcloudsettings.h"
 #include "uploader.h"
 
 Filesystem::Filesystem()

@@ -1,7 +1,7 @@
 #ifndef GLOBALTRANSFERMANAGER_H
 #define GLOBALTRANSFERMANAGER_H
 
-#include <transfermanager.h>
+#include <net/transfermanager.h>
 
 class GlobalTransferManager : public TransferManager
 {

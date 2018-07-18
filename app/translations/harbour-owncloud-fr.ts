@@ -40,6 +40,18 @@
         <source>Copy</source>
         <translation>Copier</translation>
     </message>
+    <message>
+        <source>Directory name</source>
+        <translation type="unfinished">Nom du dossier</translation>
+    </message>
+    <message>
+        <source>Rename</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New name</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FileDetails</name>
@@ -70,6 +82,10 @@
     <message>
         <source>Type:</source>
         <translation>Type :</translation>
+    </message>
+    <message>
+        <source>Loading thumbnail</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -105,21 +121,6 @@
     <message>
         <source>Please check your host address</source>
         <translation>Vérifiez l’adresse hôte</translation>
-    </message>
-</context>
-<context>
-    <name>MkDirDialog</name>
-    <message>
-        <source>Accept</source>
-        <translation>Accepter</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>Annuler</translation>
-    </message>
-    <message>
-        <source>Directory name</source>
-        <translation>Nom du dossier</translation>
     </message>
 </context>
 <context>

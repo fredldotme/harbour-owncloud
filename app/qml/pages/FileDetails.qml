@@ -5,8 +5,16 @@ import SailfishUiSet 1.0
 
 Page {
     id: pageRoot
-    property EntryInfo entry;
-    property TransferEntry downloadEntry;
+    property RemoteFileInfo entry;
+    property CommandEntity downloadEntry;
+
+    Connections {
+        target: downloadEntry
+        onDone: {
+            download.enabled = true
+            downloadAndOpen.enabled = true
+        }
+    }
 
     FileDetailsHelper { id: fileDetailsHelper }
 
@@ -17,50 +25,76 @@ Page {
             MenuItem {
                 id: download
                 text: qsTr("Download")
-                enabled: transfer.isNotEnqueued(entry);
+                enabled: transfer.isNotEnqueued(entry.path);
                 onClicked: {
-                    downloadEntry = transfer.enqueueDownload(entry, false)
-                    enabled = false;
-                }
-
-                Connections {
-                    target: downloadEntry
-                    onTransferCompleted: {
-                        download.enabled = true
-                    }
+                    downloadEntry = transfer.enqueueDownload(entry.path, entry.mimeType, false)
+                    download.enabled = false
+                    downloadAndOpen.enabled = false
                 }
             }
 
             MenuItem {
                 id: downloadAndOpen
                 text: qsTr("Download and open")
-                enabled: transfer.isNotEnqueued(entry);
+                enabled: transfer.isNotEnqueued(entry.path);
                 onClicked: {
-                    downloadEntry = transfer.enqueueDownload(entry, true)
-                    enabled = false;
-                }
-
-                Connections {
-                    target: downloadEntry
-                    onTransferCompleted: {
-                        downloadAndOpen.enabled = true
-                    }
+                    downloadEntry = transfer.enqueueDownload(entry.path, entry.mimeType, true)
+                    download.enabled = false
+                    downloadAndOpen.enabled = false
                 }
             }
         }
 
         PageHeader {
+            id: header
             title: qsTr("Details")
         }
 
-        // Icon
-        Image {
+        ThumbnailFetcher {
+            id: thumbnailFetcher
+            settings: browser.settings
+            commandQueue: transfer.miscQueue
+            width: fileImage.width
+            height: fileImage.height
+            Component.onCompleted: {
+                settings.readSettings()
+                thumbnailFetcher.fetchThumbnail(entry.path);
+            }
+        }
+
+        // Icon & Progress spinner
+        Item {
+            property int margins : parent.width / 6
+
             id: fileImage
-            source: fileDetailsHelper.getIconFromMime(entry.mimeType)
             width: parent.width / 3
             height: width
-            x: (parent.width / 2) - (width / 2)
-            y: width
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: header.bottom
+            anchors.topMargin: margins
+            anchors.left: parent.left
+            anchors.leftMargin: margins
+            anchors.right: parent.right
+            anchors.rightMargin: margins
+
+
+            Image {
+                source: thumbnailFetcher.source
+                anchors.fill: parent
+            }
+            BusyIndicator {
+                id: progressSpinner
+                size: BusyIndicatorSize.Large
+                anchors.fill: parent
+                running: thumbnailFetcher.fetching
+                visible: running && (thumbnailFetcher.source === "")
+                enabled: visible
+            }
+            ViewPlaceholder {
+                anchors.fill: parent
+                enabled: !progressSpinner.enabled && thumbnailFetcher.source
+                text: qsTr("Loading thumbnail")
+            }
         }
 
         // File name

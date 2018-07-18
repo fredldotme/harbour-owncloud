@@ -3,7 +3,7 @@
 
 #include "qwebdav.h"
 #include "qwebdavdirparser.h"
-#include "transferentry.h"
+#include <net/transferentry.h>
 
 #include <QObject>
 #include <QSet>

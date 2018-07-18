@@ -1,6 +1,6 @@
 #define DEBUG_WEBDAV 1
 #include "uploader.h"
-#include "nextcloudsettings.h"
+#include "settings/nextcloudsettings.h"
 
 #include <QNetworkReply>
 

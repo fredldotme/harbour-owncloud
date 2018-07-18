@@ -26,6 +26,8 @@ Page {
             var dirs = remotePath.split("/")
             if(dirs.length > 1) {
                 pageHeaderText = dirs[dirs.length - 2]
+            } else {
+                pageHeaderText = ""
             }
         }
     }
@@ -59,9 +61,16 @@ Page {
     Connections {
         target: transfer
         onUploadComplete: {
-            /// XXX: Would like to pass `entry` in the signal, but it confuses navigation!
-            //remotePath = entry.getRemotePath();
-            if(remotePath === pageRoot.remotePath) {
+            if (info.properties()["remotePath"] === pageRoot.remotePath) {
+                refreshListView()
+            }
+        }
+    }
+
+    Connections {
+        target: transfer.miscQueue
+        onCommandFinished: {
+            if (receipt.info.properties()["remotePath"] === pageRoot.remotePath) {
                 refreshListView()
             }
         }
@@ -77,7 +86,7 @@ Page {
         }
     }
 
-    property EntryInfo selectedEntry : null;
+    property RemoteFileInfo selectedEntry : null;
     property BackgroundItem selectedItem : null;
     property RemorseItem selectedRemorse : null;
     property Dialog dialogObj : null
@@ -246,6 +255,7 @@ Page {
             BusyIndicator {
                 anchors.centerIn: parent
                 running: listView.model === undefined
+                size: BusyIndicatorSize.Large
             }
 
             Component {
@@ -257,7 +267,7 @@ Page {
                         selectedItem = null
                     }
                     MenuItem {
-                        property EntryInfo tmpEntry;
+                        property RemoteFileInfo tmpEntry;
 
                         function renameSelectedEntry() {
                             renameEntry(tmpEntry, dialogObj.text)
@@ -282,7 +292,7 @@ Page {
                         }
                     }
                     MenuItem {
-                        property EntryInfo tmpEntry;
+                        property RemoteFileInfo tmpEntry;
 
                         function moveSelectedEntry() {
                             moveEntry(tmpEntry, remotePath)
@@ -303,7 +313,7 @@ Page {
                         }
                     }
                     MenuItem {
-                        property EntryInfo tmpEntry;
+                        property RemoteFileInfo tmpEntry;
 
                         function copySelectedEntry() {
                             copyEntry(tmpEntry, remotePath)
@@ -324,7 +334,7 @@ Page {
                         }
                     }
                     MenuItem {
-                        property EntryInfo tmpEntry;
+                        property RemoteFileInfo tmpEntry;
                         text: qsTr("Delete")
                         onClicked: {
                             selectedRemorse = remorseItem;

@@ -8,7 +8,7 @@
 
 #include "filesystem.h"
 #include "uploader.h"
-#include "nextcloudsettings.h"
+#include "settings/nextcloudsettings.h"
 #include "dbushandler.h"
 #include "networkmonitor.h"
 

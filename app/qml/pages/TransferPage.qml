@@ -32,7 +32,7 @@ Page {
     }
 
     property Item transferContextMenu;
-    property TransferEntry selectedEntry;
+    property var selectedEntry;
 
     PageHeader {
         id: header
@@ -116,63 +116,58 @@ Page {
         SilicaListView {
             id: listView
             anchors.fill: parent
-            //header:
 
-            delegate: BackgroundItem {
+            delegate: ListItem {
                 id: delegate
                 property bool menuOpen: transferContextMenu != null && transferContextMenu.parent === delegate
-                height: menuOpen ? transferContextMenu.height + bgItem.height : bgItem.height
+                property var commandInfo : listView.model[index].info
 
-                BackgroundItem {
-                    id: bgItem
-                    height: transferProgress.y+transferProgress.height - transferTypeIcon.y
+                Image {
+                    id: transferTypeIcon
+                    x: 16
+                    height: parent.height
+                    source: listView.model[index].direction === TransferEntry.DOWN ?
+                                "image://theme/icon-m-download" :
+                                "image://theme/icon-m-upload"
+                    fillMode: Image.PreserveAspectFit
+                }
 
-                    Image {
-                        id: transferTypeIcon
-                        x: 16
-                        height: parent.height
-                        source: listView.model[index].direction === TransferEntry.DOWN ?
-                                    "image://theme/icon-m-download" :
-                                    "image://theme/icon-m-upload"
-                        fillMode: Image.PreserveAspectFit
-                    }
+                Label {
+                    id: label
+                    text: commandInfo.properties()["fileName"]
+                    anchors.top: parent.top
+                    anchors.left: transferTypeIcon.right
+                    anchors.leftMargin: 16
+                    anchors.verticalCenter: parent.verticalCenter
+                    color: delegate.highlighted ? Theme.highlightColor : Theme.primaryColor
+                }
 
-                    Label {
-                        id: label
-                        text: listView.model[index].name
-                        anchors.top: bgItem.top
-                        anchors.left: transferTypeIcon.right
-                        anchors.leftMargin: 16
-                        anchors.verticalCenter: parent.verticalCenter
-                        color: delegate.highlighted ? Theme.highlightColor : Theme.primaryColor
-                    }
+                ProgressBar {
+                    id: transferProgress
+                    anchors.top: label.bottom
+                    width: parent.width
+                    anchors.leftMargin: Theme.paddingLarge
+                }
 
-                    ProgressBar {
-                        id: transferProgress
-                        anchors.top: label.bottom
-                        width: parent.width
-                        anchors.leftMargin: Theme.paddingLarge
-                    }
+                onPressAndHold: {
+                    selectedEntry = listView.model[index];
+                    if (!transferContextMenu)
+                        transferContextMenu = contextMenuComponent.createObject(listView)
+                    transferContextMenu.show(delegate)
+                }
 
-                    onPressAndHold: {
-                        selectedEntry = listView.model[index];
-                        if (!transferContextMenu)
-                            transferContextMenu = contextMenuComponent.createObject(listView)
-                        transferContextMenu.show(delegate)
-                    }
-
-                    Connections {
-                        /*
-                          Use a connection instead of directly assigning model[index].value
-                          The TransferEntry object appears to get deleted between emitting the
-                          signal and trying to read the property. Use this connection instead.
-                          */
-                        target: listView.model[index]
-                        onProgressChanged: {
-                            transferProgress.value = progress
-                        }
+                Connections {
+                    /*
+                      Use a connection instead of directly assigning model[index].value
+                      The TransferEntry object appears to get deleted between emitting the
+                      signal and trying to read the property. Use this connection instead.
+                    */
+                    target: listView.model[index]
+                    onProgressChanged: {
+                        transferProgress.value = progress
                     }
                 }
+
             }
             VerticalScrollDecorator {}
 

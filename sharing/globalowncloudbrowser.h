@@ -1,7 +1,7 @@
 #ifndef GLOBALOWNCLOUDBROWSER_H
 #define GLOBALOWNCLOUDBROWSER_H
 
-#include <owncloudbrowser.h>
+#include <net/owncloudbrowser.h>
 
 class GlobalOwncloudBrowser : public OwnCloudBrowser
 {

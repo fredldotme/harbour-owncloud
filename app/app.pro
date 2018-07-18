@@ -25,13 +25,14 @@ SOURCES += \
 HEADERS += \
     src/daemoncontrol.h
 
-OTHER_FILES += qml/harbour-owncloud.qml \
-    qml/cover/CoverPage.qml \
+OTHER_FILES += \
     rpm/harbour-owncloud.changes.in \
     rpm/harbour-owncloud.spec \
     rpm/harbour-owncloud.yaml \
     translations/*.ts \
     harbour-owncloud.desktop \
+    qml/harbour-owncloud.qml \
+    qml/cover/CoverPage.qml \
     qml/pages/FileBrowser.qml \
     qml/pages/FileDetails.qml \
     qml/pages/Login.qml \
@@ -45,28 +46,17 @@ OTHER_FILES += qml/harbour-owncloud.qml \
 CONFIG += sailfishapp_i18n
 TRANSLATIONS += \
     translations/harbour-owncloud-de.ts \
-    translations/harbour-owncloud-sl.ts
+    translations/harbour-owncloud-sl.ts \
+    translations/harbour-owncloud-fr.ts
 
 
 icon86.files += icons/86x86/harbour-owncloud.png
 icon86.path = /usr/share/icons/hicolor/86x86/apps
 INSTALLS += icon86
 
-#icon108.files += icons/108x108/harbour-owncloud.png
-#icon108.path = /usr/share/icons/hicolor/108x108/apps
-#INSTALLS += icon108
-
 icon128.files += icons/128x128/harbour-owncloud.png
 icon128.path = /usr/share/icons/hicolor/128x128/apps
 INSTALLS += icon128
-
-#icon256.files += icons/256x256/harbour-owncloud.png
-#icon256.path = /usr/share/icons/hicolor/256x256/apps
-#INSTALLS += icon256
-
-#iconsvg.files += icons/harbour-owncloud.svg
-#iconsvg.path = /usr/share/icons/hicolor/scalable/apps
-#INSTALLS += iconsvg
 
 include(../notifications.pri)
 

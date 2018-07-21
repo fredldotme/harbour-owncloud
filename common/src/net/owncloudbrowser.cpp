@@ -1,6 +1,16 @@
 #include "owncloudbrowser.h"
 
-#include <commands/remotedirectorycommandentity.h>
+#include <commands/filedownloadcommandentity.h>
+#include <commands/fileuploadcommandentity.h>
+#include <commands/mkdavdircommandentity.h>
+#include <commands/davrmcommandentity.h>
+#include <commands/davcopycommandentity.h>
+#include <commands/davmovecommandentity.h>
+#include <commands/davlistcommandentity.h>
+#include <commands/stdfunctioncommandentity.h>
+
+#include <util/filepathutil.h>
+#include <util/shellcommand.h>
 
 OwnCloudBrowser::OwnCloudBrowser(QObject *parent, NextcloudSettingsBase *settings) : QObject(parent)
 {
@@ -82,33 +92,6 @@ void OwnCloudBrowser::proxyHandleLoginFailed()
 
 void OwnCloudBrowser::handleResponse()
 {
-    deleteMutex.lock();
-    QList<QWebdavItem> list = parser.getList();
-
-    entries.clear();
-    QList<RemoteFileInfo*> deletables;
-
-    QWebdavItem item;
-    foreach(item, list) {
-        RemoteFileInfo *entry = new RemoteFileInfo();
-        entry->setPath(item.path());
-        entry->setName(item.name());
-        entry->setDirectory(item.isDir());
-        entry->setSize(item.size());
-        if(!item.isDir()) {
-            entry->setMimeType(item.mimeType());
-            entry->setModTime(item.lastModified());
-        }
-
-        QVariant tmpVariant;
-        tmpVariant.setValue(entry);
-        entries.append(tmpVariant);
-
-        deletables.append(entry);
-    }
-    entryStack.push(deletables);
-    emit directoryContentChanged(getCanonicalPath(parser.path()), entries);
-    deleteMutex.unlock();
 }
 
 QString OwnCloudBrowser::getCanonicalPath(const QString &path)
@@ -146,7 +129,8 @@ void OwnCloudBrowser::setSettings(NextcloudSettingsBase* settings)
         this->settings = settings;
 
         if (this->settings) {
-            connect(this->settings, &NextcloudSettingsBase::settingsChanged, this, &OwnCloudBrowser::reloadSettings);
+            connect(this->settings, &NextcloudSettingsBase::settingsChanged,
+                    this, &OwnCloudBrowser::reloadSettings);
             this->settings->readSettings();
         }
 
@@ -154,37 +138,9 @@ void OwnCloudBrowser::setSettings(NextcloudSettingsBase* settings)
     }
 }
 
-void OwnCloudBrowser::printError(QString msg)
-{
-    qDebug() << "ERROR: " << msg;
-}
-
 QString OwnCloudBrowser::getCurrentPath()
 {
     return currentPath;
-}
-
-void OwnCloudBrowser::goToParentPath()
-{
-    // Called when navigating back in the browser
-    // Keeping path and UI in sync
-    QString tmpPath = currentPath.mid(0, currentPath.length() - 1);
-    currentPath = tmpPath.mid(0, tmpPath.lastIndexOf('/') + 1);
-
-    // Delete old RemoteFileInfo objects
-    abortIntended = true;
-    bool busy = parser.isBusy();
-    parser.abort();
-
-    deleteMutex.lock();
-    if(!busy) {
-        QList<RemoteFileInfo*> deletables = entryStack.pop();
-        for(int i = 0; i < deletables.length(); i++) {
-            deletables.at(i)->deleteLater();
-        }
-        deletables.clear();
-    }
-    deleteMutex.unlock();
 }
 
 void OwnCloudBrowser::getDirectoryContent(QString path)
@@ -195,70 +151,94 @@ void OwnCloudBrowser::getDirectoryContent(QString path)
 
 void OwnCloudBrowser::refreshDirectoryContent()
 {
-    deleteMutex.lock();
-    QList<RemoteFileInfo*> deletables = entryStack.pop();
-    for(int i = 0; i < deletables.length(); i++) {
-        deletables.at(i)->deleteLater();
-    }
-    deletables.clear();
-    deleteMutex.unlock();
-    parser.listDirectory(webdav, currentPath);
 }
 
-void OwnCloudBrowser::makeDirectory(QString dirName)
+CommandEntity* OwnCloudBrowser::makeDirectoryRequest(QString dirName)
 {
-    RemoteDirectoryCommandEntity* mkDirCommand =
-            new RemoteDirectoryCommandEntity(this, currentPath + dirName, this->settings);
-    QObject::connect(mkDirCommand, &RemoteDirectoryCommandEntity::done,
-                     this, &OwnCloudBrowser::refreshDirectoryContent, Qt::DirectConnection);
-    QObject::connect(mkDirCommand, &RemoteDirectoryCommandEntity::aborted,
-                     this, &OwnCloudBrowser::refreshDirectoryContent, Qt::DirectConnection);
-    QObject::connect(mkDirCommand, &RemoteDirectoryCommandEntity::done,
-                     mkDirCommand, &QObject::deleteLater, Qt::DirectConnection);
-    QObject::connect(mkDirCommand, &RemoteDirectoryCommandEntity::aborted,
-                     mkDirCommand, &QObject::deleteLater, Qt::DirectConnection);
-    mkDirCommand->run();
+    MkDavDirCommandEntity* command =
+            new MkDavDirCommandEntity(this, currentPath + dirName, this->webdav);
 
     emit refreshStarted(currentPath);
+
+    return command;
 }
 
-void OwnCloudBrowser::remove(QString name, bool refresh)
+CommandEntity* OwnCloudBrowser::removeRequest(QString name, bool refresh)
 {
-    qDebug() << "Removing " << name;
-    QWebdav* rmWebdav = getNewWebDav(this->settings);
-    if (refresh)
-        connect(rmWebdav, &QNetworkAccessManager::finished, this, &OwnCloudBrowser::refreshDirectoryContent, Qt::DirectConnection);
-    connect(rmWebdav, &QNetworkAccessManager::finished, rmWebdav, &QObject::deleteLater, Qt::DirectConnection);
-    rmWebdav->remove(name);
+    DavRmCommandEntity* command =
+            new DavRmCommandEntity(this, currentPath + name, this->webdav);
 
     if (refresh)
         emit refreshStarted(currentPath);
+
+    return command;
 }
 
-void OwnCloudBrowser::move(QString from, QString to, bool refresh)
+CommandEntity* OwnCloudBrowser::moveRequest(QString from, QString to, bool refresh)
 {
-    qDebug() << "Moving" << from << "to" << to;
-    QWebdav* moveWebdav = getNewWebDav(this->settings);
-    if (refresh)
-        connect(moveWebdav, &QNetworkAccessManager::finished, this, &OwnCloudBrowser::refreshDirectoryContent, Qt::DirectConnection);
-    connect(moveWebdav, &QNetworkAccessManager::finished, moveWebdav, &QObject::deleteLater, Qt::DirectConnection);
-    moveWebdav->move(from, to);
+    DavMoveCommandEntity* command =
+            new DavMoveCommandEntity(this, from, to, this->webdav);
 
-    // TODO: refresh destination dir listing
-    if(refresh)
+    if (refresh)
         emit refreshStarted(currentPath);
+
+    return command;
 }
 
-void OwnCloudBrowser::copy(QString from, QString to, bool refresh)
+CommandEntity* OwnCloudBrowser::copyRequest(QString from, QString to, bool refresh)
 {
-    qDebug() << "Copying" << from << "to" << to;
-    QWebdav* copyWebdav = getNewWebDav(this->settings);
-    if (refresh)
-        connect(copyWebdav, &QNetworkAccessManager::finished, this, &OwnCloudBrowser::refreshDirectoryContent, Qt::DirectConnection);
-    connect(copyWebdav, &QNetworkAccessManager::finished, copyWebdav, &QObject::deleteLater, Qt::DirectConnection);
-    copyWebdav->copy(from, to);
+    DavCopyCommandEntity* command =
+            new DavCopyCommandEntity(this, from, to, this->webdav);
 
-    // TODO: refresh destination dir listing
     if (refresh)
         emit refreshStarted(currentPath);
+
+    return command;
+}
+
+CommandEntity* OwnCloudBrowser::directoryListingRequest(QString path)
+{
+    qDebug() << Q_FUNC_INFO;
+    DavListCommandEntity* command =
+            new DavListCommandEntity(this, path, this->webdav);
+
+    return command;
+}
+
+QList<CommandEntity*> OwnCloudBrowser::fileDownloadRequest(QString remotePath, QString mimeType, bool open)
+{
+    QList<CommandEntity*> commands;
+
+    FileDownloadCommandEntity* downloadCommand = Q_NULLPTR;
+
+    QString name = remotePath.mid(remotePath.lastIndexOf("/") + 1);
+    QString destination = FilePathUtil::destinationFromMIME(mimeType) + "/" + name;
+
+    downloadCommand = new FileDownloadCommandEntity(this, remotePath, destination, this->webdav);
+    commands.append(downloadCommand);
+
+    if (open) {
+        StdFunctionCommandEntity* executeCommand = new StdFunctionCommandEntity(this, [destination]() {
+            ShellCommand::runCommand(QStringLiteral("xdg-open"), QStringList() << destination);
+        });
+        commands.append(executeCommand);
+    }
+
+    return commands;
+}
+
+QList<CommandEntity*> OwnCloudBrowser::fileUploadRequest(QString localPath, QString remotePath)
+{
+    qDebug() << "upload requested";
+
+    QList<CommandEntity*> commands;
+
+    FileUploadCommandEntity* uploadCommand =
+            new FileUploadCommandEntity(this, localPath, remotePath, this->webdav);
+    DavListCommandEntity* listCommand =
+            new DavListCommandEntity(this, remotePath, this->webdav);
+
+    commands.append(uploadCommand);
+    commands.append(listCommand);
+    return commands;
 }

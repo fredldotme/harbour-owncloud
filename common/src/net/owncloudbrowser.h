@@ -7,9 +7,8 @@
 #include <qwebdavdirparser.h>
 #include <qwebdavitem.h>
 #include <QVariant>
-
-#include <net/remotefileinfo.h>
 #include <settings/nextcloudsettingsbase.h>
+#include <commands/webdavcommandentity.h>
 
 class OwnCloudBrowser : public QObject
 {
@@ -23,12 +22,16 @@ public:
 
     Q_INVOKABLE void testConnection();
     Q_INVOKABLE QString getCurrentPath();
-    Q_INVOKABLE void goToParentPath();
     Q_INVOKABLE void getDirectoryContent(QString path);
-    Q_INVOKABLE void makeDirectory(QString dirName);
-    Q_INVOKABLE void remove(QString name, bool refresh);
-    Q_INVOKABLE void move(QString from, QString to, bool refresh);
-    Q_INVOKABLE void copy(QString from, QString to, bool refresh);
+    Q_INVOKABLE QList<CommandEntity*> fileDownloadRequest(QString from,
+                                                          QString mimeType = QStringLiteral(""),
+                                                          bool open = false);
+    Q_INVOKABLE QList<CommandEntity*> fileUploadRequest(QString from, QString to);
+    Q_INVOKABLE CommandEntity* makeDirectoryRequest(QString dirName);
+    Q_INVOKABLE CommandEntity* removeRequest(QString name, bool refresh);
+    Q_INVOKABLE CommandEntity* moveRequest(QString from, QString to, bool refresh);
+    Q_INVOKABLE CommandEntity* copyRequest(QString from, QString to, bool refresh);
+    Q_INVOKABLE CommandEntity* directoryListingRequest(QString path);
     Q_INVOKABLE void resetWebdav();
     Q_INVOKABLE QString getCanonicalPath(const QString& path);
     Q_INVOKABLE NextcloudSettingsBase* getSettings();
@@ -42,8 +45,6 @@ private:
     QWebdavDirParser parser;
     QString currentPath;
     QVariantList entries;
-    QStack<QList<RemoteFileInfo*> > entryStack;
-    QMutex deleteMutex;
     bool abortIntended;
 
 signals:
@@ -56,7 +57,6 @@ signals:
 
 public slots:
     void handleResponse();
-    void printError(QString errorMsg);
     void reloadSettings();
     void testConnectionFinished();
     void proxyHandleSslError(const QList<QSslError> &errors);

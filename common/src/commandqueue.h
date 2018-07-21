@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QDateTime>
 #include <QQueue>
+#include <QMutex>
 
 #include "commandentity.h"
 
@@ -12,14 +13,19 @@ class CommandReceipt
     Q_GADGET
 
     Q_PROPERTY(CommandEntityInfo info MEMBER info CONSTANT)
+    Q_PROPERTY(QVariant result MEMBER result CONSTANT)
     Q_PROPERTY(QDateTime doneTime MEMBER doneTime CONSTANT)
     Q_PROPERTY(bool finished MEMBER finished CONSTANT)
 
 public:
     CommandReceipt() : doneTime(QDateTime::currentDateTime()), finished(false) {}
-    CommandReceipt(CommandEntityInfo info, QDateTime doneTime, bool finished) :
-        info(info), doneTime(doneTime), finished(finished) {}
+    CommandReceipt(CommandEntityInfo info, QVariant result,
+                   QDateTime doneTime, bool finished) :
+        info(info), result(result),
+        doneTime(doneTime), finished(finished) {}
+
     const CommandEntityInfo info;
+    const QVariant result;
     const QDateTime doneTime;
     const bool finished;
 };
@@ -30,6 +36,7 @@ class CommandQueue : public QObject
     Q_OBJECT
 
     Q_PROPERTY(bool running READ isRunning WRITE setRunning NOTIFY runningChanged)
+    Q_PROPERTY(QVariantList queue READ queue NOTIFY queueContentChanged)
 
 public:
     explicit CommandQueue(QObject *parent = nullptr);
@@ -37,24 +44,34 @@ public:
 
     // Command Queue takes ownership of CommandEntity object
     void enqueue(CommandEntity* command);
+    void enqueue(QList<CommandEntity*> commands);
+
+public slots:
+
+    void enqueue(QVariant command);
     void run();
     void stop();
     bool isRunning() { return this->m_running; }
     bool isEmpty() { return this->m_queue.isEmpty(); }
-    const QList<CommandEntityInfo> queueInformation() const;
+    QVariantList queue();
+    QList<CommandEntityInfo> queueInformation();
 
 private:
     void runNextCommand();
     void deleteCurrentCommand();
+    void deleteCommand(CommandEntity* command = Q_NULLPTR);
     void setRunning(bool v);
 
     QQueue<CommandEntity*> m_queue;
-    CommandEntity* m_currentCommand = Q_NULLPTR;
     bool m_running = false;
+    QMutex m_queueMutex;
 
 signals:
+    void added(CommandEntity* entity);
+    void removed(CommandEntity* entity);
     void commandFinished(CommandReceipt receipt);
     void runningChanged();
+    void queueContentChanged();
 };
 Q_DECLARE_METATYPE(CommandQueue*)
 

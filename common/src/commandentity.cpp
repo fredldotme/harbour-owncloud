@@ -16,6 +16,11 @@ CommandEntity::~CommandEntity()
     abort();
 }
 
+qreal CommandEntity::progress()
+{
+    return this->m_progress;
+}
+
 void CommandEntity::setProgress(qreal progress)
 {
     if (this->m_progress == progress)

@@ -12,17 +12,21 @@ class CommandEntityInfo
 
 public:
     CommandEntityInfo() {}
-    CommandEntityInfo(QMap<QString, QVariant> properties)
-    {
-        this->m_properties = properties;
-    }
-    CommandEntityInfo(const CommandEntityInfo& o) {
-        this->m_properties = o.m_properties;
-    }
+    CommandEntityInfo(QMap<QString, QVariant> properties) :
+        m_properties(properties) {}
+    CommandEntityInfo(const CommandEntityInfo& o) :
+        m_properties(o.m_properties) {}
 
     Q_INVOKABLE QMap<QString, QVariant> properties() const
     {
         return this->m_properties;
+    }
+
+    Q_INVOKABLE QVariant property(const QString& key) const
+    {
+        if (!this->m_properties.contains(key))
+            return QVariant();
+        return this->m_properties[key];
     }
 
 private:

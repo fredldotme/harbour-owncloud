@@ -3,32 +3,28 @@
 
 #include <QObject>
 #include <QFile>
-#include <commandentity.h>
+#include <commands/webdavcommandentity.h>
 #include <settings/nextcloudsettingsbase.h>
 #include <qwebdav.h>
 
-class FileUploadCommandEntity : public CommandEntity
+class FileUploadCommandEntity : public WebDavCommandEntity
 {
     Q_OBJECT
+
 public:
     explicit FileUploadCommandEntity(QObject* parent = Q_NULLPTR,
                                      QString localPath = QStringLiteral(""),
                                      QString remotePath = QStringLiteral(""),
+                                     QWebdav* client = Q_NULLPTR,
                                      NextcloudSettingsBase* settings = Q_NULLPTR);
-    ~FileUploadCommandEntity();
-
-    bool isRunning() { return this->m_running; }
 
 protected:
     void startWork();
-    void abortWork();
 
 private:
     void setModifiedTime();
 
     bool m_running = false;
-    QWebdav* m_client = Q_NULLPTR;
-    QNetworkReply* m_reply = Q_NULLPTR;
     QFile* m_localFile = Q_NULLPTR;
     QString m_remotePath;
 

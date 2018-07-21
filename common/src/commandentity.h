@@ -9,6 +9,8 @@ class CommandEntity : public QObject
 {
     Q_OBJECT
 
+    Q_PROPERTY(qreal progress READ progress NOTIFY progressChanged)
+
 public:
     explicit CommandEntity(QObject *parent = nullptr);
     ~CommandEntity();
@@ -22,18 +24,25 @@ public:
 
     void run();
     void abort();
-    bool isFinished() { return m_state == FINISHED; }
-    bool isRunning() { return m_state == RUNNING; }
-    const CommandEntityInfo info() const { return m_commandInfo; }
+    bool isFinished() const { return m_state == FINISHED; }
+    bool isRunning() const { return m_state == RUNNING; }
     CommandEntityState state() { return m_state; }
+
+public slots:
+    const CommandEntityInfo info() const
+    { return m_commandInfo; }
+    const QVariant resultData() const
+    { return isFinished() ? m_resultData : QVariant(); }
 
 protected:
     virtual void startWork() {}
     virtual void abortWork() {}
+    qreal progress();
     void setProgress(qreal progress);
     void setState(const CommandEntityState& state);
 
     CommandEntityInfo m_commandInfo;
+    QVariant m_resultData;
 
 private:
     qreal m_progress = 0.0;

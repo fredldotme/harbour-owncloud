@@ -5,27 +5,21 @@
 FileUploadCommandEntity::FileUploadCommandEntity(QObject* parent,
                                                  QString localPath,
                                                  QString remotePath,
-                                                 NextcloudSettingsBase* settings) : CommandEntity(parent)
+                                                 QWebdav* client,
+                                                 NextcloudSettingsBase* settings) :
+    WebDavCommandEntity(parent, client, settings)
 {
-    this->m_client = getNewWebDav(settings, QStringLiteral(""), this);
     this->m_localFile = new QFile(localPath, this);
     const QString fileName = QFileInfo(*this->m_localFile).fileName();
     this->m_remotePath = remotePath + fileName;
 
     // extensible list of command properties
     QMap<QString, QVariant> info;
+    info["type"] = QStringLiteral("fileUpload");
     info["localPath"] = localPath;
     info["remotePath"] = remotePath;
     info["fileName"] = fileName;
     this->m_commandInfo = CommandEntityInfo(info);
-}
-
-FileUploadCommandEntity::~FileUploadCommandEntity()
-{
-    if (this->m_reply) {
-        delete this->m_reply;
-        this->m_reply = Q_NULLPTR;
-    }
 }
 
 void FileUploadCommandEntity::startWork()
@@ -45,18 +39,12 @@ void FileUploadCommandEntity::startWork()
 
     this->m_reply = this->m_client->put(this->m_remotePath, this->m_localFile);
 
-    QObject::connect(this->m_reply,
-                     static_cast<void(QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), this,
-                     [=](QNetworkReply::NetworkError error) {
-        qWarning() << "Aborting due to network error:" << error;
-        abortWork();
-    });
-
-    QObject::connect(this->m_reply, &QNetworkReply::finished, this, [=]() {
+    /*QObject::connect(this->m_reply, &QNetworkReply::finished, this, [=]() {
         qInfo() << "File upload " << this->m_remotePath << "complete, applying modification time.";
         setModifiedTime();
-    });
+    });*/
 
+    WebDavCommandEntity::startWork();
     setState(RUNNING);
 }
 
@@ -95,15 +83,4 @@ void FileUploadCommandEntity::setModifiedTime()
             return;
         setProgress(bytesSent/bytesTotal);
     });
-}
-
-void FileUploadCommandEntity::abortWork()
-{
-    if (this->m_reply) {
-        this->m_reply->abort();
-        delete this->m_reply;
-        this->m_reply = Q_NULLPTR;
-    }
-
-    Q_EMIT aborted();
 }

@@ -12,11 +12,12 @@
 #include <localfilebrowser.h>
 #include <sailfish-ui-set.h>
 #include "daemoncontrol.h"
+#include <qmlmap.h>
 
 int main(int argc, char *argv[])
 {
     SailfishUiSet::registerQmlTypes();
-    qmlRegisterType<RemoteFileInfo>("harbour.owncloud", 1, 0, "RemoteFileInfo");
+    qmlRegisterType<QmlMap>("harbour.owncloud", 1, 0, "QmlMap");
     qmlRegisterType<CommandEntity>("harbour.owncloud", 1, 0, "CommandEntity");
     qmlRegisterType<CommandQueue>("harbour.owncloud", 1, 0, "CommandQueue");
     qmlRegisterType<ThumbnailFetcher>("harbour.owncloud", 1, 0, "ThumbnailFetcher");
@@ -42,7 +43,7 @@ int main(int argc, char *argv[])
     view->rootContext()->setContextProperty("transfer", transfer);
     view->rootContext()->setContextProperty("daemonCtrl", daemonCtrl);
 
-    view->setSource(SailfishApp::pathTo("qml/harbour-owncloud.qml"));
+    view->setSource(QUrl("qrc:/qml/harbour-owncloud.qml"));
     view->showFullScreen();
 
     return app->exec();

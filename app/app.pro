@@ -16,6 +16,7 @@ CONFIG += sailfishapp qt
 QT += xml dbus quick qml
 
 include(../common/common.pri)
+include(../qmlcommon/qmlcommon.pri)
 include(../sailfish-ui-set/sailfish-ui-set.pri)
 
 SOURCES += \
@@ -25,21 +26,28 @@ SOURCES += \
 HEADERS += \
     src/daemoncontrol.h
 
+RESOURCES += \
+    qml.qrc
+
 OTHER_FILES += \
     rpm/harbour-owncloud.changes.in \
     rpm/harbour-owncloud.spec \
     rpm/harbour-owncloud.yaml \
     translations/*.ts \
-    harbour-owncloud.desktop \
-    qml/harbour-owncloud.qml \
-    qml/cover/CoverPage.qml \
-    qml/pages/FileBrowser.qml \
-    qml/pages/FileDetails.qml \
-    qml/pages/Login.qml \
-    qml/pages/SSLErrorDialog.qml \
-    qml/pages/SettingsPage.qml \
-    qml/pages/TransferPage.qml \
-    qml/pages/RemoteDirSelectDialog.qml
+    harbour-owncloud.desktop
+
+lupdate_only {
+    OTHER_FILES += \
+        qml/harbour-owncloud.qml \
+        qml/cover/CoverPage.qml \
+        qml/pages/FileBrowser.qml \
+        qml/pages/FileDetails.qml \
+        qml/pages/Login.qml \
+        qml/pages/SSLErrorDialog.qml \
+        qml/pages/SettingsPage.qml \
+        qml/pages/TransferPage.qml \
+        qml/pages/RemoteDirSelectDialog.qml
+}
 
 # to disable building translations every time, comment out the
 # following CONFIG line
@@ -69,3 +77,4 @@ qwebdavlib.files += $$OUT_PWD/../qwebdavlib/qwebdavlib/libqwebdav.so.1
 INSTALLS += qwebdavlib
 
 DEFINES += QWEBDAVITEM_EXTENDED_PROPERTIES
+

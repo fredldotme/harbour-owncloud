@@ -1,23 +1,11 @@
-# NOTICE:
-#
-# Application name defined in TARGET has a corresponding QML filename.
-# If name defined in TARGET is changed, the following needs to be done
-# to match new name:
-#   - corresponding QML filename must be changed
-#   - desktop icon filename must be changed
-#   - desktop filename must be changed
-#   - icon definition filename in desktop file must be changed
-#   - translation filenames have to be changed
-
-# The name of your application
 TARGET = harbour-owncloud
 
 CONFIG += sailfishapp qt
 QT += xml dbus quick qml
 
-include(../common/common.pri)
-include(../qmlcommon/qmlcommon.pri)
-include(../sailfish-ui-set/sailfish-ui-set.pri)
+include($$PWD/../common/common.pri)
+include($$PWD/../qmlcommon/qmlcommon.pri)
+include($$PWD/../../3rdparty/sailfish-ui-set/sailfish-ui-set.pri)
 
 SOURCES += \
     src/harbour-owncloud.cpp \
@@ -30,9 +18,6 @@ RESOURCES += \
     qml.qrc
 
 OTHER_FILES += \
-    rpm/harbour-owncloud.changes.in \
-    rpm/harbour-owncloud.spec \
-    rpm/harbour-owncloud.yaml \
     translations/*.ts \
     harbour-owncloud.desktop
 
@@ -66,14 +51,14 @@ icon128.files += icons/128x128/harbour-owncloud.png
 icon128.path = /usr/share/icons/hicolor/128x128/apps
 INSTALLS += icon128
 
-include(../notifications.pri)
+include($$PWD/../../3rdparty/notifications.pri)
 
-LIBS += $$OUT_PWD/../qwebdavlib/qwebdavlib/libqwebdav.so.1
+LIBS += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.so.1
 
 QMAKE_RPATHDIR += /usr/share/harbour-owncloud/lib
 
 qwebdavlib.path = /usr/share/harbour-owncloud/lib
-qwebdavlib.files += $$OUT_PWD/../qwebdavlib/qwebdavlib/libqwebdav.so.1
+qwebdavlib.files += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.so.1
 INSTALLS += qwebdavlib
 
 DEFINES += QWEBDAVITEM_EXTENDED_PROPERTIES

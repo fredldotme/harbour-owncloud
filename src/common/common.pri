@@ -50,12 +50,12 @@ HEADERS += \
     $$PWD/src/commands/stdfunctioncommandentity.h \
     $$PWD/src/commands/davlistcommandentity.h
 
-LIBS += $$OUT_PWD/../qwebdavlib/qwebdavlib/libqwebdav.so.1
+LIBS += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.so.1
 
 QMAKE_RPATHDIR += /usr/share/harbour-owncloud/lib
 
 INCLUDEPATH += $$PWD/src
 DEPENDPATH += $$PWD/src
 
-INCLUDEPATH += $$PWD/../qwebdavlib/qwebdavlib
-DEPENDPATH += $$PWD/../qwebdavlib/qwebdavlib
+INCLUDEPATH += $$PWD/../../3rdparty/qwebdavlib/qwebdavlib
+DEPENDPATH += $$PWD/../../3rdparty/qwebdavlib/qwebdavlib

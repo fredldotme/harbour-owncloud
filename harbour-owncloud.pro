@@ -3,6 +3,9 @@ QMAKE_CXXFLAGS += -std=gnu++0x
 
 TEMPLATE = subdirs
 CONFIG += ordered
-SUBDIRS = qwebdavlib/qwebdavlib app daemon permission-agent qmlextension sharing
+SUBDIRS = 3rdparty/qwebdavlib/qwebdavlib src
 
-OTHER_FILES += rpm
+OTHER_FILES += \
+    rpm/harbour-owncloud.changes.in \
+    rpm/harbour-owncloud.spec \
+    rpm/harbour-owncloud.yaml

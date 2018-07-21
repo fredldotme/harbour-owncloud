@@ -3,7 +3,6 @@ import Sailfish.Silica 1.0
 
 Page {
     id: pageRoot
-    anchors.fill: parent
 
     Component.onCompleted: {
         settings.readSettings();
@@ -29,6 +28,7 @@ Page {
         anchors.fill: parent
 
         PageHeader {
+            id: pageHeader
             title: qsTr("Settings")
         }
 
@@ -47,8 +47,7 @@ Page {
 
         TextSwitch {
             id: autoLoginSwitch
-            anchors.top: pulley.bottom
-            anchors.topMargin: 96
+            anchors.top: pageHeader.bottom
             text: qsTr("Login automatically")
             description: qsTr("Automatically log in to your ownCloud server when starting the app", "Login automatically description")
             checked: settings.autoLogin

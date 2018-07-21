@@ -16,9 +16,12 @@ Page {
         target: browser
         onLoginSucceeded: {
             loginInProgress = false;
-            browser.getDirectoryContent("/");
-            pageStack.replace("FileBrowser.qml");
+            pageStack.replace("qrc:/qml/pages/FileBrowser.qml");
             daemonCtrl.reloadConfig()
+
+            var command = browser.directoryListingRequest("/");
+            transfer.mainQueue.enqueue(command)
+            transfer.mainQueue.run()
         }
     }
 
@@ -33,7 +36,8 @@ Page {
             x: (parent.width / 2) - (width / 2)
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: parent.top
-            anchors.topMargin: 20
+            anchors.topMargin: 48
+            anchors.bottomMargin: 48
         }
 
         TextField {
@@ -116,6 +120,7 @@ Page {
         BusyIndicator {
             anchors.centerIn: parent
             running: loginInProgress
+            size: BusyIndicatorSize.Large
         }
     }
 

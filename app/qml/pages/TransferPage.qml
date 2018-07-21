@@ -7,7 +7,6 @@ Page {
     objectName: "TransferPage"
 
     Component.onCompleted: {
-        listView.model = transfer.getTransfers();
         if(daemonCtrl.uploading) {
             daemonAnimationOut.stop();
             daemonAnimationIn.start();
@@ -17,22 +16,7 @@ Page {
         }
     }
 
-    Connections {
-        target: transfer
-        onTransferAdded: {
-            listView.model = transfer.getTransfers();
-        }
-    }
-
-    Connections {
-        target: transfer
-        onTransferingChanged: {
-            listView.model = transfer.getTransfers();
-        }
-    }
-
-    property Item transferContextMenu;
-    property var selectedEntry;
+    property CommandEntity selectedEntry : null;
 
     PageHeader {
         id: header
@@ -110,23 +94,23 @@ Page {
             id: noTransfersHint
             anchors.centerIn: parent
             text: qsTr("No pending file transfers")
-            enabled: (listView.model === undefined || listView.model.length === 0) && !daemonCtrl.uploading
+            enabled: (transfers.count < 1) && !daemonCtrl.uploading
         }
 
         SilicaListView {
             id: listView
             anchors.fill: parent
+            model: transfers
 
             delegate: ListItem {
                 id: delegate
-                property bool menuOpen: transferContextMenu != null && transferContextMenu.parent === delegate
-                property var commandInfo : listView.model[index].info
+                property CommandEntity commandEntity : listView.model[index]
 
                 Image {
                     id: transferTypeIcon
                     x: 16
                     height: parent.height
-                    source: listView.model[index].direction === TransferEntry.DOWN ?
+                    source: commandEntity.info().property("type") === "fileDownload"?
                                 "image://theme/icon-m-download" :
                                 "image://theme/icon-m-upload"
                     fillMode: Image.PreserveAspectFit
@@ -134,7 +118,7 @@ Page {
 
                 Label {
                     id: label
-                    text: commandInfo.properties()["fileName"]
+                    text: commandEntity.info().property("fileName")
                     anchors.top: parent.top
                     anchors.left: transferTypeIcon.right
                     anchors.leftMargin: 16
@@ -147,27 +131,15 @@ Page {
                     anchors.top: label.bottom
                     width: parent.width
                     anchors.leftMargin: Theme.paddingLarge
+                    value: commandEntity.progress
                 }
 
                 onPressAndHold: {
-                    selectedEntry = listView.model[index];
-                    if (!transferContextMenu)
-                        transferContextMenu = contextMenuComponent.createObject(listView)
-                    transferContextMenu.show(delegate)
+                    selectedEntry = commandEntity;
+                    if (!menu)
+                        menu = contextMenuComponent.createObject(listView)
+                    openMenu()
                 }
-
-                Connections {
-                    /*
-                      Use a connection instead of directly assigning model[index].value
-                      The TransferEntry object appears to get deleted between emitting the
-                      signal and trying to read the property. Use this connection instead.
-                    */
-                    target: listView.model[index]
-                    onProgressChanged: {
-                        transferProgress.value = progress
-                    }
-                }
-
             }
             VerticalScrollDecorator {}
 
@@ -181,7 +153,7 @@ Page {
                     MenuItem {
                         text: qsTr("Cancel")
                         onClicked: {
-                            selectedEntry.cancelTransfer()
+                            selectedEntry.abort()
                         }
                     }
                 }

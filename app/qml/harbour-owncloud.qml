@@ -19,8 +19,8 @@ ApplicationWindow
         onSslCertifcateError: {
             pageStack.completeAnimation();
             pageStack.clear();
-            pageStack.replace("pages/Login.qml", {}, PageStackAction.Immediate)
-            pageStack.push("pages/SSLErrorDialog.qml", {md5Digest : md5Digest, sha1Digest : sha1Digest});
+            pageStack.replace("qrc:/qml/pages/Login.qml", {}, PageStackAction.Immediate)
+            pageStack.push("qrc:/qml/pages/SSLErrorDialog.qml", {md5Digest : md5Digest, sha1Digest : sha1Digest});
         }
     }
 
@@ -34,7 +34,7 @@ ApplicationWindow
             pageStack.completeAnimation();
             pageStack.clear();
             pageStack.completeAnimation();
-            pageStack.push("pages/Login.qml")
+            pageStack.push("qrc:/qml/pages/Login.qml")
         }
     }
 
@@ -70,9 +70,60 @@ ApplicationWindow
         }
     }
 
+    Connections {
+        target: transfer.mainQueue
+        onCommandFinished: {
+            console.log("onCommandFinished")
+            if (!receipt.finished)
+                return;
+
+            var isDavListCommand = (receipt.info.properties()["type"] === "davList")
+            console.log("isDavListCommand " + isDavListCommand)
+            if (!isDavListCommand)
+                return;
+
+            var remotePath = receipt.info.properties()["remotePath"]
+            var dirContent = receipt.result;
+            directoryContents.insert(remotePath, dirContent);
+        }
+    }
+
+    QmlMap {
+        id: directoryContents
+        onInserted: {
+            console.log("INSERTED!")
+        }
+        onRemoved: {
+            console.log("REMOVED!")
+        }
+    }
+
+    ListModel {
+        id: transfers
+        dynamicRoles: true
+    }
+    Connections {
+        target: transfer.downloadQueue
+        onAdded: {
+            transfers.append(entity)
+        }
+        onRemoved: {
+            transfers.remove(entity)
+        }
+    }
+    Connections {
+        target: transfer.uploadQueue
+        onAdded: {
+            transfers.append(entity)
+        }
+        onRemoved: {
+            transfers.remove(entity)
+        }
+    }
+
     id: applicationWindow
     initialPage: Component { Login { id: loginPage } }
-    cover: Qt.resolvedUrl("cover/CoverPage.qml")
+    cover: Qt.resolvedUrl("qrc:/qml/cover/CoverPage.qml")
 }
 
 

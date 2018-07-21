@@ -5,22 +5,25 @@ import SailfishUiSet 1.0
 
 Page {
     id: pageRoot
-    anchors.fill: parent
+    //anchors.fill: parent
 
     property string remotePath : "/"
     property string pageHeaderText : "/"
 
     FileDetailsHelper { id: fileDetailsHelper }
-    readonly property Component remoteDirDialogComponent : Qt.createComponent("RemoteDirSelectDialog.qml");
-    readonly property Component selectionDialogComponent : Qt.createComponent("qrc:/sailfish-ui-set/ui/FileSelectionDialog.qml");
-    readonly property Component textEntryDialogComponent : Qt.createComponent("qrc:/sailfish-ui-set/ui/TextEntryDialog.qml");
-
-    Component.onCompleted: {
-        remotePath = browser.getCurrentPath();
-    }
+    readonly property Component remoteDirDialogComponent :
+        Qt.createComponent("qrc:/qml/pages/RemoteDirSelectDialog.qml");
+    readonly property Component browserComponent :
+        Qt.createComponent("qrc:/qml/pages/FileBrowser.qml");
+    readonly property Component fileDetailsComponent :
+        Qt.createComponent("qrc:/qml/pages/FileDetails.qml");
+    readonly property Component selectionDialogComponent :
+        Qt.createComponent("qrc:/sailfish-ui-set/ui/FileSelectionDialog.qml");
+    readonly property Component textEntryDialogComponent :
+        Qt.createComponent("qrc:/sailfish-ui-set/ui/TextEntryDialog.qml");
 
     onRemotePathChanged: {
-        if(remotePath === "/") {
+        if (remotePath === "/") {
             pageHeaderText = "/";
         } else {
             var dirs = remotePath.split("/")
@@ -34,41 +37,8 @@ Page {
 
     property int cancelCounter : 0;
 
-    function refreshListView() {
-        listView.model = undefined
-        browser.getDirectoryContent(remotePath);
-    }
-
     Connections {
-        id: fillListviewConnection
-        target: browser
-        onDirectoryContentChanged: {
-            if(currentPath === browser.getCanonicalPath(remotePath)) {
-                listView.model = entries;
-            }
-        }
-    }
-
-    Connections {
-        target: browser
-        onRefreshStarted: {
-            if(remotePath === pathToRefresh && cancelCounter === 0) {
-                listView.model = undefined;
-            }
-        }
-    }
-
-    Connections {
-        target: transfer
-        onUploadComplete: {
-            if (info.properties()["remotePath"] === pageRoot.remotePath) {
-                refreshListView()
-            }
-        }
-    }
-
-    Connections {
-        target: transfer.miscQueue
+        target: transfer.uploadQueue
         onCommandFinished: {
             if (receipt.info.properties()["remotePath"] === pageRoot.remotePath) {
                 refreshListView()
@@ -76,17 +46,26 @@ Page {
         }
     }
 
+    Connections {
+        target: directoryContents
+        onInserted: {
+            console.log("key:" + key + " remotePath:" + remotePath)
+            if (key !== remotePath)
+                return;
+
+            listView.model = directoryContents.value(key)
+        }
+    }
+
     onStatusChanged: {
         if (status === PageStatus.Deactivating) {
             if (_navigation === PageNavigation.Back) {
-                fillListviewConnection.destroy()
-                listView.model = undefined
-                browser.goToParentPath();
+                directoryContents.remove(remotePath)
             }
         }
     }
 
-    property RemoteFileInfo selectedEntry : null;
+    property var selectedEntry : null;
     property BackgroundItem selectedItem : null;
     property RemorseItem selectedRemorse : null;
     property Dialog dialogObj : null
@@ -96,7 +75,13 @@ Page {
                 (tmpEntry.isDirectory ? "/" : "")
         var toPath = remotePath + newName +
                 (tmpEntry.isDirectory ? "/" : "")
-        browser.move(fromPath, toPath, true)
+
+        var moveCommand = browser.moveRequest(fromPath, toPath, true)
+        transfer.mainQueue.enqueue(moveCommand)
+        var listCommand = browser.directoryListingRequest(remotePath)
+        transfer.mainQueue.enqueue(listCommand)
+
+        transfer.mainQueue.run()
     }
 
     function moveEntry(tmpEntry, remotePath) {
@@ -104,7 +89,13 @@ Page {
                 (tmpEntry.isDirectory ? "/" : "")
         var toPath = dialogObj.remotePath + tmpEntry.name +
                 (tmpEntry.isDirectory ? "/" : "")
-        browser.move(fromPath, toPath, true)
+
+        var moveCommand = browser.moveRequest(fromPath, toPath, true)
+        transfer.mainQueue.enqueue(moveCommand)
+        var listCommand = browser.directoryListingRequest(remotePath)
+        transfer.mainQueue.enqueue(listCommand)
+
+        transfer.mainQueue.run()
     }
 
     function copyEntry(tmpEntry, remotePath) {
@@ -112,7 +103,10 @@ Page {
                 (tmpEntry.isDirectory ? "/" : "")
         var toPath = dialogObj.remotePath + tmpEntry.name +
                 (tmpEntry.isDirectory ? "/" : "")
-        browser.copy(fromPath, toPath, true)
+        var command = browser.copyRequest(fromPath, toPath, true)
+
+        transfer.mainQueue.enqueue(command)
+        transfer.mainQueue.run()
     }
 
     SilicaFlickable {
@@ -124,7 +118,16 @@ Page {
             clip: true
 
             header: PageHeader {
+                id: pageHeader
                 title: pageHeaderText
+            }
+
+            BusyIndicator {
+                anchors.right: listView.header.left
+                anchors.top: listView.header.top
+                anchors.bottom: listView.header.bottom
+                width: height
+                running: transfer.mainQueue.running
             }
 
             PullDownMenu {
@@ -132,8 +135,9 @@ Page {
                     text: qsTr("Refresh")
                     enabled: listView.model !== undefined
                     onClicked: {
-                        listView.model = undefined
-                        browser.getDirectoryContent(remotePath);
+                        var command = browser.directoryListingRequest(remotePath);
+                        transfer.mainQueue.enqueue(command)
+                        transfer.mainQueue.run()
                     }
                 }
 
@@ -145,7 +149,9 @@ Page {
                         dialogObj.placeholderText = qsTr("Directory name")
                         dialogObj.labelText = dialogObj.placeholderText
                         dialogObj.accepted.connect(function () {
-                            browser.makeDirectory(dialogObj.text)
+                            var commandEntity = browser.makeDirectoryRequest(dialogObj.text)
+                            transfer.mainQueue.enqueue(commandEntity)
+                            transfer.mainQueue.run()
                             dialogObj = null
                         })
                         pageStack.push(dialogObj)
@@ -164,7 +170,8 @@ Page {
                     text: qsTr("Upload")
                     enabled: listView.model !== undefined
                     onClicked: {
-                        dialogObj = selectionDialogComponent.createObject(pageRoot, {maximumSelections:Number.MAX_VALUE});
+                        dialogObj = selectionDialogComponent.createObject(pageRoot,
+                                                                          {maximumSelections:Number.MAX_VALUE});
                         dialogObj.acceptText = qsTr("Upload")
                         dialogObj.accepted.connect(enqueueSelectedFiles)
                         dialogObj.rejected.connect(function() {
@@ -178,20 +185,22 @@ Page {
                 MenuItem {
                     text: qsTr("File transfers")
                     onClicked: {
-                        pageStack.push("TransferPage.qml")
+                        pageStack.push("qrc:/qml/pages/TransferPage.qml")
                     }
                 }
 
                 MenuItem {
                     text: qsTr("Settings")
                     onClicked: {
-                        pageStack.push("SettingsPage.qml")
+                        pageStack.push("qrc:/qml/pages/SettingsPage.qml")
                     }
                 }
             }
 
             delegate: ListItem {
                 id: delegate
+
+                property var davInfo : listView.model[index]
 
                 RemorseItem {
                     id: remorseItem
@@ -207,9 +216,9 @@ Page {
 
                 Image {
                     id: icon
-                    source: listView.model[index].isDirectory ?
+                    source: davInfo.isDirectory ?
                                 "image://theme/icon-m-folder" :
-                                fileDetailsHelper.getIconFromMime(listView.model[index].mimeType)
+                                fileDetailsHelper.getIconFromMime(davInfo.mimeType)
                     anchors.left: parent.left
                     anchors.leftMargin: Theme.paddingLarge
                     anchors.top: parent.top
@@ -223,24 +232,26 @@ Page {
                     id: label
                     x: icon.x + icon.width + 12
                     y: icon.y - icon.height + 6
-                    text: listView.model[index].name
+                    text: davInfo.name
                     anchors.verticalCenter: parent.verticalCenter
                     color: delegate.highlighted ? Theme.highlightColor : Theme.primaryColor
                 }
 
                 onClicked: {
-                    if(listView.model[index].isDirectory) {
-                        var nextDirectory = Qt.createComponent("FileBrowser.qml");
-                        browser.getDirectoryContent(remotePath + listView.model[index].name + "/");
+                    if(davInfo.isDirectory) {
+                        var nextPath = remotePath + davInfo.name + "/";
+                        var nextDirectory = browserComponent.createObject(pageRoot, { remotePath : nextPath });
                         pageStack.push(nextDirectory)
+                        var command = browser.directoryListingRequest(nextPath)
+                        transfer.mainQueue.enqueue(command)
+                        transfer.mainQueue.run()
                     } else {
-                        var fileComponent = Qt.createComponent("FileDetails.qml");
-                        var fileDetails = fileComponent.createObject(pageRoot, {entry: listView.model[index]});
+                        var fileDetails = fileDetailsComponent.createObject(pageRoot, {entry: davInfo});
                         pageStack.push(fileDetails);
                     }
                 }
                 onPressAndHold: {
-                    selectedEntry = listView.model[index];
+                    selectedEntry = davInfo;
                     selectedItem = delegate
                     if (!menu)
                         menu = contextMenuComponent.createObject(listView)
@@ -267,7 +278,7 @@ Page {
                         selectedItem = null
                     }
                     MenuItem {
-                        property RemoteFileInfo tmpEntry;
+                        property var tmpEntry;
 
                         function renameSelectedEntry() {
                             renameEntry(tmpEntry, dialogObj.text)
@@ -292,7 +303,7 @@ Page {
                         }
                     }
                     MenuItem {
-                        property RemoteFileInfo tmpEntry;
+                        property var tmpEntry;
 
                         function moveSelectedEntry() {
                             moveEntry(tmpEntry, remotePath)
@@ -313,7 +324,7 @@ Page {
                         }
                     }
                     MenuItem {
-                        property RemoteFileInfo tmpEntry;
+                        property var tmpEntry;
 
                         function copySelectedEntry() {
                             copyEntry(tmpEntry, remotePath)
@@ -334,17 +345,19 @@ Page {
                         }
                     }
                     MenuItem {
-                        property RemoteFileInfo tmpEntry;
+                        property var tmpEntry;
                         text: qsTr("Delete")
                         onClicked: {
                             selectedRemorse = remorseItem;
                             tmpEntry = selectedEntry
                             cancelCounter++;
-                            selectedRemorse.execute(selectedItem, qsTr("Deleting", "RemorseItem text"), function() {
+                            selectedRemorse.execute(selectedItem,
+                                                    qsTr("Deleting", "RemorseItem text"), function() {
                                 cancelCounter--;
-                                browser.remove(remotePath + tmpEntry.name +
-                                               (tmpEntry.isDirectory ? "/" : ""),
-                                               cancelCounter == 0);
+                                var command = browser.removeRequest(remotePath + tmpEntry.name +
+                                                                    (tmpEntry.isDirectory ? "/" : ""),
+                                                                    cancelCounter == 0);
+                                transfer.mainQueue.enqueue(command)
                                 selectedRemorse = null;
                             })
                             selectedRemorse.canceled.connect(function() {

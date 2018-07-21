@@ -10,39 +10,26 @@ Dialog {
     property bool isLoadingDirectory : true
 
     Component.onCompleted: {
-        tmpBrowser.settings.readSettings()
-        tmpBrowser.testConnection()
+        if (directoryContents.contains(remotePath)) {
+            listView.model = directoryContents.value(remotePath)
+            isLoadingDirectory = false;
+            return;
+        }
+
+        var command = browser.directoryListingRequest(remotePath)
+        transfer.mainQueue.enqueue(command)
+        transfer.mainQueue.run()
     }
 
-    OwnCloudBrowser {
-        id: tmpBrowser
-        settings: browser.settings
+    Connections {
+        target: directoryContents
+        onInserted: {
+            console.log("key:" + key + " remotePath:" + remotePath)
+            if (key !== remotePath)
+                return;
 
-        onLoginFailed: {
-            dialogRoot.close()
-        }
-
-        onSslCertifcateError: {
-            dialogRoot.close()
-        }
-
-        onDirectoryContentChanged: {
-            var dirOnlyEntries = [];
-            remotePath = currentPath
-
-            if (remotePath !== "/") {
-                dirOnlyEntries.push( { name : "..", isDirectory: true} );
-            }
-
-            for (var i = 0; i < entries.length; i++) {
-                if (entries[i].isDirectory)
-                    dirOnlyEntries.push(entries[i])
-            }
-            listView.model = dirOnlyEntries;
+            listView.model = directoryContents.value(key)
             isLoadingDirectory = false;
-        }
-        onLoginSucceeded: {
-            tmpBrowser.getDirectoryContent("/");
         }
     }
 
@@ -64,11 +51,13 @@ Dialog {
             anchors.fill: parent
             enabled: !isLoadingDirectory
 
+            property var davInfo : listView.model[index]
+
             delegate: ListItem {
                 id: bgItem
                 Image {
                     id: icon
-                    source: listView.model[index].name !== ".." ?
+                    source: davInfo.name !== ".." ?
                                 "image://theme/icon-m-folder" :
                                 "image://theme/icon-m-back"
                     anchors.left: parent.left
@@ -85,15 +74,17 @@ Dialog {
                     id: label
                     x: icon.x + icon.width + 12
                     y: icon.y - icon.height + 6
-                    text: listView.model[index].name
+                    text: davInfo.name
                     anchors.verticalCenter: parent.verticalCenter
                     color: bgItem.highlighted ? Theme.highlightColor : Theme.primaryColor
                 }
 
                 onClicked: {
-                    if(listView.model[index].isDirectory) {
-                        var newTargetDir = tmpBrowser.getCanonicalPath(remotePath + listView.model[index].name + "/");
-                        tmpBrowser.getDirectoryContent(newTargetDir);
+                    if(davInfo.isDirectory) {
+                        var newTargetDir = browser.getCanonicalPath(remotePath + davInfo.name + "/");
+                        var command = browser.directoryListingRequest(newTargetDir);
+                        transfer.mainQueue.enqueue(command)
+                        transfer.mainQueue.run()
                         isLoadingDirectory = true;
                     }
                 }

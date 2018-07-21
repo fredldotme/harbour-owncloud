@@ -53,7 +53,7 @@ Page {
         ThumbnailFetcher {
             id: thumbnailFetcher
             settings: browser.settings
-            commandQueue: transfer.miscQueue
+            commandQueue: transfer.mainQueue
             width: fileImage.width
             height: fileImage.height
             Component.onCompleted: {
@@ -69,7 +69,6 @@ Page {
             id: fileImage
             width: parent.width / 3
             height: width
-            anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: header.bottom
             anchors.topMargin: margins
             anchors.left: parent.left

@@ -20,7 +20,7 @@ public:
     Q_PROPERTY(bool transfering READ isTransfering NOTIFY transferingChanged)
     Q_PROPERTY(CommandQueue* downloadQueue READ downloadQueue CONSTANT)
     Q_PROPERTY(CommandQueue* uploadQueue READ uploadQueue CONSTANT)
-    Q_PROPERTY(CommandQueue* miscQueue READ miscQueue CONSTANT)
+    Q_PROPERTY(CommandQueue* mainQueue READ mainQueue CONSTANT)
 
     Q_INVOKABLE CommandEntity* enqueueDownload(QString remotePath, QString mimeType, bool open);
     Q_INVOKABLE void enqueueUpload(QString localPath, QString remotePath);
@@ -30,7 +30,7 @@ public:
 private:
     CommandQueue* downloadQueue() { return &this->m_downloadQueue; }
     CommandQueue* uploadQueue() { return &this->m_uploadQueue; }
-    CommandQueue* miscQueue() { return &this->m_miscQueue; }
+    CommandQueue* mainQueue() { return &this->m_miscQueue; }
 
     OwnCloudBrowser *browser = Q_NULLPTR;
     CommandQueue m_downloadQueue;
@@ -39,8 +39,6 @@ private:
     QMutex downloadMutex;
     QMutex uploadMutex;
 
-    QString destinationFromMIME(QString mime);
-
     bool isTransfering();
 
 signals:
@@ -48,8 +46,6 @@ signals:
     void transferingChanged();
     void downloadComplete(CommandEntityInfo info);
     void downloadFailed(CommandEntityInfo info);
-    void uploadComplete(CommandEntityInfo info);
-    void uploadFailed(CommandEntityInfo info);
 
 public slots:
     void refreshDirectoryContents();

@@ -3,9 +3,10 @@
 #include <QStandardPaths>
 #include <QMutexLocker>
 
+#include <util/filepathutil.h>
 #include <commands/filedownloadcommandentity.h>
 #include <commands/fileuploadcommandentity.h>
-#include <commands/remotedirectorycommandentity.h>
+#include <commands/mkdavdircommandentity.h>
 
 TransferManager::TransferManager(QObject *parent, OwnCloudBrowser *browser) :
     QObject(parent)
@@ -45,32 +46,28 @@ CommandEntity* TransferManager::enqueueDownload(QString remotePath, QString mime
 {
     FileDownloadCommandEntity* downloadCommand = Q_NULLPTR;
 
-    {
-        QMutexLocker locker(&this->downloadMutex);
+    QString name = remotePath.mid(remotePath.lastIndexOf("/") + 1);
+    QString destination = FilePathUtil::destinationFromMIME(mimeType) + "/" + name;
 
-        QString name = remotePath.mid(remotePath.lastIndexOf("/") + 1);
-        QString destination = destinationFromMIME(mimeType) + "/" + name;
+    downloadCommand = new FileDownloadCommandEntity(&this->m_downloadQueue,
+                                                    remotePath,
+                                                    destination,
+                                                    this->browser->getWebdav());
 
-        downloadCommand = new FileDownloadCommandEntity(&this->m_downloadQueue,
-                                                        remotePath,
-                                                        destination,
-                                                        this->browser->getSettings());
+    QObject::connect(downloadCommand, &FileDownloadCommandEntity::done,
+                     this, [=]() {
+        Q_EMIT downloadComplete(downloadCommand->info());
+    });
 
-        QObject::connect(downloadCommand, &FileDownloadCommandEntity::done,
-                         this, [=]() {
-            Q_EMIT downloadComplete(downloadCommand->info());
+    if (open) {
+        QObject::connect(downloadCommand, &FileDownloadCommandEntity::done, this, [=]() {
+            ShellCommand::runCommand(QStringLiteral("xdg-open"), QStringList() << destination);
         });
-
-        if (open) {
-            QObject::connect(downloadCommand, &FileDownloadCommandEntity::done, this, [=]() {
-                ShellCommand::runCommand(QStringLiteral("xdg-open"), QStringList() << destination);
-            });
-        }
-
-        this->m_downloadQueue.enqueue(downloadCommand);
-        if (!this->m_downloadQueue.isRunning())
-            this->m_downloadQueue.run();
     }
+
+    this->m_downloadQueue.enqueue(downloadCommand);
+    if (!this->m_downloadQueue.isRunning())
+        this->m_downloadQueue.run();
     emit transferAdded();
     emit transferingChanged();
 
@@ -83,24 +80,15 @@ void TransferManager::enqueueUpload(QString localPath, QString remotePath)
 
     FileUploadCommandEntity* uploadCommand = Q_NULLPTR;
 
-    {
-        QMutexLocker locker(&this->uploadMutex);
+    uploadCommand = new FileUploadCommandEntity(&this->m_downloadQueue,
+                                                localPath,
+                                                remotePath,
+                                                this->browser->getWebdav());
 
-        uploadCommand = new FileUploadCommandEntity(&this->m_downloadQueue,
-                                                    localPath,
-                                                    remotePath,
-                                                    this->browser->getSettings());
+    this->m_uploadQueue.enqueue(uploadCommand);
+    if (!this->m_uploadQueue.isRunning())
+        this->m_uploadQueue.run();
 
-
-        QObject::connect(uploadCommand, &FileDownloadCommandEntity::done,
-                         this, [=]() {
-            Q_EMIT uploadComplete(uploadCommand->info());
-        });
-
-        this->m_uploadQueue.enqueue(uploadCommand);
-        if (!this->m_uploadQueue.isRunning())
-            this->m_uploadQueue.run();
-    }
     emit transferAdded();
     emit transferingChanged();
 
@@ -135,24 +123,5 @@ bool TransferManager::isNotEnqueued(QString remotePath)
     }
 
     return true;
-}
-
-QString TransferManager::destinationFromMIME(QString mime)
-{
-    QStandardPaths::StandardLocation location;
-
-    if (mime.startsWith("image")) {
-        location = QStandardPaths::PicturesLocation;
-    } else if (mime.startsWith("video")) {
-        location = QStandardPaths::MoviesLocation;
-    } else if (mime.startsWith("audio")) {
-        location = QStandardPaths::MusicLocation;
-    } else if (mime.startsWith("application")) {
-        location = QStandardPaths::DocumentsLocation;
-    } else {
-        location = QStandardPaths::DownloadLocation;
-    }
-
-    return QStandardPaths::writableLocation(location);
 }
 

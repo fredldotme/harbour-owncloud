@@ -32,8 +32,8 @@ void ThumbnailFetcher::fetchThumbnail(QString remoteFile)
             new FileDownloadCommandEntity(this->m_commandQueue,
                                           thumbnailPath,
                                           cachePath,
-                                          this->m_settings,
-                                          client);
+                                          client,
+                                          this->m_settings);
 
     QObject::connect(thumbnailDownloadCommand, &FileDownloadCommandEntity::done, this, [=]() {
         setSource(cachePath);

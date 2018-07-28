@@ -11,8 +11,31 @@ class StdFunctionCommandEntity : public CommandEntity
 
 public:
     explicit StdFunctionCommandEntity(QObject *parent = Q_NULLPTR,
-                                      std::function<void()> function = [](){});
-    void startWork();
+                                      std::function<void()> function = [](){}) :
+        CommandEntity(parent), m_function(function) {}
+
+    bool startWork()
+    {
+        if (!CommandEntity::startWork())
+            return false;
+
+        setState(RUNNING);
+        m_function();
+        setState(FINISHED);
+
+        Q_EMIT done();
+        return true;
+    }
+
+    bool abortWork()
+    {
+        if (!CommandEntity::abortWork())
+            return false;
+
+        setState(ABORTED);
+        Q_EMIT aborted();
+        return true;
+    }
 
 private:
     std::function<void()> m_function;

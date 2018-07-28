@@ -9,13 +9,18 @@ include($$PWD/../../3rdparty/sailfish-ui-set/sailfish-ui-set.pri)
 
 SOURCES += \
     src/harbour-owncloud.cpp \
-    src/daemoncontrol.cpp
+    src/daemoncontrol.cpp \
+    src/directorycontentmodel.cpp \
+    src/ocsnetaccessfactory.cpp
 
 HEADERS += \
-    src/daemoncontrol.h
+    src/daemoncontrol.h \
+    src/directorycontentmodel.h \
+    src/ocsnetaccessfactory.h
 
 RESOURCES += \
-    qml.qrc
+    qml.qrc \
+    icons.qrc
 
 OTHER_FILES += \
     translations/*.ts \
@@ -42,24 +47,13 @@ TRANSLATIONS += \
     translations/harbour-owncloud-sl.ts \
     translations/harbour-owncloud-fr.ts
 
-
 icon86.files += icons/86x86/harbour-owncloud.png
 icon86.path = /usr/share/icons/hicolor/86x86/apps
-INSTALLS += icon86
 
 icon128.files += icons/128x128/harbour-owncloud.png
 icon128.path = /usr/share/icons/hicolor/128x128/apps
-INSTALLS += icon128
 
-include($$PWD/../../3rdparty/notifications.pri)
-
-LIBS += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.so.1
-
-QMAKE_RPATHDIR += /usr/share/harbour-owncloud/lib
-
-qwebdavlib.path = /usr/share/harbour-owncloud/lib
-qwebdavlib.files += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.so.1
-INSTALLS += qwebdavlib
+INSTALLS += icon86 icon128
 
 DEFINES += QWEBDAVITEM_EXTENDED_PROPERTIES
 

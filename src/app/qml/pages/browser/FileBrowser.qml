@@ -5,22 +5,24 @@ import SailfishUiSet 1.0
 
 Page {
     id: pageRoot
-    //anchors.fill: parent
+    anchors.fill: parent
 
     property string remotePath : "/"
     property string pageHeaderText : "/"
 
+    // Keep track of directory listing requests
+    property var listCommand : null
+
+    function refreshListView() {
+        listCommand = browserCommandQueue.directoryListingRequest(remotePath)
+        browserCommandQueue.run()
+    }
+
     FileDetailsHelper { id: fileDetailsHelper }
-    readonly property Component remoteDirDialogComponent :
-        Qt.createComponent("qrc:/qml/pages/RemoteDirSelectDialog.qml");
-    readonly property Component browserComponent :
-        Qt.createComponent("qrc:/qml/pages/FileBrowser.qml");
-    readonly property Component fileDetailsComponent :
-        Qt.createComponent("qrc:/qml/pages/FileDetails.qml");
-    readonly property Component selectionDialogComponent :
-        Qt.createComponent("qrc:/sailfish-ui-set/ui/FileSelectionDialog.qml");
-    readonly property Component textEntryDialogComponent :
-        Qt.createComponent("qrc:/sailfish-ui-set/ui/TextEntryDialog.qml");
+
+    Component.onCompleted: {
+        refreshListView()
+    }
 
     onRemotePathChanged: {
         if (remotePath === "/") {
@@ -35,13 +37,28 @@ Page {
         }
     }
 
-    property int cancelCounter : 0;
+    Connections {
+        target: browserCommandQueue
+        onCommandFinished: {
+            // Invalidate listCommand after completion
+            if (receipt.info.property("type") === "davList") {
+                listCommand = null
+                return;
+            }
+
+            if (receipt.info.property("remotePath") === pageRoot.remotePath) {
+                refreshListView()
+                return;
+            }
+        }
+    }
 
     Connections {
-        target: transfer.uploadQueue
+        target: transferQueue
         onCommandFinished: {
-            if (receipt.info.properties()["remotePath"] === pageRoot.remotePath) {
+            if (receipt.info.property("remotePath") === pageRoot.remotePath) {
                 refreshListView()
+                return;
             }
         }
     }
@@ -49,10 +66,12 @@ Page {
     Connections {
         target: directoryContents
         onInserted: {
-            console.log("key:" + key + " remotePath:" + remotePath)
+            // console.log("key:" + key + " remotePath:" + remotePath)
             if (key !== remotePath)
                 return;
 
+            // TODO: apply delta between directoryContents and localListModel
+            // TODO: animation when inserting/deleting entries
             listView.model = directoryContents.value(key)
         }
     }
@@ -67,7 +86,6 @@ Page {
 
     property var selectedEntry : null;
     property BackgroundItem selectedItem : null;
-    property RemorseItem selectedRemorse : null;
     property Dialog dialogObj : null
 
     function renameEntry(tmpEntry, newName) {
@@ -76,12 +94,8 @@ Page {
         var toPath = remotePath + newName +
                 (tmpEntry.isDirectory ? "/" : "")
 
-        var moveCommand = browser.moveRequest(fromPath, toPath, true)
-        transfer.mainQueue.enqueue(moveCommand)
-        var listCommand = browser.directoryListingRequest(remotePath)
-        transfer.mainQueue.enqueue(listCommand)
-
-        transfer.mainQueue.run()
+        browserCommandQueue.moveRequest(fromPath, toPath, true)
+        refreshListView()
     }
 
     function moveEntry(tmpEntry, remotePath) {
@@ -90,12 +104,8 @@ Page {
         var toPath = dialogObj.remotePath + tmpEntry.name +
                 (tmpEntry.isDirectory ? "/" : "")
 
-        var moveCommand = browser.moveRequest(fromPath, toPath, true)
-        transfer.mainQueue.enqueue(moveCommand)
-        var listCommand = browser.directoryListingRequest(remotePath)
-        transfer.mainQueue.enqueue(listCommand)
-
-        transfer.mainQueue.run()
+        browserCommandQueue.moveRequest(fromPath, toPath, true)
+        refreshListView()
     }
 
     function copyEntry(tmpEntry, remotePath) {
@@ -103,10 +113,9 @@ Page {
                 (tmpEntry.isDirectory ? "/" : "")
         var toPath = dialogObj.remotePath + tmpEntry.name +
                 (tmpEntry.isDirectory ? "/" : "")
-        var command = browser.copyRequest(fromPath, toPath, true)
 
-        transfer.mainQueue.enqueue(command)
-        transfer.mainQueue.run()
+        browserCommandQueue.copyRequest(fromPath, toPath, true)
+        browserCommandQueue.run()
     }
 
     SilicaFlickable {
@@ -116,28 +125,42 @@ Page {
             id: listView
             anchors.fill: parent
             clip: true
+            add: Transition {
+                NumberAnimation {
+                    properties: "height"
+                    from: 0
+                    to: delegate.height
+                    duration: 200
+                }
+            }
+            remove: Transition {
+                NumberAnimation {
+                    properties: "height"
+                    from: delegate.height
+                    to: 0
+                    duration: 200
+                }
+            }
 
             header: PageHeader {
                 id: pageHeader
                 title: pageHeaderText
             }
 
-            BusyIndicator {
+            /*BusyIndicator {
                 anchors.right: listView.header.left
                 anchors.top: listView.header.top
                 anchors.bottom: listView.header.bottom
                 width: height
-                running: transfer.mainQueue.running
-            }
+                running: browserCommandQueue.running
+            }*/
 
             PullDownMenu {
                 MenuItem {
                     text: qsTr("Refresh")
                     enabled: listView.model !== undefined
                     onClicked: {
-                        var command = browser.directoryListingRequest(remotePath);
-                        transfer.mainQueue.enqueue(command)
-                        transfer.mainQueue.run()
+                        refreshListView()
                     }
                 }
 
@@ -149,9 +172,9 @@ Page {
                         dialogObj.placeholderText = qsTr("Directory name")
                         dialogObj.labelText = dialogObj.placeholderText
                         dialogObj.accepted.connect(function () {
-                            var commandEntity = browser.makeDirectoryRequest(dialogObj.text)
-                            transfer.mainQueue.enqueue(commandEntity)
-                            transfer.mainQueue.run()
+                            var newPath = remotePath + dialogObj.text
+                            browserCommandQueue.makeDirectoryRequest(newPath)
+                            refreshListView()
                             dialogObj = null
                         })
                         pageStack.push(dialogObj)
@@ -162,8 +185,10 @@ Page {
                     function enqueueSelectedFiles() {
                         var selectedFiles = dialogObj.filesToSelect
                         for (var i = 0; i < selectedFiles.length; i++) {
-                            transfer.enqueueUpload(selectedFiles[i], browser.getCurrentPath());
+                            transferQueue.fileUploadRequest(selectedFiles[i],
+                                                            FilePathUtil.getCanonicalPath(remotePath));
                         }
+                        transferQueue.run()
                         dialogObj = null
                     }
 
@@ -185,14 +210,14 @@ Page {
                 MenuItem {
                     text: qsTr("File transfers")
                     onClicked: {
-                        pageStack.push("qrc:/qml/pages/TransferPage.qml")
+                        pageStack.push(transferPageComponent)
                     }
                 }
 
                 MenuItem {
                     text: qsTr("Settings")
                     onClicked: {
-                        pageStack.push("qrc:/qml/pages/SettingsPage.qml")
+                        pageStack.push(settingsPageComponent)
                     }
                 }
             }
@@ -201,18 +226,6 @@ Page {
                 id: delegate
 
                 property var davInfo : listView.model[index]
-
-                RemorseItem {
-                    id: remorseItem
-                    onCanceled: {
-                        console.log("Canceled...")
-                        var forceRefresh = (cancelCounter > 0);
-                        cancelCounter--;
-                        if(forceRefresh) {
-                            refreshListView()
-                        }
-                    }
-                }
 
                 Image {
                     id: icon
@@ -236,17 +249,21 @@ Page {
                     anchors.verticalCenter: parent.verticalCenter
                     color: delegate.highlighted ? Theme.highlightColor : Theme.primaryColor
                 }
+                RemorseItem {
+                    id: remorseItem
+                    onCanceled: {
+                        console.log("Canceled...")
+                        refreshListView()
+                    }
+                }
 
                 onClicked: {
                     if(davInfo.isDirectory) {
                         var nextPath = remotePath + davInfo.name + "/";
                         var nextDirectory = browserComponent.createObject(pageRoot, { remotePath : nextPath });
                         pageStack.push(nextDirectory)
-                        var command = browser.directoryListingRequest(nextPath)
-                        transfer.mainQueue.enqueue(command)
-                        transfer.mainQueue.run()
                     } else {
-                        var fileDetails = fileDetailsComponent.createObject(pageRoot, {entry: davInfo});
+                        var fileDetails = fileDetailsComponent.createObject(pageRoot, { entry: davInfo });
                         pageStack.push(fileDetails);
                     }
                 }
@@ -254,9 +271,9 @@ Page {
                     selectedEntry = davInfo;
                     selectedItem = delegate
                     if (!menu)
-                        menu = contextMenuComponent.createObject(listView)
+                        menu = contextMenuComponent.createObject(listView, {remorseItem : remorseItem})
 
-                    if (selectedRemorse === null) {
+                    if (remorseItem.pending === null) {
                         openMenu()
                     }
                 }
@@ -265,7 +282,7 @@ Page {
 
             BusyIndicator {
                 anchors.centerIn: parent
-                running: listView.model === undefined
+                running: listCommand !== null
                 size: BusyIndicatorSize.Large
             }
 
@@ -273,6 +290,7 @@ Page {
                 id: contextMenuComponent
 
                 ContextMenu {
+                    property RemorseItem remorseItem : null
                     onClosed: {
                         selectedEntry = null
                         selectedItem = null
@@ -348,21 +366,14 @@ Page {
                         property var tmpEntry;
                         text: qsTr("Delete")
                         onClicked: {
-                            selectedRemorse = remorseItem;
                             tmpEntry = selectedEntry
-                            cancelCounter++;
-                            selectedRemorse.execute(selectedItem,
-                                                    qsTr("Deleting", "RemorseItem text"), function() {
-                                cancelCounter--;
-                                var command = browser.removeRequest(remotePath + tmpEntry.name +
-                                                                    (tmpEntry.isDirectory ? "/" : ""),
-                                                                    cancelCounter == 0);
-                                transfer.mainQueue.enqueue(command)
-                                selectedRemorse = null;
-                            })
-                            selectedRemorse.canceled.connect(function() {
-                                selectedRemorse = null
-                            })
+                            remorseItem.execute(selectedItem,
+                                                qsTr("Deleting",
+                                                     "RemorseItem text"),
+                                                function(){
+                                                    browserCommandQueue.removeRequest(remotePath + tmpEntry.name);
+                                                    refreshListView()
+                                                })
                         }
                     }
                 }

@@ -9,16 +9,20 @@ Dialog {
     property string remotePath : "/"
     property bool isLoadingDirectory : true
 
-    Component.onCompleted: {
+    function getDirectoryContent(path) {
+        remotePath = FilePathUtil.getCanonicalPath(path)
+
         if (directoryContents.contains(remotePath)) {
             listView.model = directoryContents.value(remotePath)
             isLoadingDirectory = false;
             return;
         }
+        browserCommandQueue.directoryListingRequest(remotePath)
+        browserCommandQueue.run()
+    }
 
-        var command = browser.directoryListingRequest(remotePath)
-        transfer.mainQueue.enqueue(command)
-        transfer.mainQueue.run()
+    Component.onCompleted: {
+        getDirectoryContent(remotePath)
     }
 
     Connections {
@@ -51,10 +55,11 @@ Dialog {
             anchors.fill: parent
             enabled: !isLoadingDirectory
 
-            property var davInfo : listView.model[index]
-
             delegate: ListItem {
+                property var davInfo : listView.model[index]
                 id: bgItem
+                visible: davInfo.isDirectory
+
                 Image {
                     id: icon
                     source: davInfo.name !== ".." ?
@@ -80,13 +85,12 @@ Dialog {
                 }
 
                 onClicked: {
-                    if(davInfo.isDirectory) {
-                        var newTargetDir = browser.getCanonicalPath(remotePath + davInfo.name + "/");
-                        var command = browser.directoryListingRequest(newTargetDir);
-                        transfer.mainQueue.enqueue(command)
-                        transfer.mainQueue.run()
-                        isLoadingDirectory = true;
-                    }
+                    if(!davInfo.isDirectory)
+                        return;
+
+                    var newTargetDir = remotePath + davInfo.name + "/";
+                    isLoadingDirectory = true;
+                    getDirectoryContent(newTargetDir)
                 }
             }
         }

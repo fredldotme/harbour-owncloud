@@ -7,7 +7,7 @@ Page {
     objectName: "TransferPage"
 
     Component.onCompleted: {
-        if(daemonCtrl.uploading) {
+        if (daemonCtrl.uploading) {
             daemonAnimationOut.stop();
             daemonAnimationIn.start();
         } else {
@@ -51,7 +51,7 @@ Page {
     Connections {
         target: daemonCtrl
         onUploadingChanged: {
-            if(daemonCtrl.uploading) {
+            if (daemonCtrl.uploading) {
                 daemonAnimationOut.stop()
                 daemonAnimationIn.start()
             } else {
@@ -94,23 +94,26 @@ Page {
             id: noTransfersHint
             anchors.centerIn: parent
             text: qsTr("No pending file transfers")
-            enabled: (transfers.count < 1) && !daemonCtrl.uploading
+            enabled: (transferQueue.queue.length < 1) && !daemonCtrl.uploading
         }
 
         SilicaListView {
             id: listView
             anchors.fill: parent
-            model: transfers
+            model: transferQueue.queue
 
             delegate: ListItem {
                 id: delegate
+
                 property CommandEntity commandEntity : listView.model[index]
+                property string commandType : commandEntity.info.property("type")
 
                 Image {
                     id: transferTypeIcon
-                    x: 16
+                    anchors.left: parent.left
+                    anchors.leftMargin: 32
                     height: parent.height
-                    source: commandEntity.info().property("type") === "fileDownload"?
+                    source: delegate.commandType === "fileDownload" ?
                                 "image://theme/icon-m-download" :
                                 "image://theme/icon-m-upload"
                     fillMode: Image.PreserveAspectFit
@@ -118,10 +121,11 @@ Page {
 
                 Label {
                     id: label
-                    text: commandEntity.info().property("fileName")
+                    text: commandEntity.info.property("fileName")
                     anchors.top: parent.top
                     anchors.left: transferTypeIcon.right
-                    anchors.leftMargin: 16
+                    anchors.leftMargin: 32
+                    anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
                     color: delegate.highlighted ? Theme.highlightColor : Theme.primaryColor
                 }
@@ -129,8 +133,12 @@ Page {
                 ProgressBar {
                     id: transferProgress
                     anchors.top: label.bottom
-                    width: parent.width
+                    anchors.bottom: parent.bottom
+                    anchors.left: transferTypeIcon.right
                     anchors.leftMargin: Theme.paddingLarge
+                    anchors.right: parent.right
+                    minimumValue: 0.0
+                    maximumValue: 1.0
                     value: commandEntity.progress
                 }
 

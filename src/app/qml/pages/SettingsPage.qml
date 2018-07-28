@@ -5,20 +5,13 @@ Page {
     id: pageRoot
 
     Component.onCompleted: {
-        settings.readSettings();
-    }
-
-    Connections {
-        target: browser
-        onLoginFailed: {
-            loginInProgress = false;
-        }
+        persistentSettings.readSettings();
     }
 
     onStatusChanged: {
         if (status === PageStatus.Deactivating) {
             if (_navigation === PageNavigation.Back) {
-                settings.writeSettings()
+                persistentSettings.writeSettings()
                 daemonCtrl.reloadConfig()
             }
         }
@@ -37,10 +30,9 @@ Page {
             MenuItem {
                 text: qsTr("Reset connection settings")
                 onClicked: {
-                    browser.resetWebdav();
-                    settings.resetSettings();
+                    persistentSettings.resetSettings();
                     pageStack.clear();
-                    pageStack.push("Login.qml");
+                    pageStack.push(authenticationEntranceComponent);
                 }
             }
         }
@@ -50,8 +42,8 @@ Page {
             anchors.top: pageHeader.bottom
             text: qsTr("Login automatically")
             description: qsTr("Automatically log in to your ownCloud server when starting the app", "Login automatically description")
-            checked: settings.autoLogin
-            onClicked: settings.autoLogin = checked
+            checked: persistentSettings.autoLogin
+            onClicked: persistentSettings.autoLogin = checked
         }
 
         TextSwitch {
@@ -59,8 +51,8 @@ Page {
             anchors.top: autoLoginSwitch.bottom
             text: qsTr("Notifications")
             description: qsTr("Show global notifications when transfering files", "Notifications description")
-            checked: settings.notifications
-            onClicked: settings.notifications = checked
+            checked: persistentSettings.notifications
+            onClicked: persistentSettings.notifications = checked
         }
 
         TextSwitch {
@@ -69,8 +61,8 @@ Page {
             text: qsTr("Camera photo backups")
             description: qsTr("Automatically save camera photos to your ownCloud instance when on WiFi", "Camera photo backups escription")
             visible: daemonCtrl.daemonInstalled
-            checked: settings.uploadAutomatically
-            onClicked: settings.uploadAutomatically = checked
+            checked: persistentSettings.uploadAutomatically
+            onClicked: persistentSettings.uploadAutomatically = checked
         }
 
         TextSwitch {
@@ -80,8 +72,8 @@ Page {
             description: qsTr("Also automatically backup camera photos when connected via 2G, 3G or LTE", "hoto backups via mobile internet connection description")
             visible: daemonCtrl.daemonInstalled
             enabled: cameraUploadSwitch.checked
-            checked: settings.mobileUpload
-            onClicked: settings.mobileUpload = checked
+            checked: persistentSettings.mobileUpload
+            onClicked: persistentSettings.mobileUpload = checked
         }
     }
 }

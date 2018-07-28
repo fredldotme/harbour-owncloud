@@ -1,7 +1,10 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import harbour.owncloud 1.0
 
 Dialog {
+
+    property NextcloudSettings settings : null
 
     id: sslDialog
     property string md5Digest;
@@ -58,6 +61,11 @@ Dialog {
     }
 
     onAccepted: {
+        if (settings.null) {
+            console.warn("Settings nullpointer ref, not accepting certificate")
+            return;
+        }
+
         settings.acceptCertificate(md5Digest, sha1Digest);
         settings.readSettings()
     }

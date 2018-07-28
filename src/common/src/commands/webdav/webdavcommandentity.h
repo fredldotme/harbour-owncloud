@@ -2,7 +2,7 @@
 #define WEBDAVCOMMANDENTITY_H
 
 #include <QObject>
-#include "commandentity.h"
+#include <commandentity.h>
 #include <settings/nextcloudsettingsbase.h>
 #include <qwebdav.h>
 
@@ -16,11 +16,14 @@ public:
     ~WebDavCommandEntity();
 
 protected:
-    void startWork();
-    void abortWork();
+    bool startWork();
+    bool abortWork();
 
     QWebdav* m_client = Q_NULLPTR;
     QNetworkReply* m_reply = Q_NULLPTR;
+
+signals:
+    void sslErrorOccured(QString md5Digest, QString sha1Digest);
 
 };
 

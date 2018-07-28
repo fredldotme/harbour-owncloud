@@ -19,33 +19,36 @@ FileUploadCommandEntity::FileUploadCommandEntity(QObject* parent,
     info["localPath"] = localPath;
     info["remotePath"] = remotePath;
     info["fileName"] = fileName;
+    info["remoteFile"] = remotePath + fileName;
     this->m_commandInfo = CommandEntityInfo(info);
 }
 
-void FileUploadCommandEntity::startWork()
+bool FileUploadCommandEntity::startWork()
 {
+    if (!CommandEntity::startWork())
+        return false;
+
     if (!this->m_localFile->exists()) {
         qWarning() << "Local file" << this->m_localFile->fileName() << "does not exist, aborting.";
         abortWork();
-        return;
+        return false;
     }
 
     const bool isOpen = this->m_localFile->open(QFile::ReadOnly);
     if (!isOpen) {
         qWarning() << "Failed to open" << this->m_localFile->fileName() << ", aborting.";
         abortWork();
-        return;
+        return false;
     }
 
     this->m_reply = this->m_client->put(this->m_remotePath, this->m_localFile);
 
-    /*QObject::connect(this->m_reply, &QNetworkReply::finished, this, [=]() {
-        qInfo() << "File upload " << this->m_remotePath << "complete, applying modification time.";
-        setModifiedTime();
-    });*/
+    const bool canStart = WebDavCommandEntity::startWork();
+    if (!canStart)
+        return false;
 
-    WebDavCommandEntity::startWork();
     setState(RUNNING);
+    return true;
 }
 
 void FileUploadCommandEntity::setModifiedTime()
@@ -75,12 +78,5 @@ void FileUploadCommandEntity::setModifiedTime()
             return;
 
         Q_EMIT done();
-    });
-
-    QObject::connect(this->m_reply, &QNetworkReply::uploadProgress,
-                     this, [=](qint64 bytesSent, qint64 bytesTotal) {
-        if (bytesTotal < 1)
-            return;
-        setProgress(bytesSent/bytesTotal);
     });
 }

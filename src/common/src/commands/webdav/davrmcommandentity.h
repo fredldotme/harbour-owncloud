@@ -14,7 +14,7 @@ public:
                                 NextcloudSettingsBase* settings = Q_NULLPTR);
 
 private:
-    void startWork();
+    bool startWork();
 
     QString m_remotePath = QStringLiteral("");
 };

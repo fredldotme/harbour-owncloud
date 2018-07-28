@@ -2,9 +2,8 @@
 #define MKDAVDIRCOMMANDENTITY_H
 
 #include <QObject>
-#include <commands/webdavcommandentity.h>
+#include "webdavcommandentity.h"
 #include <settings/nextcloudsettingsbase.h>
-#include <qwebdav.h>
 
 class MkDavDirCommandEntity : public WebDavCommandEntity
 {
@@ -16,7 +15,7 @@ public:
                                    NextcloudSettingsBase* settings = Q_NULLPTR);
 
 private:
-    void startWork();
+    bool startWork();
 
     QString m_remotePath = QStringLiteral("");
 };

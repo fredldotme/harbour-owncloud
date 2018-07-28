@@ -9,9 +9,15 @@ DavCopyCommandEntity::DavCopyCommandEntity(QObject* parent,
 {
     this->m_fromPath = fromPath;
     this->m_toPath = toPath;
+
+    QMap<QString, QVariant> info;
+    info["type"] = QStringLiteral("davCopy");
+    info["fromPath"] = fromPath;
+    info["toPath"] = toPath;
+    this->m_commandInfo = CommandEntityInfo(info);
 }
 
-void DavCopyCommandEntity::startWork()
+bool DavCopyCommandEntity::startWork()
 {
     this->m_reply = this->m_client->copy(this->m_fromPath, this->m_toPath);
 
@@ -19,6 +25,10 @@ void DavCopyCommandEntity::startWork()
         qInfo() << "Dav entity copying" << this->m_fromPath << "to" << this->m_toPath << "complete.";
     });
 
+    const bool canStart = WebDavCommandEntity::startWork();
+    if (!canStart)
+        return false;
+
     setState(RUNNING);
-    WebDavCommandEntity::startWork();
+    return true;
 }

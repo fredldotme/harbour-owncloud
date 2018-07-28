@@ -7,16 +7,28 @@ DavRmCommandEntity::DavRmCommandEntity(QObject *parent,
     WebDavCommandEntity(parent, client, settings)
 {
     this->m_remotePath = remotePath;
+
+    QMap<QString, QVariant> info;
+    info["type"] = QStringLiteral("davRemove");
+    info["remotePath"] = remotePath;
+    this->m_commandInfo = CommandEntityInfo(info);
 }
 
-void DavRmCommandEntity::startWork()
+bool DavRmCommandEntity::startWork()
 {
+    if (!CommandEntity::startWork())
+        return false;
+
     this->m_reply = this->m_client->remove(this->m_remotePath);
 
     QObject::connect(m_reply, &QNetworkReply::finished, this, [=]() {
         qInfo() << "Dav entity removal" << this->m_remotePath << "complete.";
     });
 
+    const bool canStart = WebDavCommandEntity::startWork();
+    if (!canStart)
+        return false;
+
     setState(RUNNING);
-    WebDavCommandEntity::startWork();
+    return true;
 }

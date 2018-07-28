@@ -14,11 +14,8 @@ DavListCommandEntity::DavListCommandEntity(QObject *parent,
     this->m_commandInfo = CommandEntityInfo(info);
 }
 
-void DavListCommandEntity::startWork()
+bool DavListCommandEntity::startWork()
 {
-    qDebug() << Q_FUNC_INFO;
-    this->m_parser.listDirectory(this->m_client, this->m_remotePath);
-
     QObject::connect(&this->m_parser, &QWebdavDirParser::errorChanged,
                      this, [=](QString errorStr){
         qWarning() << "Error occured while parsing directory content for" << this->m_remotePath;
@@ -38,7 +35,10 @@ void DavListCommandEntity::startWork()
             info.insert("name", item.name());
             info.insert("isDirectory", item.isDir());
             info.insert("size", item.size());
+            info.insert("createdAt", item.createdAt());
+            info.insert("entityTag", item.entityTag());
             if(!item.isDir()) {
+                info.insert("isExecutable", item.isExecutable());
                 info.insert("mimeType", item.mimeType());
                 info.insert("lastModified", item.lastModified());
             }
@@ -48,6 +48,15 @@ void DavListCommandEntity::startWork()
         Q_EMIT done();
     });
 
+    const bool canStart = WebDavCommandEntity::startWork();
+    if (!canStart) {
+        qWarning() << "Cannot startWork due to !WebDavCommandEntity::startWork()";
+        return false;
+    }
+
+    qDebug() << Q_FUNC_INFO;
+    this->m_parser.listDirectory(this->m_client, this->m_remotePath);
+
     setState(RUNNING);
-    WebDavCommandEntity::startWork();
+    return true;
 }

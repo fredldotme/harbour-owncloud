@@ -2,7 +2,7 @@
 #define DAVLISTCOMMANDENTITY_H
 
 #include <QObject>
-#include <commands/webdavcommandentity.h>
+#include "webdavcommandentity.h"
 
 #include <qwebdavdirparser.h>
 
@@ -15,7 +15,7 @@ public:
                                   QWebdav* client = Q_NULLPTR,
                                   NextcloudSettingsBase* settings = Q_NULLPTR);
 
-    void startWork();
+    bool startWork();
 
 private:
     QWebdavDirParser m_parser;

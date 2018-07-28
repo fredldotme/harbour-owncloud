@@ -4,9 +4,8 @@
 #include <QObject>
 #include <QFile>
 #include <QDir>
-#include <commands/webdavcommandentity.h>
+#include "webdavcommandentity.h"
 #include <settings/nextcloudsettingsbase.h>
-#include <qwebdav.h>
 
 class FileDownloadCommandEntity : public WebDavCommandEntity
 {
@@ -19,7 +18,7 @@ public:
                                        NextcloudSettingsBase* settings = Q_NULLPTR);
 
 protected:
-    void startWork();
+    bool startWork();
 
     QString m_remotePath = QStringLiteral("");
     QFile* m_localFile = Q_NULLPTR;

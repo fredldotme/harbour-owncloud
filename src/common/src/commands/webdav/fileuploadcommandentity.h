@@ -3,9 +3,8 @@
 
 #include <QObject>
 #include <QFile>
-#include <commands/webdavcommandentity.h>
+#include "webdavcommandentity.h"
 #include <settings/nextcloudsettingsbase.h>
-#include <qwebdav.h>
 
 class FileUploadCommandEntity : public WebDavCommandEntity
 {
@@ -19,7 +18,7 @@ public:
                                      NextcloudSettingsBase* settings = Q_NULLPTR);
 
 protected:
-    void startWork();
+    bool startWork();
 
 private:
     void setModifiedTime();

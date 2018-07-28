@@ -14,21 +14,31 @@ FileDownloadCommandEntity::FileDownloadCommandEntity(QObject* parent,
     this->m_localFile = new QFile(localPath, this);
     const QString localDir = localPath.left(localPath.lastIndexOf(QDir::separator())+1);
     this->m_localDir = QDir(localDir);
+    const QString fileName = QFileInfo(*this->m_localFile).fileName();
 
     // extensible list of command properties
     QMap<QString, QVariant> info;
     info["type"] = QStringLiteral("fileDownload");
     info["localPath"] = localPath;
     info["remotePath"] = remotePath;
-    info["fileName"] = QFileInfo(*this->m_localFile).fileName();
+    info["fileName"] = fileName;
+    info["remoteFile"] = remotePath + fileName;
     this->m_commandInfo = CommandEntityInfo(info);
 }
 
-void FileDownloadCommandEntity::startWork()
+bool FileDownloadCommandEntity::startWork()
 {
+    if (!CommandEntity::startWork())
+        return false;
+
     setState(RUNNING);
     if (!this->m_localDir.exists()) {
-        this->m_localDir.mkpath(this->m_localDir.absolutePath());
+        const bool mkPathSuccess = this->m_localDir.mkpath(this->m_localDir.absolutePath());
+        if (!mkPathSuccess) {
+            qWarning() << "Failed to create target path" << this->m_localDir.absolutePath();
+            abortWork();
+            return false;
+        }
     }
 
     // Remove existing file before download
@@ -37,7 +47,7 @@ void FileDownloadCommandEntity::startWork()
         if (!removeSuccess) {
             qWarning() << "Failed to remove existing file" << this->m_localFile->fileName() << ", aborting.";
             abortWork();
-            return;
+            return false;
         }
     }
 
@@ -45,7 +55,7 @@ void FileDownloadCommandEntity::startWork()
     if (!isOpen) {
         qWarning() << "Failed to create local file, aborting.";
         abortWork();
-        return;
+        return false;
     }
 
     this->m_reply = this->m_client->get(this->m_remotePath, this->m_localFile);
@@ -53,5 +63,10 @@ void FileDownloadCommandEntity::startWork()
         qInfo() << "File download" << this->m_remotePath << "complete.";
     });
 
-    WebDavCommandEntity::startWork();
+    const bool canStart = WebDavCommandEntity::startWork();
+    if (!canStart)
+        return false;
+
+    setState(RUNNING);
+    return true;
 }

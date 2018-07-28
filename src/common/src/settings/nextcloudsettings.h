@@ -10,10 +10,10 @@ class NextcloudSettings : public NextcloudSettingsBase
 {
     Q_OBJECT
 
+    Q_PROPERTY(bool isCustomCert READ isCustomCert WRITE acceptCertificate NOTIFY customCertChanged)
 public:
     static NextcloudSettings *instance();
-
-    Q_PROPERTY(bool isCustomCert READ isCustomCert WRITE acceptCertificate NOTIFY customCertChanged)
+    NextcloudSettings(QObject *parent = 0);
 
 public slots:
     void acceptCertificate(QString md5, QString sha1);
@@ -26,7 +26,6 @@ signals:
     void customCertChanged();
 
 private:
-    NextcloudSettings(QObject *parent = 0);
     bool isCustomCert();
 
     QSettings settings;

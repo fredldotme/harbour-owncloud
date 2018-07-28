@@ -68,7 +68,11 @@ public:
 
 public slots:
     void resetSettings();
-    bool readSettings();
+    virtual bool readSettings();
+    virtual void writeSettings() { }
+
+    void setUsername(QString value);
+    void setPassword(QString value);
 
 protected:
     void refreshHostString();
@@ -93,8 +97,6 @@ protected:
     QString m_localPicturesPath;
 
 private:
-    void setUsername(QString value);
-    void setPassword(QString value);
     void setAutoLogin(bool value);
     void setNotifications(bool value);
 

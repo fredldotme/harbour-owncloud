@@ -2,6 +2,75 @@
 <!DOCTYPE TS>
 <TS version="2.1">
 <context>
+    <name>BasicAuthentication</name>
+    <message>
+        <source>Host address</source>
+        <translation type="unfinished">Adresse hôte</translation>
+    </message>
+    <message>
+        <source>User name</source>
+        <translation type="unfinished">Nom d’utilisateur</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation type="unfinished">Mot de passe</translation>
+    </message>
+    <message>
+        <source>Login automatically</source>
+        <translation type="unfinished">Connexion automatique</translation>
+    </message>
+    <message>
+        <source>Accept certificate</source>
+        <translation type="unfinished">Accepter le certificat</translation>
+    </message>
+    <message>
+        <source>Continue</source>
+        <translation type="unfinished">Continuer</translation>
+    </message>
+    <message>
+        <source>Invalid URL</source>
+        <translation type="unfinished">URL invalide</translation>
+    </message>
+    <message>
+        <source>Please check your host address</source>
+        <translation type="unfinished">Vérifiez l’adresse hôte</translation>
+    </message>
+</context>
+<context>
+    <name>CoverPage</name>
+    <message>
+        <source>User:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Usage:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total:</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Entrance</name>
+    <message>
+        <source></source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Host address</source>
+        <translation type="unfinished">Adresse hôte</translation>
+    </message>
+    <message>
+        <source>Continue</source>
+        <translation type="unfinished">Continuer</translation>
+    </message>
+    <message>
+        <source>Manual configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>FileBrowser</name>
     <message>
         <source>Refresh</source>
@@ -84,43 +153,12 @@
         <translation>Type :</translation>
     </message>
     <message>
-        <source>Loading thumbnail</source>
+        <source>Created at:</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>Login</name>
     <message>
-        <source>Host address</source>
-        <translation>Adresse hôte</translation>
-    </message>
-    <message>
-        <source>User name</source>
-        <translation>Nom d’utilisateur</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation>Mot de passe</translation>
-    </message>
-    <message>
-        <source>Login automatically</source>
-        <translation>Connexion automatique</translation>
-    </message>
-    <message>
-        <source>Accept certificate</source>
-        <translation>Accepter le certificat</translation>
-    </message>
-    <message>
-        <source>Continue</source>
-        <translation>Continuer</translation>
-    </message>
-    <message>
-        <source>Invalid URL</source>
-        <translation>URL invalide</translation>
-    </message>
-    <message>
-        <source>Please check your host address</source>
-        <translation>Vérifiez l’adresse hôte</translation>
+        <source>Entity tag:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -206,14 +244,6 @@
 </context>
 <context>
     <name>harbour-owncloud</name>
-    <message>
-        <source>Login failed</source>
-        <translation>Échec de la connexion</translation>
-    </message>
-    <message>
-        <source>Please check your host address and credentials</source>
-        <translation>Vérifiez l’adresse hôte et vos identifiants</translation>
-    </message>
     <message>
         <source>Upload complete</source>
         <translation>Téléversement fini</translation>

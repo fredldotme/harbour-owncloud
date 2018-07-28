@@ -2,6 +2,75 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="de_DE">
 <context>
+    <name>BasicAuthentication</name>
+    <message>
+        <source>Host address</source>
+        <translation type="unfinished">Serveradresse</translation>
+    </message>
+    <message>
+        <source>User name</source>
+        <translation type="unfinished">Benutzername</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation type="unfinished">Passwort</translation>
+    </message>
+    <message>
+        <source>Login automatically</source>
+        <translation type="unfinished">Automatisch anmelden</translation>
+    </message>
+    <message>
+        <source>Accept certificate</source>
+        <translation type="unfinished">Zertifikat akzeptieren</translation>
+    </message>
+    <message>
+        <source>Continue</source>
+        <translation type="unfinished">Weiter</translation>
+    </message>
+    <message>
+        <source>Invalid URL</source>
+        <translation type="unfinished">Falsche URL</translation>
+    </message>
+    <message>
+        <source>Please check your host address</source>
+        <translation type="unfinished">Bitte überprüfe deine Serveradresse</translation>
+    </message>
+</context>
+<context>
+    <name>CoverPage</name>
+    <message>
+        <source>User:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Usage:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total:</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Entrance</name>
+    <message>
+        <source></source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Host address</source>
+        <translation type="unfinished">Serveradresse</translation>
+    </message>
+    <message>
+        <source>Continue</source>
+        <translation type="unfinished">Weiter</translation>
+    </message>
+    <message>
+        <source>Manual configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>FileBrowser</name>
     <message>
         <source>Refresh</source>
@@ -84,43 +153,12 @@
         <translation>Typ:</translation>
     </message>
     <message>
-        <source>Loading thumbnail</source>
+        <source>Created at:</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>Login</name>
     <message>
-        <source>Host address</source>
-        <translation>Serveradresse</translation>
-    </message>
-    <message>
-        <source>User name</source>
-        <translation>Benutzername</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation>Passwort</translation>
-    </message>
-    <message>
-        <source>Login automatically</source>
-        <translation>Automatisch anmelden</translation>
-    </message>
-    <message>
-        <source>Accept certificate</source>
-        <translation>Zertifikat akzeptieren</translation>
-    </message>
-    <message>
-        <source>Continue</source>
-        <translation>Weiter</translation>
-    </message>
-    <message>
-        <source>Invalid URL</source>
-        <translation>Falsche URL</translation>
-    </message>
-    <message>
-        <source>Please check your host address</source>
-        <translation>Bitte überprüfe deine Serveradresse</translation>
+        <source>Entity tag:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -206,14 +244,6 @@
 </context>
 <context>
     <name>harbour-owncloud</name>
-    <message>
-        <source>Login failed</source>
-        <translation>Anmelden fehlgeschlagen</translation>
-    </message>
-    <message>
-        <source>Please check your host address and credentials</source>
-        <translation>Bitte prüfe die Serveradresse und die Anmelde-Credentials</translation>
-    </message>
     <message>
         <source>Upload complete</source>
         <translation>Hochladen vollständig</translation>

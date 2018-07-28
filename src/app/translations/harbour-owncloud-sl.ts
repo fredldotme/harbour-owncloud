@@ -2,6 +2,75 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="sl_SI" sourcelanguage="en">
 <context>
+    <name>BasicAuthentication</name>
+    <message>
+        <source>Host address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>User name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Login automatically</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Accept certificate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Continue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid URL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please check your host address</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>CoverPage</name>
+    <message>
+        <source>User:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Usage:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total:</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Entrance</name>
+    <message>
+        <source></source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Host address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Continue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Manual configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>FileBrowser</name>
     <message>
         <source>Refresh</source>
@@ -84,42 +153,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Loading thumbnail</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Login</name>
-    <message>
-        <source>Host address</source>
+        <source>Created at:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>User name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Login automatically</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Accept certificate</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Continue</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid URL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Please check your host address</source>
+        <source>Entity tag:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -207,14 +245,6 @@
 </context>
 <context>
     <name>harbour-owncloud</name>
-    <message>
-        <source>Login failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Please check your host address and credentials</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <source>Upload complete</source>
         <translation type="unfinished"></translation>

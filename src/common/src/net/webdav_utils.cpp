@@ -2,20 +2,21 @@
 
 QWebdav* getNewWebDav(NextcloudSettingsBase *settings, QString apiPath, QObject* parent)
 {
-    /* Used for file uploads
-     * Helps to not confuse error signals of simultaneous file operations */
-    QWebdav* newWebdav = new QWebdav(parent);
-    QObject::connect(newWebdav, &QNetworkAccessManager::finished, newWebdav, &QObject::deleteLater);
+    // Allocating QWebdav object without settings doesn't make sense.
+    if (!settings)
+        return Q_NULLPTR;
 
+    QWebdav* newWebdav = new QWebdav(parent);
     applySettingsToWebdav(settings, newWebdav, apiPath);
     qDebug() << "Returning webdav for host" << settings->hostname();
+
     return newWebdav;
 }
 
 void applySettingsToWebdav(NextcloudSettingsBase *settings, QWebdav *webdav, QString apiPath)
 {
-    if (apiPath.isEmpty())
-        apiPath = QStringLiteral("remote.php/webdav");
+    if (!settings || !webdav)
+        return;
 
     webdav->setConnectionSettings(settings->isHttps() ? QWebdav::HTTPS : QWebdav::HTTP,
                                   settings->hostname(),

@@ -32,26 +32,33 @@ QList<CommandEntityInfo> CommandQueue::queueInformation()
 
 void CommandQueue::enqueue(CommandEntity *command)
 {
+    if (!command)
+        return;
+
     qDebug() << Q_FUNC_INFO << command;
 
     QMutexLocker locker(&this->m_queueMutex);
 
-    QObject::connect(command, &CommandEntity::started,
-                     this, []() {
+    for (CommandEntity* queuedCommand : this->m_queue) {
+        qDebug() << command << queuedCommand;
+        if (command == queuedCommand)
+            return;
+    }
+
+    QObject::connect(command, &CommandEntity::started, this, []() {
         qDebug() << "Started";
     });
-    QObject::connect(command, &CommandEntity::progressChanged,
-                     this, [](qreal progress) {
-        qDebug() << "Progress: " << progress;
+    QObject::connect(command, &CommandEntity::progressChanged, this, [command]() {
+        if (command) qDebug() << "Progress: " << command->progress();
     });
-    QObject::connect(command, &CommandEntity::done,
-                     this, [=]() {
-        deleteCurrentCommand();
+    QObject::connect(command, &CommandEntity::done, this, [=]() {
+        qDebug() << "Command" << command << "done";
+        deleteCommand(command);
         QTimer::singleShot(0, this, &CommandQueue::runNextCommand);
     });
-    QObject::connect(command, &CommandEntity::aborted,
-                     this, [=]() {
-        deleteCommand(qobject_cast<CommandEntity*>(sender()));
+    QObject::connect(command, &CommandEntity::aborted, this, [=]() {
+        qWarning() << "Command" << command << "aborted";
+        deleteCommand(command);
         QTimer::singleShot(0, this, &CommandQueue::runNextCommand);
     });
 
@@ -59,7 +66,7 @@ void CommandQueue::enqueue(CommandEntity *command)
     Q_EMIT added(command);
     Q_EMIT queueContentChanged();
 
-    if (this->m_queue.size() <= 1)
+    if (this->m_queue.size() == 1)
         QTimer::singleShot(0, this, &CommandQueue::runNextCommand);
 }
 
@@ -108,21 +115,26 @@ void CommandQueue::run()
     if (this->m_running)
         return;
 
-    if (this->m_queue.isEmpty())
+    if (this->m_queue.isEmpty()) {
+        qInfo() << "Queue is empty, no need to run";
         return;
+    }
 
     setRunning(true);
     QTimer::singleShot(0, this, &CommandQueue::runNextCommand);
+    qDebug() << Q_FUNC_INFO << "end";
 }
 
 void CommandQueue::runNextCommand()
 {
+    qDebug() << Q_FUNC_INFO;
     QMutexLocker locker(&this->m_queueMutex);
 
     if (!this->m_running)
         return;
 
     if (this->m_queue.isEmpty()) {
+        qInfo() << "Queue is empty, no command to run";
         stop();
         return;
     }
@@ -137,6 +149,7 @@ void CommandQueue::runNextCommand()
 
 void CommandQueue::stop()
 {
+    qDebug() << Q_FUNC_INFO;
     QMutexLocker locker(&this->m_queueMutex);
 
     if (!this->m_running)
@@ -190,12 +203,14 @@ void CommandQueue::deleteCommand(CommandEntity* command)
                            command->resultData(),
                            QDateTime::currentDateTime(),
                            command->isFinished());
-    qDebug() << "Command finished?" << receipt.finished;
-    Q_EMIT commandFinished(receipt);
     Q_EMIT removed(command);
 
+    disconnect(command, 0, 0, 0);
     this->m_queue.removeOne(command);
-    disconnect(command);
+
+    qDebug() << "Command finished?" << receipt.finished;
+    Q_EMIT commandFinished(receipt);
+
     command->deleteLater();
 
     Q_EMIT queueContentChanged();
@@ -211,5 +226,6 @@ void CommandQueue::deleteCurrentCommand()
         return;
 
     CommandEntity* currentCommand = this->m_queue.head();
-    deleteCommand(currentCommand);
+    if (currentCommand)
+        deleteCommand(currentCommand);
 }

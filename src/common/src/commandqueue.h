@@ -35,7 +35,8 @@ class CommandQueue : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(bool running READ isRunning WRITE setRunning NOTIFY runningChanged)
+    //Q_PROPERTY(bool immediate READ immediate WRITE setImmediate NOTIFY immediateChanged)
+    Q_PROPERTY(bool running READ isRunning NOTIFY runningChanged)
     Q_PROPERTY(QVariantList queue READ queue NOTIFY queueContentChanged)
 
 public:
@@ -47,7 +48,6 @@ public:
     void enqueue(QList<CommandEntity*> commands);
 
 public slots:
-
     void enqueue(QVariant command);
     void run();
     void stop();

@@ -1,5 +1,7 @@
 #include "commandentity.h"
 
+#include <QDebug>
+
 CommandEntity::CommandEntity(QObject *parent) : QObject(parent)
 {
     QObject::connect(this, &CommandEntity::done, this, [=]() {
@@ -13,6 +15,7 @@ CommandEntity::CommandEntity(QObject *parent) : QObject(parent)
 
 CommandEntity::~CommandEntity()
 {
+    qDebug() << Q_FUNC_INFO;
     abort();
 }
 
@@ -27,7 +30,7 @@ void CommandEntity::setProgress(qreal progress)
         return;
 
     this->m_progress = progress;
-    Q_EMIT progressChanged(this->m_progress);
+    Q_EMIT progressChanged();
 }
 
 void CommandEntity::setState(const CommandEntityState &state)
@@ -50,9 +53,6 @@ void CommandEntity::run()
 
 void CommandEntity::abort()
 {
-    if (!this->isRunning())
-        return;
-
     abortWork();
     Q_EMIT aborted();
 }

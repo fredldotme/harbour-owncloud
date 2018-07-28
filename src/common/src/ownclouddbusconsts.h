@@ -7,18 +7,6 @@
 #include <QString>
 #include <QDBusArgument>
 
-/*QDBusArgument &operator<<(QDBusArgument &argument, const QMap<QString, QString> &valmap)
-{
-    argument.beginMap( QVariant::String, qMetaTypeId<QString>() );
-    for (const QString& key : valmap.keys()) {
-        argument.beginMapEntry();
-        argument << key << valmap.value(key);
-        argument.endMapEntry();
-    }
-    argument.endMap();
-    return argument;
-}*/
-
 namespace HarbourOwncloud {
 namespace DBusConsts {
 // Photo backup daemon

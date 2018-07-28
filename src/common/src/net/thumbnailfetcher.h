@@ -4,6 +4,7 @@
 #include <QObject>
 #include <commandqueue.h>
 #include <settings/nextcloudsettingsbase.h>
+#include <qwebdav.h>
 
 class ThumbnailFetcher : public QObject
 {
@@ -12,8 +13,8 @@ class ThumbnailFetcher : public QObject
     Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
     Q_PROPERTY(NextcloudSettingsBase* settings READ settings WRITE setSettings NOTIFY settingsChanged)
     Q_PROPERTY(CommandQueue* commandQueue READ commandQueue WRITE setCommandQueue NOTIFY commandQueueChanged)
-    Q_PROPERTY(qint8 width READ width WRITE setWidth NOTIFY widthChanged)
-    Q_PROPERTY(qint8 height READ height WRITE setHeight NOTIFY heightChanged)
+    Q_PROPERTY(qint16 width READ width WRITE setWidth NOTIFY widthChanged)
+    Q_PROPERTY(qint16 height READ height WRITE setHeight NOTIFY heightChanged)
     Q_PROPERTY(bool fetching READ fetching NOTIFY fetchingChanged)
 
 public:
@@ -29,17 +30,20 @@ private:
     void setCommandQueue(CommandQueue* v);
     QString source();
     void setSource(const QString& v);
-    qint8 width();
-    void setWidth(qint8 v);
-    qint8 height();
-    void setHeight(qint8 v);
+    qint16 width();
+    void setWidth(qint16 v);
+    qint16 height();
+    void setHeight(qint16 v);
     bool fetching();
+    void setFetching(bool v);
 
     QString m_source;
-    qint8 m_width = 0;
-    qint8 m_height = 0;
+    qint16 m_width = 0;
+    qint16 m_height = 0;
+    bool m_fetching = false;
     NextcloudSettingsBase* m_settings = Q_NULLPTR;
     CommandQueue* m_commandQueue = Q_NULLPTR;
+    QWebdav* m_client = Q_NULLPTR;
 
 signals:
     void sourceChanged();

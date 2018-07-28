@@ -1,6 +1,7 @@
 #include "thumbnailfetcher.h"
 
-#include <commands/filedownloadcommandentity.h>
+#include <nextcloudendpointconsts.h>
+#include <commands/http/httpgetcommandentity.h>
 #include <net/webdav_utils.h>
 
 #include <QStandardPaths>
@@ -11,49 +12,88 @@ ThumbnailFetcher::ThumbnailFetcher(QObject *parent) : QObject(parent)
 
 void ThumbnailFetcher::fetchThumbnail(QString remoteFile)
 {
-    const QString thumbnailApiPath = QStringLiteral("index.php/apps/files/api/v1/thumbnail");
-    const QString thumbnailPath = QStringLiteral("/%1/%2/%3").arg(QString::number(width()),
-                                                                  QString::number(height()),
-                                                                  remoteFile);
-    const QString cacheDirectory = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
-    const QString cachePath = cacheDirectory + QStringLiteral("/thumbnails") + remoteFile;
-
-    if (QFile(cachePath).exists()) {
-        setSource(cachePath);
+    if (!this->m_commandQueue) {
+        qWarning() << "No command queue provided";
         return;
     }
 
-    QWebdav* client = getNewWebDav(m_settings, thumbnailApiPath, this);
+    // Make sure to use 128x128 dimension in case of negative values
+    if (width() < 0) setWidth(128);
+    if (height() < 0) setHeight(128);
 
-    if (!m_commandQueue)
+    const QString thumbnailPath = QStringLiteral("/%1/%2/%3/%4").arg(NEXTCLOUD_ENDPOINT_THUMBNAIL,
+                                                                     QString::number(width()),
+                                                                     QString::number(height()),
+                                                                     remoteFile);
+    const QString cacheDirectory = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
+    const QString cachePath = cacheDirectory + QStringLiteral("/thumbnails") + remoteFile;
+
+    const QFileInfo cacheFile(cachePath);
+    const bool isCurrent = (QDateTime::currentDateTime().addDays(-5) <
+                            cacheFile.lastModified());
+    if (cacheFile.exists() && isCurrent) {
+        qDebug() << "Reusing existing thumbnail from cache";
+        setSource(QStringLiteral("file://") + cacheFile.absoluteFilePath());
         return;
+    }
 
-    FileDownloadCommandEntity* thumbnailDownloadCommand =
-            new FileDownloadCommandEntity(this->m_commandQueue,
-                                          thumbnailPath,
-                                          cachePath,
-                                          client,
-                                          this->m_settings);
+    const QByteArray authorization =
+            QStringLiteral("%1:%2").arg(this->m_settings->username(),
+                                        this->m_settings->password()).toUtf8().toBase64();
+    QMap<QByteArray, QByteArray> headers;
+    headers.insert(QByteArrayLiteral("Authorization"),
+                   QStringLiteral("Basic %1").arg(QString(authorization)).toUtf8());
 
-    QObject::connect(thumbnailDownloadCommand, &FileDownloadCommandEntity::done, this, [=]() {
-        setSource(cachePath);
-        Q_EMIT fetchingChanged();
+
+    HttpGetCommandEntity* thumbnailDownloadCommand =
+            new HttpGetCommandEntity(this->m_commandQueue,
+                                     thumbnailPath,
+                                     headers,
+                                     this->m_settings);
+
+    QObject::connect(thumbnailDownloadCommand, &CommandEntity::done, this, [=]() {
+        setFetching(false);
+
+        QFile thumbnail(cachePath);
+        if (!thumbnail.open(QFile::ReadWrite)) {
+            qWarning() << "Failed to open file for write operation";
+            return;
+        }
+
+        const QByteArray content =
+                thumbnailDownloadCommand->resultData().toMap()["content"].toByteArray();
+
+        if (thumbnail.write(content) < 0) {
+            qWarning() << "Failed to write thumbnail file";
+            return;
+        }
+        thumbnail.close();
+        setSource(QStringLiteral("file://") + cachePath);
     });
-    QObject::connect(this->m_commandQueue, &CommandQueue::runningChanged, this, [=]() {
-        Q_EMIT fetchingChanged();
+    QObject::connect(thumbnailDownloadCommand, &CommandEntity::aborted, this, [=]() {
+        setFetching(false);
     });
 
     this->m_commandQueue->enqueue(thumbnailDownloadCommand);
     if (!this->m_commandQueue->isRunning())
         this->m_commandQueue->run();
-    Q_EMIT fetchingChanged();
+
+    setFetching(true);
+    qDebug() << "Fetching started";
 }
 
 bool ThumbnailFetcher::fetching()
 {
-    if (this->m_commandQueue)
-        return this->m_commandQueue->isRunning();
-    return false;
+    return this->m_fetching;
+}
+
+void ThumbnailFetcher::setFetching(bool v)
+{
+    if (this->m_fetching == v)
+        return;
+
+    this->m_fetching = v;
+    Q_EMIT fetchingChanged();
 }
 
 QString ThumbnailFetcher::source()
@@ -67,6 +107,7 @@ void ThumbnailFetcher::setSource(const QString &v)
         return;
 
     this->m_source = v;
+    qDebug() << "new thumbnail source:" << this->m_source;
     Q_EMIT sourceChanged();
 }
 
@@ -98,12 +139,12 @@ void ThumbnailFetcher::setCommandQueue(CommandQueue* v)
     Q_EMIT settingsChanged();
 }
 
-qint8 ThumbnailFetcher::width()
+qint16 ThumbnailFetcher::width()
 {
     return this->m_width;
 }
 
-void ThumbnailFetcher::setWidth(qint8 v)
+void ThumbnailFetcher::setWidth(qint16 v)
 {
     if (this->m_width == v)
         return;
@@ -112,12 +153,12 @@ void ThumbnailFetcher::setWidth(qint8 v)
     Q_EMIT widthChanged();
 }
 
-qint8 ThumbnailFetcher::height()
+qint16 ThumbnailFetcher::height()
 {
     return this->m_height;
 }
 
-void ThumbnailFetcher::setHeight(qint8 v)
+void ThumbnailFetcher::setHeight(qint16 v)
 {
     if (this->m_height == v)
         return;

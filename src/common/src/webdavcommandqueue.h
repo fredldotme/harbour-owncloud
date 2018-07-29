@@ -22,7 +22,6 @@ public:
     void setSettings(NextcloudSettingsBase* v);
 
 public slots:
-
     CommandEntity* fileDownloadRequest(QString from,
                                        QString mimeType = QStringLiteral(""),
                                        bool open = false);

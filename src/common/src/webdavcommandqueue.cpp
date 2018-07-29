@@ -20,18 +20,19 @@ WebDavCommandQueue::WebDavCommandQueue(QObject* parent, NextcloudSettingsBase* s
     CommandQueue(parent)
 {
     this->m_settings = settings;
+    this->m_client = getNewWebDav(this->m_settings, NEXTCLOUD_ENDPOINT_WEBDAV, this);
 
     QObject::connect(this, &WebDavCommandQueue::settingsChanged,
                      this, [=]() {
         if (this->m_client) {
-            this->m_client->deleteLater();
+            delete this->m_client;
             this->m_client = Q_NULLPTR;
         }
 
         if (!this->m_settings)
             return;
 
-        this->m_settings->readSettings();
+        // this->m_settings->readSettings();
         this->m_client = getNewWebDav(this->m_settings, NEXTCLOUD_ENDPOINT_WEBDAV, this);
     });
 }
@@ -46,7 +47,20 @@ void WebDavCommandQueue::setSettings(NextcloudSettingsBase *v)
     if (this->m_settings == v)
         return;
 
+    if (this->m_settings)
+        QObject::disconnect(this->m_settings, 0, 0, 0);
+
     this->m_settings = v;
+    QObject::connect(this->m_settings, &NextcloudSettingsBase::settingsChanged,
+                     this, [=]() {
+        if (this->m_client) {
+            delete this->m_client;
+            this->m_client = Q_NULLPTR;
+        }
+        if (!this->m_settings)
+            return;
+        this->m_client = getNewWebDav(this->m_settings, NEXTCLOUD_ENDPOINT_WEBDAV, this);
+    });
     Q_EMIT settingsChanged();
 }
 

@@ -9,8 +9,6 @@
 #include <auth/qwebdavauthenticator.h>
 #include <auth/authenticationexaminer.h>
 #include <auth/flowloginauthenticator.h>
-#include <net/transfermanager.h>
-#include <net/transferentry.h>
 #include <util/filepathutil.h>
 #include <net/thumbnailfetcher.h>
 #include <entryinfo.h>
@@ -21,6 +19,7 @@
 #include "daemoncontrol.h"
 #include "directorycontentmodel.h"
 #include "ocsnetaccessfactory.h"
+#include "webdavmediafeeder.h"
 
 static QJSValue filePathUtilProvider(QQmlEngine *engine, QJSEngine *scriptEngine)
 {
@@ -45,8 +44,8 @@ int main(int argc, char *argv[])
     qmlRegisterType<WebDavCommandQueue>("harbour.owncloud", 1, 0, "WebDavCommandQueue");
     qmlRegisterType<OcsCommandQueue>("harbour.owncloud", 1, 0, "OcsCommandQueue");
     qmlRegisterType<ThumbnailFetcher>("harbour.owncloud", 1, 0, "ThumbnailFetcher");
-    qmlRegisterType<TransferManager>("harbour.owncloud", 1, 0, "TransferManager");
-    qmlRegisterType<TransferEntry>("harbour.owncloud", 1, 0, "TransferEntry");
+    qmlRegisterType<WebDavMediaFeeder>("harbour.owncloud", 1, 0, "WebDavMediaFeeder");
+    qmlRegisterType<OscNetAccess>("harbour.owncloud", 1, 0, "OscNetAccess");
     qmlRegisterType<DaemonControl>("harbour.owncloud", 1, 0, "DaemonControl");
     qmlRegisterSingletonType("harbour.owncloud", 1, 0, "FilePathUtil", filePathUtilProvider);
 
@@ -55,9 +54,17 @@ int main(int argc, char *argv[])
     app->setOrganizationDomain("harbour-owncloud");
     app->setApplicationName("harbour-owncloud");
 
-    OcsNetAccessFactory networkManagerFactory;
-    QQuickView *view = SailfishApp::createView();
-    view->engine()->setNetworkAccessManagerFactory(&networkManagerFactory);
+    NextcloudSettings::instance()->readSettings();
+
+    QQmlEngine* newEngine = new QQmlEngine;
+    QQmlNetworkAccessManagerFactory* accessInterceptor =
+            new OcsNetAccessFactory(NextcloudSettings::instance());
+
+    newEngine->setNetworkAccessManagerFactory(accessInterceptor);
+    newEngine->rootContext()->setContextProperty("persistentSettings",
+                                                 NextcloudSettings::instance());
+
+    QQuickView *view = new QQuickView(newEngine, Q_NULLPTR); //SailfishApp::createView();
 
     view->setSource(QUrl("qrc:/qml/harbour-owncloud.qml"));
     view->showFullScreen();

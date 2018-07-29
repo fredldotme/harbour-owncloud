@@ -1,7 +1,7 @@
 TARGET = harbour-owncloud
 
 CONFIG += sailfishapp qt
-QT += xml dbus quick qml
+QT += xml dbus quick qml multimedia
 
 include($$PWD/../common/common.pri)
 include($$PWD/../qmlcommon/qmlcommon.pri)
@@ -11,12 +11,14 @@ SOURCES += \
     src/harbour-owncloud.cpp \
     src/daemoncontrol.cpp \
     src/directorycontentmodel.cpp \
-    src/ocsnetaccessfactory.cpp
+    src/ocsnetaccessfactory.cpp \
+    src/webdavmediafeeder.cpp
 
 HEADERS += \
     src/daemoncontrol.h \
     src/directorycontentmodel.h \
-    src/ocsnetaccessfactory.h
+    src/ocsnetaccessfactory.h \
+    src/webdavmediafeeder.h
 
 RESOURCES += \
     qml.qrc \

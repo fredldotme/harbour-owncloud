@@ -5,50 +5,50 @@
     <name>BasicAuthentication</name>
     <message>
         <source>Host address</source>
-        <translation type="unfinished">Serveradresse</translation>
+        <translation>Serveradresse</translation>
     </message>
     <message>
         <source>User name</source>
-        <translation type="unfinished">Benutzername</translation>
+        <translation>Benutzername</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished">Passwort</translation>
+        <translation>Passwort</translation>
     </message>
     <message>
         <source>Login automatically</source>
-        <translation type="unfinished">Automatisch anmelden</translation>
+        <translation>Automatisch anmelden</translation>
     </message>
     <message>
         <source>Accept certificate</source>
-        <translation type="unfinished">Zertifikat akzeptieren</translation>
+        <translation>Zertifikat akzeptieren</translation>
     </message>
     <message>
         <source>Continue</source>
-        <translation type="unfinished">Weiter</translation>
+        <translation>Weiter</translation>
     </message>
     <message>
         <source>Invalid URL</source>
-        <translation type="unfinished">Falsche URL</translation>
+        <translation>Falsche URL</translation>
     </message>
     <message>
         <source>Please check your host address</source>
-        <translation type="unfinished">Bitte überprüfe deine Serveradresse</translation>
+        <translation>Bitte überprüfe deine Serveradresse</translation>
     </message>
 </context>
 <context>
     <name>CoverPage</name>
     <message>
         <source>User:</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzer:</translation>
     </message>
     <message>
         <source>Usage:</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwendung:</translation>
     </message>
     <message>
         <source>Total:</source>
-        <translation type="unfinished"></translation>
+        <translation>Total:</translation>
     </message>
 </context>
 <context>
@@ -59,15 +59,15 @@
     </message>
     <message>
         <source>Host address</source>
-        <translation type="unfinished">Serveradresse</translation>
+        <translation>Serveradresse</translation>
     </message>
     <message>
         <source>Continue</source>
-        <translation type="unfinished">Weiter</translation>
+        <translation>Weiter</translation>
     </message>
     <message>
         <source>Manual configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Manuelle Konfiguration</translation>
     </message>
 </context>
 <context>
@@ -154,11 +154,11 @@
     </message>
     <message>
         <source>Created at:</source>
-        <translation type="unfinished"></translation>
+        <translation>Erzeugt am:</translation>
     </message>
     <message>
         <source>Entity tag:</source>
-        <translation type="unfinished"></translation>
+        <translation>Entity tag:</translation>
     </message>
 </context>
 <context>
@@ -278,15 +278,15 @@
     </message>
     <message>
         <source>Failed to get remote content</source>
-        <translation type="unfinished"></translation>
+        <translation>Inhaltsauflistung fehlgeschlagen</translation>
     </message>
     <message>
         <source>Please check your connection or try again later.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bitte überprüfen Sie die Verbindung oder versuchen Sie es später noch einmal.</translation>
     </message>
     <message>
         <source>Operation failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Operation fehlgeschlagen</translation>
     </message>
 </context>
 </TS>

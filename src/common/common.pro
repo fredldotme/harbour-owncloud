@@ -5,6 +5,11 @@ CONFIG += qt c++11
 QT += dbus network xml
 DEFINES += QWEBDAVITEM_EXTENDED_PROPERTIES
 
+contains(CONFIG, RELEASE) {
+    QMAKE_POST_LINK=$(STRIP) $(TARGET)
+    DEFINES += QT_NO_DEBUG
+}
+
 SOURCES += \
     $$PWD/src/net/thumbnailfetcher.cpp \
     $$PWD/src/net/webdav_utils.cpp \

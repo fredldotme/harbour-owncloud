@@ -13,7 +13,7 @@ class Filesystem : public QObject
 
     struct WatchDelay {
         QString path;
-        QTimer *timer;
+        QTimer *timer = Q_NULLPTR;
     };
 
 public:

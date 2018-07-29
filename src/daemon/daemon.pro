@@ -8,14 +8,12 @@ include(../common/common.pri)
 
 SOURCES += \
     main.cpp \
-    uploader.cpp \
     filesystem.cpp \
     networkmonitor.cpp \
     dbushandler.cpp
 
 HEADERS += \
     filesystem.h \
-    uploader.h \
     networkmonitor.h \
     dbushandler.h
 

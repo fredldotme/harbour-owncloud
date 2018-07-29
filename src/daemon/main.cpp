@@ -6,8 +6,8 @@
 
 #include <ownclouddbusconsts.h>
 
+#include <webdavcommandqueue.h>
 #include "filesystem.h"
-#include "uploader.h"
 #include "settings/nextcloudsettings.h"
 #include "dbushandler.h"
 #include "networkmonitor.h"
@@ -24,9 +24,10 @@ int main(int argc, char *argv[])
     }
 
     Filesystem *fsHandler = Filesystem::instance();
-    Uploader *uploader = Uploader::instance();
     DBusHandler *dbusHandler = new DBusHandler();
     NetworkMonitor *netMonitor = NetworkMonitor::instance();
+    WebDavCommandQueue webDavQueue(&app, NextcloudSettings::instance());
+
 
     // Periodically check for existance of the local pictures path until found.
     // Don't stop the timer as the external storage could be ejected anytime.
@@ -42,17 +43,17 @@ int main(int argc, char *argv[])
     });
     localPathCheck.start();
 
-    QObject::connect(fsHandler, &Filesystem::fileFound, uploader, &Uploader::fileFound);
-    QObject::connect(uploader, &Uploader::pokeFilesystemScanner, fsHandler, &Filesystem::localPathChanged);
-    QObject::connect(netMonitor, &NetworkMonitor::shouldDownloadChanged, uploader, &Uploader::setOnline);
+    //QObject::connect(fsHandler, &Filesystem::fileFound, &webDavQueue, &Uploader::fileFound);
+    //QObject::connect(uploader, &Uploader::pokeFilesystemScanner, fsHandler, &Filesystem::localPathChanged);
+    //QObject::connect(netMonitor, &NetworkMonitor::shouldDownloadChanged, uploader, &Uploader::setOnline);
 
     // DBus connections
-    QObject::connect(netMonitor, &NetworkMonitor::shouldDownloadChanged, dbusHandler, &DBusHandler::setOnline);
-    QObject::connect(uploader, &Uploader::fileUploaded, dbusHandler, &DBusHandler::fileUploaded);
-    QObject::connect(uploader, &Uploader::connectError, dbusHandler, &DBusHandler::connectError);
-    QObject::connect(uploader, &Uploader::uploadError, dbusHandler, &DBusHandler::uploadError);
-    QObject::connect(uploader, &Uploader::uploadingChanged, dbusHandler, &DBusHandler::uploadingChanged);
-    QObject::connect(dbusHandler, &DBusHandler::configChanged, uploader, &Uploader::settingsChanged);
+    //QObject::connect(netMonitor, &NetworkMonitor::shouldDownloadChanged, dbusHandler, &DBusHandler::setOnline);
+    //QObject::connect(uploader, &Uploader::fileUploaded, dbusHandler, &DBusHandler::fileUploaded);
+    //QObject::connect(uploader, &Uploader::connectError, dbusHandler, &DBusHandler::connectError);
+    //QObject::connect(uploader, &Uploader::uploadError, dbusHandler, &DBusHandler::uploadError);
+    //QObject::connect(uploader, &Uploader::uploadingChanged, dbusHandler, &DBusHandler::uploadingChanged);
+    //QObject::connect(dbusHandler, &DBusHandler::configChanged, uploader, &Uploader::settingsChanged);
 
     // We only need one instance
     if(!QDBusConnection::sessionBus().registerService(HarbourOwncloud::DBusConsts::DBUS_SERVICE) ||
@@ -64,7 +65,7 @@ int main(int argc, char *argv[])
     }
 
     netMonitor->recheckNetworks();
-    uploader->settingsChanged();
+    //uploader->settingsChanged();
 
     return app.exec();
 }

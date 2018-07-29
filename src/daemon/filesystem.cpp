@@ -1,7 +1,11 @@
 #include "filesystem.h"
 
 #include "settings/nextcloudsettings.h"
-#include "uploader.h"
+//#include "uploader.h"
+
+#include <QDebug>
+#include <QDir>
+#include <QFileInfo>
 
 Filesystem::Filesystem()
 {
@@ -16,10 +20,6 @@ Filesystem* Filesystem::instance()
 
 void Filesystem::prepareScan(QString dirPath)
 {
-
-    if(!Uploader::instance()->isOnline())
-        return;
-
     if(isDelayActive(dirPath)) {
         resetDelay(dirPath);
     } else {
@@ -29,9 +29,6 @@ void Filesystem::prepareScan(QString dirPath)
 
 void Filesystem::scan(QString dirPath, bool recursive)
 {
-    if(!Uploader::instance()->isOnline())
-        return;
-
     qDebug() << "scanning" << dirPath;
 
     QDir dir(dirPath);
@@ -70,9 +67,6 @@ void Filesystem::scan(QString dirPath, bool recursive)
 
 void Filesystem::rescan()
 {
-    if(!Uploader::instance()->isOnline())
-        return;
-
     QFileInfo dirInfo(m_localPath);
     if (!dirInfo.exists() || !dirInfo.isDir()) {
         qWarning() << "invalid path for watching";

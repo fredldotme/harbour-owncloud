@@ -1,13 +1,19 @@
 #include "globaltransfermanager.h"
 
-GlobalTransferManager* GlobalTransferManager::instance(OwnCloudBrowser* browser)
+#include <settings/nextcloudsettings.h>
+
+GlobalTransferManager* GlobalTransferManager::instance()
 {
-    static GlobalTransferManager manager(NULL, browser);
+    NextcloudSettings* settings = NextcloudSettings::instance();
+    if (settings)
+        settings->readSettings();
+
+    static GlobalTransferManager manager(Q_NULLPTR, settings);
     return &manager;
 }
 
-GlobalTransferManager::GlobalTransferManager(QObject *parent, OwnCloudBrowser *browser) :
-    TransferManager(parent, browser)
+GlobalTransferManager::GlobalTransferManager(QObject *parent,
+                                             NextcloudSettingsBase* settings) :
+    WebDavCommandQueue(parent, settings)
 {
-
 }

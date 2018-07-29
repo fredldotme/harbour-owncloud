@@ -4,6 +4,7 @@
 #include <TransferEngine-qt5/mediatransferinterface.h>
 #include <TransferEngine-qt5/mediaitem.h>
 #include <settings/nextcloudsettingsbase.h>
+#include <webdavcommandqueue.h>
 
 class NextcloudUploader : public MediaTransferInterface
 {
@@ -16,6 +17,9 @@ public:
     QUrl serviceIcon() const;
     bool cancelEnabled() const;
     bool restartEnabled() const;
+
+private:
+    WebDavCommandQueue m_commandQueue;
 
 public Q_SLOTS:
     void start();

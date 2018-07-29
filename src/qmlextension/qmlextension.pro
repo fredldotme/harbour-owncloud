@@ -3,7 +3,8 @@ TARGET = $$qtLibraryTarget(harbourowncloudqmlplugin)
 CONFIG += plugin
 DEPENDPATH += .
 
-include(../common/common.pri)
+include($$PWD/../common/common.pri)
+include($$PWD/../qmlcommon/qmlcommon.pri)
 
 SOURCES += \
     harbourowncloudqmlplugin.cpp

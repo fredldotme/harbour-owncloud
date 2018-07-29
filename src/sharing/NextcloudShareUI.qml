@@ -13,7 +13,7 @@ ShareDialog {
     property int viewWidth: root.isPortrait ? Screen.width : Screen.width / 2
     property string remotePath : "/"
     property string localPath : root.source
-    property bool isLoadingDirectory : true
+    readonly property bool isLoadingDirectory : webDavCommandQueue.running
     property bool errorOccured : false
     property bool thumbnailErrorOccured : false
 
@@ -25,48 +25,41 @@ ShareDialog {
     readonly property string errorHint :
          "An error occured while contacting the Nextcloud/ownCloud instance"
 
-    Component.onCompleted: browser.settings.readSettings()
-
-    OwnCloudBrowser {
-        id: browser
+    FilePathUtil { id: filePathUtil }
+    WebDavCommandQueue {
+        id: webDavCommandQueue
         settings: PermittedSettings {
+            id: permittedSettings
             onSettingsChanged: {
-                browser.reloadSettings()
-                browser.testConnection()
+                webDavCommandQueue.directoryListingRequest(remotePath);
+                webDavCommandQueue.run()
             }
         }
-
-        onLoginFailed: {
-            placeholderHint.text = errorHint
-            errorOccured = true
-            isLoadingDirectory = false
-        }
-
-        onSslCertifcateError: {
-            placeholderHint.text = errorHint
-            errorOccured = true
-            isLoadingDirectory = false
-        }
-
-        onDirectoryContentChanged: {
-            var dirOnlyEntries = [];
-            remotePath = currentPath
-
-            if (remotePath !== "/") {
-                dirOnlyEntries.push( { name : "..", isDirectory: true} );
+        onCommandFinished: {
+            if (!receipt.finished) {
+                errorOccured = true;
+                return;
             }
 
-            for (var i = 0; i < entries.length; i++) {
-                if (entries[i].isDirectory)
-                    dirOnlyEntries.push(entries[i])
+            var isDavListCommand = (receipt.info.property("type") === "davList")
+
+            // Insert/update directory list in case of type === davList
+            if (isDavListCommand) {
+                var remotePath = receipt.info.property("remotePath")
+                var dirContent = receipt.result;
+                directoryContents.insert(remotePath, dirContent);
+                return;
             }
-            listView.model = dirOnlyEntries;
-            isLoadingDirectory = false;
         }
-        onLoginSucceeded: {
-            if (shouldShowList)
-                browser.getDirectoryContent("/");
+    }
+    QmlMap {
+        id: directoryContents
+        onInserted: {
+            if (key !== remotePath)
+                return;
+            listView.model = directoryContents.value(key)
         }
+        onRemoved: console.log("REMOVED!")
     }
 
     onAccepted: {
@@ -123,10 +116,12 @@ ShareDialog {
                 delegate: ListItem {
                     id: bgItem
                     contentHeight: Theme.itemSizeSmall
+                    property var davInfo : listView.model[index]
+                    visible: davInfo.isDirectory
 
                     Image {
                         id: icon
-                        source: listView.model[index].name !== ".." ?
+                        source: davInfo.name !== ".." ?
                                     "image://theme/icon-m-folder" :
                                     "image://theme/icon-m-back"
                         anchors.left: parent.left
@@ -142,17 +137,18 @@ ShareDialog {
                         id: label
                         x: icon.x + icon.width + 6
                         y: icon.y - icon.height + 12
-                        text: listView.model[index].name
+                        text: davInfo.name
                         anchors.verticalCenter: parent.verticalCenter
                         color: bgItem.highlighted ? Theme.highlightColor : Theme.primaryColor
                         enabled: listView.enabled
                     }
 
                     onClicked: {
-                        if(listView.model[index].isDirectory) {
-                            var newTargetDir = browser.getCanonicalPath(remotePath + listView.model[index].name + "/");
-                            browser.getDirectoryContent(newTargetDir);
-                            isLoadingDirectory = true;
+                        if (davInfo.isDirectory) {
+                            var newTargetDir = filePathUtil.getCanonicalPath(remotePath + listView.model[index].name + "/");
+                            remotePath = newTargetDir
+                            webDavCommandQueue.directoryListingRequest(newTargetDir);
+                            webDavCommandQueue.run()
                         }
                     }
                 }

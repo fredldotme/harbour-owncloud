@@ -6,7 +6,7 @@ DEPENDPATH += .
 CONFIG += link_pkgconfig
 PKGCONFIG += nemotransferengine-qt5
 
-include(../common/common.pri)
+include($$PWD/../common/common.pri)
 
 # Input
 HEADERS += \
@@ -14,15 +14,13 @@ HEADERS += \
     nextclouduploader.h \
     nextcloudplugininfo.h \
     nextcloudshareplugin.h \
-    globaltransfermanager.h \
-    globalowncloudbrowser.h
+    globaltransfermanager.h
 
 SOURCES += \
     nextcloudplugininfo.cpp \
     nextclouduploader.cpp \
     nextcloudshareplugin.cpp \
-    globaltransfermanager.cpp \
-    globalowncloudbrowser.cpp
+    globaltransfermanager.cpp
 
 OTHER_FILES += \
     NextcloudShareUI.qml

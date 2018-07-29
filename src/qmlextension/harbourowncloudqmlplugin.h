@@ -1,9 +1,11 @@
 #include <QtQml/QQmlExtensionPlugin>
 #include <QtQml/QtQml>
 
-#include <net/owncloudbrowser.h>
 #include <settings/permittedsettings.h>
+#include <commandentity.h>
 #include <webdavcommandqueue.h>
+#include <qmlmap.h>
+#include <util/filepathutil.h>
 
 class HarbourOwncloudQmlPlugin : public QQmlExtensionPlugin
 {
@@ -14,8 +16,11 @@ public:
     void registerTypes(const char *uri)
     {
         Q_ASSERT(uri == QLatin1String("com.github.beidl.harbourowncloud"));
+        qmlRegisterType<CommandEntity>(uri, 1, 0, "CommandEntity");
         qmlRegisterType<WebDavCommandQueue>(uri, 1, 0, "WebDavCommandQueue");
         qmlRegisterType<NextcloudSettingsBase>(uri, 1, 0, "NextcloudSettingsBase");
         qmlRegisterType<PermittedSettings>(uri, 1, 0, "PermittedSettings");
+        qmlRegisterType<FilePathUtil>(uri, 1, 0, "FilePathUtil");
+        qmlRegisterType<QmlMap>(uri, 1, 0, "QmlMap");
     }
 };

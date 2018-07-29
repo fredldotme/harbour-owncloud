@@ -1,15 +1,20 @@
 #include "nextclouduploader.h"
 
 #include <QDebug>
-#include <globaltransfermanager.h>
-#include <globalowncloudbrowser.h>
-
-#define GLOBAL_TRANSFER_MANAGER GlobalTransferManager::instance(GlobalOwncloudBrowser::instance())
+#include <settings/nextcloudsettings.h>
 
 NextcloudUploader::NextcloudUploader(QObject *parent) : MediaTransferInterface(parent)
 {
-    // Initialize singletons
-    GLOBAL_TRANSFER_MANAGER;
+    NextcloudSettings::instance()->readSettings();
+    this->m_commandQueue.setSettings(NextcloudSettings::instance());
+
+    QObject::connect(&this->m_commandQueue, &WebDavCommandQueue::commandFinished,
+                     this, [=](CommandReceipt receipt) {
+        if (receipt.finished)
+            setStatus(MediaTransferInterface::TransferFinished);
+        else
+            setStatus(MediaTransferInterface::TransferCanceled);
+    });
 }
 
 NextcloudUploader::~NextcloudUploader()
@@ -47,28 +52,22 @@ void NextcloudUploader::start()
         localPath = localPath.mid(7);
     const QString remotePath = userData.value("remoteDir").toString();
 
-    GLOBAL_TRANSFER_MANAGER->enqueueUpload(localPath, remotePath);
-    setStatus(MediaTransferInterface::TransferStarted);
-
-    for (QVariant entry : GLOBAL_TRANSFER_MANAGER->getTransfers()) {
-        TransferEntry* transferEntry = entry.value<TransferEntry*>();
-        if (!transferEntry)
-            continue;
-
-        if (transferEntry->getRemotePath() == remotePath) {
-            connect(transferEntry, &TransferEntry::progressChanged, this, [=](qreal progress, QString remotePath) {
-                setProgress(progress);
-            });
-            connect(transferEntry, &TransferEntry::transferCompleted, this, [=](bool success) {
-                if (success)
-                    setStatus(MediaTransferInterface::TransferFinished);
-                else
-                    setStatus(MediaTransferInterface::TransferInterrupted);
-            });
-
-            break;
-        }
+    CommandEntity* transferCommand =
+            this->m_commandQueue.fileUploadRequest(localPath, remotePath);
+    if (!transferCommand) {
+        setStatus(MediaTransferInterface::TransferInterrupted);
+        return;
     }
+
+    QObject::connect(transferCommand, &CommandEntity::progressChanged,
+                     this, [=]() {
+        if (!transferCommand)
+            return;
+        setProgress(transferCommand->progress());
+    });
+
+    this->m_commandQueue.run();
+    setStatus(MediaTransferInterface::TransferStarted);
 }
 
 void NextcloudUploader::cancel()
@@ -79,14 +78,15 @@ void NextcloudUploader::cancel()
     const QMap<QString, QVariant> userData = mediaItem()->value(MediaItem::UserData).toMap();
     const QString remotePath = userData.value("remoteDir").toString();
 
-    for (QVariant entry : GLOBAL_TRANSFER_MANAGER->getTransfers()) {
-        TransferEntry* transferEntry = entry.value<TransferEntry*>();
-        if (!transferEntry)
+    for (QVariant entry : this->m_commandQueue.queue()) {
+        CommandEntity* transferCommand = entry.value<CommandEntity*>();
+        if (!transferCommand)
             continue;
 
-        if (transferEntry->getRemotePath() == remotePath) {
+        if (transferCommand->info().property(QStringLiteral("remotePath")) == remotePath) {
+            qDebug() << "aborting upload to" << remotePath;
             setStatus(MediaTransferInterface::TransferCanceled);
-            transferEntry->cancelTransfer();
+            transferCommand->abort();
             break;
         }
     }

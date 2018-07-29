@@ -1,3 +1,16 @@
+0.7.9.1:
+Major refactoring, improving parallelism of concurrent operations
+User information on the application cover
+File uploads from SD card
+Thumbnails and audio/video previews
+Prevent destruction/modification of remote resources while they're transfering
+Allow cancellation of file opening after download completion
+Improved stability
+Visual improvements
+Reduce size of the additionals package by separating shared code
+Additionals package is now dependent on the main application package
+Note: photo backup daemon is non-functional in this version
+
 0.5.7:
 Support renaming of files and directories
 Icon for the TransferEngine Share UI

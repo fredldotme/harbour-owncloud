@@ -161,7 +161,7 @@ CommandEntity* WebDavCommandQueue::fileDownloadRequest(QString remotePath,
             if (!QFile(destination).exists())
                 return;
             ShellCommand::runCommand(QStringLiteral("xdg-open"), QStringList() << destination);
-        });
+        }, QStringLiteral("fileOpen"));
         enqueue(executeCommand);
     }
 

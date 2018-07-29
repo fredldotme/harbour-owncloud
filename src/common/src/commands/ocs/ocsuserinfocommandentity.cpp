@@ -97,7 +97,7 @@ OcsUserInfoCommandEntity::OcsUserInfoCommandEntity(QObject *parent,
         if (content.isEmpty())
             return;
 
-        qInfo() << content;
+        qDebug() << content;
 
         QXmlSimpleReader xmlReader;
         QXmlInputSource xmlInputSource;

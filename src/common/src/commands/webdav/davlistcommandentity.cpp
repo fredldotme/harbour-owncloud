@@ -2,6 +2,7 @@
 
 DavListCommandEntity::DavListCommandEntity(QObject *parent,
                                            QString remotePath,
+                                           bool refresh,
                                            QWebdav* client,
                                            NextcloudSettingsBase* settings) :
     WebDavCommandEntity(parent, client, settings)
@@ -11,6 +12,7 @@ DavListCommandEntity::DavListCommandEntity(QObject *parent,
     QMap<QString, QVariant> info;
     info["type"] = QStringLiteral("davList");
     info["remotePath"] = remotePath;
+    info["refresh"] = refresh;
     this->m_commandInfo = CommandEntityInfo(info);
 }
 

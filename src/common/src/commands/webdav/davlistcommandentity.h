@@ -12,6 +12,7 @@ class DavListCommandEntity : public WebDavCommandEntity
 public:
     explicit DavListCommandEntity(QObject* parent = Q_NULLPTR,
                                   QString remotePath = QStringLiteral(""),
+                                  bool refresh = false,
                                   QWebdav* client = Q_NULLPTR,
                                   NextcloudSettingsBase* settings = Q_NULLPTR);
 

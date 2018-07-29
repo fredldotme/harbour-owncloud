@@ -25,6 +25,10 @@ ShareDialog {
     readonly property string errorHint :
          "An error occured while contacting the Nextcloud/ownCloud instance"
 
+    Component.onCompleted: {
+        permittedSettings.readSettings()
+    }
+
     FilePathUtil { id: filePathUtil }
     WebDavCommandQueue {
         id: webDavCommandQueue

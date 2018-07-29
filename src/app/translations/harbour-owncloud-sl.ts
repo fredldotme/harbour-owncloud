@@ -277,5 +277,17 @@
         <source>%1 couldn&apos;t be downloaded</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Failed to get remote content</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please check your connection or try again later.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Operation failed</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

@@ -18,9 +18,9 @@ public:
 public slots:
     void acceptCertificate(QString md5, QString sha1);
     void acceptCertificate(bool value);
-    bool readSettings();
+    bool readSettings() Q_DECL_OVERRIDE;
+    void writeSettings() Q_DECL_OVERRIDE;
     void resetSettings();
-    void writeSettings();
 
 signals:
     void customCertChanged();

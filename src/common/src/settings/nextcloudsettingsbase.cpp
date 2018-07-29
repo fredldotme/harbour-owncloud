@@ -10,11 +10,11 @@ NextcloudSettingsBase::NextcloudSettingsBase(QObject *parent) : QObject(parent)
     m_autoLogin = false;
     m_notifications = true;
 
-    connect(this, &NextcloudSettingsBase::hoststringChanged, this, &NextcloudSettingsBase::settingsChanged);
-    connect(this, &NextcloudSettingsBase::usernameChanged, this, &NextcloudSettingsBase::settingsChanged);
-    connect(this, &NextcloudSettingsBase::passwordChanged, this, &NextcloudSettingsBase::settingsChanged);
-    connect(this, &NextcloudSettingsBase::uploadAutomaticallyChanged, this, &NextcloudSettingsBase::settingsChanged);
-    connect(this, &NextcloudSettingsBase::localPicturesPathChanged, this, &NextcloudSettingsBase::settingsChanged);
+//    connect(this, &NextcloudSettingsBase::hoststringChanged, this, &NextcloudSettingsBase::settingsChanged);
+//    connect(this, &NextcloudSettingsBase::usernameChanged, this, &NextcloudSettingsBase::settingsChanged);
+//    connect(this, &NextcloudSettingsBase::passwordChanged, this, &NextcloudSettingsBase::settingsChanged);
+//    connect(this, &NextcloudSettingsBase::uploadAutomaticallyChanged, this, &NextcloudSettingsBase::settingsChanged);
+//    connect(this, &NextcloudSettingsBase::localPicturesPathChanged, this, &NextcloudSettingsBase::settingsChanged);
 }
 
 void NextcloudSettingsBase::refreshHostString()
@@ -60,7 +60,12 @@ bool NextcloudSettingsBase::parseFromAddressString(QString value)
 
 bool NextcloudSettingsBase::readSettings()
 {
+    Q_EMIT settingsChanged();
     return true;
+}
+
+void NextcloudSettingsBase::writeSettings()
+{
 }
 
 void NextcloudSettingsBase::resetSettings()

@@ -96,9 +96,7 @@ bool NextcloudSettings::readSettings()
 
     settings.endGroup();
 
-    // Since settings are read, propagate changes to the ownCloud browser object
-    emit settingsChanged();
-
+    // Since settings are read, propagate changes to the associated object
     return NextcloudSettingsBase::readSettings();
 }
 

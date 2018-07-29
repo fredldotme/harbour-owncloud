@@ -69,7 +69,7 @@ public:
 public slots:
     void resetSettings();
     virtual bool readSettings();
-    virtual void writeSettings() { }
+    virtual void writeSettings();
 
     void setUsername(QString value);
     void setPassword(QString value);

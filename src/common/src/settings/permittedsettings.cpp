@@ -48,5 +48,5 @@ bool PermittedSettings::readSettings()
         wtchr->deleteLater();
     });
 
-    return NextcloudSettingsBase::readSettings();
+    return true;
 }

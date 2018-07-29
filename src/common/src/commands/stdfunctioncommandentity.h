@@ -11,8 +11,15 @@ class StdFunctionCommandEntity : public CommandEntity
 
 public:
     explicit StdFunctionCommandEntity(QObject *parent = Q_NULLPTR,
-                                      std::function<void()> function = [](){}) :
-        CommandEntity(parent), m_function(function) {}
+                                      std::function<void()> function = [](){},
+                                      const QString& type = QStringLiteral("")) :
+        CommandEntity(parent), m_function(function) {
+        if (!type.isEmpty()) {
+            QMap<QString, QVariant> commandProperties;
+            commandProperties.insert(QStringLiteral("type"), type);
+            this->m_commandInfo = CommandEntityInfo(commandProperties);
+        }
+    }
 
     bool startWork()
     {

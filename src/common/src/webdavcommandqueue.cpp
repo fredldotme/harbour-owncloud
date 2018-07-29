@@ -106,11 +106,11 @@ CommandEntity* WebDavCommandQueue::copyRequest(QString from, QString to)
     return command;
 }
 
-CommandEntity* WebDavCommandQueue::directoryListingRequest(QString path)
+CommandEntity* WebDavCommandQueue::directoryListingRequest(QString path, bool refresh)
 {
     qDebug() << Q_FUNC_INFO;
     DavListCommandEntity* command =
-            new DavListCommandEntity(this, path, this->getWebdav());
+            new DavListCommandEntity(this, path, refresh, this->getWebdav());
 
     enqueue(command);
     return command;

@@ -33,7 +33,7 @@ public slots:
     CommandEntity* removeRequest(QString name);
     CommandEntity* moveRequest(QString from, QString to);
     CommandEntity* copyRequest(QString from, QString to);
-    CommandEntity* directoryListingRequest(QString path);
+    CommandEntity* directoryListingRequest(QString path, bool refresh);
 
 protected:
     QWebdav* getWebdav() { return m_client; }

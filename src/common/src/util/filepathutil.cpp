@@ -2,6 +2,8 @@
 
 #include <QStandardPaths>
 
+#include <nextcloudendpointconsts.h>
+
 QString FilePathUtil::destinationFromMIME(QString mime)
 {
     QStandardPaths::StandardLocation location;
@@ -40,4 +42,15 @@ QString FilePathUtil::getCanonicalPath(const QString &path)
         ret += newDirs.join(slash) + slash;
 
     return ret;
+}
+
+QString FilePathUtil::getWebDavFileUrl(const QString &path,
+                                       NextcloudSettingsBase *settings)
+{
+    if (!settings) {
+        return QStringLiteral();
+    }
+
+    const QString urlString = settings->hoststring() + NEXTCLOUD_ENDPOINT_WEBDAV + path;
+    return urlString;
 }

@@ -49,5 +49,20 @@ bool AuthenticationExaminer::examine(QString serverUrl, AuthenticationMethod met
         break;
     }
 
+    Q_EMIT examinationSucceeded(method);
     return true;
+}
+
+void AuthenticationExaminer::setRunning(bool v)
+{
+    if (this->m_running == v)
+        return;
+
+    this->m_running = v;
+    Q_EMIT runningChanged();
+}
+
+bool AuthenticationExaminer::running()
+{
+    return this->m_running;
 }

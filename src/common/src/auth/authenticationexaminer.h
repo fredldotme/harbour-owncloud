@@ -11,6 +11,8 @@ class AuthenticationExaminer : public QObject
 {
     Q_OBJECT
 
+    Q_PROPERTY(bool running READ running NOTIFY runningChanged)
+
 public:
     explicit AuthenticationExaminer(QObject *parent = Q_NULLPTR);
     enum AuthenticationMethod {
@@ -18,6 +20,7 @@ public:
         FLOW_DIALOG
     };
     Q_ENUM(AuthenticationMethod)
+    bool running();
 
 public slots:
     bool examine(QString serverUrl, AuthenticationMethod method);
@@ -30,9 +33,13 @@ private:
         new QWebDavAuthenticator
     };
 
+    void setRunning(bool v);
+    bool m_running = false;
+
 signals:
     void examinationFailed(AuthenticationMethod method);
     void examinationSucceeded(AuthenticationMethod method);
+    void runningChanged();
 };
 Q_DECLARE_METATYPE(AuthenticationExaminer*)
 

@@ -18,6 +18,24 @@ Page {
         listCommand = browserCommandQueue.directoryListingRequest(remotePath, refresh)
     }
 
+    function preventResourceModification(target) {
+        var queueInfos = transferQueue.queueInformation();
+        for (var i = 0; i < queueInfos.length; i++) {
+            var pendingTransfer = queueInfos[i];
+
+            var isTransfer = (pendingTransfer.property("type") === "fileDownload" ||
+                              pendingTransfer.property("type") === "fileUpload")
+
+            if (!isTransfer)
+                continue;
+
+            if (pendingTransfer.property("remotePath").indexOf(target.path) === 0) {
+                return true
+            }
+        }
+        return false
+    }
+
     FileDetailsHelper { id: fileDetailsHelper }
     Notification {
         id: transientNotifier
@@ -27,7 +45,6 @@ Page {
     onStatusChanged: {
         if (status === PageStatus.Inactive) {
             if (_navigation !== undefined && _navigation === PageNavigation.Back) {
-                console.debug("cleanup")
                 if (listCommand !== null)
                     listCommand.abort()
                 directoryContents.remove(remotePath)
@@ -121,6 +138,11 @@ Page {
         browserCommandQueue.copyRequest(fromPath, toPath, true)
     }
 
+    function deleteEntry(fullPath) {
+        browserCommandQueue.removeRequest(fullPath);
+        refreshListView(true)
+    }
+
     SilicaFlickable {
         anchors.fill: parent
 
@@ -191,7 +213,6 @@ Page {
                         var selectedFiles = dialogObj.filesToSelect
                         for (var i = 0; i < selectedFiles.length; i++) {
                             var canonicalRemotePath = FilePathUtil.getCanonicalPath(remotePath);
-                            console.debug("lastModified: " + selectedFiles[i].lastModified);
                             transferQueue.fileUploadRequest(selectedFiles[i].path,
                                                             canonicalRemotePath,
                                                             selectedFiles[i].lastModified);
@@ -261,13 +282,6 @@ Page {
                     anchors.verticalCenter: parent.verticalCenter
                     color: delegate.highlighted ? Theme.highlightColor : Theme.primaryColor
                 }
-                RemorseItem {
-                    id: remorseItem
-                    onCanceled: {
-                        console.log("Canceled...")
-                        refreshListView(true)
-                    }
-                }
 
                 onClicked: {
                     if(davInfo.isDirectory) {
@@ -282,11 +296,14 @@ Page {
                     selectedEntry = davInfo;
                     selectedItem = delegate
                     if (!menu)
-                        menu = contextMenuComponent.createObject(listView, {remorseItem : remorseItem})
-
-                    if (remorseItem.pending === null) {
-                        openMenu()
-                    }
+                        menu = contextMenuComponent.createObject(listView, {
+                                                                     tmpEntry : selectedEntry
+                                                                 })
+                    menu.closed.connect(function(){
+                        menu.destroy()
+                        menu = null
+                    });
+                    openMenu()
                 }
             }
             VerticalScrollDecorator {}
@@ -298,24 +315,47 @@ Page {
             }
 
             Component {
+                id: deleteRemorseComponent
+
+                RemorseItem {
+                    id: remorseItem
+                    property string pathToResource : ""
+
+                    onCanceled: {
+                        refreshListView(true)
+                        remorseItem.destroy()
+                    }
+                    onTriggered: {
+                        deleteEntry(pathToResource)
+                        remorseItem.destroy()
+                    }
+                }
+            }
+
+            Component {
                 id: contextMenuComponent
 
                 ContextMenu {
-                    property RemorseItem remorseItem : null
+                    property var tmpEntry : null;
+
                     onClosed: {
                         selectedEntry = null
                         selectedItem = null
                     }
-                    MenuItem {
-                        property var tmpEntry;
 
-                        function renameSelectedEntry() {
-                            renameEntry(tmpEntry, dialogObj.text)
-                            dialogObj = null
-                            tmpEntry = null
+                    Connections {
+                        target: transferQueue
+                        onCommandFinished: {
+                            renameMenuItem.enabled = !preventResourceModification(tmpEntry)
+                            moveMenuItem.enabled = !preventResourceModification(tmpEntry)
+                            deleteMenuItem.enabled = !preventResourceModification(tmpEntry)
                         }
+                    }
 
+                    MenuItem {
+                        id: renameMenuItem
                         text: qsTr("Rename")
+                        enabled : !preventResourceModification(tmpEntry)
                         onClicked: {
                             tmpEntry = selectedEntry
                             dialogObj = textEntryDialogComponent.createObject(pageRoot);
@@ -323,7 +363,11 @@ Page {
                             dialogObj.acceptText = qsTr("Rename")
                             dialogObj.placeholderText = qsTr("New name")
                             dialogObj.labelText = dialogObj.placeholderText
-                            dialogObj.accepted.connect(renameSelectedEntry);
+                            dialogObj.accepted.connect(function () {
+                                renameEntry(tmpEntry, dialogObj.text)
+                                dialogObj = null
+                                tmpEntry = null
+                            });
                             dialogObj.rejected.connect(function() {
                                 dialogObj = null
                                 tmpEntry = null
@@ -332,19 +376,17 @@ Page {
                         }
                     }
                     MenuItem {
-                        property var tmpEntry;
-
-                        function moveSelectedEntry() {
-                            moveEntry(tmpEntry, remotePath)
-                            dialogObj = null
-                            tmpEntry = null
-                        }
-
+                        id: moveMenuItem
                         text: qsTr("Move")
+                        enabled : !preventResourceModification(tmpEntry)
                         onClicked: {
                             tmpEntry = selectedEntry
                             dialogObj = remoteDirDialogComponent.createObject(pageRoot, {entry: tmpEntry});
-                            dialogObj.accepted.connect(moveSelectedEntry);
+                            dialogObj.accepted.connect(function () {
+                                moveEntry(tmpEntry, remotePath)
+                                dialogObj = null
+                                tmpEntry = null
+                            });
                             dialogObj.rejected.connect(function() {
                                 dialogObj = null
                                 tmpEntry = null
@@ -353,19 +395,15 @@ Page {
                         }
                     }
                     MenuItem {
-                        property var tmpEntry;
-
-                        function copySelectedEntry() {
-                            copyEntry(tmpEntry, remotePath)
-                            dialogObj = null
-                            tmpEntry = null
-                        }
-
                         text: qsTr("Copy")
                         onClicked: {
                             tmpEntry = selectedEntry
                             dialogObj = remoteDirDialogComponent.createObject(pageRoot, {entry: tmpEntry});
-                            dialogObj.accepted.connect(copySelectedEntry);
+                            dialogObj.accepted.connect(function () {
+                                copyEntry(tmpEntry, remotePath)
+                                dialogObj = null
+                                tmpEntry = null
+                            });
                             dialogObj.rejected.connect(function() {
                                 dialogObj = null
                                 tmpEntry = null
@@ -374,17 +412,18 @@ Page {
                         }
                     }
                     MenuItem {
-                        property var tmpEntry;
+                        id: deleteMenuItem
                         text: qsTr("Delete")
+                        enabled : !preventResourceModification(tmpEntry)
                         onClicked: {
-                            tmpEntry = selectedEntry
+                            var fullPath = remotePath + selectedEntry.name
+                            var remorseItem =
+                                    deleteRemorseComponent.createObject(selectedItem,
+                                                                        {
+                                                                            pathToResource : fullPath
+                                                                        });
                             remorseItem.execute(selectedItem,
-                                                qsTr("Deleting",
-                                                     "RemorseItem text"),
-                                                function(){
-                                                    browserCommandQueue.removeRequest(remotePath + tmpEntry.name);
-                                                    refreshListView(true)
-                                                })
+                                                qsTr("Deleting", "RemorseItem text"))
                         }
                     }
                 }

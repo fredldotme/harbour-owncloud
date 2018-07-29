@@ -1,5 +1,7 @@
 #include "webdavcommandqueue.h"
 
+#include <QDebug>
+
 #include <commands/webdav/filedownloadcommandentity.h>
 #include <commands/webdav/fileuploadcommandentity.h>
 #include <commands/webdav/mkdavdircommandentity.h>
@@ -7,6 +9,7 @@
 #include <commands/webdav/davcopycommandentity.h>
 #include <commands/webdav/davmovecommandentity.h>
 #include <commands/webdav/davlistcommandentity.h>
+#include <commands/webdav/davproppatchcommandentity.h>
 #include <commands/stdfunctioncommandentity.h>
 
 #include <util/filepathutil.h>
@@ -15,6 +18,9 @@
 #include <net/webdav_utils.h>
 
 #include <nextcloudendpointconsts.h>
+
+#include <sys/types.h>
+#include <utime.h>
 
 WebDavCommandQueue::WebDavCommandQueue(QObject* parent, NextcloudSettingsBase* settings) :
     CommandQueue(parent)
@@ -110,18 +116,47 @@ CommandEntity* WebDavCommandQueue::directoryListingRequest(QString path)
     return command;
 }
 
-CommandEntity* WebDavCommandQueue::fileDownloadRequest(QString remotePath, QString mimeType, bool open)
+CommandEntity* WebDavCommandQueue::fileDownloadRequest(QString remotePath,
+                                                       QString mimeType,
+                                                       bool open,
+                                                       QDateTime lastModified)
 {
     FileDownloadCommandEntity* downloadCommand = Q_NULLPTR;
 
     QString name = remotePath.mid(remotePath.lastIndexOf("/") + 1);
     QString destination = FilePathUtil::destinationFromMIME(mimeType) + "/" + name;
 
-    downloadCommand = new FileDownloadCommandEntity(this, remotePath, destination, this->getWebdav());
+    downloadCommand = new FileDownloadCommandEntity(this, remotePath,
+                                                    destination, this->getWebdav());
     enqueue(downloadCommand);
 
+    // if lastModified has been provided update the local lastModified information after download
+    qDebug() << lastModified;
+    if (lastModified.isValid()) {
+        StdFunctionCommandEntity* updateLocalLastModifiedCommand =
+                new StdFunctionCommandEntity(this, [destination, lastModified]() {
+            if (!QFile(destination).exists())
+                return;
+            struct utimbuf newLocalLastModified;
+            int utimesuccess;
+
+            newLocalLastModified.actime = time(NULL);
+            newLocalLastModified.modtime = lastModified.toMSecsSinceEpoch() / 1000; // seconds
+
+            utimesuccess = utime(destination.toStdString().c_str(), &newLocalLastModified);
+            if (utimesuccess != 0) {
+                qWarning() << "failed to update local last modified time to"
+                           << lastModified;
+            } else {
+                qDebug() << "Local last modified " << newLocalLastModified.modtime;
+            }
+        });
+        enqueue(updateLocalLastModifiedCommand);
+    }
+
     if (open) {
-        StdFunctionCommandEntity* executeCommand = new StdFunctionCommandEntity(this, [destination]() {
+        StdFunctionCommandEntity* executeCommand =
+                new StdFunctionCommandEntity(this, [destination]() {
             qDebug() << destination;
             if (!QFile(destination).exists())
                 return;
@@ -133,13 +168,31 @@ CommandEntity* WebDavCommandQueue::fileDownloadRequest(QString remotePath, QStri
     return downloadCommand;
 }
 
-CommandEntity* WebDavCommandQueue::fileUploadRequest(QString localPath, QString remotePath)
+CommandEntity* WebDavCommandQueue::fileUploadRequest(QString localPath,
+                                                     QString remotePath,
+                                                     QDateTime lastModified)
 {
     qDebug() << "upload requested";
     FileUploadCommandEntity* uploadCommand =
             new FileUploadCommandEntity(this, localPath, remotePath, this->getWebdav());
 
     enqueue(uploadCommand);
+
+    // if lastModified has been provided update the remote lastModified information afterwards
+    qDebug() << lastModified;
+    if (lastModified.isValid()) {
+        QWebdav::PropValues props;
+        QMap<QString, QVariant> propMap;
+
+        // Last modified in seconds
+        propMap["lastmodified"] = (QVariant)(lastModified.toMSecsSinceEpoch() / 1000);
+        props["DAV:"] = propMap;
+
+        DavPropPatchCommandEntity* propPatchCommand =
+                new DavPropPatchCommandEntity(this, remotePath, props, this->getWebdav());
+
+        enqueue(propPatchCommand);
+    }
+
     return uploadCommand;
 }
-

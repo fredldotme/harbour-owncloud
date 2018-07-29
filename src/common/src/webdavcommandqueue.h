@@ -24,8 +24,11 @@ public:
 public slots:
     CommandEntity* fileDownloadRequest(QString from,
                                        QString mimeType = QStringLiteral(""),
-                                       bool open = false);
-    CommandEntity* fileUploadRequest(QString from, QString to);
+                                       bool open = false,
+                                       QDateTime lastModified = QDateTime());
+    CommandEntity* fileUploadRequest(QString from,
+                                     QString to,
+                                     QDateTime lastModified = QDateTime());
     CommandEntity* makeDirectoryRequest(QString dirName);
     CommandEntity* removeRequest(QString name);
     CommandEntity* moveRequest(QString from, QString to);

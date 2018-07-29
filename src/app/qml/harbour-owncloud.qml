@@ -5,16 +5,29 @@ import Nemo.Notifications 1.0
 
 ApplicationWindow
 {
+    id: applicationWindow
+    initialPage: basicAuthenticationComponent
+    cover: coverPage
+
     DaemonControl {
         id: daemonCtrl
     }
     Notification {
         id: notifier
     }
+    QmlMap {
+        id: directoryContents
+    }
 
     readonly property bool isTransfering :
         (transferQueue.running || daemonCtrl.uploading)
 
+    // Main application cover
+    readonly property Component coverPage :
+        Qt.createComponent("qrc:/qml/cover/CoverPage.qml",
+                           Component.PreferSynchronous)
+
+    // Application pages
     readonly property Component remoteDirDialogComponent :
         Qt.createComponent("qrc:/qml/pages/browser/RemoteDirSelectDialog.qml",
                            Component.PreferSynchronous);
@@ -68,9 +81,7 @@ ApplicationWindow
         if (!persistentSettings.notifications)
             return;
 
-        //notifier.summary = summary
         notifier.previewSummary = summary
-        //notifier.body = body
         notifier.previewBody = body
         notifier.publish();
     }
@@ -78,20 +89,56 @@ ApplicationWindow
     WebDavCommandQueue {
         id: browserCommandQueue
         settings: persistentSettings
+        immediate: true
         onCommandFinished: {
             console.log("onCommandFinished")
-            if (!receipt.finished)
-                return;
-
             var isDavListCommand = (receipt.info.property("type") === "davList")
-            var isDavRmCommand = (receipt.info.property("type") === "davRemove")
+            var isDavMoveCommand = (receipt.info.property("type") === "davMove")
             var isDavCopyCommand = (receipt.info.property("type") === "davCopy")
+            var isDavRmCommand = (receipt.info.property("type") === "davRemove")
 
-            // Insert/update directory list in case of type === davList
+            // Error messages
+            if (!receipt.finished) {
+                if (isDavListCommand) {
+                    notify(qsTr("Failed to get remote content"),
+                           qsTr("Please check your connection or try again later."))
+                    return
+                }
+                if (isDavRmCommand || isDavMoveCommand || isDavCopyCommand) {
+                    notify(qsTr("Operation failed"),
+                           qsTr("Please check your connection or try again later."))
+                    return
+                }
+
+                return;
+            }
+
+            // Insert/update directory list in case of type === davList and push
+            // a new page into the PageStack in case a refresh was not requested
             if (isDavListCommand) {
                 var remotePath = receipt.info.property("remotePath")
+                var isRefresh = receipt.info.property("refresh")
+
                 var dirContent = receipt.result;
                 directoryContents.insert(remotePath, dirContent);
+
+                // Done in case of a refresh
+                if (isRefresh)
+                    return;
+
+                // Complete pending PageStack animation
+                if (pageStack.busy)
+                    pageStack.completeAnimation()
+
+                // Clear the PageStack when requesting a directory lising
+                // for the remote root path
+                if (remotePath === "/")
+                    pageStack.clear()
+
+                var nextDirectory = browserComponent.createObject(pageStack,
+                                                                  { remotePath : remotePath });
+                pageStack.push(nextDirectory)
+                console.log("pushed new browsing page")
                 return;
             }
 
@@ -100,7 +147,6 @@ ApplicationWindow
                 refreshUserInfo()
                 return;
             }
-
         }
     }
     WebDavCommandQueue {
@@ -142,38 +188,6 @@ ApplicationWindow
         }
         return false;
     }
-
-    /*Connections {
-        target: browserCommandQueue
-        onSslCertifcateError: {
-            pageStack.completeAnimation();
-            pageStack.clear();
-            pageStack.replace(authenticationEntranceComponent, {}, PageStackAction.Immediate)
-            pageStack.push("qrc:/qml/pages/login/SSLErrorDialog.qml", {md5Digest : md5Digest, sha1Digest : sha1Digest});
-        }
-    }*/
-
-    /*Connections {
-        target: browser
-        onLoginFailed: {
-            loginInProgress = false;
-            loginFailed = true;
-            notify(qsTr("Login failed"), qsTr("Please check your host address and credentials"))
-
-            pageStack.completeAnimation();
-            pageStack.clear();
-            pageStack.completeAnimation();
-            pageStack.push(authenticationEntranceComponent)
-        }
-    }*/
-
-    QmlMap {
-        id: directoryContents
-    }
-
-    id: applicationWindow
-    initialPage: basicAuthenticationComponent
-    cover: Qt.resolvedUrl("qrc:/qml/cover/CoverPage.qml")
 }
 
 

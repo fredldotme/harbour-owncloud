@@ -5,7 +5,8 @@ import harbour.owncloud 1.0
 Page {
     id: pageRoot
 
-    readonly property bool loginInProgress : authenticator.running;
+    readonly property bool loginInProgress : (authenticator.running ||
+                                              browserCommandQueue.running);
 
     Component.onCompleted: {
         persistentSettings.readSettings();
@@ -19,9 +20,8 @@ Page {
         settings: persistentSettings
         onAuthenticationSuccessful: {
             daemonCtrl.reloadConfig()
-            pageStack.completeAnimation()
-            pageStack.clear()
-            pageStack.push(browserComponent, {}, PageStackAction.Immediate);
+            browserCommandQueue.directoryListingRequest("/", false)
+            browserCommandQueue.run()
             ocsCommandQueue.userInfoRequest();
             ocsCommandQueue.run()
         }

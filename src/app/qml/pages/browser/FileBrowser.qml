@@ -14,9 +14,8 @@ Page {
     // Keep track of directory listing requests
     property var listCommand : null
 
-    function refreshListView() {
-        listCommand = browserCommandQueue.directoryListingRequest(remotePath)
-        browserCommandQueue.run()
+    function refreshListView(refresh) {
+        listCommand = browserCommandQueue.directoryListingRequest(remotePath, refresh)
     }
 
     FileDetailsHelper { id: fileDetailsHelper }
@@ -25,14 +24,12 @@ Page {
         isTransient: true
     }
 
-    Component.onCompleted: {
-        refreshListView()
-    }
-
     onStatusChanged: {
         if (status === PageStatus.Inactive) {
             if (_navigation !== undefined && _navigation === PageNavigation.Back) {
                 console.debug("cleanup")
+                if (listCommand !== null)
+                    listCommand.abort()
                 directoryContents.remove(remotePath)
                 pageRoot.destroy()
             }
@@ -62,7 +59,7 @@ Page {
             }
 
             if (receipt.info.property("remotePath") === pageRoot.remotePath) {
-                refreshListView()
+                refreshListView(true)
                 return;
             }
         }
@@ -72,7 +69,7 @@ Page {
         target: transferQueue
         onCommandFinished: {
             if (receipt.info.property("remotePath") === pageRoot.remotePath) {
-                refreshListView()
+                refreshListView(true)
                 return;
             }
         }
@@ -102,7 +99,7 @@ Page {
                 (tmpEntry.isDirectory ? "/" : "")
 
         browserCommandQueue.moveRequest(fromPath, toPath, true)
-        refreshListView()
+        refreshListView(true)
     }
 
     function moveEntry(tmpEntry, remotePath) {
@@ -112,7 +109,7 @@ Page {
                 (tmpEntry.isDirectory ? "/" : "")
 
         browserCommandQueue.moveRequest(fromPath, toPath, true)
-        refreshListView()
+        refreshListView(true)
     }
 
     function copyEntry(tmpEntry, remotePath) {
@@ -122,7 +119,6 @@ Page {
                 (tmpEntry.isDirectory ? "/" : "")
 
         browserCommandQueue.copyRequest(fromPath, toPath, true)
-        browserCommandQueue.run()
     }
 
     SilicaFlickable {
@@ -132,6 +128,8 @@ Page {
             id: listView
             anchors.fill: parent
             clip: true
+            model: directoryContents.value(remotePath)
+
             add: Transition {
                 NumberAnimation {
                     properties: "height"
@@ -167,7 +165,7 @@ Page {
                     text: qsTr("Refresh")
                     enabled: listView.model !== undefined
                     onClicked: {
-                        refreshListView()
+                        refreshListView(true)
                     }
                 }
 
@@ -181,7 +179,7 @@ Page {
                         dialogObj.accepted.connect(function () {
                             var newPath = remotePath + dialogObj.text
                             browserCommandQueue.makeDirectoryRequest(newPath)
-                            refreshListView()
+                            refreshListView(true)
                             dialogObj = null
                         })
                         pageStack.push(dialogObj)
@@ -267,15 +265,14 @@ Page {
                     id: remorseItem
                     onCanceled: {
                         console.log("Canceled...")
-                        refreshListView()
+                        refreshListView(true)
                     }
                 }
 
                 onClicked: {
                     if(davInfo.isDirectory) {
                         var nextPath = remotePath + davInfo.name + "/";
-                        var nextDirectory = browserComponent.createObject(pageRoot, { remotePath : nextPath });
-                        pageStack.push(nextDirectory)
+                        listCommand = browserCommandQueue.directoryListingRequest(nextPath, false)
                     } else {
                         var fileDetails = fileDetailsComponent.createObject(pageRoot, { entry: davInfo });
                         pageStack.push(fileDetails);
@@ -386,7 +383,7 @@ Page {
                                                      "RemorseItem text"),
                                                 function(){
                                                     browserCommandQueue.removeRequest(remotePath + tmpEntry.name);
-                                                    refreshListView()
+                                                    refreshListView(true)
                                                 })
                         }
                     }

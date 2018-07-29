@@ -21,15 +21,9 @@ protected:
     bool startWork();
 
 private:
-    void setModifiedTime();
-
     bool m_running = false;
     QFile* m_localFile = Q_NULLPTR;
     QString m_remotePath;
-
-signals:
-
-public slots:
 };
 
 #endif // FILEUPLOADCOMMANDENTITY_H

@@ -55,33 +55,3 @@ bool FileUploadCommandEntity::startWork()
     setState(RUNNING);
     return true;
 }
-
-void FileUploadCommandEntity::setModifiedTime()
-{
-    QWebdav::PropValues props;
-    QMap<QString, QVariant> propMap;
-
-    QFileInfo localFileInfo(*this->m_localFile);
-    qint64 lastModified = localFileInfo.lastModified().toMSecsSinceEpoch() / 1000; // seconds
-
-    propMap["lastmodified"] = (QVariant) lastModified;
-    props["DAV:"] = propMap;
-
-    if (this->m_reply)
-        this->m_reply->deleteLater();
-
-    this->m_reply = this->m_client->proppatch(this->m_remotePath, props);
-    QObject::connect(this->m_reply,
-                     static_cast<void(QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error),
-                     this, [=](QNetworkReply::NetworkError error) {
-        qWarning() << "Failed to apply mtime" << lastModified << "due to error" << error << "continuing.";
-        abortWork();
-    });
-
-    QObject::connect(this->m_reply, &QNetworkReply::finished, this, [=]() {
-        if (this->m_reply->error() != QNetworkReply::NoError)
-            return;
-
-        Q_EMIT done();
-    });
-}

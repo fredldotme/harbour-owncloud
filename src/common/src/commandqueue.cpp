@@ -33,13 +33,18 @@ bool CommandQueue::immediate()
     return this->m_immediate;
 }
 
-QList<CommandEntityInfo> CommandQueue::queueInformation()
+QVariantList CommandQueue::queueInformation()
 {
     QMutexLocker locker(&this->m_queueMutex);
 
-    QList<CommandEntityInfo> commandInfos;
+    QVariantList commandInfos;
     for (const CommandEntity* command : this->m_queue) {
-        commandInfos.append(command->info());
+        if (!command)
+            continue;
+
+        QVariant info;
+        info.setValue(command->info());
+        commandInfos.append(info);
     }
     return commandInfos;
 }

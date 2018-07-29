@@ -57,7 +57,7 @@ public slots:
     bool isRunning() { return this->m_running; }
     bool isEmpty() { return this->m_queue.isEmpty(); }
     QVariantList queue();
-    QList<CommandEntityInfo> queueInformation();
+    QVariantList queueInformation();
 
 private:
     void runNextCommand();

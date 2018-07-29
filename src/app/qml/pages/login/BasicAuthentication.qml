@@ -19,6 +19,7 @@ Page {
         id: authenticator
         settings: persistentSettings
         onAuthenticationSuccessful: {
+            pageStack.pop()
             daemonCtrl.reloadConfig()
             browserCommandQueue.directoryListingRequest("/", false)
             browserCommandQueue.run()

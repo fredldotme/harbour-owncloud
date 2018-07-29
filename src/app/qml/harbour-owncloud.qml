@@ -130,15 +130,16 @@ ApplicationWindow
                 if (pageStack.busy)
                     pageStack.completeAnimation()
 
-                // Clear the PageStack when requesting a directory lising
-                // for the remote root path
-                if (remotePath === "/")
-                    pageStack.clear()
-
                 var nextDirectory = browserComponent.createObject(pageStack,
                                                                   { remotePath : remotePath });
-                pageStack.push(nextDirectory)
-                console.log("pushed new browsing page")
+
+                // Replace the current top page when requesting a
+                // directory lising for the remote root path
+                if (remotePath === "/")
+                    pageStack.replace(nextDirectory)
+                else
+                    pageStack.push(nextDirectory)
+
                 return;
             }
 

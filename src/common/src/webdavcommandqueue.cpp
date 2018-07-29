@@ -188,8 +188,11 @@ CommandEntity* WebDavCommandQueue::fileUploadRequest(QString localPath,
         propMap["lastmodified"] = (QVariant)(lastModified.toMSecsSinceEpoch() / 1000);
         props["DAV:"] = propMap;
 
+        const QString fileName = localPath.mid(localPath.lastIndexOf('/'));
+
         DavPropPatchCommandEntity* propPatchCommand =
-                new DavPropPatchCommandEntity(this, remotePath, props, this->getWebdav());
+                new DavPropPatchCommandEntity(this, remotePath + fileName,
+                                              props, this->getWebdav());
 
         enqueue(propPatchCommand);
     }

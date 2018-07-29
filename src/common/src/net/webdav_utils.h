@@ -13,6 +13,8 @@ QWebdav* getNewWebDav(NextcloudSettingsBase *settings,
 void applySettingsToWebdav(NextcloudSettingsBase *settings,
                            QWebdav *webdav,
                            QString apiPath = QStringLiteral(""));
+QNetworkRequest getOcsRequest(const QNetworkRequest& request,
+                              NextcloudSettingsBase* settings);
 
 #endif // WEBDAV_UTILS_H
 

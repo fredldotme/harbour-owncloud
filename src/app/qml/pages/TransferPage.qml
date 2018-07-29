@@ -100,43 +100,77 @@ Page {
         SilicaListView {
             id: listView
             anchors.fill: parent
+            spacing: Theme.paddingMedium
             model: transferQueue.queue
 
             delegate: ListItem {
                 id: delegate
 
                 property CommandEntity commandEntity : listView.model[index]
-                property string commandType : commandEntity.info.property("type")
+
+                property string commandType :
+                    commandEntity.info.property("type") !== undefined ?
+                        commandEntity.info.property("type") : ""
+
+                property string fileName :
+                    commandEntity.info.property("fileName") !== undefined ?
+                        commandEntity.info.property("fileName") : ""
+
+                function getIconForCommandType() {
+                    if (commandType == "fileDownload")
+                        return "image://theme/icon-m-download"
+                    if (commandType == "fileUpload")
+                        return "image://theme/icon-m-upload"
+                    if (commandType == "fileOpen")
+                        return "image://theme/icon-m-file-other"
+                    return ""
+                }
+
+                // The transfer queue contains additional entities, including prop patch requests.
+                // Hide all except for downloads, uploads and file opening requests.
+                property bool isTransfer :
+                    (commandType === "fileDownload" ||
+                     commandType === "fileUpload")
+
+                property bool isAllowedVisible :
+                    (isTransfer || commandType === "fileOpen")
+
+                Component.onCompleted: {
+                    if (!isAllowedVisible) height = 0
+                }
+                visible: isAllowedVisible
 
                 Image {
                     id: transferTypeIcon
+                    anchors.top: parent.top
                     anchors.left: parent.left
                     anchors.leftMargin: 32
+                    anchors.bottom: parent.bottom
                     height: parent.height
-                    source: delegate.commandType === "fileDownload" ?
-                                "image://theme/icon-m-download" :
-                                "image://theme/icon-m-upload"
+                    width: height
+                    source: getIconForCommandType()
                     fillMode: Image.PreserveAspectFit
                 }
 
                 Label {
                     id: label
-                    text: commandEntity.info.property("fileName")
+                    text: fileName
                     anchors.top: parent.top
                     anchors.left: transferTypeIcon.right
                     anchors.leftMargin: 32
                     anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
                     color: delegate.highlighted ? Theme.highlightColor : Theme.primaryColor
                 }
 
                 ProgressBar {
                     id: transferProgress
                     anchors.top: label.bottom
-                    anchors.bottom: parent.bottom
-                    anchors.left: transferTypeIcon.right
+                    anchors.left: transferTypeIcon.left
                     anchors.leftMargin: Theme.paddingLarge
                     anchors.right: parent.right
+                    anchors.rightMargin: Theme.paddingLarge
+                    anchors.bottom: parent.bottom
+                    visible: isTransfer
                     minimumValue: 0.0
                     maximumValue: 1.0
                     value: commandEntity.progress

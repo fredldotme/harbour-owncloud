@@ -35,13 +35,16 @@ class CommandQueue : public QObject
 {
     Q_OBJECT
 
-    //Q_PROPERTY(bool immediate READ immediate WRITE setImmediate NOTIFY immediateChanged)
+    Q_PROPERTY(bool immediate READ immediate WRITE setImmediate NOTIFY immediateChanged)
     Q_PROPERTY(bool running READ isRunning NOTIFY runningChanged)
     Q_PROPERTY(QVariantList queue READ queue NOTIFY queueContentChanged)
 
 public:
     explicit CommandQueue(QObject *parent = nullptr);
     ~CommandQueue();
+
+    void setImmediate(bool v);
+    bool immediate();
 
     // Command Queue takes ownership of CommandEntity object
     void enqueue(CommandEntity* command);
@@ -62,6 +65,7 @@ private:
     void deleteCommand(CommandEntity* command = Q_NULLPTR);
     void setRunning(bool v);
 
+    bool m_immediate = false;
     QQueue<CommandEntity*> m_queue;
     bool m_running = false;
     QMutex m_queueMutex;
@@ -72,6 +76,7 @@ signals:
     void commandFinished(CommandReceipt receipt);
     void runningChanged();
     void queueContentChanged();
+    void immediateChanged();
 };
 Q_DECLARE_METATYPE(CommandQueue*)
 

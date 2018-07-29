@@ -19,6 +19,20 @@ CommandQueue::~CommandQueue()
     }
 }
 
+void CommandQueue::setImmediate(bool v)
+{
+    if (this->m_immediate == v)
+        return;
+
+    this->m_immediate = v;
+    Q_EMIT immediateChanged();
+}
+
+bool CommandQueue::immediate()
+{
+    return this->m_immediate;
+}
+
 QList<CommandEntityInfo> CommandQueue::queueInformation()
 {
     QMutexLocker locker(&this->m_queueMutex);
@@ -65,6 +79,11 @@ void CommandQueue::enqueue(CommandEntity *command)
     this->m_queue.enqueue(command);
     Q_EMIT added(command);
     Q_EMIT queueContentChanged();
+
+    if (this->m_immediate && !isRunning()) {
+        QTimer::singleShot(0, this, &CommandQueue::run);
+        return;
+    }
 
     if (this->m_queue.size() == 1)
         QTimer::singleShot(0, this, &CommandQueue::runNextCommand);

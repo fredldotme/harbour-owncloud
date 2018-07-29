@@ -337,6 +337,8 @@ Page {
 
                 ContextMenu {
                     property var tmpEntry : null;
+                    property bool enableDestructiveMenus :
+                        !preventResourceModification(tmpEntry)
 
                     onClosed: {
                         selectedEntry = null
@@ -346,16 +348,14 @@ Page {
                     Connections {
                         target: transferQueue
                         onCommandFinished: {
-                            renameMenuItem.enabled = !preventResourceModification(tmpEntry)
-                            moveMenuItem.enabled = !preventResourceModification(tmpEntry)
-                            deleteMenuItem.enabled = !preventResourceModification(tmpEntry)
+                            enableDestructiveMenus = !preventResourceModification(tmpEntry)
                         }
                     }
 
                     MenuItem {
                         id: renameMenuItem
                         text: qsTr("Rename")
-                        enabled : !preventResourceModification(tmpEntry)
+                        enabled : enableDestructiveMenus
                         onClicked: {
                             tmpEntry = selectedEntry
                             dialogObj = textEntryDialogComponent.createObject(pageRoot);
@@ -378,7 +378,7 @@ Page {
                     MenuItem {
                         id: moveMenuItem
                         text: qsTr("Move")
-                        enabled : !preventResourceModification(tmpEntry)
+                        enabled : enableDestructiveMenus
                         onClicked: {
                             tmpEntry = selectedEntry
                             dialogObj = remoteDirDialogComponent.createObject(pageRoot, {entry: tmpEntry});
@@ -414,7 +414,7 @@ Page {
                     MenuItem {
                         id: deleteMenuItem
                         text: qsTr("Delete")
-                        enabled : !preventResourceModification(tmpEntry)
+                        enabled : enableDestructiveMenus
                         onClicked: {
                             var fullPath = remotePath + selectedEntry.name
                             var remorseItem =

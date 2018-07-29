@@ -6,11 +6,35 @@ Page {
     id: pageRoot
     anchors.fill: parent
 
-    readonly property Component basicAuthenticationComponent :
-        Qt.createComponent("qrc:/qml/pages/login/BasicAuthentication.qml");
-    readonly property Component flowAuthenticationComponent :
-        Qt.createComponent("qrc:/qml/pages/login/FlowAuthentication.qml");
-    property bool examining : false
+    readonly property bool examining : examiner.running
+
+    AuthenticationExaminer {
+        id: examiner
+        onExaminationSucceeded: {
+            if (method === AuthenticationExaminer.FLOW_DIALOG) {
+                pageStack.completeAnimation()
+                pageStack.push(flowAuthenticationComponent);
+            } else if (method === AuthenticationExaminer.QWEBDAV) {
+                pageStack.completeAnimation()
+                pageStack.push(basicAuthenticationComponent);
+            }
+        }
+
+        onExaminationFailed: {
+            // Use QWebdav for authentication support examination
+            // if FLOW_DIALOG fails.
+            console.log("Examination failed for method " + method)
+            if (method === AuthenticationExaminer.FLOW_DIALOG) {
+                pageStack.completeAnimation()
+                pageStack.push(basicAuthenticationComponent);
+            }
+        }
+    }
+
+    Component.onCompleted: {
+        // Prefer basic authentication for now
+        // examiner.examine(persistentSettings.hoststring, AuthenticationExaminer.QWEBDAV)
+    }
 
     SilicaFlickable {
         anchors.fill: parent
@@ -56,28 +80,6 @@ Page {
                 anchors.fill: parent
                 spacing: 32
 
-                AuthenticationExaminer {
-                    id: examiner
-                    onExaminationSucceeded: {
-                        examining = false
-                        if (method === AuthenticationExaminer.FLOW_DIALOG) {
-                            pageStack.push(flowAuthenticationComponent);
-                        } else if (method === AuthenticationExaminer.QWEBDAV) {
-                            pageStack.push(basicAuthenticationComponent);
-                        }
-                    }
-
-                    onExaminationFailed: {
-                        examining = false
-
-                        // Use QWebdav for authentication support examination
-                        // if FLOW_DIALOG fails.
-                        if (method === AuthenticationExaminer.FLOW_DIALOG) {
-                            pageStack.push(basicAuthenticationComponent);
-                        }
-                    }
-                }
-
                 TextField {
                     id: serverUrl
                     placeholderText: qsTr("Host address")
@@ -90,10 +92,9 @@ Page {
                 Button {
                     anchors.horizontalCenter: parent.horizontalCenter
                     text: qsTr("Continue")
-                    enabled: !(serverUrl.text === "https://" ||
-                               serverUrl.text === "http://")
+                    enabled: (serverUrl.text.indexOf("https://") == 0 ||
+                              serverUrl.text.indexOf("http://") == 0)
                     onClicked: {
-                        examining = true
                         examiner.examine(serverUrl.text,
                                          AuthenticationExaminer.FLOW_DIALOG);
                     }

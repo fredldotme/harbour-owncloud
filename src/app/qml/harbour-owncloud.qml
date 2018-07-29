@@ -5,9 +5,6 @@ import Nemo.Notifications 1.0
 
 ApplicationWindow
 {
-    NextcloudSettings {
-        id: persistentSettings
-    }
     DaemonControl {
         id: daemonCtrl
     }
@@ -30,6 +27,10 @@ ApplicationWindow
         Qt.createComponent("qrc:/sailfish-ui-set/ui/TextEntryDialog.qml");
     readonly property Component authenticationEntranceComponent :
         Qt.createComponent("qrc:/qml/pages/login/Entrance.qml");
+    readonly property Component basicAuthenticationComponent :
+        Qt.createComponent("qrc:/qml/pages/login/BasicAuthentication.qml");
+    readonly property Component flowAuthenticationComponent :
+        Qt.createComponent("qrc:/qml/pages/login/FlowAuthentication.qml");
     readonly property Component sslErrorDialogComponent :
         Qt.createComponent("qrc:/qml/pages/login/SSLErrorDialog.qml")
     readonly property Component settingsPageComponent :
@@ -162,7 +163,7 @@ ApplicationWindow
     }
 
     id: applicationWindow
-    initialPage: authenticationEntranceComponent
+    initialPage: basicAuthenticationComponent
     cover: Qt.resolvedUrl("qrc:/qml/cover/CoverPage.qml")
 }
 

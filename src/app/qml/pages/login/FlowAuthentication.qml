@@ -1,7 +1,7 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import QtWebKit 3.0
-import QtWebKit.experimental 1.0
+//import QtWebKit.experimental 1.0
 import harbour.owncloud 1.0
 
 Page {
@@ -12,7 +12,12 @@ Page {
         id: authenticator
         settings: persistentSettings
         onAuthenticationSuccessful: {
+            pageStack.completeAnimation()
             pageStack.replace(browserComponent)
+        }
+        onAuthenticationFailed: {
+            pageStack.completeAnimation()
+            pageStack.replace(basicAuthenticationComponent)
         }
         onUrlChanged: {
             console.log("FlowLoginAuthenticator url: " + authenticator.url)
@@ -27,11 +32,11 @@ Page {
             anchors.fill: parent
             url: authenticator.url
 
-            experimental.userAgent: "Nextcloud/OwnCloud Client for Sailfish"
+            /*experimental.userAgent: "Nextcloud/OwnCloud Client for Sailfish"
             experimental.preferences.webGLEnabled: false
             experimental.preferences.localStorageEnabled: false
             experimental.preferences.webAudioEnabled: false
-            experimental.preferences.developerExtrasEnabled: false
+            experimental.preferences.developerExtrasEnabled: false*/
 
             onNavigationRequested: {
                 if (request.url.toString().indexOf("nc://") == 0) {

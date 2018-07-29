@@ -19,8 +19,9 @@ Page {
         settings: persistentSettings
         onAuthenticationSuccessful: {
             daemonCtrl.reloadConfig()
+            pageStack.completeAnimation()
             pageStack.clear()
-            pageStack.push(browserComponent);
+            pageStack.push(browserComponent, {}, PageStackAction.Immediate);
             ocsCommandQueue.userInfoRequest();
             ocsCommandQueue.run()
         }

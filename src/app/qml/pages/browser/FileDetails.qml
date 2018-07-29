@@ -2,6 +2,7 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 import harbour.owncloud 1.0
 import SailfishUiSet 1.0
+import QtMultimedia 5.6
 
 Page {
     id: pageRoot
@@ -15,6 +16,9 @@ Page {
         (!thumbnailFetcher.fetching && thumbnailFetcher.source !== "") ?
             thumbnailFetcher.source :
             fileDetailsHelper.getIconFromMime(entry.mimeType)
+    readonly property bool isAudioVideo :
+        (entry.mimeType.indexOf("video") === 0 ||
+         entry.mimeType.indexOf("audio") === 0)
 
     Connections {
         target: downloadCommand
@@ -23,6 +27,9 @@ Page {
     }
 
     Component.onCompleted: {
+        if (isAudioVideo)
+            return;
+
         console.log("Fetching thumbnail: " + entry.path)
         thumbnailFetcher.fetchThumbnail(entry.path);
     }
@@ -97,20 +104,69 @@ Page {
             anchors.right: parent.right
             anchors.rightMargin: margins
 
+            // Image thumbnail
             Image {
                 id: thumbnailView
-                source: imgSrc
+                source: isAudioVideo ? "" : imgSrc
+                visible: !isAudioVideo
                 anchors.fill: parent
                 asynchronous: true
                 onSourceChanged: {
                     console.log("thumbnail source " + source)
                 }
             }
+
+            // Media player for video and audio preview
+            WebDavMediaFeeder {
+                id: mediaFeeder
+                mediaPlayer: previewPlayer
+                settings: persistentSettings
+                url: isAudioVideo ?
+                            (FilePathUtil.getWebDavFileUrl(entry.path, persistentSettings)) :
+                            ""
+            }
+            MediaPlayer {
+                id: previewPlayer
+                autoPlay: false
+                onSourceChanged: {
+                    console.log("AV preview " + source)
+                }
+                onPlaybackStateChanged: {
+                    console.log("playback state " + playbackState)
+                }
+            }
+            VideoOutput {
+                id: mediaView
+                source: previewPlayer
+                visible: isAudioVideo
+                anchors.fill: parent
+            }
+            Image {
+                anchors.centerIn: parent
+                source: (previewPlayer.playbackState == MediaPlayer.PlayingState) ?
+                            "image://theme/icon-l-pause" :
+                            "image://theme/icon-l-play"
+                visible: mediaView.visible
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        console.log("clicked @ " + previewPlayer.playbackState)
+                        if (previewPlayer.playbackState == MediaPlayer.PlayingState) {
+                            mediaFeeder.pause()
+                        } else {
+                            mediaFeeder.play()
+                        }
+                    }
+                }
+            }
+
+            // Loading indicator
             BusyIndicator {
                 id: progressSpinner
                 size: BusyIndicatorSize.Large
                 anchors.centerIn: parent
-                running: thumbnailFetcher.fetching
+                running: (thumbnailFetcher.fetching ||
+                          previewPlayer.status === MediaPlayer.Loading)
             }
         }
 

@@ -9,6 +9,11 @@ DavPropPatchCommandEntity::DavPropPatchCommandEntity(QObject* parent,
 {
     this->m_remotePath = remotePath;
     this->m_props = properties;
+
+    QMap<QString, QVariant> info;
+    info["type"] = QStringLiteral("davPropPatch");
+    info["remotePath"] = remotePath;
+    this->m_commandInfo = CommandEntityInfo(info);
 }
 
 bool DavPropPatchCommandEntity::startWork()

@@ -5,9 +5,8 @@
 WebDavCommandEntity::WebDavCommandEntity(QObject* parent,
                                          QWebdav* client,
                                          NextcloudSettingsBase* settings) :
-    CommandEntity(parent)
+    CommandEntity(parent), m_client(client), m_settings(settings)
 {
-    this->m_client = client ? client : getNewWebDav(settings);
 }
 
 WebDavCommandEntity::~WebDavCommandEntity()
@@ -70,6 +69,12 @@ bool WebDavCommandEntity::startWork()
             const qreal newProgress = ((qreal)bytesSent/(qreal)bytesTotal);
             setProgress(newProgress);
         });
+    }
+
+    if (!this->m_client) {
+        qWarning() << "No valid client object available, aborting";
+        abortWork();
+        return false;
     }
 
     return true;

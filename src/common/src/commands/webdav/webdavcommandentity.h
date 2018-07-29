@@ -20,6 +20,7 @@ protected:
     bool abortWork();
 
     QWebdav* m_client = Q_NULLPTR;
+    NextcloudSettingsBase* m_settings = Q_NULLPTR;
     QNetworkReply* m_reply = Q_NULLPTR;
 
 signals:

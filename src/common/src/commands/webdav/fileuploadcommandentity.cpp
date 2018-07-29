@@ -41,6 +41,11 @@ bool FileUploadCommandEntity::startWork()
         return false;
     }
 
+    if (!this->m_client) {
+        qWarning() << "No valid client object available, aborting";
+        abortWork();
+        return false;
+    }
     this->m_reply = this->m_client->put(this->m_remotePath, this->m_localFile);
 
     const bool canStart = WebDavCommandEntity::startWork();

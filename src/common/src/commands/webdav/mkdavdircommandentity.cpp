@@ -18,6 +18,11 @@ MkDavDirCommandEntity::MkDavDirCommandEntity(QObject* parent,
 
 bool MkDavDirCommandEntity::startWork()
 {
+    if (!this->m_client) {
+        qWarning() << "No valid client object available, aborting";
+        abortWork();
+        return false;
+    }
     this->m_reply = this->m_client->mkdir(this->m_remotePath);
 
     QObject::connect(m_reply, static_cast<void(QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), this,

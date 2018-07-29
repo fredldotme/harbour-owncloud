@@ -58,14 +58,21 @@ bool FileDownloadCommandEntity::startWork()
         return false;
     }
 
+    if (!this->m_client) {
+        qWarning() << "No valid client object available, aborting";
+        abortWork();
+        return false;
+    }
+
     this->m_reply = this->m_client->get(this->m_remotePath, this->m_localFile);
     QObject::connect(this->m_reply, &QNetworkReply::finished, this, [=]() {
         qInfo() << "File download" << this->m_remotePath << "complete.";
     });
 
     const bool canStart = WebDavCommandEntity::startWork();
-    if (!canStart)
+    if (!canStart) {
         return false;
+    }
 
     setState(RUNNING);
     return true;

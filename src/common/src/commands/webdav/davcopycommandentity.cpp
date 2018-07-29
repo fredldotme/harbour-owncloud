@@ -19,6 +19,11 @@ DavCopyCommandEntity::DavCopyCommandEntity(QObject* parent,
 
 bool DavCopyCommandEntity::startWork()
 {
+    if (!this->m_client) {
+        qWarning() << "No valid client object available, aborting";
+        abortWork();
+        return false;
+    }
     this->m_reply = this->m_client->copy(this->m_fromPath, this->m_toPath);
 
     QObject::connect(m_reply, &QNetworkReply::finished, this, [=]() {

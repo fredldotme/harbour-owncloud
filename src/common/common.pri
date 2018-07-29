@@ -3,6 +3,11 @@ QT += dbus network xml
 
 DEFINES += QWEBDAVITEM_EXTENDED_PROPERTIES
 
+CONFIG(release, debug|release) {
+    QMAKE_POST_LINK=$(STRIP) $(TARGET)
+    DEFINES += QT_NO_DEBUG_OUTPUT
+}
+
 INCLUDEPATH += $$PWD/src
 DEPENDPATH += $$PWD/src
 

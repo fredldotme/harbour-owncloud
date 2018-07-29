@@ -5,9 +5,11 @@ CONFIG += qt c++11
 QT += dbus network xml
 DEFINES += QWEBDAVITEM_EXTENDED_PROPERTIES
 
-contains(CONFIG, RELEASE) {
+OTHER_FILES += $$PWD/common.pri
+
+CONFIG(release, debug|release) {
     QMAKE_POST_LINK=$(STRIP) $(TARGET)
-    DEFINES += QT_NO_DEBUG
+    DEFINES += QT_NO_DEBUG_OUTPUT
 }
 
 SOURCES += \
@@ -38,7 +40,8 @@ SOURCES += \
     $$PWD/src/auth/flowloginauthenticator.cpp \
     $$PWD/src/commands/ocs/ocscommandentity.cpp \
     $$PWD/src/commands/ocs/ocsuserinfocommandentity.cpp \
-    src/ocscommandqueue.cpp
+    src/ocscommandqueue.cpp \
+    src/commands/webdav/davproppatchcommandentity.cpp
 
 HEADERS += \
     $$PWD/src/net/thumbnailfetcher.h \
@@ -72,7 +75,8 @@ HEADERS += \
     $$PWD/src/auth/flowloginauthenticator.h \
     $$PWD/src/commands/ocs/ocscommandentity.h \
     $$PWD/src/commands/ocs/ocsuserinfocommandentity.h \
-    src/ocscommandqueue.h
+    src/ocscommandqueue.h \
+    src/commands/webdav/davproppatchcommandentity.h
 
 INCLUDEPATH += $$PWD/src
 DEPENDPATH += $$PWD/src

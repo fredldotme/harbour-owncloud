@@ -29,6 +29,7 @@ void ThumbnailFetcher::fetchThumbnail(QString remoteFile)
     const QString cachePath = cacheDirectory + QStringLiteral("/thumbnails") + remoteFile;
 
     const QFileInfo cacheFile(cachePath);
+    const QString targetCacheDir = cacheFile.absolutePath();
     const bool isCurrent = (QDateTime::currentDateTime().addDays(-5) <
                             cacheFile.lastModified());
     if (cacheFile.exists() && isCurrent) {
@@ -55,8 +56,16 @@ void ThumbnailFetcher::fetchThumbnail(QString remoteFile)
         setFetching(false);
 
         QFile thumbnail(cachePath);
+        QDir cacheDir(targetCacheDir);
+        if (!cacheDir.exists()) {
+            if (!cacheDir.mkpath(targetCacheDir)) {
+                qWarning() << "Failed to create cache directory" << targetCacheDir;
+                return;
+            }
+        }
+
         if (!thumbnail.open(QFile::ReadWrite)) {
-            qWarning() << "Failed to open file for write operation";
+            qWarning() << "Failed to open" << cachePath << "for write operation";
             return;
         }
 

@@ -16,27 +16,38 @@ ApplicationWindow
         (transferQueue.running || daemonCtrl.uploading)
 
     readonly property Component remoteDirDialogComponent :
-        Qt.createComponent("qrc:/qml/pages/browser/RemoteDirSelectDialog.qml");
+        Qt.createComponent("qrc:/qml/pages/browser/RemoteDirSelectDialog.qml",
+                           Component.PreferSynchronous);
     readonly property Component browserComponent :
-        Qt.createComponent("qrc:/qml/pages/browser/FileBrowser.qml");
+        Qt.createComponent("qrc:/qml/pages/browser/FileBrowser.qml",
+                           Component.PreferSynchronous);
     readonly property Component fileDetailsComponent :
-        Qt.createComponent("qrc:/qml/pages/browser/FileDetails.qml");
+        Qt.createComponent("qrc:/qml/pages/browser/FileDetails.qml",
+                           Component.PreferSynchronous);
     readonly property Component selectionDialogComponent :
-        Qt.createComponent("qrc:/sailfish-ui-set/ui/FileSelectionDialog.qml");
+        Qt.createComponent("qrc:/sailfish-ui-set/ui/FileSelectionDialog.qml",
+                           Component.PreferSynchronous);
     readonly property Component textEntryDialogComponent :
-        Qt.createComponent("qrc:/sailfish-ui-set/ui/TextEntryDialog.qml");
+        Qt.createComponent("qrc:/sailfish-ui-set/ui/TextEntryDialog.qml",
+                           Component.PreferSynchronous);
     readonly property Component authenticationEntranceComponent :
-        Qt.createComponent("qrc:/qml/pages/login/Entrance.qml");
+        Qt.createComponent("qrc:/qml/pages/login/Entrance.qml",
+                           Component.PreferSynchronous);
     readonly property Component basicAuthenticationComponent :
-        Qt.createComponent("qrc:/qml/pages/login/BasicAuthentication.qml");
+        Qt.createComponent("qrc:/qml/pages/login/BasicAuthentication.qml",
+                           Component.PreferSynchronous);
     readonly property Component flowAuthenticationComponent :
-        Qt.createComponent("qrc:/qml/pages/login/FlowAuthentication.qml");
+        Qt.createComponent("qrc:/qml/pages/login/FlowAuthentication.qml",
+                           Component.PreferSynchronous);
     readonly property Component sslErrorDialogComponent :
-        Qt.createComponent("qrc:/qml/pages/login/SSLErrorDialog.qml")
+        Qt.createComponent("qrc:/qml/pages/login/SSLErrorDialog.qml",
+                           Component.PreferSynchronous)
     readonly property Component settingsPageComponent :
-        Qt.createComponent("qrc:/qml/pages/SettingsPage.qml")
+        Qt.createComponent("qrc:/qml/pages/SettingsPage.qml",
+                           Component.PreferSynchronous)
     readonly property Component transferPageComponent :
-        Qt.createComponent("qrc:/qml/pages/TransferPage.qml")
+        Qt.createComponent("qrc:/qml/pages/TransferPage.qml",
+                           Component.PreferSynchronous)
 
 
     function refreshUserInfo() {
@@ -51,6 +62,17 @@ ApplicationWindow
             ocsCommandQueue.userInfoRequest();
             ocsCommandQueue.run()
         }
+    }
+
+    function notify(summary, body) {
+        if (!persistentSettings.notifications)
+            return;
+
+        //notifier.summary = summary
+        notifier.previewSummary = summary
+        //notifier.body = body
+        notifier.previewBody = body
+        notifier.publish();
     }
 
     WebDavCommandQueue {
@@ -121,17 +143,6 @@ ApplicationWindow
         return false;
     }
 
-    function notify(summary, body) {
-        if (!persistentSettings.notifications)
-            return;
-
-        notifier.summary = summary
-        notifier.previewSummary = summary
-        notifier.body = body
-        notifier.previewBody = body
-        notifier.publish();
-    }
-
     /*Connections {
         target: browserCommandQueue
         onSslCertifcateError: {
@@ -158,8 +169,6 @@ ApplicationWindow
 
     QmlMap {
         id: directoryContents
-        onInserted: console.log("INSERTED!")
-        onRemoved: console.log("REMOVED!")
     }
 
     id: applicationWindow

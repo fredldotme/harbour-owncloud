@@ -11,7 +11,6 @@
 #include <auth/flowloginauthenticator.h>
 #include <util/filepathutil.h>
 #include <net/thumbnailfetcher.h>
-#include <entryinfo.h>
 #include <localfilebrowser.h>
 #include <sailfish-ui-set.h>
 #include <qmlmap.h>

@@ -59,7 +59,8 @@ Page {
     FileDetailsHelper { id: fileDetailsHelper }
 
     function startDownload(path, mimeType, open) {
-        downloadCommand = transferQueue.fileDownloadRequest(path, mimeType, open)
+        downloadCommand = transferQueue.fileDownloadRequest(path, mimeType,
+                                                            open, entry.lastModified)
         transferQueue.run()
     }
 

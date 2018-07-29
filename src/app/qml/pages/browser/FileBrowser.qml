@@ -2,6 +2,7 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 import harbour.owncloud 1.0
 import SailfishUiSet 1.0
+import Nemo.Notifications 1.0
 
 Page {
     id: pageRoot
@@ -19,6 +20,10 @@ Page {
     }
 
     FileDetailsHelper { id: fileDetailsHelper }
+    Notification {
+        id: transientNotifier
+        isTransient: true
+    }
 
     Component.onCompleted: {
         refreshListView()
@@ -88,7 +93,7 @@ Page {
 
     property var selectedEntry : null;
     property BackgroundItem selectedItem : null;
-    property Dialog dialogObj : null
+    property var dialogObj : null
 
     function renameEntry(tmpEntry, newName) {
         var fromPath = remotePath + tmpEntry.name +
@@ -187,8 +192,11 @@ Page {
                     function enqueueSelectedFiles() {
                         var selectedFiles = dialogObj.filesToSelect
                         for (var i = 0; i < selectedFiles.length; i++) {
-                            transferQueue.fileUploadRequest(selectedFiles[i],
-                                                            FilePathUtil.getCanonicalPath(remotePath));
+                            var canonicalRemotePath = FilePathUtil.getCanonicalPath(remotePath);
+                            console.debug("lastModified: " + selectedFiles[i].lastModified);
+                            transferQueue.fileUploadRequest(selectedFiles[i].path,
+                                                            canonicalRemotePath,
+                                                            selectedFiles[i].lastModified);
                         }
                         transferQueue.run()
                         dialogObj = null
@@ -200,6 +208,10 @@ Page {
                         dialogObj = selectionDialogComponent.createObject(pageRoot,
                                                                           {maximumSelections:Number.MAX_VALUE});
                         dialogObj.acceptText = qsTr("Upload")
+                        dialogObj.errorOccured.connect(function(errorStr) {
+                            transientNotifier.previewSummary = errorStr
+                            transientNotifier.publish()
+                        });
                         dialogObj.accepted.connect(enqueueSelectedFiles)
                         dialogObj.rejected.connect(function() {
                             dialogObj = null

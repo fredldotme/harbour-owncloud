@@ -24,6 +24,16 @@ Page {
         refreshListView()
     }
 
+    onStatusChanged: {
+        if (status === PageStatus.Inactive) {
+            if (_navigation !== undefined && _navigation === PageNavigation.Back) {
+                console.debug("cleanup")
+                directoryContents.remove(remotePath)
+                pageRoot.destroy()
+            }
+        }
+    }
+
     onRemotePathChanged: {
         if (remotePath === "/") {
             pageHeaderText = "/";
@@ -73,14 +83,6 @@ Page {
             // TODO: apply delta between directoryContents and localListModel
             // TODO: animation when inserting/deleting entries
             listView.model = directoryContents.value(key)
-        }
-    }
-
-    onStatusChanged: {
-        if (status === PageStatus.Deactivating) {
-            if (_navigation === PageNavigation.Back) {
-                directoryContents.remove(remotePath)
-            }
         }
     }
 

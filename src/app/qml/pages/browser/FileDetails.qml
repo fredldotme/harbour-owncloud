@@ -26,6 +26,14 @@ Page {
         onAborted: downloadCommand = null
     }
 
+    onStatusChanged: {
+        switch (status) {
+        case PageStatus.Inactive:
+            pageRoot.destroy()
+            break;
+        }
+    }
+
     Component.onCompleted: {
         if (isAudioVideo)
             return;

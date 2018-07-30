@@ -133,12 +133,17 @@ ApplicationWindow
                 var nextDirectory = browserComponent.createObject(pageStack,
                                                                   { remotePath : remotePath });
 
-                // Replace the current top page when requesting a
-                // directory lising for the remote root path
-                if (remotePath === "/")
+                // Replace the current top page when requesting a directory
+                // lising for the remote root path, ie after initial login.
+                if (remotePath === "/") {
                     pageStack.replace(nextDirectory)
-                else
+
+                    // Additionally try to fetch the avatar which
+                    // will only succeed if the server supports it.
+                    avatarFetcher.fetch()
+                } else {
                     pageStack.push(nextDirectory)
+                }
 
                 return;
             }
@@ -178,6 +183,13 @@ ApplicationWindow
     OcsCommandQueue {
         id: ocsCommandQueue
         settings: persistentSettings
+    }
+    AvatarFetcher {
+        id: avatarFetcher
+        commandQueue: ocsCommandQueue
+        settings: ocsCommandQueue.settings
+        width: 128
+        height: 128
     }
 
     function isTransferEnqueued(remoteFilePath) {

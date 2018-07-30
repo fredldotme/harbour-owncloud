@@ -11,6 +11,7 @@
 #include <auth/flowloginauthenticator.h>
 #include <util/filepathutil.h>
 #include <net/thumbnailfetcher.h>
+#include <net/avatarfetcher.h>
 #include <localfilebrowser.h>
 #include <sailfish-ui-set.h>
 #include <qmlmap.h>
@@ -43,6 +44,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<WebDavCommandQueue>("harbour.owncloud", 1, 0, "WebDavCommandQueue");
     qmlRegisterType<OcsCommandQueue>("harbour.owncloud", 1, 0, "OcsCommandQueue");
     qmlRegisterType<ThumbnailFetcher>("harbour.owncloud", 1, 0, "ThumbnailFetcher");
+    qmlRegisterType<AvatarFetcher>("harbour.owncloud", 1, 0, "AvatarFetcher");
     qmlRegisterType<WebDavMediaFeeder>("harbour.owncloud", 1, 0, "WebDavMediaFeeder");
     qmlRegisterType<OscNetAccess>("harbour.owncloud", 1, 0, "OscNetAccess");
     qmlRegisterType<DaemonControl>("harbour.owncloud", 1, 0, "DaemonControl");

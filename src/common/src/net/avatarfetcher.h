@@ -14,9 +14,6 @@ public:
 public slots:
     void fetch() Q_DECL_OVERRIDE;
 
-signals:
-
-public slots:
 };
 
 #endif // AVATARFETCHER_H

@@ -22,12 +22,12 @@ void AvatarFetcher::fetch()
         return;
     }
 
-    // Make sure to use 128x128 dimension in case of negative values
+    // Use 128x128 dimension in case of negative values
     if (width() < 0) setWidth(128);
     if (height() < 0) setHeight(128);
 
     const QString thumbnailPath = NEXTCLOUD_ENDPOINT_AVATAR.arg(this->settings()->username(),
-                                                                width());
+                                                                QString::number(width()));
 
 
     const QString cacheDirectory = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);

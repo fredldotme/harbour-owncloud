@@ -13,6 +13,7 @@ CONFIG(release, debug|release) {
 }
 
 SOURCES += \
+    $$PWD/src/net/abstractfetcher.cpp \
     $$PWD/src/net/thumbnailfetcher.cpp \
     $$PWD/src/net/webdav_utils.cpp \
     $$PWD/src/settings/nextcloudsettingsbase.cpp \
@@ -40,10 +41,12 @@ SOURCES += \
     $$PWD/src/auth/flowloginauthenticator.cpp \
     $$PWD/src/commands/ocs/ocscommandentity.cpp \
     $$PWD/src/commands/ocs/ocsuserinfocommandentity.cpp \
-    src/ocscommandqueue.cpp \
-    src/commands/webdav/davproppatchcommandentity.cpp
+    $$PWD/src/ocscommandqueue.cpp \
+    $$PWD/src/commands/webdav/davproppatchcommandentity.cpp \
+    src/net/avatarfetcher.cpp
 
 HEADERS += \
+    $$PWD/src/net/abstractfetcher.h \
     $$PWD/src/net/thumbnailfetcher.h \
     $$PWD/src/net/webdav_utils.h \
     $$PWD/src/settings/nextcloudsettingsbase.h \
@@ -75,8 +78,9 @@ HEADERS += \
     $$PWD/src/auth/flowloginauthenticator.h \
     $$PWD/src/commands/ocs/ocscommandentity.h \
     $$PWD/src/commands/ocs/ocsuserinfocommandentity.h \
-    src/ocscommandqueue.h \
-    src/commands/webdav/davproppatchcommandentity.h
+    $$PWD/src/ocscommandqueue.h \
+    $$PWD/src/commands/webdav/davproppatchcommandentity.h \
+    src/net/avatarfetcher.h
 
 INCLUDEPATH += $$PWD/src
 DEPENDPATH += $$PWD/src

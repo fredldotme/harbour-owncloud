@@ -119,23 +119,23 @@ Page {
         refreshListView(true)
     }
 
-    function moveEntry(tmpEntry, remotePath) {
-        var fromPath = remotePath + tmpEntry.name +
+    function moveEntry(tmpEntry, newDir) {
+        var fromPath = tmpEntry.path +
                 (tmpEntry.isDirectory ? "/" : "")
-        var toPath = dialogObj.remotePath + tmpEntry.name +
+        var toPath = newDir + tmpEntry.name +
                 (tmpEntry.isDirectory ? "/" : "")
 
-        browserCommandQueue.moveRequest(fromPath, toPath, true)
+        browserCommandQueue.moveRequest(fromPath, toPath)
         refreshListView(true)
     }
 
-    function copyEntry(tmpEntry, remotePath) {
-        var fromPath = remotePath + tmpEntry.name +
+    function copyEntry(tmpEntry, newDir) {
+        var fromPath = tmpEntry.path +
                 (tmpEntry.isDirectory ? "/" : "")
-        var toPath = dialogObj.remotePath + tmpEntry.name +
+        var toPath = newDir + tmpEntry.name +
                 (tmpEntry.isDirectory ? "/" : "")
 
-        browserCommandQueue.copyRequest(fromPath, toPath, true)
+        browserCommandQueue.copyRequest(fromPath, toPath)
     }
 
     function deleteEntry(fullPath) {
@@ -202,6 +202,9 @@ Page {
                             var newPath = remotePath + dialogObj.text
                             browserCommandQueue.makeDirectoryRequest(newPath)
                             refreshListView(true)
+                            dialogObj = null
+                        })
+                        dialogObj.rejected.connect(function () {
                             dialogObj = null
                         })
                         pageStack.push(dialogObj)
@@ -297,12 +300,10 @@ Page {
                     selectedItem = delegate
                     if (!menu)
                         menu = contextMenuComponent.createObject(listView, {
-                                                                     tmpEntry : selectedEntry
+                                                                     tmpEntry : selectedEntry,
+                                                                     dialogObj: dialogObj
                                                                  })
-                    menu.closed.connect(function(){
-                        menu.destroy()
-                        menu = null
-                    });
+
                     openMenu()
                 }
             }
@@ -336,9 +337,32 @@ Page {
                 id: contextMenuComponent
 
                 ContextMenu {
+                    id: menu
                     property var tmpEntry : null;
+                    property var dialogObj : null;
                     property bool enableDestructiveMenus :
                         !preventResourceModification(tmpEntry)
+
+                    function _renameEntry() {
+                        renameEntry(tmpEntry, dialogObj.text)
+                        _cleanup()
+                    }
+
+                    function _moveEntry() {
+                        moveEntry(tmpEntry, dialogObj.remotePath)
+                        _cleanup()
+                    }
+
+                    function _copyEntry() {
+                        copyEntry(tmpEntry, dialogObj.remotePath)
+                        _cleanup()
+                    }
+
+                    function _cleanup() {
+                        dialogObj = null
+                        tmpEntry = null
+                        menu.destroy()
+                    }
 
                     onClosed: {
                         selectedEntry = null
@@ -363,15 +387,8 @@ Page {
                             dialogObj.acceptText = qsTr("Rename")
                             dialogObj.placeholderText = qsTr("New name")
                             dialogObj.labelText = dialogObj.placeholderText
-                            dialogObj.accepted.connect(function () {
-                                renameEntry(tmpEntry, dialogObj.text)
-                                dialogObj = null
-                                tmpEntry = null
-                            });
-                            dialogObj.rejected.connect(function() {
-                                dialogObj = null
-                                tmpEntry = null
-                            });
+                            dialogObj.accepted.connect(_renameEntry);
+                            dialogObj.rejected.connect(_cleanup);
                             pageStack.push(dialogObj);
                         }
                     }
@@ -382,15 +399,8 @@ Page {
                         onClicked: {
                             tmpEntry = selectedEntry
                             dialogObj = remoteDirDialogComponent.createObject(pageRoot, {entry: tmpEntry});
-                            dialogObj.accepted.connect(function () {
-                                moveEntry(tmpEntry, remotePath)
-                                dialogObj = null
-                                tmpEntry = null
-                            });
-                            dialogObj.rejected.connect(function() {
-                                dialogObj = null
-                                tmpEntry = null
-                            });
+                            dialogObj.accepted.connect(_moveEntry);
+                            dialogObj.rejected.connect(_cleanup);
                             pageStack.push(dialogObj);
                         }
                     }
@@ -399,15 +409,8 @@ Page {
                         onClicked: {
                             tmpEntry = selectedEntry
                             dialogObj = remoteDirDialogComponent.createObject(pageRoot, {entry: tmpEntry});
-                            dialogObj.accepted.connect(function () {
-                                copyEntry(tmpEntry, remotePath)
-                                dialogObj = null
-                                tmpEntry = null
-                            });
-                            dialogObj.rejected.connect(function() {
-                                dialogObj = null
-                                tmpEntry = null
-                            });
+                            dialogObj.accepted.connect(_copyEntry);
+                            dialogObj.rejected.connect(_cleanup);
                             pageStack.push(dialogObj);
                         }
                     }

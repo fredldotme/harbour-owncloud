@@ -115,7 +115,7 @@ Page {
         var toPath = remotePath + newName +
                 (tmpEntry.isDirectory ? "/" : "")
 
-        browserCommandQueue.moveRequest(fromPath, toPath, true)
+        browserCommandQueue.moveRequest(fromPath, toPath)
         refreshListView(true)
     }
 

@@ -23,6 +23,7 @@ QMap<QByteArray, QByteArray> prepareOcsHeaders(
 QNetworkRequest getOcsRequest(const QNetworkRequest& request,
                               NextcloudSettingsBase* settings);
 
+QByteArray hexToDigest(const QString &input);
 
 #endif // WEBDAV_UTILS_H
 

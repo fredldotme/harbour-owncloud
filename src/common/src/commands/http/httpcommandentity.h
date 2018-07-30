@@ -29,11 +29,10 @@ protected:
     NextcloudSettingsBase* m_settings = Q_NULLPTR;
 
 private:
+    QUrl setupRequestUrl();
+
     QString m_path;
     QMap<QByteArray, QByteArray> m_headers;
-
-    QByteArray hexToDigest(const QString &input);
-    QUrl setupRequestUrl();
 
 signals:
     void sslErrorOccured(QString md5Digest, QString sha1Digest);

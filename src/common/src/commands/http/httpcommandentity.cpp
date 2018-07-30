@@ -1,5 +1,6 @@
 #include "httpcommandentity.h"
 #include <QAuthenticator>
+#include <net/webdav_utils.h>
 
 HttpCommandEntity::HttpCommandEntity(QObject *parent,
                                      QString path,
@@ -103,20 +104,6 @@ bool HttpCommandEntity::abortWork()
     setState(ABORTED);
     Q_EMIT aborted();
     return true;
-}
-
-QByteArray HttpCommandEntity::hexToDigest(const QString &input)
-{
-    QByteArray result;
-    int i = 2;
-    int l = input.size();
-    result.append(input.left(2).toLatin1());
-    while ((i<l) && (input.at(i) == ':')) {
-        ++i;
-        result.append(input.mid(i,2).toLatin1());
-        i+=2;
-    }
-    return QByteArray::fromHex(result);
 }
 
 QUrl HttpCommandEntity::setupRequestUrl()

@@ -33,8 +33,8 @@ Page {
             pageStack.completeAnimation();
             pageStack.push(sslErrorDialogComponent,
                            {
-                               md5Digest : md5Digest,
-                               sha1Digest : sha1Digest,
+                               md5Digest : certMd5,
+                               sha1Digest : certSha1,
                                settings : persistentSettings
                            });
         }

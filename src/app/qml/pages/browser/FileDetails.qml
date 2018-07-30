@@ -215,6 +215,11 @@ Page {
                 value: entry.entityTag
                 visible: value.length > 0
             }
+            DetailItem {
+                label: qsTr("File ID:")
+                value: entry.fileId
+                visible: value.length > 0
+            }
         }
     }
 }

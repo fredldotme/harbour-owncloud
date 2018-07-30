@@ -2,6 +2,7 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 import harbour.owncloud 1.0
 import Nemo.Notifications 1.0
+import "qrc:/qml/navigation"
 
 ApplicationWindow
 {
@@ -9,6 +10,15 @@ ApplicationWindow
     initialPage: basicAuthenticationComponent
     cover: coverPage
 
+    BrowserCommandPageFlow {
+        id: browserPageFlow
+        commandQueue: browserCommandQueue
+        onNotificationRequest: notify(summary, body)
+    }
+    OcsUserInfo {
+        id: ocsUserInfo
+        commandQueue: ocsCommandQueue
+    }
     DaemonControl {
         id: daemonCtrl
     }
@@ -90,70 +100,6 @@ ApplicationWindow
         id: browserCommandQueue
         settings: persistentSettings
         immediate: true
-        onCommandFinished: {
-            console.log("onCommandFinished")
-            var isDavListCommand = (receipt.info.property("type") === "davList")
-            var isDavMoveCommand = (receipt.info.property("type") === "davMove")
-            var isDavCopyCommand = (receipt.info.property("type") === "davCopy")
-            var isDavRmCommand = (receipt.info.property("type") === "davRemove")
-
-            // Error messages
-            if (!receipt.finished) {
-                if (isDavListCommand) {
-                    notify(qsTr("Failed to get remote content"),
-                           qsTr("Please check your connection or try again later."))
-                    return
-                }
-                if (isDavRmCommand || isDavMoveCommand || isDavCopyCommand) {
-                    notify(qsTr("Operation failed"),
-                           qsTr("Please check your connection or try again later."))
-                    return
-                }
-
-                return;
-            }
-
-            // Insert/update directory list in case of type === davList and push
-            // a new page into the PageStack in case a refresh was not requested
-            if (isDavListCommand) {
-                var remotePath = receipt.info.property("remotePath")
-                var isRefresh = receipt.info.property("refresh")
-
-                var dirContent = receipt.result;
-                directoryContents.insert(remotePath, dirContent);
-
-                // Done in case of a refresh
-                if (isRefresh)
-                    return;
-
-                // Complete pending PageStack animation
-                if (pageStack.busy)
-                    pageStack.completeAnimation()
-
-                var nextDirectory = browserComponent.createObject(pageStack,
-                                                                  { remotePath : remotePath });
-
-                // Replace the current top page when requesting a directory
-                // lising for the remote root path, ie after initial login.
-                if (remotePath === "/") {
-                    pageStack.replace(nextDirectory)
-
-                    // Additionally try to fetch the avatar which
-                    // will only succeed if the server supports it.
-                    avatarFetcher.fetch()
-                } else {
-                    pageStack.push(nextDirectory)
-                }
-
-                return;
-            }
-
-            // Refresh userInfo after remote removal or copy
-            if (isDavRmCommand || isDavCopyCommand) {
-                refreshUserInfo()
-                return;
-            }
-        }
     }
     WebDavCommandQueue {
         id: transferQueue
@@ -184,6 +130,7 @@ ApplicationWindow
         id: ocsCommandQueue
         settings: persistentSettings
     }
+
     AvatarFetcher {
         id: avatarFetcher
         commandQueue: ocsCommandQueue

@@ -6,54 +6,6 @@ CoverBackground {
     id: coverRoot
     anchors.fill: parent
 
-    property bool userInfoEnabled : false
-    property string displayName : ""
-    property string email : ""
-    property string usedBytes : ""
-    property string totalBytes : ""
-
-    readonly property string hrDisplayName :
-        displayName.length < 20 ?
-            displayName :
-            displayName.substring(0, 20) + ".."
-    readonly property string hrMailAddress :
-        email.length < 20 ?
-            email :
-            email.substring(0, 20) + ".."
-    readonly property string hrUsedBytes :
-        usedBytes.length < 15 ?
-            usedBytes :
-            usedBytes.substring(0, 15) + ".."
-    readonly property string hrTotalBytes :
-        totalBytes.length < 15 ?
-            totalBytes :
-            totalBytes.substring(0, 15) + ".."
-
-
-    FileDetailsHelper {
-        id: fileDetailsHelper
-    }
-
-    Connections {
-        target: ocsCommandQueue
-        onCommandFinished: {
-            var ocsType = receipt.info.property("type")
-            if (ocsType !== "userInfo")
-                return;
-
-            if (receipt.result.enabled === undefined)
-                return;
-
-            userInfoEnabled = receipt.result.enabled;
-            displayName = receipt.result.displayName;
-            email = receipt.result.email;
-            usedBytes = fileDetailsHelper.getHRSizeFromString(
-                        receipt.result.usedBytes);
-            totalBytes = fileDetailsHelper.getHRSizeFromString(
-                        receipt.result.totalBytes);
-        }
-    }
-
     Image {
         id: icon
         source: "qrc:/icons/icon_gray.svg"
@@ -70,14 +22,14 @@ CoverBackground {
     }
 
     Column {
-        visible: userInfoEnabled
+        visible: ocsUserInfo.userInfoEnabled
         anchors.centerIn: coverRoot
         width: coverRoot.width
 
         CoverDetailItem {
             width: parent.width
             label: qsTr("User:")
-            value: hrDisplayName
+            value: ocsUserInfo.hrDisplayName
             visible: value.length > 0
         }
         /*CoverDetailItem {
@@ -89,13 +41,13 @@ CoverBackground {
         CoverDetailItem {
             width: parent.width
             label: qsTr("Usage:")
-            value: hrUsedBytes
+            value: ocsUserInfo.hrUsedBytes
             visible: value.length > 0
         }
         CoverDetailItem {
             width: parent.width
             label: qsTr("Total:")
-            value: hrTotalBytes
+            value: ocsUserInfo.hrTotalBytes
             visible: value.length > 0
         }
     }

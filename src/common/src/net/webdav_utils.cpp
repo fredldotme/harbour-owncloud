@@ -28,22 +28,46 @@ void applySettingsToWebdav(NextcloudSettingsBase *settings, QWebdav *webdav, QSt
                                   settings->isHttps() ? settings->sha1Hex() : "");
 }
 
-QNetworkRequest getOcsRequest(const QNetworkRequest& request,
-                              NextcloudSettingsBase* settings)
+QMap<QByteArray, QByteArray> prepareOcsHeaders(
+         NextcloudSettingsBase* settings, QMap<QByteArray, QByteArray> headers)
 {
-    qDebug() << Q_FUNC_INFO;
+    // Return current headers when no valid settings have been provided
+    if (!settings)
+        return headers;
 
-    QNetworkRequest ret(request);
     const QString username = settings ? settings->username() : QStringLiteral("");
     const QString password = settings ? settings->password() : QStringLiteral("");
     const QByteArray authorization =
             QStringLiteral("%1:%2").arg(username,
                                         password).toUtf8().toBase64();
-    qDebug() << "Authorization:" << authorization;
-    ret.setRawHeader(QByteArrayLiteral("Authorization"),
-                     QStringLiteral("Basic %1").arg(QString(authorization)).toUtf8());
 
-    ret.setRawHeader(QByteArrayLiteral("OCS-APIREQUEST"),
-                     QByteArrayLiteral("true"));
-    return ret;
+    headers.insert(QByteArrayLiteral("Authorization"),
+                   QStringLiteral("Basic %1").arg(QString(authorization)).toUtf8());
+    headers.insert(QByteArrayLiteral("OCS-APIREQUEST"),
+                   QByteArrayLiteral("true"));
+
+    return headers;
+}
+
+QNetworkRequest getOcsRequest(const QNetworkRequest& request,
+                              NextcloudSettingsBase* settings)
+{
+    qDebug() << Q_FUNC_INFO;
+
+    // Read raw headers out of the provided request
+    QMap<QByteArray, QByteArray> rawHeaders;
+    for (const QByteArray& headerKey : request.rawHeaderList()) {
+        rawHeaders.insert(headerKey, request.rawHeader(headerKey));
+    }
+
+    // Add OCS required headers
+    rawHeaders = prepareOcsHeaders(settings, rawHeaders);
+
+    // Construct new QNetworkRequest with prepared header values
+    QNetworkRequest newRequest(request);
+    for (const QByteArray& headerKey : request.rawHeaderList()) {
+        newRequest.setRawHeader(headerKey, rawHeaders[headerKey]);
+    }
+
+    return newRequest;
 }

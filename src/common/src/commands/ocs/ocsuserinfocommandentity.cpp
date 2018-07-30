@@ -80,7 +80,7 @@ QString prepareUserinfoPath(NextcloudSettingsBase* settingsBase)
 OcsUserInfoCommandEntity::OcsUserInfoCommandEntity(QObject *parent,
                                                    NextcloudSettingsBase* settings,
                                                    QMap<QByteArray, QByteArray> headers) :
-    OcsCommandEntity(parent, prepareUserinfoPath(settings), prepareOcsHeaders(headers, settings), settings)
+    OcsCommandEntity(parent, prepareUserinfoPath(settings), headers, settings)
 {
     QMap<QString, QVariant> info;
     info["type"] = QStringLiteral("userInfo");

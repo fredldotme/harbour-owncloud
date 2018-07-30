@@ -1,12 +1,20 @@
 import QtQuick 2.0
+import QtGraphicalEffects 1.0
 import Sailfish.Silica 1.0
 import harbour.owncloud 1.0
 import SailfishUiSet 1.0
 import Nemo.Notifications 1.0
+import "qrc:/qml/pages/browser/controls"
+import "qrc:/qml/controls"
 
 Page {
     id: pageRoot
     anchors.fill: parent
+
+    property Component contextMenuComponent :
+        Qt.createComponent(
+            "qrc:/qml/pages/browser/controls/FileOperationsContextMenu.qml",
+            Component.PreferSynchronous);
 
     property string remotePath : "/"
     property string pageHeaderText : "/"
@@ -14,26 +22,17 @@ Page {
     // Keep track of directory listing requests
     property var listCommand : null
 
-    function refreshListView(refresh) {
-        listCommand = browserCommandQueue.directoryListingRequest(remotePath, refresh)
+    // Keep track of active dialog.
+    // There can only be one of them active at a time due to their modal nature.
+    property var dialogObj : null
+
+    function __dialogCleanup() {
+        //dialogObj.destroy()
+        dialogObj = null
     }
 
-    function preventResourceModification(target) {
-        var queueInfos = transferQueue.queueInformation();
-        for (var i = 0; i < queueInfos.length; i++) {
-            var pendingTransfer = queueInfos[i];
-
-            var isTransfer = (pendingTransfer.property("type") === "fileDownload" ||
-                              pendingTransfer.property("type") === "fileUpload")
-
-            if (!isTransfer)
-                continue;
-
-            if (pendingTransfer.property("remotePath").indexOf(target.path) === 0) {
-                return true
-            }
-        }
-        return false
+    function refreshListView(refresh) {
+        listCommand = browserCommandQueue.directoryListingRequest(remotePath, refresh)
     }
 
     FileDetailsHelper { id: fileDetailsHelper }
@@ -108,82 +107,63 @@ Page {
         }
     }
 
-    property var selectedEntry : null;
-    property BackgroundItem selectedItem : null;
-    property var dialogObj : null
+    Item {
+        id: userInformationAnchor
+        width: parent.width
+        height: userInformation.height
+        //onHeightChanged: console.log(height)
 
-    function renameEntry(tmpEntry, newName) {
-        var fromPath = remotePath + tmpEntry.name +
-                (tmpEntry.isDirectory ? "/" : "")
-        var toPath = remotePath + newName +
-                (tmpEntry.isDirectory ? "/" : "")
+        ContextMenu {
+            id: userInformation
+            width: userInformationAnchor.width
 
-        browserCommandQueue.moveRequest(fromPath, toPath)
-        refreshListView(true)
-    }
+            Row {
 
-    function moveEntry(tmpEntry, newDir) {
-        var fromPath = tmpEntry.path +
-                (tmpEntry.isDirectory ? "/" : "")
-        var toPath = newDir + tmpEntry.name +
-                (tmpEntry.isDirectory ? "/" : "")
+            }
 
-        browserCommandQueue.moveRequest(fromPath, toPath)
-        refreshListView(true)
-    }
+            Column {
+                width: parent.width
 
-    function copyEntry(tmpEntry, newDir) {
-        var fromPath = tmpEntry.path +
-                (tmpEntry.isDirectory ? "/" : "")
-        var toPath = newDir + tmpEntry.name +
-                (tmpEntry.isDirectory ? "/" : "")
-
-        browserCommandQueue.copyRequest(fromPath, toPath)
-    }
-
-    function deleteEntry(fullPath) {
-        browserCommandQueue.removeRequest(fullPath);
-        refreshListView(true)
+                DetailItem {
+                    width: parent.width
+                    label: qsTr("User:")
+                    value: ocsUserInfo.displayName
+                    visible: value.length > 0
+                }
+                DetailItem {
+                    width: parent.width
+                    label: qsTr("Mail:")
+                    value: ocsUserInfo.emailAddress
+                    visible: value.length > 0
+                }
+                DetailItem {
+                    width: parent.width
+                    label: qsTr("Usage:")
+                    value: ocsUserInfo.hrUsedBytes
+                    visible: value.length > 0
+                }
+                DetailItem {
+                    width: parent.width
+                    label: qsTr("Total:")
+                    value: ocsUserInfo.hrTotalBytes
+                    visible: value.length > 0
+                }
+            }
+        }
     }
 
     SilicaFlickable {
-        anchors.fill: parent
+        id: flickContainer
+        anchors.top: userInformationAnchor.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
 
         SilicaListView {
             id: listView
             anchors.fill: parent
             clip: true
             model: directoryContents.value(remotePath)
-
-            add: Transition {
-                NumberAnimation {
-                    properties: "height"
-                    from: 0
-                    to: delegate.height
-                    duration: 200
-                }
-            }
-            remove: Transition {
-                NumberAnimation {
-                    properties: "height"
-                    from: delegate.height
-                    to: 0
-                    duration: 200
-                }
-            }
-
-            header: PageHeader {
-                id: pageHeader
-                title: pageHeaderText
-            }
-
-            /*BusyIndicator {
-                anchors.right: listView.header.left
-                anchors.top: listView.header.top
-                anchors.bottom: listView.header.bottom
-                width: height
-                running: browserCommandQueue.running
-            }*/
 
             PullDownMenu {
                 MenuItem {
@@ -205,11 +185,9 @@ Page {
                             var newPath = remotePath + dialogObj.text
                             browserCommandQueue.makeDirectoryRequest(newPath)
                             refreshListView(true)
-                            dialogObj = null
+                            __dialogCleanup()
                         })
-                        dialogObj.rejected.connect(function () {
-                            dialogObj = null
-                        })
+                        dialogObj.rejected.connect(__dialogCleanup)
                         pageStack.push(dialogObj)
                     }
                 }
@@ -224,7 +202,7 @@ Page {
                                                             selectedFiles[i].lastModified);
                         }
                         transferQueue.run()
-                        dialogObj = null
+                        __dialogCleanup()
                     }
 
                     text: qsTr("Upload")
@@ -238,13 +216,12 @@ Page {
                             transientNotifier.publish()
                         });
                         dialogObj.accepted.connect(enqueueSelectedFiles)
-                        dialogObj.rejected.connect(function() {
-                            dialogObj = null
-                        });
+                        dialogObj.rejected.connect(__dialogCleanup)
                         pageStack.push(dialogObj)
                     }
                 }
             }
+
             PushUpMenu {
                 MenuItem {
                     text: qsTr("File transfers")
@@ -258,6 +235,46 @@ Page {
                     onClicked: {
                         pageStack.push(settingsPageComponent)
                     }
+                }
+            }
+
+            add: Transition {
+                NumberAnimation {
+                    properties: "height"
+                    from: 0
+                    to: delegate.height
+                    duration: 200
+                }
+            }
+            remove: Transition {
+                NumberAnimation {
+                    properties: "height"
+                    from: delegate.height
+                    to: 0
+                    duration: 200
+                }
+            }
+
+            header: PageHeader {
+                id: pageHeader
+                title: pageHeaderText
+                width: listView.width
+
+                AvatarButton {
+                    id: avatarButton
+                    source: avatarFetcher.source
+                    highlightColor: Theme.highlightColor
+                    visible: ocsUserInfo.userInfoEnabled
+                    anchors {
+                        top: parent.top
+                        topMargin: Theme.paddingMedium
+                        left: parent.left
+                        leftMargin: (Theme.paddingLarge*2.5)
+                        bottom: parent.bottom
+                        bottomMargin: Theme.paddingMedium
+                    }
+                    width: height
+                    onClicked: { userInformation.open(userInformationAnchor) }
                 }
             }
 
@@ -298,14 +315,26 @@ Page {
                         pageStack.push(fileDetails);
                     }
                 }
+
+                // Delete menu resources after completion,
+                // which MUST be indicated by the context menu component
                 onPressAndHold: {
-                    selectedEntry = davInfo;
-                    selectedItem = delegate
-                    if (!menu)
+                    if (!menu) {
                         menu = contextMenuComponent.createObject(listView, {
-                                                                     tmpEntry : selectedEntry,
-                                                                     dialogObj: dialogObj
+                                                                     selectedEntry : davInfo,
+                                                                     selectedItem : delegate,
+                                                                     dialogObj: dialogObj,
+                                                                     remoteDirDialogComponent : remoteDirDialogComponent,
+                                                                     textEntryDialogComponent : textEntryDialogComponent,
+                                                                     transferQueue : transferQueue,
+                                                                     browserCommandQueue : browserCommandQueue
                                                                  })
+                        menu.requestListReload.connect(refreshListView)
+                        menu.contextMenuDone.connect(function() {
+                            menu.destroy()
+                            menu = null
+                        });
+                    }
 
                     openMenu()
                 }
@@ -317,128 +346,6 @@ Page {
                 running: listCommand !== null
                 size: BusyIndicatorSize.Large
             }
-
-            Component {
-                id: deleteRemorseComponent
-
-                RemorseItem {
-                    id: remorseItem
-                    property string pathToResource : ""
-
-                    onCanceled: {
-                        refreshListView(true)
-                        remorseItem.destroy()
-                    }
-                    onTriggered: {
-                        deleteEntry(pathToResource)
-                        remorseItem.destroy()
-                    }
-                }
-            }
-
-            Component {
-                id: contextMenuComponent
-
-                ContextMenu {
-                    id: menu
-                    property var tmpEntry : null;
-                    property var dialogObj : null;
-                    property bool enableDestructiveMenus :
-                        !preventResourceModification(tmpEntry)
-
-                    function _renameEntry() {
-                        renameEntry(tmpEntry, dialogObj.text)
-                        _cleanup()
-                    }
-
-                    function _moveEntry() {
-                        moveEntry(tmpEntry, dialogObj.remotePath)
-                        _cleanup()
-                    }
-
-                    function _copyEntry() {
-                        copyEntry(tmpEntry, dialogObj.remotePath)
-                        _cleanup()
-                    }
-
-                    function _cleanup() {
-                        dialogObj = null
-                        tmpEntry = null
-                        menu.destroy()
-                    }
-
-                    onClosed: {
-                        selectedEntry = null
-                        selectedItem = null
-                    }
-
-                    Connections {
-                        target: transferQueue
-                        onCommandFinished: {
-                            enableDestructiveMenus = !preventResourceModification(tmpEntry)
-                        }
-                    }
-
-                    MenuItem {
-                        id: renameMenuItem
-                        text: qsTr("Rename")
-                        enabled : enableDestructiveMenus
-                        onClicked: {
-                            tmpEntry = selectedEntry
-                            dialogObj = textEntryDialogComponent.createObject(pageRoot);
-                            dialogObj.text = tmpEntry.name
-                            dialogObj.acceptText = qsTr("Rename")
-                            dialogObj.placeholderText = qsTr("New name")
-                            dialogObj.labelText = dialogObj.placeholderText
-                            dialogObj.accepted.connect(_renameEntry);
-                            dialogObj.rejected.connect(_cleanup);
-                            pageStack.push(dialogObj);
-                        }
-                    }
-                    MenuItem {
-                        id: moveMenuItem
-                        text: qsTr("Move")
-                        enabled : enableDestructiveMenus
-                        onClicked: {
-                            tmpEntry = selectedEntry
-                            dialogObj = remoteDirDialogComponent.createObject(pageRoot, {entry: tmpEntry});
-                            dialogObj.accepted.connect(_moveEntry);
-                            dialogObj.rejected.connect(_cleanup);
-                            pageStack.push(dialogObj);
-                        }
-                    }
-                    MenuItem {
-                        text: qsTr("Copy")
-                        onClicked: {
-                            tmpEntry = selectedEntry
-                            dialogObj = remoteDirDialogComponent.createObject(pageRoot, {entry: tmpEntry});
-                            dialogObj.accepted.connect(_copyEntry);
-                            dialogObj.rejected.connect(_cleanup);
-                            pageStack.push(dialogObj);
-                        }
-                    }
-                    MenuItem {
-                        id: deleteMenuItem
-                        text: qsTr("Delete")
-                        enabled : enableDestructiveMenus
-                        onClicked: {
-                            var fullPath = remotePath + selectedEntry.name
-                            var remorseItem =
-                                    deleteRemorseComponent.createObject(selectedItem,
-                                                                        {
-                                                                            pathToResource : fullPath
-                                                                        });
-                            remorseItem.execute(selectedItem,
-                                                qsTr("Deleting", "RemorseItem text"))
-                        }
-                    }
-                }
-            }
         }
     }
 }
-
-
-
-
-

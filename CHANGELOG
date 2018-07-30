@@ -1,3 +1,8 @@
+0.7.9.2:
+Fix move, copy & rename operations
+Add 'File ID' to the file details view
+Fix upward directory navigation in the remote directory selection dialog
+
 0.7.9.1:
 Major refactoring, improving parallelism of concurrent operations
 User information on the application cover

@@ -1,31 +1,16 @@
-#include "thumbnailfetcher.h"
+#include "avatarfetcher.h"
 
 #include <nextcloudendpointconsts.h>
+
 #include <commands/http/httpgetcommandentity.h>
 #include <net/webdav_utils.h>
 
-#include <QStandardPaths>
-
-ThumbnailFetcher::ThumbnailFetcher(QObject *parent) : AbstractFetcher(parent)
+AvatarFetcher::AvatarFetcher(QObject *parent) : AbstractFetcher(parent)
 {
 
 }
 
-void ThumbnailFetcher::setRemoteFile(QString v)
-{
-    if (this->m_remoteFile == v)
-        return;
-
-    this->m_remoteFile = v;
-    Q_EMIT remoteFileChanged();
-}
-
-QString ThumbnailFetcher::remoteFile()
-{
-    return this->m_remoteFile;
-}
-
-void ThumbnailFetcher::fetch()
+void AvatarFetcher::fetch()
 {
     if (!this->commandQueue()) {
         qWarning() << "No command queue provided";
@@ -41,12 +26,12 @@ void ThumbnailFetcher::fetch()
     if (width() < 0) setWidth(128);
     if (height() < 0) setHeight(128);
 
-    const QString thumbnailPath = QStringLiteral("/%1/%2/%3/%4").arg(NEXTCLOUD_ENDPOINT_THUMBNAIL,
-                                                                     QString::number(width()),
-                                                                     QString::number(height()),
-                                                                     this->remoteFile());
+    const QString thumbnailPath = NEXTCLOUD_ENDPOINT_AVATAR.arg(this->settings()->username(),
+                                                                width());
+
+
     const QString cacheDirectory = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
-    const QString cachePath = cacheDirectory + QStringLiteral("/thumbnails") + this->remoteFile();
+    const QString cachePath = cacheDirectory + QStringLiteral("/avatar.png");
 
     const QFileInfo cacheFile(cachePath);
     const QString targetCacheDir = cacheFile.absolutePath();

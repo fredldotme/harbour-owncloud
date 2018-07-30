@@ -160,6 +160,10 @@
         <source>Entity tag:</source>
         <translation>Entity tag:</translation>
     </message>
+    <message>
+        <source>File ID:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SSLErrorDialog</name>

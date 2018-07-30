@@ -12,5 +12,6 @@
         <file>qml/pages/login/FlowAuthentication.qml</file>
         <file>qml/pages/login/Entrance.qml</file>
         <file>qml/cover/CoverDetailItem.qml</file>
+        <file>qml/controls/AvatarButton.qml</file>
     </qresource>
 </RCC>

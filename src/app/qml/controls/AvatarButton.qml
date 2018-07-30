@@ -1,10 +1,11 @@
 import QtQuick 2.0
 import QtGraphicalEffects 1.0
-import Sailfish.Silica 1.0
 
-Image {
-    id: avatarImage
+Item {
+    id: buttonRoot
 
+    property alias source : avatarImage.source
+    property color highlightColor : "white"
     signal clicked()
 
     layer.enabled: true
@@ -19,8 +20,26 @@ Image {
         }
     }
 
-    MouseArea {
+    Image {
+        id: avatarImage
         anchors.fill: parent
-        onClicked: avatarImage.clicked()
+        visible: !inputArea.pressed
+    }
+
+    ColorOverlay {
+        id: pressedColorOverlay
+        anchors.fill: avatarImage
+        source: avatarImage
+        color: Qt.rgba(highlightColor.r,
+                       highlightColor.g,
+                       highlightColor.b,
+                       0.5)
+        visible: inputArea.pressed
+    }
+
+    MouseArea {
+        id: inputArea
+        anchors.fill: parent
+        onClicked: buttonRoot.clicked()
     }
 }

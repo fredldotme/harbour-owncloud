@@ -39,6 +39,7 @@ bool DavListCommandEntity::startWork()
             info.insert("size", item.size());
             info.insert("createdAt", item.createdAt());
             info.insert("entityTag", item.entityTag());
+            info.insert("fileId", item.fileId());
             if(!item.isDir()) {
                 info.insert("isExecutable", item.isExecutable());
                 info.insert("mimeType", item.mimeType());

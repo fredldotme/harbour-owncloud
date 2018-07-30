@@ -50,15 +50,21 @@ bool HttpCommandEntity::startWork()
         }
 
         QSslCertificate sslcert = errors[0].certificate();
+
         const QString md5Digest = sslcert.digest(QCryptographicHash::Md5);
         const QString sha1Digest = sslcert.digest(QCryptographicHash::Sha1);
-        if (md5Digest == hexToDigest(this->m_settings->md5Hex()) &&
-                sha1Digest == hexToDigest(this->m_settings->sha1Hex())) {
+        const QString md5DigestFromSettings = hexToDigest(this->m_settings->md5Hex());
+        const QString sha1DigestFromSettings = hexToDigest(this->m_settings->sha1Hex());
+
+        qDebug() << md5Digest << "vs" << md5DigestFromSettings;
+        qDebug() << sha1Digest << "vs" << sha1DigestFromSettings;
+
+        if (md5Digest == md5DigestFromSettings && sha1Digest == sha1DigestFromSettings) {
             // user accepted this SSL certifcate already ==> ignore SSL errors
             reply->ignoreSslErrors();
         } else {
-            Q_EMIT sslErrorOccured(md5Digest, sha1Digest);
             qWarning() << "Invalid SSL certificate, aborting.";
+            Q_EMIT sslErrorOccured(md5Digest, sha1Digest);
             reply->abort();
             abortWork();
             return;

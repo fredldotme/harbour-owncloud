@@ -57,14 +57,6 @@ bool HttpGetCommandEntity::startWork()
         Q_EMIT done();
     });
 
-    /*QObject::connect(this->m_reply,
-                     static_cast<void(QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), this,
-                     [=](QNetworkReply::NetworkError error) {
-        qWarning() << "Error occured during HTTP get request:" << error;
-        abortWork();
-        return;
-    });*/
-
     setState(RUNNING);
     return true;
 }

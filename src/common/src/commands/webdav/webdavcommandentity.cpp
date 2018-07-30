@@ -25,20 +25,6 @@ bool WebDavCommandEntity::startWork()
     }
 
     if (this->m_reply) {
-        QObject::connect(this->m_reply, &QNetworkReply::sslErrors,
-                         this, [=](const QList<QSslError> &errors) {
-            qWarning() << "SSL error occured";
-
-            if (errors.length() > 0 && this->m_client) {
-                QSslCertificate sslcert = errors[0].certificate();
-                const QString md5Digest = sslcert.digest(QCryptographicHash::Md5);
-                const QString sha1Digest = sslcert.digest(QCryptographicHash::Sha1);
-
-                Q_EMIT sslErrorOccured(md5Digest, sha1Digest);
-            }
-            abortWork();
-        });
-
         QObject::connect(this->m_reply,
                          static_cast<void(QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), this,
                          [=](QNetworkReply::NetworkError error) {
@@ -76,6 +62,20 @@ bool WebDavCommandEntity::startWork()
         abortWork();
         return false;
     }
+
+    QObject::connect(this->m_client, &QWebdav::checkSslCertifcate,
+                     this, [=](const QList<QSslError> &errors) {
+        qWarning() << "SSL error occured";
+
+        if (errors.length() > 0) {
+            QSslCertificate sslcert = errors[0].certificate();
+            const QString md5Digest = sslcert.digest(QCryptographicHash::Md5);
+            const QString sha1Digest = sslcert.digest(QCryptographicHash::Sha1);
+
+            Q_EMIT sslErrorOccured(md5Digest, sha1Digest);
+        }
+        abortWork();
+    });
 
     return true;
 }

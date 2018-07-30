@@ -38,8 +38,8 @@ Page {
         if (isAudioVideo)
             return;
 
-        console.log("Fetching thumbnail: " + entry.path)
-        thumbnailFetcher.fetchThumbnail(entry.path);
+        console.log("Fetching thumbnail: " + thumbnailFetcher.remoteFile)
+        thumbnailFetcher.fetch();
     }
     Connections {
         target: transferQueue
@@ -94,6 +94,7 @@ Page {
 
         ThumbnailFetcher {
             id: thumbnailFetcher
+            remoteFile: entry.path
             settings: persistentSettings
             commandQueue: browserCommandQueue
             width: fileImage.width

@@ -75,6 +75,8 @@ Page {
                 return;
             }
 
+            // Refresh the listView after a non-davList command
+            // related to this remote directory succeeded
             if (receipt.info.property("remotePath") === pageRoot.remotePath) {
                 refreshListView(true)
                 return;
@@ -85,6 +87,7 @@ Page {
     Connections {
         target: transferQueue
         onCommandFinished: {
+            // Refresh the listView after an upload to this remote directory succeeded
             if (receipt.info.property("remotePath") === pageRoot.remotePath) {
                 refreshListView(true)
                 return;

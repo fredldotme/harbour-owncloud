@@ -68,12 +68,12 @@ void AbstractFetcher::setCommandQueue(CommandQueue* v)
     Q_EMIT settingsChanged();
 }
 
-qint16 AbstractFetcher::width()
+int AbstractFetcher::width()
 {
     return this->m_width;
 }
 
-void AbstractFetcher::setWidth(qint16 v)
+void AbstractFetcher::setWidth(int v)
 {
     if (this->m_width == v)
         return;
@@ -82,12 +82,12 @@ void AbstractFetcher::setWidth(qint16 v)
     Q_EMIT widthChanged();
 }
 
-qint16 AbstractFetcher::height()
+int AbstractFetcher::height()
 {
     return this->m_height;
 }
 
-void AbstractFetcher::setHeight(qint16 v)
+void AbstractFetcher::setHeight(int v)
 {
     if (this->m_height == v)
         return;

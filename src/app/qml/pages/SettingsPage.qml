@@ -30,9 +30,10 @@ Page {
             MenuItem {
                 text: qsTr("Reset connection settings")
                 onClicked: {
+                    transferQueue.stop()
                     persistentSettings.resetSettings();
                     pageStack.clear();
-                    pageStack.push(authenticationEntranceComponent);
+                    pageStack.push(basicAuthenticationComponent);
                 }
             }
         }

@@ -43,7 +43,8 @@ SOURCES += \
     $$PWD/src/commands/ocs/ocsuserinfocommandentity.cpp \
     $$PWD/src/ocscommandqueue.cpp \
     $$PWD/src/commands/webdav/davproppatchcommandentity.cpp \
-    src/net/avatarfetcher.cpp
+    $$PWD/src/net/avatarfetcher.cpp \
+    $$PWD/src/commands/nopcommandentity.cpp
 
 HEADERS += \
     $$PWD/src/net/abstractfetcher.h \
@@ -80,7 +81,8 @@ HEADERS += \
     $$PWD/src/commands/ocs/ocsuserinfocommandentity.h \
     $$PWD/src/ocscommandqueue.h \
     $$PWD/src/commands/webdav/davproppatchcommandentity.h \
-    src/net/avatarfetcher.h
+    $$PWD/src/net/avatarfetcher.h \
+    $$PWD/src/commands/nopcommandentity.h
 
 INCLUDEPATH += $$PWD/src
 DEPENDPATH += $$PWD/src

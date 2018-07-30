@@ -22,9 +22,9 @@ private:
     NextcloudSettingsBase* m_settings = Q_NULLPTR;
 
 public:
-    virtual QNetworkReply* createRequest(Operation op,
-                                         const QNetworkRequest &request,
-                                         QIODevice* outgoingData) Q_DECL_OVERRIDE;
+    QNetworkReply* createRequest(Operation op,
+                                 const QNetworkRequest &request,
+                                 QIODevice* outgoingData) Q_DECL_OVERRIDE;
 };
 
 class OcsNetAccessFactory :

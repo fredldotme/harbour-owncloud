@@ -7,15 +7,37 @@
 
 OscNetAccess::OscNetAccess(QObject* parent, NextcloudSettingsBase* settings) :
     QNetworkAccessManager(parent), m_settings(settings)
-{ }
+{
+    QObject::connect(this, &OscNetAccess::sslErrors,
+                     this, [=](QNetworkReply* reply, const QList<QSslError> &errors) {
+        if (errors.length() > 0) {
+            QSslCertificate sslcert = errors[0].certificate();
+            const QString md5Digest = sslcert.digest(QCryptographicHash::Md5);
+            const QString sha1Digest = sslcert.digest(QCryptographicHash::Sha1);
+
+            if (md5Digest == hexToDigest(this->m_settings->md5Hex()) &&
+                    sha1Digest == hexToDigest(this->m_settings->sha1Hex())) {
+                reply->ignoreSslErrors();
+
+                return;
+            }
+        }
+
+        qWarning() << "OscNetAccess: unhandled SSL error occured";
+    });}
 
 QNetworkReply* OscNetAccess::createRequest(Operation op,
                                            const QNetworkRequest &request,
                                            QIODevice *outgoingData)
 {
-    qDebug() << Q_FUNC_INFO << this->m_settings;
+    // Create QNetworkRequest with proper authorization headers
+    // if a settings object has been provided at construction time.
+    const QNetworkRequest actualRequest = this->m_settings ?
+                getOcsRequest(request, this->m_settings) :
+                request;
+
     return QNetworkAccessManager::createRequest(op,
-                                                getOcsRequest(request, this->m_settings),
+                                                actualRequest,
                                                 outgoingData);
 }
 

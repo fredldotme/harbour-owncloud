@@ -9,16 +9,22 @@ Dialog {
     property string remotePath : "/"
     property bool isLoadingDirectory : true
 
+    // Prepend ".." in case remotePath !== "/"
+    function mangledDirectoryList(dirs) {
+        if (remotePath === "/")
+            return dirs;
+        return [{ name: "..", isDirectory: true }].concat(dirs)
+    }
+
     function getDirectoryContent(path) {
         remotePath = FilePathUtil.getCanonicalPath(path)
 
         if (directoryContents.contains(remotePath)) {
-            listView.model = directoryContents.value(remotePath)
+            listView.model = mangledDirectoryList(directoryContents.value(remotePath))
             isLoadingDirectory = false;
             return;
         }
-        browserCommandQueue.directoryListingRequest(remotePath)
-        browserCommandQueue.run()
+        browserCommandQueue.directoryListingRequest(remotePath, true)
     }
 
     Component.onCompleted: {
@@ -32,7 +38,7 @@ Dialog {
             if (key !== remotePath)
                 return;
 
-            listView.model = directoryContents.value(key)
+            listView.model = mangledDirectoryList(directoryContents.value(key))
             isLoadingDirectory = false;
         }
     }
@@ -79,7 +85,7 @@ Dialog {
                     id: label
                     x: icon.x + icon.width + 12
                     y: icon.y - icon.height + 6
-                    text: davInfo.name
+                    text: davInfo.name !== ".." ? davInfo.name : ""
                     anchors.verticalCenter: parent.verticalCenter
                     color: bgItem.highlighted ? Theme.highlightColor : Theme.primaryColor
                 }
@@ -88,7 +94,9 @@ Dialog {
                     if(!davInfo.isDirectory)
                         return;
 
-                    var newTargetDir = remotePath + davInfo.name + "/";
+                    var newTargetDir = FilePathUtil.getCanonicalPath(remotePath + "/" +
+                                                                     davInfo.name + "/")
+                    console.log(newTargetDir)
                     isLoadingDirectory = true;
                     getDirectoryContent(newTargetDir)
                 }

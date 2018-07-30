@@ -37,6 +37,21 @@
     </message>
 </context>
 <context>
+    <name>BrowserCommandPageFlow</name>
+    <message>
+        <source>Failed to get remote content</source>
+        <translation>Inhaltsauflistung fehlgeschlagen</translation>
+    </message>
+    <message>
+        <source>Please check your connection or try again later.</source>
+        <translation>Bitte überprüfen Sie die Verbindung oder versuchen Sie es später noch einmal.</translation>
+    </message>
+    <message>
+        <source>Operation failed</source>
+        <translation>Operation fehlgeschlagen</translation>
+    </message>
+</context>
+<context>
     <name>CoverPage</name>
     <message>
         <source>User:</source>
@@ -93,33 +108,24 @@
         <translation>Ordner erstellen</translation>
     </message>
     <message>
-        <source>Delete</source>
-        <translation>Löschen</translation>
-    </message>
-    <message>
-        <source>Deleting</source>
-        <comment>RemorseItem text</comment>
-        <translation>Löschen</translation>
-    </message>
-    <message>
-        <source>Move</source>
-        <translation>Verschieben</translation>
-    </message>
-    <message>
-        <source>Copy</source>
-        <translation>Kopieren</translation>
-    </message>
-    <message>
-        <source>Rename</source>
-        <translation>Umbenennen</translation>
-    </message>
-    <message>
         <source>Directory name</source>
         <translation>Ordnername</translation>
     </message>
     <message>
-        <source>New name</source>
-        <translation>Neuer Name</translation>
+        <source>User:</source>
+        <translation>Benutzer:</translation>
+    </message>
+    <message>
+        <source>Mail:</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Usage:</source>
+        <translation>Verwendung:</translation>
+    </message>
+    <message>
+        <source>Total:</source>
+        <translation>Total:</translation>
     </message>
 </context>
 <context>
@@ -162,7 +168,35 @@
     </message>
     <message>
         <source>File ID:</source>
-        <translation type="unfinished"></translation>
+        <translation>Datei ID:</translation>
+    </message>
+</context>
+<context>
+    <name>FileOperationsContextMenu</name>
+    <message>
+        <source>Rename</source>
+        <translation>Umbenennen</translation>
+    </message>
+    <message>
+        <source>New name</source>
+        <translation>Neuer Name</translation>
+    </message>
+    <message>
+        <source>Move</source>
+        <translation>Verschieben</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation>Kopieren</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation>Löschen</translation>
+    </message>
+    <message>
+        <source>Deleting</source>
+        <comment>RemorseItem text</comment>
+        <translation>Löschen</translation>
     </message>
 </context>
 <context>
@@ -279,18 +313,6 @@
     <message>
         <source>%1 couldn&apos;t be downloaded</source>
         <translation>%1 konnte nicht heruntergeladen werden</translation>
-    </message>
-    <message>
-        <source>Failed to get remote content</source>
-        <translation>Inhaltsauflistung fehlgeschlagen</translation>
-    </message>
-    <message>
-        <source>Please check your connection or try again later.</source>
-        <translation>Bitte überprüfen Sie die Verbindung oder versuchen Sie es später noch einmal.</translation>
-    </message>
-    <message>
-        <source>Operation failed</source>
-        <translation>Operation fehlgeschlagen</translation>
     </message>
 </context>
 </TS>

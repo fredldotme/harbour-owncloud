@@ -37,6 +37,21 @@
     </message>
 </context>
 <context>
+    <name>BrowserCommandPageFlow</name>
+    <message>
+        <source>Failed to get remote content</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please check your connection or try again later.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Operation failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>CoverPage</name>
     <message>
         <source>User:</source>
@@ -93,32 +108,23 @@
         <translation>Créer dossier</translation>
     </message>
     <message>
-        <source>Delete</source>
-        <translation>Supprimer</translation>
-    </message>
-    <message>
-        <source>Deleting</source>
-        <comment>RemorseItem text</comment>
-        <translation>Suppresion</translation>
-    </message>
-    <message>
-        <source>Move</source>
-        <translation>Déplacer</translation>
-    </message>
-    <message>
-        <source>Copy</source>
-        <translation>Copier</translation>
-    </message>
-    <message>
         <source>Directory name</source>
         <translation type="unfinished">Nom du dossier</translation>
     </message>
     <message>
-        <source>Rename</source>
+        <source>User:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>New name</source>
+        <source>Mail:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Usage:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -163,6 +169,34 @@
     <message>
         <source>File ID:</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>FileOperationsContextMenu</name>
+    <message>
+        <source>Rename</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move</source>
+        <translation type="unfinished">Déplacer</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished">Copier</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation type="unfinished">Supprimer</translation>
+    </message>
+    <message>
+        <source>Deleting</source>
+        <comment>RemorseItem text</comment>
+        <translation type="unfinished">Suppresion</translation>
     </message>
 </context>
 <context>
@@ -279,18 +313,6 @@
     <message>
         <source>%1 couldn&apos;t be downloaded</source>
         <translation>%1 n’a pas été téléchargé</translation>
-    </message>
-    <message>
-        <source>Failed to get remote content</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Please check your connection or try again later.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Operation failed</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

@@ -16,8 +16,8 @@ public:
     ~WebDavCommandEntity();
 
 protected:
-    bool startWork();
-    bool abortWork();
+    bool startWork() Q_DECL_OVERRIDE;
+    bool abortWork() Q_DECL_OVERRIDE;
 
     QWebdav* m_client = Q_NULLPTR;
     NextcloudSettingsBase* m_settings = Q_NULLPTR;

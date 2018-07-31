@@ -82,6 +82,7 @@ bool WebDavCommandEntity::startWork()
 
 bool WebDavCommandEntity::abortWork()
 {
+    qDebug() << Q_FUNC_INFO;
     if (!CommandEntity::abortWork())
         return false;
 

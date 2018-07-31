@@ -68,6 +68,18 @@ Page {
 
     Connections {
         target: browserCommandQueue
+        onCommandStarted: {
+            // Get the handle to davList commands when remotePaths match
+            var isDavListCommand = (command.info.property("type") === "davList")
+            if (!isDavListCommand)
+                return;
+
+            // Don't replace existing handle
+            if (!listCommand && command.info.property("remotePath") === remotePath) {
+                listCommand = command;
+            }
+        }
+
         onCommandFinished: {
             // Invalidate listCommand after completion
             if (receipt.info.property("type") === "davList") {
@@ -292,6 +304,12 @@ Page {
                          (pageRoot.status === PageStatus.Active ||
                           pageRoot.status === PageStatus.Activating))
 
+                    // Keep smaller padding on the root
+                    readonly property int __leftMargin :
+                        (remotePath === "/") ?
+                            (Theme.horizontalPageMargin) :
+                            (Theme.horizontalPageMargin*2.5)
+
                     // onVisibilityChanged: console.log("visibility: " + visibility)
                     state: visibility ? "visible" : "invisible"
 
@@ -299,7 +317,7 @@ Page {
                         top: parent.top
                         topMargin: (Theme.paddingMedium * 1.2)
                         left: parent.left
-                        leftMargin: (Theme.horizontalPageMargin*2.5)
+                        leftMargin: __leftMargin
                         bottom: parent.bottom
                         bottomMargin: (Theme.paddingMedium * 1.2)
                     }

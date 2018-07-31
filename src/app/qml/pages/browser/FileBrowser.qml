@@ -195,9 +195,15 @@ Page {
             model: directoryContents.value(remotePath)
 
             PullDownMenu {
+                // Disable pull down menu items while
+                // reloading content of current directory.
+                readonly property bool __enableMenuItems :
+                    (listView.model !== undefined &&
+                     listCommand === null);
+
                 MenuItem {
                     text: qsTr("Refresh")
-                    enabled: listView.model !== undefined
+                    enabled: __enableMenuItems
                     onClicked: {
                         refreshListView(true)
                     }
@@ -205,7 +211,7 @@ Page {
 
                 MenuItem {
                     text:qsTr("Create directory")
-                    enabled: listView.model !== undefined
+                    enabled: __enableMenuItems
                     onClicked: {
                         dialogObj = textEntryDialogComponent.createObject(pageRoot);
                         dialogObj.placeholderText = qsTr("Directory name")
@@ -235,7 +241,7 @@ Page {
                     }
 
                     text: qsTr("Upload")
-                    enabled: listView.model !== undefined
+                    enabled: __enableMenuItems
                     onClicked: {
                         dialogObj = selectionDialogComponent.createObject(pageRoot,
                                                                           {maximumSelections:Number.MAX_VALUE});

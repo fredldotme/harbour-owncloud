@@ -11,6 +11,7 @@
 #include <commands/webdav/davlistcommandentity.h>
 #include <commands/webdav/davproppatchcommandentity.h>
 #include <commands/stdfunctioncommandentity.h>
+#include <commandunit.h>
 
 #include <util/filepathutil.h>
 #include <util/shellcommand.h>
@@ -122,80 +123,127 @@ CommandEntity* WebDavCommandQueue::fileDownloadRequest(QString remotePath,
                                                        QDateTime lastModified)
 {
     FileDownloadCommandEntity* downloadCommand = Q_NULLPTR;
+    CommandEntity* lastModifiedCommand = Q_NULLPTR;
+    CommandEntity* openFileCommand = Q_NULLPTR;
+
 
     QString name = remotePath.mid(remotePath.lastIndexOf("/") + 1);
     QString destination = FilePathUtil::destinationFromMIME(mimeType) + "/" + name;
 
     downloadCommand = new FileDownloadCommandEntity(this, remotePath,
                                                     destination, this->getWebdav());
-    enqueue(downloadCommand);
 
     // if lastModified has been provided update the local lastModified information after download
     qDebug() << lastModified;
     if (lastModified.isValid()) {
-        StdFunctionCommandEntity* updateLocalLastModifiedCommand =
-                new StdFunctionCommandEntity(this, [destination, lastModified]() {
-            if (!QFile(destination).exists())
-                return;
-            struct utimbuf newLocalLastModified;
-            int utimesuccess;
-
-            newLocalLastModified.actime = time(NULL);
-            newLocalLastModified.modtime = lastModified.toMSecsSinceEpoch() / 1000; // seconds
-
-            utimesuccess = utime(destination.toStdString().c_str(), &newLocalLastModified);
-            if (utimesuccess != 0) {
-                qWarning() << "failed to update local last modified time to"
-                           << lastModified;
-            } else {
-                qDebug() << "Local last modified " << newLocalLastModified.modtime;
-            }
-        });
-        enqueue(updateLocalLastModifiedCommand);
+        lastModifiedCommand = localLastModifiedRequest(destination,
+                                                       lastModified);
     }
 
     if (open) {
-        StdFunctionCommandEntity* executeCommand =
-                new StdFunctionCommandEntity(this, [destination]() {
-            qDebug() << destination;
-            if (!QFile(destination).exists())
-                return;
-            ShellCommand::runCommand(QStringLiteral("xdg-open"), QStringList() << destination);
-        }, QStringLiteral("fileOpen"));
-        enqueue(executeCommand);
+        openFileCommand = openFileRequest(destination);
     }
 
-    return downloadCommand;
+    const QString fileName = QFileInfo(destination).fileName();
+    QMap<QString, QVariant> info;
+    info["type"] = QStringLiteral("fileDownload");
+    info["localPath"] = destination;
+    info["remotePath"] = remotePath;
+    info["fileName"] = fileName;
+    info["remoteFile"] = remotePath + fileName;
+    CommandEntityInfo unitInfo(info);
+
+    CommandUnit* commandUnit = new CommandUnit(this,
+    {downloadCommand, lastModifiedCommand, openFileCommand}, unitInfo);
+
+    enqueue(commandUnit);
+    return commandUnit;
 }
 
 CommandEntity* WebDavCommandQueue::fileUploadRequest(QString localPath,
                                                      QString remotePath,
                                                      QDateTime lastModified)
 {
+    const QString fileName = localPath.mid(localPath.lastIndexOf('/'));
+
     qDebug() << "upload requested";
     FileUploadCommandEntity* uploadCommand =
             new FileUploadCommandEntity(this, localPath, remotePath, this->getWebdav());
-
-    enqueue(uploadCommand);
+    CommandEntity* lastModifiedCommand = Q_NULLPTR;
 
     // if lastModified has been provided update the remote lastModified information afterwards
     qDebug() << lastModified;
     if (lastModified.isValid()) {
-        QWebdav::PropValues props;
-        QMap<QString, QVariant> propMap;
-
-        // Last modified in seconds
-        propMap["lastmodified"] = (QVariant)(lastModified.toMSecsSinceEpoch() / 1000);
-        props["DAV:"] = propMap;
-
-        const QString fileName = localPath.mid(localPath.lastIndexOf('/'));
-
-        DavPropPatchCommandEntity* propPatchCommand =
-                new DavPropPatchCommandEntity(this, remotePath + fileName,
-                                              props, this->getWebdav());
-
-        enqueue(propPatchCommand);
+        lastModifiedCommand = remoteLastModifiedRequest(remotePath + fileName, lastModified);
     }
 
+
+    // extensible list of command properties
+    QMap<QString, QVariant> info;
+    info["type"] = QStringLiteral("fileUpload");
+    info["localPath"] = localPath;
+    info["remotePath"] = remotePath;
+    info["fileName"] = fileName;
+    info["remoteFile"] = remotePath + fileName;
+
+    CommandUnit* commandUnit = new CommandUnit(this,
+    {uploadCommand, lastModifiedCommand}, CommandEntityInfo(info));
+
+    enqueue(commandUnit);
     return uploadCommand;
+}
+
+CommandEntity* WebDavCommandQueue::localLastModifiedRequest(const QString &destination,
+                                                            const QDateTime &lastModified)
+{
+    StdFunctionCommandEntity* updateLocalLastModifiedCommand =
+            new StdFunctionCommandEntity(this, [destination, lastModified]() {
+        if (!QFile(destination).exists())
+            return;
+        struct utimbuf newLocalLastModified;
+        int utimesuccess;
+
+        newLocalLastModified.actime = time(NULL);
+        newLocalLastModified.modtime = lastModified.toMSecsSinceEpoch() / 1000; // seconds
+
+        utimesuccess = utime(destination.toStdString().c_str(), &newLocalLastModified);
+        if (utimesuccess != 0) {
+            qWarning() << "failed to update local last modified time to"
+                       << lastModified;
+        } else {
+            qDebug() << "Local last modified " << newLocalLastModified.modtime;
+        }
+    });
+
+    return updateLocalLastModifiedCommand;
+}
+
+CommandEntity* WebDavCommandQueue::openFileRequest(const QString &destination)
+{
+    StdFunctionCommandEntity* executeCommand =
+            new StdFunctionCommandEntity(this, [destination]() {
+        qDebug() << destination;
+        if (!QFile(destination).exists())
+            return;
+        ShellCommand::runCommand(QStringLiteral("xdg-open"), QStringList() << destination);
+    }, QStringLiteral("fileOpen"));
+
+    return executeCommand;
+}
+
+CommandEntity* WebDavCommandQueue::remoteLastModifiedRequest(const QString &destination,
+                                                             const QDateTime &lastModified)
+{
+    QWebdav::PropValues props;
+    QMap<QString, QVariant> propMap;
+
+    // Last modified in seconds
+    propMap["lastmodified"] = (QVariant)(lastModified.toMSecsSinceEpoch() / 1000);
+    props["DAV:"] = propMap;
+
+
+    DavPropPatchCommandEntity* propPatchCommand =
+            new DavPropPatchCommandEntity(this, destination,
+                                          props, this->getWebdav());
+    return propPatchCommand;
 }

@@ -39,6 +39,13 @@ protected:
     QWebdav* getWebdav() { return m_client; }
 
 private:
+    CommandEntity* localLastModifiedRequest(const QString& destination,
+                                            const QDateTime& lastModified);
+    CommandEntity* openFileRequest(const QString& destination);
+
+    CommandEntity* remoteLastModifiedRequest(const QString& destination,
+                                            const QDateTime& lastModified);
+
     NextcloudSettingsBase* m_settings = Q_NULLPTR;
     QWebdav* m_client = Q_NULLPTR;
 

@@ -41,7 +41,7 @@ Page {
             Label {
                 width: parent.width
                 text: qsTr("Easily access your ownCloud and NextCloud " +
-                           "instances with a native open source application.")
+                           "instances with a native free software application.")
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 horizontalAlignment: Text.AlignHCenter
             }

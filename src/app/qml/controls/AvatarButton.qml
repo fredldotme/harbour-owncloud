@@ -3,10 +3,43 @@ import QtGraphicalEffects 1.0
 
 Item {
     id: buttonRoot
+    visible: true
+    state: "visible"
 
     property alias source : avatarImage.source
-    property color highlightColor : "white"
+    property color highlightColor : "#FFFFFF88"
     signal clicked()
+
+    states: [
+        State { name: "visible" },
+        State { name: "invisible" }
+    ]
+    transitions: [
+        Transition {
+            from: "visible"
+            to: "invisible"
+            NumberAnimation {
+                target: buttonRoot
+                property: "opacity"
+                duration: 200
+                from: 1.0
+                to: 0.0
+                easing.type: Easing.InOutQuad
+            }
+        },
+        Transition {
+            from: "invisible"
+            to: "visible"
+            NumberAnimation {
+                target: buttonRoot
+                property: "opacity"
+                duration: 200
+                from: 0.0
+                to: 1.0
+                easing.type: Easing.InOutQuad
+            }
+        }
+    ]
 
     layer.enabled: true
     layer.effect: OpacityMask {
@@ -30,10 +63,7 @@ Item {
         id: pressedColorOverlay
         anchors.fill: avatarImage
         source: avatarImage
-        color: Qt.rgba(highlightColor.r,
-                       highlightColor.g,
-                       highlightColor.b,
-                       0.5)
+        color: highlightColor
         visible: inputArea.pressed
     }
 

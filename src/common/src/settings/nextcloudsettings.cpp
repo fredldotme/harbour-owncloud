@@ -78,7 +78,7 @@ bool NextcloudSettings::readSettings()
     {
         QString md5Hex = settings.value(NEXTCLOUD_SETTINGS_KEY_CERTMD5).toString();
         QString sha1Hex = settings.value(NEXTCLOUD_SETTINGS_KEY_CERTSHA1).toString();
-        if (md5Hex != m_md5Hex && sha1Hex != m_sha1Hex) {
+        if (md5Hex != m_md5Hex || sha1Hex != m_sha1Hex) {
             m_md5Hex = md5Hex;
             m_sha1Hex = sha1Hex;
             emit customCertChanged();
@@ -127,23 +127,4 @@ void NextcloudSettings::resetSettings()
     settings.endGroup();
 
     NextcloudSettingsBase::resetSettings();
-}
-
-void NextcloudSettings::acceptCertificate(QString md5, QString sha1)
-{
-    m_md5Hex = md5;
-    m_sha1Hex = sha1;
-    writeSettings();
-    emit customCertChanged();
-}
-
-void NextcloudSettings::acceptCertificate(bool value)
-{
-    if(!value)
-        acceptCertificate("", "");
-}
-
-bool NextcloudSettings::isCustomCert()
-{
-    return !m_md5Hex.isEmpty() && !m_sha1Hex.isEmpty();
 }

@@ -23,6 +23,23 @@ class NextcloudSettingsBase : public QObject
 {
     Q_OBJECT
 
+    Q_PROPERTY(bool autoLogin READ isAutoLogin WRITE setAutoLogin NOTIFY autoLoginChanged)
+    Q_PROPERTY(bool notifications READ notifications WRITE setNotifications NOTIFY notificationSettingsChanged)
+
+    Q_PROPERTY(QString hoststring READ hoststring NOTIFY hoststringChanged)
+    Q_PROPERTY(QString username READ username WRITE setUsername NOTIFY usernameChanged)
+    Q_PROPERTY(QString password READ password WRITE setPassword NOTIFY passwordChanged)
+    Q_PROPERTY(bool isCustomCert READ isCustomCert WRITE acceptCertificate NOTIFY customCertChanged)
+
+    Q_PROPERTY(bool uploadAutomatically READ uploadAutomatically WRITE setUploadAutomatically NOTIFY uploadAutomaticallyChanged)
+    Q_PROPERTY(bool mobileUpload READ mobileUpload WRITE setMobileUpload NOTIFY mobileUploadChanged)
+    Q_PROPERTY(QString localPicturesPath READ localPicturesPath WRITE setLocalPicturesPath NOTIFY localPicturesPathChanged)
+
+    Q_PROPERTY(QString hostname READ hostname)
+    Q_PROPERTY(QString path READ path)
+    Q_PROPERTY(int port READ port)
+    Q_PROPERTY(bool isHttps READ isHttps)
+
 public:
     NextcloudSettingsBase(QObject *parent = 0);
 
@@ -34,6 +51,7 @@ public:
     QString hoststring();
     QString username();
     QString password();
+    bool isCustomCert();
 
     bool isAutoLogin();
     bool notifications();
@@ -49,22 +67,6 @@ public:
     void setLocalPicturesPath(QString newPath) { m_localPicturesPath = newPath; emit localPicturesPathChanged(); }
 
     Q_INVOKABLE bool parseFromAddressString(QString value);
-
-    Q_PROPERTY(bool autoLogin READ isAutoLogin WRITE setAutoLogin NOTIFY autoLoginChanged)
-    Q_PROPERTY(bool notifications READ notifications WRITE setNotifications NOTIFY notificationSettingsChanged)
-
-    Q_PROPERTY(QString hoststring READ hoststring NOTIFY hoststringChanged)
-    Q_PROPERTY(QString username READ username WRITE setUsername NOTIFY usernameChanged)
-    Q_PROPERTY(QString password READ password WRITE setPassword NOTIFY passwordChanged)
-
-    Q_PROPERTY(bool uploadAutomatically READ uploadAutomatically WRITE setUploadAutomatically NOTIFY uploadAutomaticallyChanged)
-    Q_PROPERTY(bool mobileUpload READ mobileUpload WRITE setMobileUpload NOTIFY mobileUploadChanged)
-    Q_PROPERTY(QString localPicturesPath READ localPicturesPath WRITE setLocalPicturesPath NOTIFY localPicturesPathChanged)
-
-    Q_PROPERTY(QString hostname READ hostname)
-    Q_PROPERTY(QString path READ path)
-    Q_PROPERTY(int port READ port)
-    Q_PROPERTY(bool isHttps READ isHttps)
 
 public slots:
     void resetSettings();
@@ -99,6 +101,8 @@ protected:
 private:
     void setAutoLogin(bool value);
     void setNotifications(bool value);
+    void acceptCertificate(QString md5, QString sha1);
+    void acceptCertificate(bool value);
 
 signals:
     void settingsChanged();
@@ -106,6 +110,7 @@ signals:
     void usernameChanged();
     void passwordChanged();
     void hoststringChanged();
+    void customCertChanged();
     void autoLoginChanged();
     void notificationSettingsChanged();
     void uploadAutomaticallyChanged();

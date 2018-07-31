@@ -1,5 +1,6 @@
 #include "filepathutil.h"
 
+#include <QFileInfo>
 #include <QStandardPaths>
 
 #include <nextcloudendpointconsts.h>
@@ -53,4 +54,10 @@ QString FilePathUtil::getWebDavFileUrl(const QString &path,
 
     const QString urlString = settings->hoststring() + NEXTCLOUD_ENDPOINT_WEBDAV + path;
     return urlString;
+}
+
+bool FilePathUtil::fileExists(const QString &filePath)
+{
+    QFileInfo fileInfo(filePath);
+    return fileInfo.isDir() && fileInfo.exists();
 }

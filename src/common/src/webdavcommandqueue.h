@@ -46,6 +46,8 @@ private:
     CommandEntity* remoteLastModifiedRequest(const QString& destination,
                                             const QDateTime& lastModified);
 
+    void updateConnectionSettings();
+
     NextcloudSettingsBase* m_settings = Q_NULLPTR;
     QWebdav* m_client = Q_NULLPTR;
 

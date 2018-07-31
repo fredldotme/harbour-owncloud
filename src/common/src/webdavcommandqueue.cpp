@@ -30,18 +30,7 @@ WebDavCommandQueue::WebDavCommandQueue(QObject* parent, NextcloudSettingsBase* s
     this->m_client = getNewWebDav(this->m_settings, NEXTCLOUD_ENDPOINT_WEBDAV, this);
 
     QObject::connect(this, &WebDavCommandQueue::settingsChanged,
-                     this, [=]() {
-        if (this->m_client) {
-            delete this->m_client;
-            this->m_client = Q_NULLPTR;
-        }
-
-        if (!this->m_settings)
-            return;
-
-        // this->m_settings->readSettings();
-        this->m_client = getNewWebDav(this->m_settings, NEXTCLOUD_ENDPOINT_WEBDAV, this);
-    });
+                     this, &WebDavCommandQueue::updateConnectionSettings);
 }
 
 NextcloudSettingsBase* WebDavCommandQueue::settings()
@@ -54,21 +43,37 @@ void WebDavCommandQueue::setSettings(NextcloudSettingsBase *v)
     if (this->m_settings == v)
         return;
 
+    // Disconnect from current settings object if it exists
     if (this->m_settings)
         QObject::disconnect(this->m_settings, 0, 0, 0);
 
     this->m_settings = v;
-    QObject::connect(this->m_settings, &NextcloudSettingsBase::settingsChanged,
-                     this, [=]() {
-        if (this->m_client) {
-            delete this->m_client;
-            this->m_client = Q_NULLPTR;
-        }
-        if (!this->m_settings)
-            return;
-        this->m_client = getNewWebDav(this->m_settings, NEXTCLOUD_ENDPOINT_WEBDAV, this);
-    });
+
+    // Connect to changes of credentials, certificate and hostname settings
+    if (this->m_settings) {
+        QObject::connect(this->m_settings, &NextcloudSettingsBase::hoststringChanged,
+                         this, &WebDavCommandQueue::updateConnectionSettings);
+        QObject::connect(this->m_settings, &NextcloudSettingsBase::usernameChanged,
+                         this, &WebDavCommandQueue::updateConnectionSettings);
+        QObject::connect(this->m_settings, &NextcloudSettingsBase::passwordChanged,
+                         this, &WebDavCommandQueue::updateConnectionSettings);
+        QObject::connect(this->m_settings, &NextcloudSettingsBase::customCertChanged,
+                         this, &WebDavCommandQueue::updateConnectionSettings);
+    }
     Q_EMIT settingsChanged();
+}
+
+void WebDavCommandQueue::updateConnectionSettings()
+{
+    if (!this->m_settings)
+        return;
+
+    // Apply settings to new or existing QWebdav object
+    if (!this->m_client) {
+        this->m_client = getNewWebDav(this->m_settings, NEXTCLOUD_ENDPOINT_WEBDAV, this);
+    } else {
+        applySettingsToWebdav(this->m_settings, this->m_client, NEXTCLOUD_ENDPOINT_WEBDAV);
+    }
 }
 
 CommandEntity* WebDavCommandQueue::makeDirectoryRequest(QString dirName)
@@ -164,7 +169,7 @@ CommandEntity* WebDavCommandQueue::fileUploadRequest(QString localPath,
                                                      QString remotePath,
                                                      QDateTime lastModified)
 {
-    const QString fileName = localPath.mid(localPath.lastIndexOf('/'));
+    const QString fileName = localPath.mid(localPath.lastIndexOf('/') + 1);
 
     qDebug() << "upload requested";
     FileUploadCommandEntity* uploadCommand =

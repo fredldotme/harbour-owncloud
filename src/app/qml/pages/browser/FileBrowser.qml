@@ -297,11 +297,11 @@ Page {
 
                     anchors {
                         top: parent.top
-                        topMargin: Theme.paddingMedium
+                        topMargin: (Theme.paddingMedium * 1.2)
                         left: parent.left
-                        leftMargin: (Theme.paddingLarge*2.5)
+                        leftMargin: (Theme.horizontalPageMargin*2.5)
                         bottom: parent.bottom
-                        bottomMargin: Theme.paddingMedium
+                        bottomMargin: (Theme.paddingMedium * 1.2)
                     }
 
                     width: height
@@ -320,18 +320,19 @@ Page {
                                 "image://theme/icon-m-folder" :
                                 fileDetailsHelper.getIconFromMime(davInfo.mimeType)
                     anchors.left: parent.left
-                    anchors.leftMargin: Theme.paddingLarge
+                    anchors.leftMargin: Theme.horizontalPageMargin
                     anchors.top: parent.top
-                    anchors.topMargin: 18
+                    anchors.topMargin: Theme.paddingSmall
                     anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 18
+                    anchors.bottomMargin: Theme.paddingSmall
                     fillMode: Image.PreserveAspectFit
                 }
 
                 Label {
                     id: label
-                    x: icon.x + icon.width + 12
-                    y: icon.y - icon.height + 6
+                    anchors.left: icon.right
+                    anchors.leftMargin: Theme.paddingMedium
+                    anchors.right: parent.right
                     text: davInfo.name
                     anchors.verticalCenter: parent.verticalCenter
                     color: delegate.highlighted ? Theme.highlightColor : Theme.primaryColor

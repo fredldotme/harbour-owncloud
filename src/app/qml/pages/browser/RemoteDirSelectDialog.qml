@@ -72,19 +72,20 @@ Dialog {
                                 "image://theme/icon-m-folder" :
                                 "image://theme/icon-m-back"
                     anchors.left: parent.left
-                    anchors.leftMargin: Theme.paddingLarge
+                    anchors.leftMargin: Theme.horizontalPageMargin
                     anchors.top: parent.top
-                    anchors.topMargin: 18
+                    anchors.topMargin: Theme.paddingSmall
                     anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 18
+                    anchors.bottomMargin: Theme.paddingSmall
                     height: label.height
                     fillMode: Image.PreserveAspectFit
                 }
 
                 Label {
                     id: label
-                    x: icon.x + icon.width + 12
-                    y: icon.y - icon.height + 6
+                    anchors.left: icon.right
+                    anchors.leftMargin: Theme.paddingMedium
+                    anchors.right: parent.right
                     text: davInfo.name !== ".." ? davInfo.name : ""
                     anchors.verticalCenter: parent.verticalCenter
                     color: bgItem.highlighted ? Theme.highlightColor : Theme.primaryColor

@@ -177,8 +177,6 @@ CommandEntity* WebDavCommandQueue::fileUploadRequest(QString localPath,
         lastModifiedCommand = remoteLastModifiedRequest(remotePath + fileName, lastModified);
     }
 
-
-    // extensible list of command properties
     QMap<QString, QVariant> info;
     info["type"] = QStringLiteral("fileUpload");
     info["localPath"] = localPath;

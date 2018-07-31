@@ -22,9 +22,9 @@ Page {
             fileDetailsHelper.getIconFromMime(entry.mimeType)
 
     readonly property bool isAudioVideo :
-        (!entry.isDirectory ||
-         entry.mimeType.indexOf("video") === 0 ||
-         entry.mimeType.indexOf("audio") === 0)
+        (!entry.isDirectory &&
+         (entry.mimeType.indexOf("video") === 0 ||
+          entry.mimeType.indexOf("audio") === 0))
 
     Connections {
         target: downloadCommand

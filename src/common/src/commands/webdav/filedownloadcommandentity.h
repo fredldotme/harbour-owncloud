@@ -18,6 +18,7 @@ public:
                                        NextcloudSettingsBase* settings = Q_NULLPTR);
 protected:
     bool startWork();
+    bool staticProgress() const Q_DECL_OVERRIDE { return false; }
 
     QString m_remotePath = QStringLiteral("");
     QFile* m_localFile = Q_NULLPTR;

@@ -19,6 +19,7 @@ public:
 
 protected:
     bool startWork();
+    bool staticProgress() const Q_DECL_OVERRIDE { return false; }
 
 private:
     bool m_running = false;

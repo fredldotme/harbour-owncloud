@@ -44,7 +44,8 @@ SOURCES += \
     $$PWD/src/ocscommandqueue.cpp \
     $$PWD/src/commands/webdav/davproppatchcommandentity.cpp \
     $$PWD/src/net/avatarfetcher.cpp \
-    $$PWD/src/commands/nopcommandentity.cpp
+    $$PWD/src/commands/nopcommandentity.cpp \
+    $$PWD/src/commandunit.cpp
 
 HEADERS += \
     $$PWD/src/net/abstractfetcher.h \
@@ -82,7 +83,8 @@ HEADERS += \
     $$PWD/src/ocscommandqueue.h \
     $$PWD/src/commands/webdav/davproppatchcommandentity.h \
     $$PWD/src/net/avatarfetcher.h \
-    $$PWD/src/commands/nopcommandentity.h
+    $$PWD/src/commands/nopcommandentity.h \
+    $$PWD/src/commandunit.h
 
 INCLUDEPATH += $$PWD/src
 DEPENDPATH += $$PWD/src

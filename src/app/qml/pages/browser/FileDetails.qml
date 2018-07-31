@@ -10,14 +10,20 @@ Page {
 
     property CommandEntity downloadCommand : null
     property var entry : null;
-    readonly property bool isDownloading : downloadCommand !== null ||
-                                  applicationWindow.isTransferEnqueued(entry.path);
+
+    readonly property bool isDownloading :
+        (downloadCommand !== null ||
+         applicationWindow.isTransferEnqueued(entry.path))
+
     readonly property string imgSrc :
-        (!thumbnailFetcher.fetching && thumbnailFetcher.source !== "") ?
+        (!entry.isDirectory && !thumbnailFetcher.fetching &&
+         thumbnailFetcher.source !== "") ?
             thumbnailFetcher.source :
             fileDetailsHelper.getIconFromMime(entry.mimeType)
+
     readonly property bool isAudioVideo :
-        (entry.mimeType.indexOf("video") === 0 ||
+        (!entry.isDirectory ||
+         entry.mimeType.indexOf("video") === 0 ||
          entry.mimeType.indexOf("audio") === 0)
 
     Connections {
@@ -35,7 +41,7 @@ Page {
     }
 
     Component.onCompleted: {
-        if (isAudioVideo)
+        if (isAudioVideo || entry.isDirectory)
             return;
 
         console.log("Fetching thumbnail: " + thumbnailFetcher.remoteFile)
@@ -78,6 +84,8 @@ Page {
         contentHeight: mainColumn.height
 
         PullDownMenu {
+            enabled: !entry.isDirectory
+            visible: !entry.isDirectory
             MenuItem {
                 id: download
                 text: qsTr("Download")
@@ -113,14 +121,16 @@ Page {
                 id: fileImage
                 height: width
                 anchors.left: parent.left
-                anchors.leftMargin: margins
+                anchors.leftMargin: entry.isDirectory ? margins * 2 : margins
                 anchors.right: parent.right
-                anchors.rightMargin: margins
+                anchors.rightMargin: entry.isDirectory ? margins * 2 : margins
 
                 // Image thumbnail
                 Image {
                     id: thumbnailView
-                    source: isAudioVideo ? "" : imgSrc
+                    source: isAudioVideo ? "" :
+                                           (entry.isDirectory ? "image://theme/icon-m-folder" :
+                                                                imgSrc)
                     visible: !isAudioVideo
                     anchors.fill: parent
                     asynchronous: true
@@ -203,7 +213,7 @@ Page {
                 }
                 DetailItem {
                     label: qsTr("Type:")
-                    value: entry.mimeType
+                    value: !entry.isDirectory ? entry.mimeType : qsTr("Directory")
                     visible: value.length > 0
                 }
                 DetailItem {

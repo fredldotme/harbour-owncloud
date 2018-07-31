@@ -13,6 +13,7 @@ ContextMenu {
     property WebDavCommandQueue browserCommandQueue : null
     property Component remoteDirDialogComponent : null
     property Component textEntryDialogComponent: null
+    property Component fileDetailsComponent : null
 
     signal requestListReload(bool refresh)
     signal contextMenuDone()
@@ -121,6 +122,15 @@ ContextMenu {
         target: transferQueue
         onCommandFinished: {
             __enableDestructiveMenus = !preventResourceModification(selectedEntry)
+        }
+    }
+
+    MenuItem {
+        id: detailsMenuItem
+        text: qsTr("Details")
+        onClicked: {
+            var fileDetails = fileDetailsComponent.createObject(pageRoot, { entry: selectedEntry });
+            pageStack.push(fileDetails);
         }
     }
 

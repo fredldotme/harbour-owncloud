@@ -376,6 +376,7 @@ Page {
                                                                      dialogObj: dialogObj,
                                                                      remoteDirDialogComponent : remoteDirDialogComponent,
                                                                      textEntryDialogComponent : textEntryDialogComponent,
+                                                                     fileDetailsComponent : fileDetailsComponent,
                                                                      transferQueue : transferQueue,
                                                                      browserCommandQueue : browserCommandQueue
                                                                  })

@@ -271,6 +271,13 @@ Page {
                         pageStack.push(settingsPageComponent)
                     }
                 }
+
+                MenuItem {
+                    text: qsTr("About")
+                    onClicked: {
+                        pageStack.push(aboutPageComponent)
+                    }
+                }
             }
 
             add: Transition {

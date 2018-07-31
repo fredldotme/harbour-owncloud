@@ -17,5 +17,6 @@
         <file>qml/OcsUserInfo.qml</file>
         <file>qml/navigation/CommandPageFlow.qml</file>
         <file>qml/navigation/BrowserCommandPageFlow.qml</file>
+        <file>qml/pages/About.qml</file>
     </qresource>
 </RCC>

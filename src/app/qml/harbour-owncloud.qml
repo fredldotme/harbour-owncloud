@@ -71,6 +71,9 @@ ApplicationWindow
     readonly property Component transferPageComponent :
         Qt.createComponent("qrc:/qml/pages/TransferPage.qml",
                            Component.PreferSynchronous)
+    readonly property Component aboutPageComponent :
+        Qt.createComponent("qrc:/qml/pages/About.qml",
+                           Component.PreferSynchronous)
 
 
     function refreshUserInfo() {

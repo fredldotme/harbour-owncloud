@@ -27,6 +27,12 @@ Page {
     // There can only be one of them active at a time due to their modal nature.
     property var dialogObj : null
 
+    // Disable pull down menu items while
+    // reloading content of current directory.
+    readonly property bool __enableMenuItems :
+        (listView.model !== undefined &&
+         listCommand === null);
+
     function __dialogCleanup() {
         //dialogObj.destroy()
         dialogObj = null
@@ -195,12 +201,6 @@ Page {
             model: directoryContents.value(remotePath)
 
             PullDownMenu {
-                // Disable pull down menu items while
-                // reloading content of current directory.
-                readonly property bool __enableMenuItems :
-                    (listView.model !== undefined &&
-                     listCommand === null);
-
                 MenuItem {
                     text: qsTr("Refresh")
                     enabled: __enableMenuItems

@@ -1,3 +1,8 @@
+0.7.9.3:
+Visual enhancements in the file browser including avatar, user details & storage overview
+Fix file operations and transfers with self-signed SSL certificates
+Fix scrolling in the file details view with large file names
+
 0.7.9.2:
 Fix move, copy & rename operations
 Add 'File ID' to the file details view

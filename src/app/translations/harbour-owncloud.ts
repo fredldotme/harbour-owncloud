@@ -2,6 +2,53 @@
 <!DOCTYPE TS>
 <TS version="2.1">
 <context>
+    <name>About</name>
+    <message>
+        <source>About Nextcloud/ownCloud client</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nextcloud/ownCloud client</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Easily access your ownCloud and NextCloud instances with a native open source application.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Donation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copyright notices</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>QWebDAV library (qwebdavlib) version 1.0 (LGPL v2.1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Licensed under GPL v2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Source code on GitHub</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Via PayPal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Via Flattr</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SailfishUiSet UI components (GPL v2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>BasicAuthentication</name>
     <message>
         <source>Host address</source>
@@ -125,6 +172,10 @@
     </message>
     <message>
         <source>Total:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

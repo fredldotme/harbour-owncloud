@@ -2,6 +2,53 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="de_DE">
 <context>
+    <name>About</name>
+    <message>
+        <source>About Nextcloud/ownCloud client</source>
+        <translation>Über Nextcloud/ownCloud Client</translation>
+    </message>
+    <message>
+        <source>Nextcloud/ownCloud client</source>
+        <translation>Nextcloud/ownCloud Client</translation>
+    </message>
+    <message>
+        <source>Easily access your ownCloud and NextCloud instances with a native free software application.</source>
+        <translation>Einfacher Zugriff auf deine ownCloud und Nextcloud Instanzen mit einer nativen Free Software Anwendung</translation>
+    </message>
+    <message>
+        <source>Donation</source>
+        <translation>Spende</translation>
+    </message>
+    <message>
+        <source>Copyright notices</source>
+        <translation>Rechtliche Hinweise</translation>
+    </message>
+    <message>
+        <source>QWebDAV library (qwebdavlib) version 1.0 (LGPL v2.1)</source>
+        <translation>QWebDAV Library (qwebdavlib) Version 1.0 (LGPL v2.1)</translation>
+    </message>
+    <message>
+        <source>Licensed under GPL v2</source>
+        <translation>Lizensiert unter GPLv2</translation>
+    </message>
+    <message>
+        <source>Source code on GitHub</source>
+        <translation>Source Code auf GitHub</translation>
+    </message>
+    <message>
+        <source>Via PayPal</source>
+        <translation>Über PayPal</translation>
+    </message>
+    <message>
+        <source>Via Flattr</source>
+        <translation>Über Flattr</translation>
+    </message>
+    <message>
+        <source>SailfishUiSet UI components (GPL v2)</source>
+        <translation>SailfishUiSet UI Komponenten (GPL v2)</translation>
+    </message>
+</context>
+<context>
     <name>BasicAuthentication</name>
     <message>
         <source>Host address</source>
@@ -126,6 +173,10 @@
     <message>
         <source>Total:</source>
         <translation>Total:</translation>
+    </message>
+    <message>
+        <source>About</source>
+        <translation>Über</translation>
     </message>
 </context>
 <context>

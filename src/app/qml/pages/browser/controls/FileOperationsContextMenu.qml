@@ -56,6 +56,7 @@ ContextMenu {
                 (tmpEntry.isDirectory ? "/" : "")
 
         browserCommandQueue.moveRequest(fromPath, toPath)
+        browserCommandQueue.directoryListingRequest(newDir, true)
         requestListReload(true)
         contextMenuDone()
     }
@@ -67,6 +68,7 @@ ContextMenu {
                 (tmpEntry.isDirectory ? "/" : "")
 
         browserCommandQueue.copyRequest(fromPath, toPath)
+        browserCommandQueue.directoryListingRequest(newDir, true)
         contextMenuDone()
     }
 

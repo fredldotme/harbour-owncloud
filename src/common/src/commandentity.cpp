@@ -26,6 +26,10 @@ qreal CommandEntity::progress()
 
 void CommandEntity::setProgress(qreal progress)
 {
+    // Avoid setting a progress value when the CommandEntity has static progress
+    if (this->staticProgress())
+        return;
+
     if (this->m_progress == progress)
         return;
 

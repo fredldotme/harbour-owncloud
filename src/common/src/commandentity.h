@@ -25,6 +25,12 @@ public:
     };
     qreal progress();
 
+    virtual bool staticProgress() const {
+        // Whether the CommandEntity can update it's progress
+        // depends on the implementation. Fall back to static progression.
+        return true;
+    }
+
 public slots:
     void run();
     void abort();
@@ -48,11 +54,13 @@ protected:
         }
         return true;
     }
+
     virtual bool abortWork() {
         if (state() == ABORTED)
             return false;
         return true;
     }
+
     void setProgress(qreal progress);
     void setState(const CommandEntityState& state);
 

@@ -73,6 +73,7 @@ private:
 signals:
     void added(CommandEntity* entity);
     void removed(CommandEntity* entity);
+    void commandStarted(CommandEntity* command);
     void commandFinished(CommandReceipt receipt);
     void runningChanged();
     void queueContentChanged();

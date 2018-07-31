@@ -168,6 +168,7 @@ void CommandQueue::runNextCommand()
         return;
 
     qInfo() << "Now running:" << this->m_queue.head();
+    Q_EMIT commandStarted(this->m_queue.head());
     this->m_queue.head()->run();
 }
 
@@ -227,10 +228,11 @@ void CommandQueue::deleteCommand(CommandEntity* command)
                            command->resultData(),
                            QDateTime::currentDateTime(),
                            command->isFinished());
-    Q_EMIT removed(command);
 
     disconnect(command, 0, 0, 0);
+
     this->m_queue.removeOne(command);
+    Q_EMIT removed(command);
 
     qDebug() << "Command finished?" << receipt.finished;
     Q_EMIT commandFinished(receipt);

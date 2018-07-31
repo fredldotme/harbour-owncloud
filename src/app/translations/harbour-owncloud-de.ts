@@ -170,6 +170,10 @@
         <source>File ID:</source>
         <translation>Datei ID:</translation>
     </message>
+    <message>
+        <source>Directory</source>
+        <translation>Ordner</translation>
+    </message>
 </context>
 <context>
     <name>FileOperationsContextMenu</name>
@@ -197,6 +201,10 @@
         <source>Deleting</source>
         <comment>RemorseItem text</comment>
         <translation>Löschen</translation>
+    </message>
+    <message>
+        <source>Details</source>
+        <translation>Details</translation>
     </message>
 </context>
 <context>

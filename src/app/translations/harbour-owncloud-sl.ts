@@ -170,6 +170,10 @@
         <source>File ID:</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Directory</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FileOperationsContextMenu</name>
@@ -197,6 +201,10 @@
         <source>Deleting</source>
         <comment>RemorseItem text</comment>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Details</source>
+        <translation type="unfinished">Podrobnosti</translation>
     </message>
 </context>
 <context>

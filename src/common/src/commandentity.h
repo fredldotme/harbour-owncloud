@@ -13,7 +13,8 @@ class CommandEntity : public QObject
     Q_PROPERTY(CommandEntityInfo info READ info CONSTANT)
 
 public:
-    explicit CommandEntity(QObject *parent = nullptr);
+    explicit CommandEntity(QObject *parent = Q_NULLPTR,
+                           CommandEntityInfo info = CommandEntityInfo());
     ~CommandEntity();
 
     enum CommandEntityState {

@@ -2,7 +2,8 @@
 
 #include <QDebug>
 
-CommandEntity::CommandEntity(QObject *parent) : QObject(parent)
+CommandEntity::CommandEntity(QObject *parent, CommandEntityInfo info) :
+    QObject(parent), m_commandInfo(info)
 {
     QObject::connect(this, &CommandEntity::done, this, [=]() {
         setState(FINISHED);
@@ -16,7 +17,6 @@ CommandEntity::CommandEntity(QObject *parent) : QObject(parent)
 CommandEntity::~CommandEntity()
 {
     qDebug() << Q_FUNC_INFO;
-    abort();
 }
 
 qreal CommandEntity::progress()
@@ -53,6 +53,7 @@ void CommandEntity::run()
 
 void CommandEntity::abort()
 {
+    qDebug() << Q_FUNC_INFO;
     abortWork();
     Q_EMIT aborted();
 }

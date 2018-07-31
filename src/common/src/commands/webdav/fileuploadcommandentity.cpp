@@ -15,7 +15,7 @@ FileUploadCommandEntity::FileUploadCommandEntity(QObject* parent,
 
     // extensible list of command properties
     QMap<QString, QVariant> info;
-    info["type"] = QStringLiteral("fileUpload");
+    info["type"] = QStringLiteral("davPut");
     info["localPath"] = localPath;
     info["remotePath"] = remotePath;
     info["fileName"] = fileName;

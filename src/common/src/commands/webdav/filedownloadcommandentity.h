@@ -16,7 +16,6 @@ public:
                                        QString localPath = QStringLiteral(""),
                                        QWebdav* client = Q_NULLPTR,
                                        NextcloudSettingsBase* settings = Q_NULLPTR);
-
 protected:
     bool startWork();
 

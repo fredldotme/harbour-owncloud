@@ -18,7 +18,7 @@ FileDownloadCommandEntity::FileDownloadCommandEntity(QObject* parent,
 
     // extensible list of command properties
     QMap<QString, QVariant> info;
-    info["type"] = QStringLiteral("fileDownload");
+    info["type"] = QStringLiteral("davGet");
     info["localPath"] = localPath;
     info["remotePath"] = remotePath;
     info["fileName"] = fileName;

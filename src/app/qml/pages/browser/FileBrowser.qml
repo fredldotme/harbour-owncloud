@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import QtQuick.Layouts 1.0
 import QtGraphicalEffects 1.0
 import Sailfish.Silica 1.0
 import harbour.owncloud 1.0
@@ -110,6 +111,9 @@ Page {
     Item {
         id: userInformationAnchor
         width: parent.width
+
+        // Rely on height of the userInformation column
+        // for the AvatarButton to adapt automatically
         height: userInformation.height
         //onHeightChanged: console.log(height)
 
@@ -117,36 +121,49 @@ Page {
             id: userInformation
             width: userInformationAnchor.width
 
-            Row {
-
-            }
-
-            Column {
+            RowLayout {
                 width: parent.width
 
-                DetailItem {
-                    width: parent.width
-                    label: qsTr("User:")
-                    value: ocsUserInfo.displayName
-                    visible: value.length > 0
+                Column {
+                    id: detailsColumn
+                    width: (parent.width / 3) * 2
+                    DetailItem {
+                        width: parent.width
+                        label: qsTr("User:")
+                        value: ocsUserInfo.displayName
+                        visible: value.length > 0
+                    }
+                    DetailItem {
+                        width: parent.width
+                        label: qsTr("Mail:")
+                        value: ocsUserInfo.emailAddress
+                        visible: value.length > 0
+                    }
+                    DetailItem {
+                        width: parent.width
+                        label: qsTr("Usage:")
+                        value: ocsUserInfo.hrUsedBytes
+                        visible: value.length > 0
+                    }
+                    DetailItem {
+                        width: parent.width
+                        label: qsTr("Total:")
+                        value: ocsUserInfo.hrTotalBytes
+                        visible: value.length > 0
+                    }
                 }
-                DetailItem {
-                    width: parent.width
-                    label: qsTr("Mail:")
-                    value: ocsUserInfo.emailAddress
-                    visible: value.length > 0
-                }
-                DetailItem {
-                    width: parent.width
-                    label: qsTr("Usage:")
-                    value: ocsUserInfo.hrUsedBytes
-                    visible: value.length > 0
-                }
-                DetailItem {
-                    width: parent.width
-                    label: qsTr("Total:")
-                    value: ocsUserInfo.hrTotalBytes
-                    visible: value.length > 0
+
+                Item {
+                    width: (parent.width / 3)
+                    height: width
+                    AvatarButton {
+                        source: avatarFetcher.source
+                        Layout.fillWidth: true
+                        anchors.fill: parent
+                        anchors.margins: Theme.paddingLarge
+                        state: userInformation.active ? "visible" : "invisible"
+                        enabled: false
+                    }
                 }
             }
         }
@@ -263,8 +280,21 @@ Page {
                 AvatarButton {
                     id: avatarButton
                     source: avatarFetcher.source
-                    highlightColor: Theme.highlightColor
                     visible: ocsUserInfo.userInfoEnabled
+                    highlightColor:
+                        Qt.rgba(Theme.highlightColor.r,
+                                Theme.highlightColor.g,
+                                Theme.highlightColor.b,
+                                0.5)
+
+                    readonly property bool visibility :
+                        (!userInformation.active &&
+                         (pageRoot.status === PageStatus.Active ||
+                          pageRoot.status === PageStatus.Activating))
+
+                    // onVisibilityChanged: console.log("visibility: " + visibility)
+                    state: visibility ? "visible" : "invisible"
+
                     anchors {
                         top: parent.top
                         topMargin: Theme.paddingMedium
@@ -273,6 +303,7 @@ Page {
                         bottom: parent.bottom
                         bottomMargin: Theme.paddingMedium
                     }
+
                     width: height
                     onClicked: { userInformation.open(userInformationAnchor) }
                 }

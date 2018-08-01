@@ -126,14 +126,20 @@ Page {
                     return ""
                 }
 
-                // The transfer queue contains additional entities, including prop patch requests.
+                // The transfer queue could contain additional entities, including prop patch requests.
                 // Hide all except for downloads, uploads and file opening requests.
                 property bool isTransfer :
                     (commandType === "fileDownload" ||
                      commandType === "fileUpload")
 
+                readonly property bool isFileOpen :
+                    (commandType === "fileOpen")
+
+                readonly property string openFileHint :
+                    qsTr("Open: '%1'").arg(fileName)
+
                 property bool isAllowedVisible :
-                    (isTransfer || commandType === "fileOpen")
+                    (isTransfer || isFileOpen)
 
                 Component.onCompleted: {
                     if (!isAllowedVisible) height = 0
@@ -154,7 +160,7 @@ Page {
 
                 Label {
                     id: label
-                    text: fileName
+                    text: !isFileOpen ? fileName : openFileHint
                     anchors.top: parent.top
                     anchors.left: transferTypeIcon.right
                     anchors.leftMargin: 32

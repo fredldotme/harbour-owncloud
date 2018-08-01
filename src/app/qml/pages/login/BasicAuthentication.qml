@@ -8,9 +8,16 @@ Page {
     readonly property bool loginInProgress : (authenticator.running ||
                                               browserCommandQueue.running);
 
+    property NextcloudSettings clientSettings : null
+    property OcsCommandQueue ocsCommandQueue : null
+    property WebDavCommandQueue browserCommandQueue : null
+    property DaemonControl daemonCtrl : null
+
+    signal notificationRequest(string summary, string body)
+
     Component.onCompleted: {
-        persistentSettings.readSettings();
-        if (persistentSettings.autoLogin) {
+        clientSettings.readSettings();
+        if (clientSettings.autoLogin) {
             authenticator.authenticate(false)
         }
     }
@@ -28,6 +35,8 @@ Page {
         }
         onAuthenticationFailed: {
             daemonCtrl.reloadConfig()
+            notificationRequest(qsTr("Login failed"),
+                                qsTr("Please check your connection or try again later."))
         }
         onSslError: {
             pageStack.completeAnimation();
@@ -35,7 +44,7 @@ Page {
                            {
                                md5Digest : certMd5,
                                sha1Digest : certSha1,
-                               settings : persistentSettings
+                               settings : settings
                            });
         }
     }
@@ -69,14 +78,14 @@ Page {
                 width: parent.width
                 placeholderText: qsTr("Host address")
                 label: placeholderText
-                text: persistentSettings.hoststring;
+                text: clientSettings.hoststring;
             }
 
             TextField {
                 id: username
                 enabled: !loginInProgress
                 width: parent.width
-                text: persistentSettings.username;
+                text: clientSettings.username;
                 inputMethodHints: Qt.ImhNoAutoUppercase
                 placeholderText: qsTr("User name")
                 label: placeholderText
@@ -85,7 +94,7 @@ Page {
             TextField {
                 id: password
                 enabled: !loginInProgress
-                text: persistentSettings.password
+                text: clientSettings.password
                 width: parent.width
                 echoMode: TextInput.Password
                 placeholderText: qsTr("Password")
@@ -96,15 +105,15 @@ Page {
                 id: autoLoginSwitch
                 enabled: !loginInProgress
                 text: qsTr("Login automatically")
-                checked: persistentSettings.autoLogin
+                checked: clientSettings.autoLogin
             }
 
             TextSwitch {
                 id: certSwitch
                 enabled: !loginInProgress
                 text: qsTr("Accept certificate")
-                visible: persistentSettings.isCustomCert
-                checked: persistentSettings.isCustomCert
+                visible: clientSettings.isCustomCert
+                checked: clientSettings.isCustomCert
             }
 
             Button {
@@ -114,17 +123,17 @@ Page {
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 onClicked: {
-                    if (persistentSettings.parseFromAddressString(hostaddress.text)) {
-                        persistentSettings.username = username.text;
-                        persistentSettings.password = password.text;
-                        persistentSettings.autoLogin = autoLoginSwitch.checked;
-                        persistentSettings.isCustomCert = certSwitch.checked;
-                        persistentSettings.writeSettings();
-                        persistentSettings.readSettings()
+                    if (clientSettings.parseFromAddressString(hostaddress.text)) {
+                        clientSettings.username = username.text;
+                        clientSettings.password = password.text;
+                        clientSettings.autoLogin = autoLoginSwitch.checked;
+                        clientSettings.isCustomCert = certSwitch.checked;
+                        clientSettings.writeSettings();
+                        clientSettings.readSettings()
 
                         authenticator.authenticate(true)
                     } else {
-                        notify(qsTr("Invalid URL"), qsTr("Please check your host address"))
+                        notificationRequest(qsTr("Invalid URL"), qsTr("Please check your host address"))
                     }
                 }
             }

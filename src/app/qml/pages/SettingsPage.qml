@@ -33,7 +33,7 @@ Page {
                     transferQueue.stop()
                     persistentSettings.resetSettings();
                     pageStack.clear();
-                    pageStack.push(basicAuthenticationComponent);
+                    pageStack.push(basicAuthenticationPage);
                 }
             }
         }

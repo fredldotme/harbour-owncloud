@@ -3,11 +3,12 @@ import Sailfish.Silica 1.0
 import harbour.owncloud 1.0
 import Nemo.Notifications 1.0
 import "qrc:/qml/navigation"
+import "qrc:/qml/pages/login"
 
 ApplicationWindow
 {
     id: applicationWindow
-    initialPage: basicAuthenticationComponent
+    initialPage: basicAuthenticationPage
     cover: coverPage
 
     BrowserCommandPageFlow {
@@ -27,6 +28,14 @@ ApplicationWindow
     }
     QmlMap {
         id: directoryContents
+    }
+    BasicAuthentication {
+        id: basicAuthenticationPage
+        onNotificationRequest: notify(summary, body)
+        clientSettings: persistentSettings
+        ocsCommandQueue: ocsCommandQueue
+        browserCommandQueue: browserCommandQueue
+        daemonCtrl: daemonCtrl
     }
 
     readonly property bool isTransfering :
@@ -55,9 +64,6 @@ ApplicationWindow
                            Component.PreferSynchronous);
     readonly property Component authenticationEntranceComponent :
         Qt.createComponent("qrc:/qml/pages/login/Entrance.qml",
-                           Component.PreferSynchronous);
-    readonly property Component basicAuthenticationComponent :
-        Qt.createComponent("qrc:/qml/pages/login/BasicAuthentication.qml",
                            Component.PreferSynchronous);
     readonly property Component flowAuthenticationComponent :
         Qt.createComponent("qrc:/qml/pages/login/FlowAuthentication.qml",

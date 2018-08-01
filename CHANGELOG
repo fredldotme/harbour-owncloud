@@ -1,3 +1,8 @@
+next:
+Details view for directories, accessible through long press
+Dialog before overwriting an existing file
+Visual enhancements including improved hints and error reporting
+
 0.7.9.3:
 Visual enhancements in the file browser including avatar, user details & storage overview
 Fix file operations and transfers with self-signed SSL certificates

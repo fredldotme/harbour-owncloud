@@ -126,15 +126,6 @@ ContextMenu {
     }
 
     MenuItem {
-        id: detailsMenuItem
-        text: qsTr("Details")
-        onClicked: {
-            var fileDetails = fileDetailsComponent.createObject(pageRoot, { entry: selectedEntry });
-            pageStack.push(fileDetails);
-        }
-    }
-
-    MenuItem {
         id: renameMenuItem
         text: qsTr("Rename")
         enabled : __enableDestructiveMenus
@@ -184,4 +175,14 @@ ContextMenu {
                                 qsTr("Deleting", "RemorseItem text"))
         }
     }
+
+    MenuItem {
+        id: detailsMenuItem
+        text: qsTr("Details")
+        onClicked: {
+            var fileDetails = fileDetailsComponent.createObject(pageRoot, { entry: selectedEntry });
+            pageStack.push(fileDetails);
+        }
+    }
+
 }

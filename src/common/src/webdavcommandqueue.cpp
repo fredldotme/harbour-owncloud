@@ -159,9 +159,10 @@ CommandEntity* WebDavCommandQueue::fileDownloadRequest(QString remotePath,
     CommandEntityInfo unitInfo(info);
 
     CommandUnit* commandUnit = new CommandUnit(this,
-    {downloadCommand, lastModifiedCommand, openFileCommand}, unitInfo);
+    {downloadCommand, lastModifiedCommand}, unitInfo);
 
     enqueue(commandUnit);
+    enqueue(openFileCommand);
     return commandUnit;
 }
 
@@ -223,13 +224,21 @@ CommandEntity* WebDavCommandQueue::localLastModifiedRequest(const QString &desti
 
 CommandEntity* WebDavCommandQueue::openFileRequest(const QString &destination)
 {
+    const QString fileName = QFileInfo(destination).fileName();
+    QMap<QString, QVariant> info;
+    info["type"] = QStringLiteral("fileOpen");
+    info["localPath"] = destination;
+    info["fileName"] = fileName;
+    CommandEntityInfo commandInfo(info);
+
     StdFunctionCommandEntity* executeCommand =
             new StdFunctionCommandEntity(this, [destination]() {
-        qDebug() << destination;
-        if (!QFile(destination).exists())
+        const bool fileExists = QFile(destination).exists();
+        qDebug() << destination << fileExists;
+        if (!fileExists)
             return;
         ShellCommand::runCommand(QStringLiteral("xdg-open"), QStringList() << destination);
-    }, QStringLiteral("fileOpen"));
+    }, commandInfo);
 
     return executeCommand;
 }

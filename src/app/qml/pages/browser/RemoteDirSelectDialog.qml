@@ -89,6 +89,7 @@ Dialog {
                     text: davInfo.name !== ".." ? davInfo.name : ""
                     anchors.verticalCenter: parent.verticalCenter
                     color: bgItem.highlighted ? Theme.highlightColor : Theme.primaryColor
+                    truncationMode: TruncationMode.Fade
                 }
 
                 onClicked: {

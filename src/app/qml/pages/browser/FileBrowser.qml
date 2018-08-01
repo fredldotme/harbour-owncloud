@@ -375,6 +375,11 @@ Page {
                         listCommand = browserCommandQueue.directoryListingRequest(nextPath, false)
                     } else {
                         var fileDetails = fileDetailsComponent.createObject(pageRoot, { entry: davInfo });
+                        if (!fileDetails) {
+                            console.warn(fileDetailsComponent.errorString())
+                            return;
+                        }
+
                         pageStack.push(fileDetails);
                     }
                 }

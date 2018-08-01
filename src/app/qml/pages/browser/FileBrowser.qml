@@ -10,7 +10,7 @@ import "qrc:/qml/controls"
 
 Page {
     id: pageRoot
-    anchors.fill: parent
+    //anchors.fill: parent
 
     property Component contextMenuComponent :
         Qt.createComponent(
@@ -187,242 +187,235 @@ Page {
         }
     }
 
-    SilicaFlickable {
-        id: flickContainer
+    SilicaListView {
+        id: listView
         anchors.top: userInformationAnchor.bottom
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
+        clip: true
+        model: directoryContents.value(remotePath)
 
-        SilicaListView {
-            id: listView
-            anchors.fill: parent
-            clip: true
-            model: directoryContents.value(remotePath)
-
-            PullDownMenu {
-                MenuItem {
-                    text: qsTr("Refresh")
-                    enabled: __enableMenuItems
-                    onClicked: {
-                        refreshListView(true)
-                    }
-                }
-
-                MenuItem {
-                    text:qsTr("Create directory")
-                    enabled: __enableMenuItems
-                    onClicked: {
-                        dialogObj = textEntryDialogComponent.createObject(pageRoot);
-                        dialogObj.placeholderText = qsTr("Directory name")
-                        dialogObj.labelText = dialogObj.placeholderText
-                        dialogObj.accepted.connect(function () {
-                            var newPath = remotePath + dialogObj.text
-                            browserCommandQueue.makeDirectoryRequest(newPath)
-                            refreshListView(true)
-                            __dialogCleanup()
-                        })
-                        dialogObj.rejected.connect(__dialogCleanup)
-                        pageStack.push(dialogObj)
-                    }
-                }
-
-                MenuItem {
-                    function enqueueSelectedFiles() {
-                        var selectedFiles = dialogObj.filesToSelect
-                        for (var i = 0; i < selectedFiles.length; i++) {
-                            var canonicalRemotePath = FilePathUtil.getCanonicalPath(remotePath);
-                            transferQueue.fileUploadRequest(selectedFiles[i].path,
-                                                            canonicalRemotePath,
-                                                            selectedFiles[i].lastModified);
-                        }
-                        transferQueue.run()
-                        __dialogCleanup()
-                    }
-
-                    text: qsTr("Upload")
-                    enabled: __enableMenuItems
-                    onClicked: {
-                        dialogObj = selectionDialogComponent.createObject(pageRoot,
-                                                                          {maximumSelections:Number.MAX_VALUE});
-                        dialogObj.acceptText = qsTr("Upload")
-                        dialogObj.errorOccured.connect(function(errorStr) {
-                            transientNotifier.previewSummary = errorStr
-                            transientNotifier.publish()
-                        });
-                        dialogObj.accepted.connect(enqueueSelectedFiles)
-                        dialogObj.rejected.connect(__dialogCleanup)
-                        pageStack.push(dialogObj)
-                    }
-                }
-            }
-
-            PushUpMenu {
-                MenuItem {
-                    text: qsTr("File transfers")
-                    onClicked: {
-                        pageStack.push(transferPageComponent)
-                    }
-                }
-
-                MenuItem {
-                    text: qsTr("Settings")
-                    onClicked: {
-                        pageStack.push(settingsPageComponent)
-                    }
-                }
-
-                MenuItem {
-                    text: qsTr("About")
-                    onClicked: {
-                        pageStack.push(aboutPageComponent)
-                    }
-                }
-            }
-
-            add: Transition {
-                NumberAnimation {
-                    properties: "height"
-                    from: 0
-                    to: delegate.height
-                    duration: 200
-                }
-            }
-            remove: Transition {
-                NumberAnimation {
-                    properties: "height"
-                    from: delegate.height
-                    to: 0
-                    duration: 200
-                }
-            }
-
-            header: PageHeader {
-                id: pageHeader
-                title: pageHeaderText
-                width: listView.width
-
-                AvatarButton {
-                    id: avatarButton
-                    source: avatarFetcher.source
-                    visible: ocsUserInfo.userInfoEnabled
-                    highlightColor:
-                        Qt.rgba(Theme.highlightColor.r,
-                                Theme.highlightColor.g,
-                                Theme.highlightColor.b,
-                                0.5)
-
-                    readonly property bool visibility :
-                        (!userInformation.active &&
-                         (pageRoot.status === PageStatus.Active ||
-                          pageRoot.status === PageStatus.Activating))
-
-                    // Keep smaller padding on the root
-                    readonly property int __leftMargin :
-                        (remotePath === "/") ?
-                            (Theme.horizontalPageMargin) :
-                            (Theme.horizontalPageMargin*2.5)
-
-                    // onVisibilityChanged: console.log("visibility: " + visibility)
-                    state: visibility ? "visible" : "invisible"
-
-                    anchors {
-                        top: parent.top
-                        topMargin: (Theme.paddingMedium * 1.2)
-                        left: parent.left
-                        leftMargin: __leftMargin
-                        bottom: parent.bottom
-                        bottomMargin: (Theme.paddingMedium * 1.2)
-                    }
-
-                    width: height
-                    onClicked: { userInformation.open(userInformationAnchor) }
-                }
-            }
-
-            delegate: ListItem {
-                id: delegate
-
-                property var davInfo : listView.model[index]
-
-                Image {
-                    id: icon
-                    source: davInfo.isDirectory ?
-                                "image://theme/icon-m-folder" :
-                                fileDetailsHelper.getIconFromMime(davInfo.mimeType)
-                    anchors.left: parent.left
-                    anchors.leftMargin: Theme.horizontalPageMargin
-                    anchors.top: parent.top
-                    anchors.topMargin: Theme.paddingSmall
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: Theme.paddingSmall
-                    fillMode: Image.PreserveAspectFit
-                }
-
-                Label {
-                    id: label
-                    anchors.left: icon.right
-                    anchors.leftMargin: Theme.paddingMedium
-                    anchors.right: parent.right
-                    text: davInfo.name
-                    anchors.verticalCenter: parent.verticalCenter
-                    color: delegate.highlighted ?
-                               Theme.highlightColor :
-                               Theme.primaryColor
-                    truncationMode: TruncationMode.Fade
-                }
-
+        PullDownMenu {
+            MenuItem {
+                text: qsTr("Refresh")
+                enabled: __enableMenuItems
                 onClicked: {
-                    if(davInfo.isDirectory) {
-                        var nextPath = remotePath + davInfo.name + "/";
-                        listCommand = browserCommandQueue.directoryListingRequest(nextPath, false)
-                    } else {
-                        var fileDetails = fileDetailsComponent.createObject(pageRoot, { entry: davInfo });
-                        if (!fileDetails) {
-                            console.warn(fileDetailsComponent.errorString())
-                            return;
-                        }
-
-                        pageStack.push(fileDetails);
-                    }
-                }
-
-                // Delete menu resources after completion,
-                // which MUST be indicated by the context menu component
-                onPressAndHold: {
-                    if (!menu) {
-                        menu = contextMenuComponent.createObject(listView, {
-                                                                     selectedEntry : davInfo,
-                                                                     selectedItem : delegate,
-                                                                     dialogObj: dialogObj,
-                                                                     remoteDirDialogComponent : remoteDirDialogComponent,
-                                                                     textEntryDialogComponent : textEntryDialogComponent,
-                                                                     fileDetailsComponent : fileDetailsComponent,
-                                                                     transferQueue : transferQueue,
-                                                                     browserCommandQueue : browserCommandQueue
-                                                                 })
-                        menu.requestListReload.connect(refreshListView)
-                        menu.contextMenuDone.connect(function() {
-                            menu.destroy()
-                            menu = null
-                        });
-                    }
-
-                    openMenu()
+                    refreshListView(true)
                 }
             }
-            VerticalScrollDecorator {}
 
-            BusyIndicator {
-                anchors.centerIn: parent
-                running: listCommand !== null
-                size: BusyIndicatorSize.Large
+            MenuItem {
+                text:qsTr("Create directory")
+                enabled: __enableMenuItems
+                onClicked: {
+                    dialogObj = textEntryDialogComponent.createObject(pageRoot);
+                    dialogObj.placeholderText = qsTr("Directory name")
+                    dialogObj.labelText = dialogObj.placeholderText
+                    dialogObj.accepted.connect(function () {
+                        var newPath = remotePath + dialogObj.text
+                        browserCommandQueue.makeDirectoryRequest(newPath)
+                        refreshListView(true)
+                        __dialogCleanup()
+                    })
+                    dialogObj.rejected.connect(__dialogCleanup)
+                    pageStack.push(dialogObj)
+                }
+            }
+
+            MenuItem {
+                function enqueueSelectedFiles() {
+                    var selectedFiles = dialogObj.filesToSelect
+                    for (var i = 0; i < selectedFiles.length; i++) {
+                        var canonicalRemotePath = FilePathUtil.getCanonicalPath(remotePath);
+                        transferQueue.fileUploadRequest(selectedFiles[i].path,
+                                                        canonicalRemotePath,
+                                                        selectedFiles[i].lastModified);
+                    }
+                    transferQueue.run()
+                    __dialogCleanup()
+                }
+
+                text: qsTr("Upload")
+                enabled: __enableMenuItems
+                onClicked: {
+                    dialogObj = selectionDialogComponent.createObject(pageRoot,
+                                                                      {maximumSelections:Number.MAX_VALUE});
+                    dialogObj.acceptText = qsTr("Upload")
+                    dialogObj.errorOccured.connect(function(errorStr) {
+                        transientNotifier.previewSummary = errorStr
+                        transientNotifier.publish()
+                    });
+                    dialogObj.accepted.connect(enqueueSelectedFiles)
+                    dialogObj.rejected.connect(__dialogCleanup)
+                    pageStack.push(dialogObj)
+                }
             }
         }
 
-        ViewPlaceholder {
+        PushUpMenu {
+            MenuItem {
+                text: qsTr("File transfers")
+                onClicked: {
+                    pageStack.push(transferPageComponent)
+                }
+            }
+
+            MenuItem {
+                text: qsTr("Settings")
+                onClicked: {
+                    pageStack.push(settingsPageComponent)
+                }
+            }
+
+            MenuItem {
+                text: qsTr("About")
+                onClicked: {
+                    pageStack.push(aboutPageComponent)
+                }
+            }
+        }
+
+        add: Transition {
+            NumberAnimation {
+                properties: "height"
+                from: 0
+                to: delegate.height
+                duration: 200
+            }
+        }
+        remove: Transition {
+            NumberAnimation {
+                properties: "height"
+                from: delegate.height
+                to: 0
+                duration: 200
+            }
+        }
+
+        header: PageHeader {
+            id: pageHeader
+            title: pageHeaderText
+            width: listView.width
+
+            AvatarButton {
+                id: avatarButton
+                source: avatarFetcher.source
+                visible: ocsUserInfo.userInfoEnabled
+                highlightColor:
+                    Qt.rgba(Theme.highlightColor.r,
+                            Theme.highlightColor.g,
+                            Theme.highlightColor.b,
+                            0.5)
+
+                readonly property bool visibility :
+                    (!userInformation.active &&
+                     (pageRoot.status === PageStatus.Active ||
+                      pageRoot.status === PageStatus.Activating))
+
+                // Keep smaller padding on the root
+                readonly property int __leftMargin :
+                    (remotePath === "/") ?
+                        (Theme.horizontalPageMargin) :
+                        (Theme.horizontalPageMargin*2.5)
+
+                // onVisibilityChanged: console.log("visibility: " + visibility)
+                state: visibility ? "visible" : "invisible"
+
+                anchors {
+                    top: parent.top
+                    topMargin: (Theme.paddingMedium * 1.2)
+                    left: parent.left
+                    leftMargin: __leftMargin
+                    bottom: parent.bottom
+                    bottomMargin: (Theme.paddingMedium * 1.2)
+                }
+
+                width: height
+                onClicked: { userInformation.open(userInformationAnchor) }
+            }
+        }
+
+        delegate: ListItem {
+            id: delegate
+
+            property var davInfo : listView.model[index]
+
+            Image {
+                id: icon
+                source: davInfo.isDirectory ?
+                            "image://theme/icon-m-folder" :
+                            fileDetailsHelper.getIconFromMime(davInfo.mimeType)
+                anchors.left: parent.left
+                anchors.leftMargin: Theme.horizontalPageMargin
+                anchors.top: parent.top
+                anchors.topMargin: Theme.paddingSmall
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: Theme.paddingSmall
+                fillMode: Image.PreserveAspectFit
+            }
+
+            Label {
+                id: label
+                anchors.left: icon.right
+                anchors.leftMargin: Theme.paddingMedium
+                anchors.right: parent.right
+                text: davInfo.name
+                anchors.verticalCenter: parent.verticalCenter
+                color: delegate.highlighted ?
+                           Theme.highlightColor :
+                           Theme.primaryColor
+                truncationMode: TruncationMode.Fade
+            }
+
+            onClicked: {
+                if(davInfo.isDirectory) {
+                    var nextPath = remotePath + davInfo.name + "/";
+                    listCommand = browserCommandQueue.directoryListingRequest(nextPath, false)
+                } else {
+                    var fileDetails = fileDetailsComponent.createObject(pageRoot, { entry: davInfo });
+                    if (!fileDetails) {
+                        console.warn(fileDetailsComponent.errorString())
+                        return;
+                    }
+
+                    pageStack.push(fileDetails);
+                }
+            }
+
+            // Delete menu resources after completion,
+            // which MUST be indicated by the context menu component
+            onPressAndHold: {
+                if (!menu) {
+                    menu = contextMenuComponent.createObject(listView, {
+                                                                 selectedEntry : davInfo,
+                                                                 selectedItem : delegate,
+                                                                 dialogObj: dialogObj,
+                                                                 remoteDirDialogComponent : remoteDirDialogComponent,
+                                                                 textEntryDialogComponent : textEntryDialogComponent,
+                                                                 fileDetailsComponent : fileDetailsComponent,
+                                                                 transferQueue : transferQueue,
+                                                                 browserCommandQueue : browserCommandQueue
+                                                             })
+                    menu.requestListReload.connect(refreshListView)
+                    menu.contextMenuDone.connect(function() {
+                        menu.destroy()
+                        menu = null
+                    });
+                }
+
+                openMenu()
+            }
+        }
+        VerticalScrollDecorator {}
+
+        BusyIndicator {
             anchors.centerIn: parent
-            width: parent.width
+            running: listCommand !== null
+            size: BusyIndicatorSize.Large
+        }
+
+        ViewPlaceholder {
             text: qsTr("Folder is empty")
             enabled: (listCommand === null &&
                       listView.model.length < 1)

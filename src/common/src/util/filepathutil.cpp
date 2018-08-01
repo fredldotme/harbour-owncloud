@@ -59,5 +59,5 @@ QString FilePathUtil::getWebDavFileUrl(const QString &path,
 bool FilePathUtil::fileExists(const QString &filePath)
 {
     QFileInfo fileInfo(filePath);
-    return fileInfo.isDir() && fileInfo.exists();
+    return !fileInfo.isDir() && fileInfo.exists();
 }

@@ -22,12 +22,9 @@ void QWebDavAuthenticator::authenticate(bool saveCredentials)
 
     this->m_dirParser.abort();
 
-    if (this->m_client) {
-        delete this->m_client;
-        this->m_client = Q_NULLPTR;
-    }
+    // Apply settings to new or existing QWebdav object
+    updateClientSettings();
 
-    this->m_client = getNewWebDav(this->settings(), NEXTCLOUD_ENDPOINT_WEBDAV, this);
     if (!this->m_client) {
         qWarning() << "Invalid QWebdav client object created";
         Q_EMIT authenticationFailed();
@@ -43,6 +40,21 @@ void QWebDavAuthenticator::authenticate(bool saveCredentials)
     this->m_dirParser.listDirectory(this->m_client, "/");
 
     setRunning(true);
+}
+
+void QWebDavAuthenticator::updateClientSettings()
+{
+    if (!this->settings()) {
+        qWarning() << "No settings object provided";
+        return;
+    }
+
+    // Apply settings to new or existing QWebdav object
+    if (!this->m_client) {
+        this->m_client = getNewWebDav(this->settings(), NEXTCLOUD_ENDPOINT_WEBDAV, this);
+    } else {
+        applySettingsToWebdav(this->settings(), this->m_client, NEXTCLOUD_ENDPOINT_WEBDAV);
+    }
 }
 
 void QWebDavAuthenticator::sslErrorOccured(const QList<QSslError> &errors)

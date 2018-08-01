@@ -20,6 +20,8 @@ public slots:
     virtual void authenticate(bool saveCredentials = false) = 0;
 
 protected:
+    virtual void updateClientSettings() = 0;
+
     NextcloudSettingsBase* settings();
     void setSettings(NextcloudSettingsBase* v);
     bool running();

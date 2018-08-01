@@ -19,6 +19,9 @@ public:
 public slots:
     void authenticate(bool saveCredentials = false) Q_DECL_OVERRIDE;
 
+protected:
+    void updateClientSettings() Q_DECL_OVERRIDE;
+
 private:
     void sslErrorOccured(const QList<QSslError> &errors);
     void testConnectionFinished(QNetworkReply* reply);

@@ -23,7 +23,7 @@ Item {
         }
         horizontalAlignment: Text.AlignRight
         color: Theme.primaryColor
-        font.pixelSize: Theme.fontSizeMedium
+        font.pixelSize: Theme.fontSizeSmall
         //font.bold: true
         textFormat: Text.PlainText
         wrapMode: Text.WrapAnywhere
@@ -41,7 +41,7 @@ Item {
         }
         horizontalAlignment: Text.AlignLeft
         color: Theme.highlightColor
-        font.pixelSize: Theme.fontSizeMedium
+        font.pixelSize: Theme.fontSizeSmall
         //font.bold: true
         textFormat: Text.PlainText
         wrapMode: Text.WrapAnywhere

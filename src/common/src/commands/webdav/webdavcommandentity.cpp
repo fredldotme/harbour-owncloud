@@ -87,7 +87,8 @@ bool WebDavCommandEntity::abortWork()
         return false;
 
     if (this->m_reply) {
-        this->m_reply->abort();
+        if (!this->m_reply->isFinished())
+            this->m_reply->abort();
         this->m_reply->deleteLater();
         this->m_reply = Q_NULLPTR;
     }

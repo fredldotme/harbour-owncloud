@@ -225,6 +225,10 @@
         <source>Directory</source>
         <translation>Ordner</translation>
     </message>
+    <message>
+        <source>The file &apos;%1&apos; already exists. Would you like to overwrite it?</source>
+        <translation>Die Datei &apos;%1&apos; existiert bereits. Möchten Sie diese überschreiben?</translation>
+    </message>
 </context>
 <context>
     <name>FileOperationsContextMenu</name>

@@ -12,10 +12,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Easily access your ownCloud and NextCloud instances with a native open source application.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Donation</source>
         <translation type="unfinished"></translation>
     </message>
@@ -45,6 +41,10 @@
     </message>
     <message>
         <source>SailfishUiSet UI components (GPL v2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Easily access your ownCloud and NextCloud instances with a native free software application.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -223,6 +223,10 @@
     </message>
     <message>
         <source>Directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The file &apos;%1&apos; already exists. Would you like to overwrite it?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

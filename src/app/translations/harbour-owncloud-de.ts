@@ -178,6 +178,10 @@
         <source>About</source>
         <translation>Über</translation>
     </message>
+    <message>
+        <source>Folder is empty</source>
+        <translation>Ordner ist leer</translation>
+    </message>
 </context>
 <context>
     <name>FileDetails</name>

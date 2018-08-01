@@ -26,6 +26,9 @@ Page {
          (entry.mimeType.indexOf("video") === 0 ||
           entry.mimeType.indexOf("audio") === 0))
 
+    readonly property string fileExistsHintText :
+        qsTr("The file '%1' already exists. Would you like to overwrite it?")
+
     Connections {
         target: downloadCommand
         onDone: downloadCommand = null
@@ -34,9 +37,12 @@ Page {
 
     onStatusChanged: {
         switch (status) {
-        case PageStatus.Inactive:
-            pageRoot.destroy()
+        case PageStatus.Inactive: {
+            if (_navigation !== undefined && _navigation === PageNavigation.Back) {
+                pageRoot.destroy()
+            }
             break;
+        }
         }
     }
 
@@ -73,7 +79,51 @@ Page {
         height: fileImage.height
     }
 
-    function startDownload(path, mimeType, open) {
+    Dialog {
+        id: fileExistsDialog
+        anchors.fill: parent
+
+        property string fileName : ""
+        property string path : ""
+        property string mimeType : ""
+        property bool openFile : false
+        property alias hintLabel : fileExistsLabel
+
+        DialogHeader {
+
+        }
+
+        Label {
+            id: fileExistsLabel
+            width: parent.width
+            anchors.centerIn: parent
+            font.pixelSize: Theme.fontSizeExtraLarge
+            color: Theme.highlightColor
+            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+            horizontalAlignment: Text.AlignHCenter
+        }
+
+        onAccepted: {
+            startDownload(path, mimeType, openFile, true)
+        }
+    }
+
+    function startDownload(path, mimeType, open, overwriteExistingFile) {
+        var destinationDir = FilePathUtil.destinationFromMIME(mimeType)
+        var fileName = path.substring(path.lastIndexOf("/") + 1)
+        var localFilePath = destinationDir + "/" + fileName
+        console.log("fileExists: " + localFilePath)
+
+        if (!overwriteExistingFile && FilePathUtil.fileExists(localFilePath)) {
+            fileExistsDialog.fileName = fileName
+            fileExistsDialog.path = path
+            fileExistsDialog.mimeType = mimeType
+            fileExistsDialog.openFile = open
+            fileExistsDialog.hintLabel.text = fileExistsHintText.arg(fileName)
+            pageStack.push(fileExistsDialog)
+            return
+        }
+
         downloadCommand = transferQueue.fileDownloadRequest(path, mimeType,
                                                             open, entry.lastModified)
         transferQueue.run()
@@ -91,7 +141,7 @@ Page {
                 text: qsTr("Download")
                 enabled: !isDownloading
                 onClicked: {
-                    startDownload(entry.path, entry.mimeType, false)
+                    startDownload(entry.path, entry.mimeType, false, false)
                 }
             }
 
@@ -100,7 +150,7 @@ Page {
                 text: qsTr("Download and open")
                 enabled: !isDownloading
                 onClicked: {
-                    startDownload(entry.path, entry.mimeType, true)
+                    startDownload(entry.path, entry.mimeType, true, false)
                 }
             }
         }
@@ -117,13 +167,17 @@ Page {
 
             // Icon & Progress spinner
             Item {
-                property int margins : parent.width / 8
+                // Wider side margins when only showing
+                // a default icon from the system theme
+                property int margins : (thumbnailFetcher.source === "" && !isAudioVideo)
+                                       ? (parent.width/4)
+                                       : (parent.width/8)
                 id: fileImage
                 height: width
                 anchors.left: parent.left
-                anchors.leftMargin: entry.isDirectory ? margins * 2 : margins
+                anchors.leftMargin: margins
                 anchors.right: parent.right
-                anchors.rightMargin: entry.isDirectory ? margins * 2 : margins
+                anchors.rightMargin: margins
 
                 // Image thumbnail
                 Image {

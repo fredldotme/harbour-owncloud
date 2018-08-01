@@ -77,3 +77,15 @@ bool FileDownloadCommandEntity::startWork()
     setState(RUNNING);
     return true;
 }
+
+bool FileDownloadCommandEntity::abortWork()
+{
+    const bool success = WebDavCommandEntity::abortWork();
+
+    // Don't keep stale files around in case of command abortion
+    if (this->m_localFile && this->m_localFile->exists()) {
+        this->m_localFile->remove();
+    }
+
+    return success;
+}

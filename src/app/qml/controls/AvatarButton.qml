@@ -7,7 +7,9 @@ Item {
     state: "visible"
 
     property alias source : avatarImage.source
-    property color highlightColor : "#FFFFFF88"
+    property color highlightColor : "#88FFFFFF"
+    property color shadowColor : "#88FFFFFF"
+    property int radius : 16
     signal clicked()
 
     states: [
@@ -47,8 +49,20 @@ Item {
             width: avatarImage.width
             height: avatarImage.height
             Rectangle {
-                anchors.fill: parent
+                id: circleCut
+                width: parent.width-(buttonRoot.radius*2)
+                height: parent.height-(buttonRoot.radius*2)
+                anchors.centerIn: parent
                 radius: Math.min(width, height)
+                visible: false
+            }
+            DropShadow {
+                id: blurShadow
+                source: circleCut
+                radius: buttonRoot.radius
+                samples: 32
+                anchors.fill: circleCut
+                color: shadowColor
             }
         }
     }

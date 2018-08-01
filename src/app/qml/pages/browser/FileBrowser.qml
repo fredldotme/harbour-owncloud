@@ -366,7 +366,10 @@ Page {
                     anchors.right: parent.right
                     text: davInfo.name
                     anchors.verticalCenter: parent.verticalCenter
-                    color: delegate.highlighted ? Theme.highlightColor : Theme.primaryColor
+                    color: delegate.highlighted ?
+                               Theme.highlightColor :
+                               Theme.primaryColor
+                    truncationMode: TruncationMode.Fade
                 }
 
                 onClicked: {
@@ -415,6 +418,14 @@ Page {
                 running: listCommand !== null
                 size: BusyIndicatorSize.Large
             }
+        }
+
+        ViewPlaceholder {
+            anchors.centerIn: parent
+            width: parent.width
+            text: qsTr("Folder is empty")
+            enabled: (listCommand === null &&
+                      listView.model.length < 1)
         }
     }
 }

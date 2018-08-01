@@ -82,6 +82,14 @@
         <source>Please check your host address</source>
         <translation>Bitte überprüfe deine Serveradresse</translation>
     </message>
+    <message>
+        <source>Login failed</source>
+        <translation>Login fehlgeschlagen</translation>
+    </message>
+    <message>
+        <source>Please check your connection or try again later.</source>
+        <translation>Bitte überprüfen Sie die Verbindung oder versuchen Sie es später noch einmal.</translation>
+    </message>
 </context>
 <context>
     <name>BrowserCommandPageFlow</name>
@@ -345,6 +353,10 @@
     <message>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
+    </message>
+    <message>
+        <source>Open: &apos;%1&apos;</source>
+        <translation>Öffne: &apos;%1&apos;</translation>
     </message>
 </context>
 <context>

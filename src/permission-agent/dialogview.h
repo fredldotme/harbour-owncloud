@@ -8,8 +8,7 @@ class DialogView : public QQuickView
 {
     Q_OBJECT
 public:
-    explicit DialogView(const QUrl &source = QUrl(),
-                        QWindow *parent = Q_NULLPTR);
+    explicit DialogView(QWindow *parent = Q_NULLPTR);
 
 private:
     QPlatformNativeInterface* m_nativeHandle = nullptr;

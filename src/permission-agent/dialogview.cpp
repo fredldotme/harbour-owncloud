@@ -4,8 +4,7 @@
 #include <QOpenGLContext>
 #include <qpa/qplatformnativeinterface.h>
 
-DialogView::DialogView(const QUrl &source, QWindow *parent) :
-    QQuickView(source, parent)
+DialogView::DialogView(QWindow *parent) : QQuickView(parent)
 {
     m_nativeHandle = QGuiApplication::platformNativeInterface();
     connect(this, &DialogView::openglContextCreated, this,

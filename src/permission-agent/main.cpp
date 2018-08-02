@@ -25,8 +25,9 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
-    DialogView* permissionsDialog = new DialogView(QUrl("qrc:/PermissionsDialog.qml"));
+    DialogView* permissionsDialog = new DialogView();
     permissionsDialog->engine()->rootContext()->setContextProperty("queue", requestQueue);
+    permissionsDialog->setSource(QUrl("qrc:/PermissionsDialog.qml"));
     permissionsDialog->setFlags(Qt::Dialog | Qt::FramelessWindowHint);
 
     // Show and raise dialog on a request

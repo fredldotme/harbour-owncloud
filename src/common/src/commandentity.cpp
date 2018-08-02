@@ -55,9 +55,10 @@ void CommandEntity::run()
     Q_EMIT started();
 }
 
-void CommandEntity::abort()
+void CommandEntity::abort(bool intended)
 {
     qDebug() << Q_FUNC_INFO;
+    this->m_abortIntended = intended;
     abortWork();
     Q_EMIT aborted();
 }

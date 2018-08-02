@@ -33,9 +33,10 @@ public:
 
 public slots:
     void run();
-    void abort();
+    void abort(bool intended = false);
     bool isFinished() const { return m_state == FINISHED; }
     bool isRunning() const { return m_state == RUNNING; }
+    bool abortIntended() const { return m_abortIntended; }
     CommandEntityState state() { return m_state; }
     const CommandEntityInfo info() const
     { return m_commandInfo; }
@@ -70,6 +71,7 @@ protected:
 private:
     qreal m_progress = 0.0;
     CommandEntityState m_state = IDLE;
+    bool m_abortIntended = false;
 
 signals:
     void started();

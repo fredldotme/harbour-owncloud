@@ -37,6 +37,8 @@ public:
 protected:
     bool startWork() Q_DECL_OVERRIDE;
     bool abortWork() Q_DECL_OVERRIDE;
+    virtual void decideAdditionalWorkRequired(CommandEntity* entity);
+    std::deque<CommandEntity*>* queue();
 
 private:
     unsigned int numberOfProgressingEntities();

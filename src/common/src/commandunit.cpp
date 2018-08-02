@@ -46,6 +46,16 @@ bool CommandUnit::staticProgress() const
     return this->m_numProgressingEntities < 1;
 }
 
+void CommandUnit::decideAdditionalWorkRequired(CommandEntity *entity)
+{
+    Q_UNUSED(entity);
+}
+
+std::deque<CommandEntity*>* CommandUnit::queue()
+{
+    return &this->m_queue;
+}
+
 unsigned int CommandUnit::numberOfProgressingEntities()
 {
     unsigned int c = 0;
@@ -96,9 +106,17 @@ void CommandUnit::runNext()
     if (command) {
         if (!command->staticProgress())
             this->m_completedProgressingEntities++;
+
+        // Decide whether to let additional entities join the
+        // queue before running the front entity.
+        // This decision has to be based upon the previous CommandEntity.
+        // The method is virtual and has to be implemented by inheriting CommandUnit types.
+        decideAdditionalWorkRequired(command);
+
         qDebug() << "deleting command:" << command << command->state();
         delete command;
         qDebug() << "delete done";
+        qDebug() << this->m_queue.size();
     }
 
     runFirst();
@@ -123,7 +141,7 @@ void CommandUnit::runFirst()
     QObject::connect(this->m_queue.front(), &CommandEntity::aborted,
                      this, &CommandUnit::abortWork);
     QObject::connect(this->m_queue.front(), &CommandEntity::done,
-                     this, [=](){
+                     this, [=]() {
         QTimer::singleShot(0, this, &CommandUnit::runNext);
     });
 

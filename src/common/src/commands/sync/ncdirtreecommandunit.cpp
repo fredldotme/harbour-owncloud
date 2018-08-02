@@ -4,6 +4,8 @@
 
 // NcDirTreeCommandUnit builds a tree view of the cloud instance
 
+#define REACHED_END(node) (node->directory_iterator == node->directories.end())
+
 DavListCommandEntity* startingListCommand(QObject* parent,
                                           const QString& rootPath,
                                           QWebdav* client,
@@ -37,9 +39,10 @@ NcDirTreeCommandUnit::NcDirTreeCommandUnit(QObject *parent,
     }
 
     // Start content list retrieval at the root node
-    this->m_rootNode.name = this->queue()->front()->info().property(QStringLiteral("name")).toString();
-    this->m_rootNode.parentNode = nullptr;
-    this->m_currentNode = &this->m_rootNode;
+    this->m_rootNode = new NcDirNode;
+    this->m_rootNode->name = this->queue()->front()->info().property(QStringLiteral("name")).toString();
+    this->m_rootNode->parentNode = nullptr;
+    this->m_currentNode = this->m_rootNode;
 }
 
 void NcDirTreeCommandUnit::decideAdditionalWorkRequired(CommandEntity *entity)
@@ -64,7 +67,7 @@ void NcDirTreeCommandUnit::decideAdditionalWorkRequired(CommandEntity *entity)
     const QString directoryNameOfCommand = listCommand->info().property(QStringLiteral("remotePath")).toString();
 
     QVector<QVariant> files;
-    QVector<NcDirNode> directories;
+    QVector<NcDirNode*> directories;
 
     const QVariantList directoryContent = listCommand->resultData().toList();
 
@@ -90,9 +93,9 @@ void NcDirTreeCommandUnit::decideAdditionalWorkRequired(CommandEntity *entity)
         // NcDirNode and the related DavListCommandEntity are inserted
         // into their respective lists/queues in the same order
         //
-        NcDirNode node;
-        node.name = entryName;
-        node.parentNode = this->m_currentNode;
+        NcDirNode* node = new NcDirNode;
+        node->name = entryName;
+        node->parentNode = this->m_currentNode;
 
         directories.prepend(node);
 
@@ -115,33 +118,22 @@ void NcDirTreeCommandUnit::decideAdditionalWorkRequired(CommandEntity *entity)
     this->m_currentNode->directories = directories;
     this->m_currentNode->directory_iterator = this->m_currentNode->directories.begin();
 
-    // Iterate through child directories if possible
-    if (this->m_currentNode->directory_iterator != this->m_currentNode->directories.end()) {
-        // Essentially walking a level down
-        this->m_currentNode = &(*this->m_currentNode->directory_iterator++);
-    } else {
-        // Iterated through all child nodes
-        NcDirNode* parentNode = this->m_currentNode->parentNode;
-        const bool hasParent = (parentNode != nullptr);
-        const bool parentHasChildrenAvailable =
-                (hasParent && parentNode->directory_iterator != parentNode->directories.end());
-
-        qDebug() << parentHasChildrenAvailable;
-
-        if (parentHasChildrenAvailable) {
-            // Walk up a level and into the next child directory
-            this->m_currentNode = &(*parentNode->directory_iterator++);
+    NcDirNode* potentialNode = this->m_currentNode;
+    while (potentialNode) {
+        if (REACHED_END(potentialNode)) {
+            potentialNode = potentialNode->parentNode;
         } else {
-            qDebug() << "parentIteratedAllChildren";
-            // Walk up two levels and into the next child directory
-            if (parentNode->parentNode)
-                this->m_currentNode = &(*parentNode->parentNode->directory_iterator++);
-
-            // At this point building the tree should be done
-            // as all children of all nodes would be iterated.
-            // Set the currentNode to null to avoid further traversion.
-            this->m_currentNode = nullptr;
+            this->m_currentNode = *potentialNode->directory_iterator++;
+            break;
         }
     }
+
+    if (!this->m_currentNode) {
+        // At this point building the tree should be done
+        // as all children of all nodes would be iterated.
+        // Point resultData to the root node as finalization step.
+        this->m_resultData = QVariant::fromValue<NcDirNode*>(this->m_rootNode);
+    }
+
     qDebug() << Q_FUNC_INFO << "done";
 }

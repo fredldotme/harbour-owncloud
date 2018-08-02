@@ -3,16 +3,21 @@
 
 #include <QObject>
 #include <commandunit.h>
-#include <commands/webdav/webdavcommandentity.h>
+#include <qwebdav.h>
+#include <settings/nextcloudsettingsbase.h>
 
-struct NcDirNode {
+class NcDirNode {
+    Q_GADGET
+
+public:
     NcDirNode* parentNode = nullptr;
 
     QString name;
     QVector<QVariant> files;
-    QVector<NcDirNode> directories;
-    QVector<NcDirNode>::iterator directory_iterator;
+    QVector<NcDirNode*> directories;
+    QVector<NcDirNode*>::iterator directory_iterator;
 };
+Q_DECLARE_METATYPE(NcDirNode*)
 
 class NcDirTreeCommandUnit : public CommandUnit
 {
@@ -30,7 +35,7 @@ protected:
 private:
     QWebdav* m_client;
     NextcloudSettingsBase* m_settings;
-    NcDirNode m_rootNode;
+    NcDirNode* m_rootNode = Q_NULLPTR;
 
     // As the list commands are run serially we can keep
     // a pointer to the currently processed node to avoid

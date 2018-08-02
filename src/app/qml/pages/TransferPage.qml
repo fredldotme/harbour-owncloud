@@ -23,28 +23,36 @@ Page {
         title: qsTr("File transfers")
     }
 
-    BackgroundItem {
+    Item {
         id: daemonProgress
+        property real animationProgress : 0
+
+        clip: true
         anchors.top: header.bottom
-        width: parent.width
+        anchors.left: parent.left
+        anchors.leftMargin: Theme.paddingLarge
+        anchors.right: parent.right
+        anchors.rightMargin: Theme.paddingLarge
         visible: daemonCtrl.daemonInstalled
-        height: visible ? 78 * opacity : 0
-        anchors.horizontalCenter: parent.horizontalCenter
+        height: visible ? Theme.fontSizeHuge * animationProgress : 0
+        opacity: animationProgress
         BusyIndicator {
             id: indicator
+            height: parent.height
             anchors.left: parent.left
-            anchors.leftMargin: Theme.paddingLarge + 39 - (parent.height/2)
             anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            width: parent.height
+            anchors.verticalCenter: parent.verticalCenter
+            size: BusyIndicatorSize.Medium
             running: parent.visible
         }
         Label {
             id: backupText
             text: qsTr("Camera backup in progress...")
             anchors.left: indicator.right
-            anchors.leftMargin: 16 + 39 - (parent.height/2)
+            anchors.leftMargin: Theme.paddingMedium
+            anchors.right: parent.right
             anchors.verticalCenter: indicator.verticalCenter
+            truncationMode: TruncationMode.Fade
         }
     }
 
@@ -64,7 +72,7 @@ Page {
     NumberAnimation {
         id: daemonAnimationIn
         target: daemonProgress;
-        property: "opacity";
+        property: "animationProgress";
         duration: 150;
         from: 0.0
         to: 1.0
@@ -75,7 +83,7 @@ Page {
     NumberAnimation {
         id: daemonAnimationOut
         target: daemonProgress;
-        property: "opacity";
+        property: "animationProgress";
         duration: 150;
         from: 1.0
         to: 0.0

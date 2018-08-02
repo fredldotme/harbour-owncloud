@@ -3,9 +3,8 @@
 DavMoveCommandEntity::DavMoveCommandEntity(QObject* parent,
                                            QString fromPath,
                                            QString toPath,
-                                           QWebdav* client,
-                                           NextcloudSettingsBase* settings) :
-    WebDavCommandEntity(parent, client, settings)
+                                           QWebdav* client) :
+    WebDavCommandEntity(parent, client)
 {
     this->m_fromPath = fromPath;
     this->m_toPath = toPath;

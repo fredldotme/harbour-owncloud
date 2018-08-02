@@ -3,9 +3,8 @@
 DavPropPatchCommandEntity::DavPropPatchCommandEntity(QObject* parent,
                                                      QString remotePath,
                                                      QWebdav::PropValues properties,
-                                                     QWebdav* client,
-                                                     NextcloudSettingsBase* settings) :
-              WebDavCommandEntity(parent, client, settings)
+                                                     QWebdav* client) :
+              WebDavCommandEntity(parent, client)
 {
     this->m_remotePath = remotePath;
     this->m_props = properties;

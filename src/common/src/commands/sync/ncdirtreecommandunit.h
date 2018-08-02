@@ -26,7 +26,6 @@ class NcDirTreeCommandUnit : public CommandUnit
 public:
     NcDirTreeCommandUnit(QObject* parent = Q_NULLPTR,
                          QWebdav* client = Q_NULLPTR,
-                         NextcloudSettingsBase* settings = Q_NULLPTR,
                          QString rootPath = QStringLiteral("/"));
 
 protected:

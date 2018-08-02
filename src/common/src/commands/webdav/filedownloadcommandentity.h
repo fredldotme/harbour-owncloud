@@ -14,8 +14,7 @@ public:
     explicit FileDownloadCommandEntity(QObject* parent = Q_NULLPTR,
                                        QString remotePath = QStringLiteral(""),
                                        QString localPath = QStringLiteral(""),
-                                       QWebdav* client = Q_NULLPTR,
-                                       NextcloudSettingsBase* settings = Q_NULLPTR);
+                                       QWebdav* client = Q_NULLPTR);
 protected:
     bool startWork() Q_DECL_OVERRIDE;
     bool abortWork() Q_DECL_OVERRIDE;

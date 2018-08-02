@@ -8,11 +8,10 @@
 
 DavListCommandEntity* startingListCommand(QObject* parent,
                                           const QString& rootPath,
-                                          QWebdav* client,
-                                          NextcloudSettingsBase* settings)
+                                          QWebdav* client)
 {
     DavListCommandEntity* davListCommand =
-            new DavListCommandEntity(parent, rootPath, true, client, settings);
+            new DavListCommandEntity(parent, rootPath, true, client);
     return davListCommand;
 }
 
@@ -26,12 +25,10 @@ CommandEntityInfo defaultCommandInfo(const QString& rootPath)
 
 NcDirTreeCommandUnit::NcDirTreeCommandUnit(QObject *parent,
                                            QWebdav *client,
-                                           NextcloudSettingsBase *settings,
                                            QString rootPath) :
-    CommandUnit(parent, {startingListCommand(parent, rootPath, client, settings)},
+    CommandUnit(parent, {startingListCommand(parent, rootPath, client)},
                 defaultCommandInfo(rootPath)),
-    m_client(client),
-    m_settings(settings)
+    m_client(client)
 {
     if (!this->queue()->front()) {
         qCritical() << "The CommandUnit is supposed to have an entity in the queue but doesn't. Bailing out.";
@@ -106,8 +103,7 @@ void NcDirTreeCommandUnit::decideAdditionalWorkRequired(CommandEntity *entity)
                 new DavListCommandEntity(parent(),
                                          fullPath,
                                          true,
-                                         this->m_client,
-                                         this->m_settings);
+                                         this->m_client);
         this->queue()->push_front(additionalCommand);
         qDebug() << "DavListCommandEntity" << fullPath;
     }

@@ -11,8 +11,7 @@ public:
     explicit DavMoveCommandEntity(QObject* parent = Q_NULLPTR,
                                   QString fromPath = QStringLiteral(""),
                                   QString toPath = QStringLiteral(""),
-                                  QWebdav* client = Q_NULLPTR,
-                                  NextcloudSettingsBase* settings = Q_NULLPTR);
+                                  QWebdav* client = Q_NULLPTR);
 
 private:
     bool startWork();

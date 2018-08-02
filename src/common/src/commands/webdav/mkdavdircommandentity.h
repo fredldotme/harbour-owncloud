@@ -11,8 +11,7 @@ class MkDavDirCommandEntity : public WebDavCommandEntity
 public:
     explicit MkDavDirCommandEntity(QObject* parent = Q_NULLPTR,
                                    QString remotePath = QStringLiteral(""),
-                                   QWebdav* client = Q_NULLPTR,
-                                   NextcloudSettingsBase* settings = Q_NULLPTR);
+                                   QWebdav* client = Q_NULLPTR);
 
 private:
     bool startWork();

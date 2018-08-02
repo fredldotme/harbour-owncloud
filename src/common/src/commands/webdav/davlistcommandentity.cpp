@@ -14,9 +14,8 @@ const QString getDirNameFromPath(const QString& path)
 DavListCommandEntity::DavListCommandEntity(QObject *parent,
                                            QString remotePath,
                                            bool refresh,
-                                           QWebdav* client,
-                                           NextcloudSettingsBase* settings) :
-    WebDavCommandEntity(parent, client, settings)
+                                           QWebdav* client) :
+    WebDavCommandEntity(parent, client)
 {
     this->m_remotePath = remotePath;
 

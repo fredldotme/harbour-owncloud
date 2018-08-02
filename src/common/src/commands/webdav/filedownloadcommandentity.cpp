@@ -6,9 +6,8 @@
 FileDownloadCommandEntity::FileDownloadCommandEntity(QObject* parent,
                                                      QString remotePath,
                                                      QString localPath,
-                                                     QWebdav* client,
-                                                     NextcloudSettingsBase* settings) :
-    WebDavCommandEntity(parent, client, settings)
+                                                     QWebdav* client) :
+    WebDavCommandEntity(parent, client)
 {
     this->m_remotePath = remotePath;
     this->m_localFile = new QFile(localPath, this);

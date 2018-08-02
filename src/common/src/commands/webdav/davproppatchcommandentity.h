@@ -11,8 +11,7 @@ public:
     explicit DavPropPatchCommandEntity(QObject* parent = Q_NULLPTR,
                                        QString remotePath = QStringLiteral(""),
                                        QWebdav::PropValues m_props = QWebdav::PropValues(),
-                                       QWebdav* client = Q_NULLPTR,
-                                       NextcloudSettingsBase* settings = Q_NULLPTR);
+                                       QWebdav* client = Q_NULLPTR);
 
 private:
     bool startWork();

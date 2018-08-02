@@ -14,8 +14,7 @@ public:
     explicit FileUploadCommandEntity(QObject* parent = Q_NULLPTR,
                                      QString localPath = QStringLiteral(""),
                                      QString remotePath = QStringLiteral(""),
-                                     QWebdav* client = Q_NULLPTR,
-                                     NextcloudSettingsBase* settings = Q_NULLPTR);
+                                     QWebdav* client = Q_NULLPTR);
 
 protected:
     bool startWork();

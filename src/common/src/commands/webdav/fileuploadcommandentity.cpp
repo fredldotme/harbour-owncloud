@@ -5,9 +5,8 @@
 FileUploadCommandEntity::FileUploadCommandEntity(QObject* parent,
                                                  QString localPath,
                                                  QString remotePath,
-                                                 QWebdav* client,
-                                                 NextcloudSettingsBase* settings) :
-    WebDavCommandEntity(parent, client, settings)
+                                                 QWebdav* client) :
+    WebDavCommandEntity(parent, client)
 {
     this->m_localFile = new QFile(localPath, this);
     const QString fileName = QFileInfo(*this->m_localFile).fileName();

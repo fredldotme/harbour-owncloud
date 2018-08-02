@@ -3,9 +3,8 @@
 #include <net/webdav_utils.h>
 
 WebDavCommandEntity::WebDavCommandEntity(QObject* parent,
-                                         QWebdav* client,
-                                         NextcloudSettingsBase* settings) :
-    CommandEntity(parent), m_client(client), m_settings(settings)
+                                         QWebdav* client) :
+    CommandEntity(parent), m_client(client)
 {
 }
 
@@ -20,6 +19,12 @@ WebDavCommandEntity::~WebDavCommandEntity()
 bool WebDavCommandEntity::startWork()
 {
     if (!CommandEntity::startWork()) {
+        abortWork();
+        return false;
+    }
+
+    if (!this->m_client) {
+        qWarning() << "No valid client object available, aborting";
         abortWork();
         return false;
     }
@@ -55,12 +60,6 @@ bool WebDavCommandEntity::startWork()
             const qreal newProgress = ((qreal)bytesSent/(qreal)bytesTotal);
             setProgress(newProgress);
         });
-    }
-
-    if (!this->m_client) {
-        qWarning() << "No valid client object available, aborting";
-        abortWork();
-        return false;
     }
 
     QObject::connect(this->m_client, &QWebdav::checkSslCertifcate,

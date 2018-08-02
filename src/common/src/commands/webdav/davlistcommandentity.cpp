@@ -33,7 +33,6 @@ bool DavListCommandEntity::startWork()
                      this, [=](QString errorStr){
         qWarning() << "Error occured while parsing directory content for" << this->m_remotePath;
         qWarning() << errorStr;
-        abortWork();
     });
 
     QObject::connect(&this->m_parser, &QWebdavDirParser::finished, this, [=]() {

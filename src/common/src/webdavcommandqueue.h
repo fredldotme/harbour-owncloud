@@ -35,8 +35,9 @@ public slots:
     CommandEntity* copyRequest(QString from, QString to);
     CommandEntity* directoryListingRequest(QString path, bool refresh);
 
-protected:
     QWebdav* getWebdav() { return m_client; }
+
+    //protected:
 
 private:
     CommandEntity* localLastModifiedRequest(const QString& destination,

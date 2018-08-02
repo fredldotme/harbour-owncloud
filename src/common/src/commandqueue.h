@@ -16,18 +16,30 @@ class CommandReceipt
     Q_PROPERTY(QVariant result MEMBER result CONSTANT)
     Q_PROPERTY(QDateTime doneTime MEMBER doneTime CONSTANT)
     Q_PROPERTY(bool finished MEMBER finished CONSTANT)
+    Q_PROPERTY(bool abortIntended MEMBER abortIntended CONSTANT)
+    Q_PROPERTY(bool valid MEMBER valid CONSTANT)
 
 public:
-    CommandReceipt() : doneTime(QDateTime::currentDateTime()), finished(false) {}
-    CommandReceipt(CommandEntityInfo info, QVariant result,
-                   QDateTime doneTime, bool finished) :
-        info(info), result(result),
-        doneTime(doneTime), finished(finished) {}
+    CommandReceipt() :
+        doneTime(QDateTime::currentDateTime()),
+        finished(false),
+        abortIntended(false),
+        valid(false)
+    {}
+    CommandReceipt(const CommandEntity& command) :
+        info(command.info()), result(command.resultData()),
+        doneTime(QDateTime::currentDateTime()),
+        finished(command.isFinished()),
+        abortIntended(command.abortIntended()),
+        valid(true)
+    {}
 
     const CommandEntityInfo info;
     const QVariant result;
     const QDateTime doneTime;
     const bool finished;
+    const bool abortIntended;
+    const bool valid;
 };
 Q_DECLARE_METATYPE(CommandReceipt)
 

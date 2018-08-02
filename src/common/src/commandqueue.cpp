@@ -224,10 +224,7 @@ void CommandQueue::deleteCommand(CommandEntity* command)
 
     QMutexLocker locker(&this->m_queueMutex);
 
-    CommandReceipt receipt(command->info(),
-                           command->resultData(),
-                           QDateTime::currentDateTime(),
-                           command->isFinished());
+    CommandReceipt receipt(*command);
 
     disconnect(command, 0, 0, 0);
 

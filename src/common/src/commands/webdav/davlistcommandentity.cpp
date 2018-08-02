@@ -1,5 +1,16 @@
 #include "davlistcommandentity.h"
 
+const QString getDirNameFromPath(const QString& path)
+{
+    const QString separator = QStringLiteral("/");
+    if (!path.contains(separator))
+        return path;
+    const QStringList splitPath = path.split(separator, QString::SkipEmptyParts);
+    if (splitPath.length() < 1)
+        return separator;
+    return splitPath[splitPath.length()-1];
+}
+
 DavListCommandEntity::DavListCommandEntity(QObject *parent,
                                            QString remotePath,
                                            bool refresh,
@@ -12,6 +23,7 @@ DavListCommandEntity::DavListCommandEntity(QObject *parent,
     QMap<QString, QVariant> info;
     info["type"] = QStringLiteral("davList");
     info["remotePath"] = remotePath;
+    info["name"] = getDirNameFromPath(remotePath);
     info["refresh"] = refresh;
     this->m_commandInfo = CommandEntityInfo(info);
 }
@@ -61,5 +73,6 @@ bool DavListCommandEntity::startWork()
     this->m_parser.listDirectory(this->m_client, this->m_remotePath);
 
     setState(RUNNING);
+    qDebug() << Q_FUNC_INFO << "done";
     return true;
 }

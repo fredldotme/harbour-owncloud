@@ -11,6 +11,14 @@ CommandPageFlow {
             var isDavCopyCommand = (receipt.info.property("type") === "davCopy")
             var isDavRmCommand = (receipt.info.property("type") === "davRemove")
 
+            // Ignore invalid CommandReceipts
+            if (!receipt.valid)
+                return;
+
+            // Ignore if the command was intentionally aborted by the user
+            if (receipt.abortIntended)
+                return
+
             // Error messages
             if (!receipt.finished) {
                 if (isDavListCommand) {

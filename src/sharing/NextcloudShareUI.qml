@@ -32,11 +32,11 @@ ShareDialog {
     FilePathUtil { id: filePathUtil }
     WebDavCommandQueue {
         id: webDavCommandQueue
+        immediate: true
         settings: PermittedSettings {
             id: permittedSettings
             onSettingsChanged: {
-                webDavCommandQueue.directoryListingRequest(remotePath);
-                webDavCommandQueue.run()
+                webDavCommandQueue.directoryListingRequest(remotePath, true);
             }
         }
         onCommandFinished: {
@@ -151,8 +151,7 @@ ShareDialog {
                         if (davInfo.isDirectory) {
                             var newTargetDir = filePathUtil.getCanonicalPath(remotePath + listView.model[index].name + "/");
                             remotePath = newTargetDir
-                            webDavCommandQueue.directoryListingRequest(newTargetDir);
-                            webDavCommandQueue.run()
+                            webDavCommandQueue.directoryListingRequest(newTargetDir, true);
                         }
                     }
                 }

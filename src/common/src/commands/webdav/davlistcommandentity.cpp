@@ -32,14 +32,19 @@ bool DavListCommandEntity::startWork()
     QObject::connect(&this->m_parser, &QWebdavDirParser::errorChanged,
                      this, [=](QString errorStr){
         qWarning() << "Error occured while parsing directory content for" << this->m_remotePath;
-        qWarning() << errorStr;
+        qWarning() << this->m_parser.httpCode() << this->m_parser.error() << errorStr;
+        this->m_parser.abort();
     });
 
     QObject::connect(&this->m_parser, &QWebdavDirParser::finished, this, [=]() {
         qInfo() << "Listing remote directory content" << this->m_remotePath << "complete.";
         qInfo() << "DIRECTORY SIZE" << this->m_parser.getList().size();
 
-        QVariantList result;
+        QVariantMap result;
+        result.insert(QStringLiteral("success"), (this->m_parser.error() == QNetworkReply::NoError));
+        result.insert(QStringLiteral("httpCode"), this->m_parser.httpCode());
+
+        QVariantList directoryContent;
 
         for(const QWebdavItem& item : this->m_parser.getList()) {
             QVariantMap info;
@@ -55,8 +60,9 @@ bool DavListCommandEntity::startWork()
                 info.insert("mimeType", item.mimeType());
                 info.insert("lastModified", item.lastModified());
             }
-            result.append(info);
+            directoryContent.append(info);
         }
+        result.insert(QStringLiteral("dirContent"), directoryContent);
         this->m_resultData = result;
         Q_EMIT done();
     });

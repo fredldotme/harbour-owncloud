@@ -75,6 +75,8 @@ public slots:
 
     void setUsername(QString value);
     void setPassword(QString value);
+    void acceptCertificate(QString md5, QString sha1);
+    void acceptCertificate(bool value);
 
 protected:
     void refreshHostString();
@@ -101,8 +103,6 @@ protected:
 private:
     void setAutoLogin(bool value);
     void setNotifications(bool value);
-    void acceptCertificate(QString md5, QString sha1);
-    void acceptCertificate(bool value);
 
 signals:
     void settingsChanged();

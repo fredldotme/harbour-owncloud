@@ -45,7 +45,9 @@ SOURCES += \
     $$PWD/src/commands/webdav/davproppatchcommandentity.cpp \
     $$PWD/src/net/avatarfetcher.cpp \
     $$PWD/src/commands/nopcommandentity.cpp \
-    $$PWD/src/commandunit.cpp
+    $$PWD/src/commandunit.cpp \
+    $$PWD/src/commands/sync/ncdirtreecommandunit.cpp \
+    $$PWD/src/commands/sync/ncsynccommandunit.cpp
 
 HEADERS += \
     $$PWD/src/net/abstractfetcher.h \
@@ -84,7 +86,9 @@ HEADERS += \
     $$PWD/src/commands/webdav/davproppatchcommandentity.h \
     $$PWD/src/net/avatarfetcher.h \
     $$PWD/src/commands/nopcommandentity.h \
-    $$PWD/src/commandunit.h
+    $$PWD/src/commandunit.h \
+    $$PWD/src/commands/sync/ncdirtreecommandunit.h \
+    $$PWD/src/commands/sync/ncsynccommandunit.h
 
 INCLUDEPATH += $$PWD/src
 DEPENDPATH += $$PWD/src

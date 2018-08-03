@@ -30,6 +30,11 @@ bool WebDavCommandEntity::startWork()
     }
 
     if (this->m_reply) {
+        QObject::connect(this->m_reply, &QNetworkReply::destroyed, this, [=](){
+            QObject::disconnect(this->m_reply, 0, 0, 0);
+            this->m_reply = Q_NULLPTR;
+        });
+
         QObject::connect(this->m_reply,
                          static_cast<void(QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), this,
                          [=](QNetworkReply::NetworkError error) {

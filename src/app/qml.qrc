@@ -12,7 +12,6 @@
         <file>qml/pages/login/FlowAuthentication.qml</file>
         <file>qml/pages/login/Entrance.qml</file>
         <file>qml/cover/CoverDetailItem.qml</file>
-        <file>qml/controls/AvatarButton.qml</file>
         <file>qml/pages/browser/controls/FileOperationsContextMenu.qml</file>
         <file>qml/OcsUserInfo.qml</file>
         <file>qml/navigation/CommandPageFlow.qml</file>

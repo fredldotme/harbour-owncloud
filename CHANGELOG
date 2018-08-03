@@ -1,4 +1,7 @@
-next:
+0.7.9.4:
+Re-enable photo backup daemon functionality
+Photo backup cancellation from within the Transfer overview
+Cancellation button for browser refreshes
 Details view for directories, accessible through long press
 Dialog before overwriting an existing file
 Visual enhancements including improved hints and error reporting

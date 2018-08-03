@@ -39,7 +39,12 @@ Page {
                                 qsTr("Please check your connection or try again later."))
         }
         onSslError: {
+            ocsCommandQueue.stop()
+            browserCommandQueue.stop()
             pageStack.completeAnimation();
+            pageStack.clear();
+            pageStack.replace(basicAuthenticationPage)
+            gc()
             pageStack.push(sslErrorDialogComponent,
                            {
                                md5Digest : certMd5,

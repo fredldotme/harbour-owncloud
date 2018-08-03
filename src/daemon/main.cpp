@@ -39,16 +39,25 @@ QString remoteDirectoryFromHwRelease()
     return QStringLiteral("/Jolla/");
 }
 
-inline void enqueueSyncCommand(WebDavCommandQueue* webDavQueue,
-                               NextcloudSettings* settings,
-                               QString remoteTarget)
-{
-    if (!(webDavQueue && settings)) {
-        qCritical() << "Invalid object existance (webDavQueue, settings), bailing out.";
+inline void filePushRequested(WebDavCommandQueue* webDavQueue,
+                              NextcloudSettings* settings,
+                              NetworkMonitor* netMonitor,
+                              QString targetDirectory) {
+    if (!(webDavQueue && settings && netMonitor)) {
+        qCritical() << "Invalid object existance (webDavQueue, settings, netMonitor)"
+                    << ", bailing out.";
         return;
     }
 
     if (!settings->uploadAutomatically())
+        return;
+
+    if (!netMonitor->shouldDownload() && webDavQueue->isRunning()) {
+        webDavQueue->stop();
+        return;
+    }
+
+    if (!netMonitor->shouldDownload())
         return;
 
     if (webDavQueue->queue().length() > 0)
@@ -57,7 +66,7 @@ inline void enqueueSyncCommand(WebDavCommandQueue* webDavQueue,
     NcSyncCommandUnit* syncDirectoriesUnit = new NcSyncCommandUnit(webDavQueue,
                                                                    webDavQueue->getWebdav(),
                                                                    settings->localPicturesPath(),
-                                                                   remoteTarget);
+                                                                   targetDirectory);
     webDavQueue->enqueue((CommandEntity*)syncDirectoriesUnit);
 }
 
@@ -104,39 +113,23 @@ int main(int argc, char *argv[])
     QObject::connect(fsHandler, &Filesystem::fileFound,
                      [fsHandler, webDavQueue, settings, netMonitor, targetDirectory]
                      (QString fullPath){
-        if (!(fsHandler && webDavQueue && settings && netMonitor)) {
-            qCritical() << "Invalid object existance (fsHandler, webDavQueue, settings, netMonitor)"
-                        << ", bailing out.";
-            return;
-        }
-
-        if (!netMonitor->shouldDownload())
-            return;
-
-        qDebug() << fullPath;
-        enqueueSyncCommand(webDavQueue, settings, targetDirectory);
+        filePushRequested(webDavQueue, settings, netMonitor, targetDirectory);
     });
 
     // DBus connections
     QObject::connect(dbusHandler, &DBusHandler::abortRequested, webDavQueue, &WebDavCommandQueue::stop);
     QObject::connect(dbusHandler, &DBusHandler::configReloadRequested, settings, &NextcloudSettings::readSettings);
 
-    QObject::connect(netMonitor, &NetworkMonitor::shouldDownloadChanged, [netMonitor, dbusHandler, webDavQueue](){
-        if (!(netMonitor && dbusHandler && webDavQueue)) {
-            qCritical() << "Invalid object existance (netMonitor, dbusHandler, webDavQueue), bailing out.";
+    QObject::connect(netMonitor, &NetworkMonitor::shouldDownloadChanged,
+                     [netMonitor, dbusHandler, webDavQueue, settings, targetDirectory](){
+        if (!(netMonitor && dbusHandler)) {
+            qCritical() << "Invalid object existance (netMonitor, dbusHandler),"
+                        << "bailing out.";
             return;
         }
         dbusHandler->setOnline(netMonitor->shouldDownload());
-        if (!netMonitor->shouldDownload() && webDavQueue->isRunning()) {
-            webDavQueue->stop();
-            return;
-        }
 
-        if (!netMonitor->shouldDownload())
-            return;
-
-        qDebug() << fullPath;
-        enqueueSyncCommand(webDavQueue, settings, targetDirectory);
+        filePushRequested(webDavQueue, settings, netMonitor, targetDirectory);
     });
 
     QObject::connect(webDavQueue, &WebDavCommandQueue::runningChanged, [dbusHandler, webDavQueue]() {

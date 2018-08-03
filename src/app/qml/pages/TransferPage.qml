@@ -1,20 +1,11 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import harbour.owncloud 1.0
+import "qrc:/sailfish-ui-set"
 
 Page {
     id: pageRoot
     objectName: "TransferPage"
-
-    Component.onCompleted: {
-        if (daemonCtrl.uploading) {
-            daemonAnimationOut.stop();
-            daemonAnimationIn.start();
-        } else {
-            daemonAnimationIn.stop();
-            daemonAnimationOut.start();
-        }
-    }
 
     property CommandEntity selectedEntry : null;
 
@@ -23,72 +14,44 @@ Page {
         title: qsTr("File transfers")
     }
 
-    Item {
+    HidingPanel {
         id: daemonProgress
-        property real animationProgress : 0
+
+        readonly property bool __visible : (state === "visible")
 
         clip: true
         anchors.top: header.bottom
         anchors.left: parent.left
-        anchors.leftMargin: Theme.paddingLarge
         anchors.right: parent.right
-        anchors.rightMargin: Theme.paddingLarge
-        visible: daemonCtrl.daemonInstalled
-        height: visible ? Theme.fontSizeHuge * animationProgress : 0
-        opacity: animationProgress
-        BusyIndicator {
+        height: __visible ?
+                    Theme.fontSizeHuge * daemonProgress.opacity :
+                    0
+        state: (daemonCtrl.daemonInstalled & daemonCtrl.uploading) ?
+                    "visible" :
+                    "invisible"
+
+        AbortableBusyIndicator {
             id: indicator
             height: parent.height
+            width: height
             anchors.left: parent.left
+            anchors.leftMargin: Theme.paddingLarge
             anchors.top: parent.top
             anchors.verticalCenter: parent.verticalCenter
             size: BusyIndicatorSize.Medium
-            running: parent.visible
+            running: daemonProgress.__visible && daemonCtrl.uploading
+            onAbort: daemonCtrl.abort()
         }
         Label {
             id: backupText
             text: qsTr("Camera backup in progress...")
             anchors.left: indicator.right
-            anchors.leftMargin: Theme.paddingMedium
+            anchors.leftMargin: Theme.paddingLarge
             anchors.right: parent.right
+            anchors.rightMargin: Theme.paddingLarge
             anchors.verticalCenter: indicator.verticalCenter
             truncationMode: TruncationMode.Fade
         }
-    }
-
-    Connections {
-        target: daemonCtrl
-        onUploadingChanged: {
-            if (daemonCtrl.uploading) {
-                daemonAnimationOut.stop()
-                daemonAnimationIn.start()
-            } else {
-                daemonAnimationIn.stop()
-                daemonAnimationOut.start()
-            }
-        }
-    }
-
-    NumberAnimation {
-        id: daemonAnimationIn
-        target: daemonProgress;
-        property: "animationProgress";
-        duration: 150;
-        from: 0.0
-        to: 1.0
-        easing.type: Easing.InOutQuad
-        running: false
-    }
-
-    NumberAnimation {
-        id: daemonAnimationOut
-        target: daemonProgress;
-        property: "animationProgress";
-        duration: 150;
-        from: 1.0
-        to: 0.0
-        easing.type: Easing.InOutQuad
-        running: false
     }
 
     SilicaFlickable {

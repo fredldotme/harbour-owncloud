@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QDir>
 #include <QFileInfo>
+#include <QMutexLocker>
 
 Filesystem::Filesystem()
 {
@@ -20,7 +21,8 @@ Filesystem* Filesystem::instance()
 
 void Filesystem::prepareScan(QString dirPath)
 {
-    if(isDelayActive(dirPath)) {
+    qDebug() << dirPath;
+    if (isDelayActive(dirPath)) {
         resetDelay(dirPath);
     } else {
         insertDelay(dirPath);
@@ -75,7 +77,7 @@ void Filesystem::rescan()
     scan(dirInfo.absoluteFilePath(), true);
 }
 
-void Filesystem::localPathChanged()
+void Filesystem::triggerRescan()
 {
     QString newPath = NextcloudSettings::instance()->localPicturesPath();
 
@@ -91,62 +93,54 @@ void Filesystem::localPathChanged()
 
 void Filesystem::resetDelay(QString path)
 {
-    m_delayLock.lock();
-    for(int i = 0; i < m_delayers.count(); i++) {
+    QMutexLocker locker(&this->m_delayLock);
+    for (int i = 0; i < m_delayers.count(); i++) {
         if(m_delayers.at(i).path == path) {
             m_delayers.at(i).timer->stop();
             m_delayers.at(i).timer->start();
-            m_delayLock.unlock();
             return;
         }
     }
-    m_delayLock.unlock();
 }
 
 void Filesystem::insertDelay(QString path)
 {
-    m_delayLock.lock();
-
     WatchDelay delay;
     delay.path = path;
     delay.timer = new QTimer(this);
     delay.timer->setInterval(3000);
     delay.timer->setSingleShot(true);
     connect(delay.timer, &QTimer::timeout, [this, path]() {
-        m_delayLock.lock();
         for(int i = 0; i < m_delayers.count(); i++) {
             if(m_delayers.at(i).path == path)
                 m_delayers.removeAt(i);
         }
-        m_delayLock.unlock();
         scan(path);
     });
+    delay.timer->start();
     connect(delay.timer, &QTimer::timeout, delay.timer, &QObject::deleteLater);
     m_delayers.append(delay);
-
-    m_delayLock.unlock();
 }
 
 bool Filesystem::isDelayActive(QString path)
 {
-    m_delayLock.lock();
+    QMutexLocker locker(&this->m_delayLock);
+
     for(int i = 0; i < m_delayers.count(); i++) {
         if(m_delayers.at(i).path == path) {
-            m_delayLock.unlock();
             return true;
         }
     }
-    m_delayLock.unlock();
     return false;
 }
 
 void Filesystem::clearDelays()
 {
-    m_delayLock.lock();
+    QMutexLocker locker(&this->m_delayLock);
+
     for(int i = 0; i < m_delayers.count(); i++) {
         m_delayers.at(i).timer->stop();
         m_delayers.at(i).timer->deleteLater();
     }
     m_delayers.clear();
-    m_delayLock.unlock();
 }

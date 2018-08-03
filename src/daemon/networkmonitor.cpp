@@ -1,6 +1,11 @@
 #include "networkmonitor.h"
 
-NetworkMonitor::NetworkMonitor(QObject *parent) : QObject(parent)
+#include <settings/nextcloudsettings.h>
+#include <QCoreApplication>
+
+NetworkMonitor::NetworkMonitor(QObject *parent,
+                               NextcloudSettings* settings) :
+    QObject(parent), m_settings(settings)
 {
     m_shouldDownload = false;
     connect(&m_configManager, &QNetworkConfigurationManager::configurationAdded, this, &NetworkMonitor::recheckNetworks);
@@ -14,9 +19,9 @@ NetworkMonitor::~NetworkMonitor()
 
 }
 
-NetworkMonitor* NetworkMonitor::instance()
+NetworkMonitor* NetworkMonitor::instance(NextcloudSettings* settings)
 {
-    static NetworkMonitor monitor;
+    static NetworkMonitor monitor(qApp, settings);
     return &monitor;
 }
 
@@ -24,7 +29,7 @@ void NetworkMonitor::recheckNetworks()
 {
     QMutexLocker locker(&checkerMutex);
 
-    const bool uploadOverCellular = NextcloudSettings::instance()->mobileUpload();
+    const bool uploadOverCellular = this->m_settings->mobileUpload();
 
     if (!m_configManager.isOnline()) {
         if (!m_shouldDownload) {

@@ -6,19 +6,17 @@
 #include <QMutex>
 #include <QMutexLocker>
 
-#include "settings/nextcloudsettings.h"
+#include <settings/nextcloudsettings.h>
 
 class NetworkMonitor : public QObject
 {
     Q_OBJECT
 public:
-    explicit NetworkMonitor(QObject *parent = 0);
+    explicit NetworkMonitor(QObject *parent = Q_NULLPTR,
+                            NextcloudSettings* settings = Q_NULLPTR);
     ~NetworkMonitor();
-    static NetworkMonitor* instance();
-
-    void setUploadOverCellullar(bool enabled);
-
-    bool shouldDownload() { return NextcloudSettings::instance()->mobileUpload() || m_shouldDownload; }
+    static NetworkMonitor* instance(NextcloudSettings* settings);
+    bool shouldDownload() { return m_shouldDownload; }
 
 signals:
     void shouldDownloadChanged(bool);
@@ -28,6 +26,7 @@ public slots:
 
 private:
     QNetworkConfigurationManager m_configManager;
+    NextcloudSettings* m_settings = Q_NULLPTR;
     bool m_shouldDownload;
     QMutex checkerMutex;
 };

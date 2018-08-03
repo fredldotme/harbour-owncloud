@@ -2,20 +2,19 @@ TARGET = harbour-owncloud-daemon
 
 CONFIG = qt c++11
 QT = dbus network xml
-DEFINES += QWEBDAVITEM_EXTENDED_PROPERTIES
 
 include(../common/common.pri)
 
 SOURCES += \
-    main.cpp \
-    filesystem.cpp \
-    networkmonitor.cpp \
-    dbushandler.cpp
+    $$PWD/main.cpp \
+    $$PWD/filesystem.cpp \
+    $$PWD/networkmonitor.cpp \
+    $$PWD/dbushandler.cpp
 
 HEADERS += \
-    filesystem.h \
-    networkmonitor.h \
-    dbushandler.h
+    $$PWD/filesystem.h \
+    $$PWD/networkmonitor.h \
+    $$PWD/dbushandler.h
 
 OTHER_FILES += harbour-owncloud-daemon.service
 

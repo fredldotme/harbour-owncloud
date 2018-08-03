@@ -24,7 +24,7 @@ signals:
     void fileFound(QString fullPath);
 
 public slots:
-    void localPathChanged();
+    void triggerRescan();
 
 private slots:
     void scan(QString dirPath, bool recursive = false);

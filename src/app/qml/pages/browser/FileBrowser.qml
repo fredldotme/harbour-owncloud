@@ -6,7 +6,7 @@ import harbour.owncloud 1.0
 import SailfishUiSet 1.0
 import Nemo.Notifications 1.0
 import "qrc:/qml/pages/browser/controls"
-import "qrc:/qml/controls"
+import "qrc:/sailfish-ui-set"
 
 Page {
     id: pageRoot
@@ -131,7 +131,7 @@ Page {
         width: parent.width
 
         // Rely on height of the userInformation column
-        // for the AvatarButton to adapt automatically
+        // for the CircularImageButton to adapt automatically
         height: userInformation.height
         //onHeightChanged: console.log(height)
 
@@ -174,7 +174,7 @@ Page {
                 Item {
                     width: (parent.width / 3)
                     height: width
-                    AvatarButton {
+                    CircularImageButton {
                         source: avatarFetcher.source
                         Layout.fillWidth: true
                         anchors.fill: parent
@@ -298,8 +298,7 @@ Page {
             title: pageHeaderText
             width: listView.width
 
-            AvatarButton {
-                id: avatarButton
+            CircularImageButton {
                 source: avatarFetcher.source
                 visible: ocsUserInfo.userInfoEnabled
                 highlightColor:

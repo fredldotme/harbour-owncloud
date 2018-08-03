@@ -22,7 +22,8 @@ public slots:
     void setUploading(bool uploading);
     bool uploading() { return m_uploading; }
 
-    void reloadConfig() { emit configChanged(); }
+    void reloadConfig() { emit configReloadRequested(); }
+    void abort() { emit abortRequested(); }
 
 signals:
     void fileUploaded(QString filePath);
@@ -30,7 +31,8 @@ signals:
     void uploadingChanged(bool uploading);
     void uploadError(QString errorMessage);
     void connectError(QString errorMessage);
-    void configChanged();
+    void configReloadRequested();
+    void abortRequested();
 
 private:
     bool m_online;

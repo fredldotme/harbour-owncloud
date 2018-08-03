@@ -50,7 +50,7 @@ ShareDialog {
             // Insert/update directory list in case of type === davList
             if (isDavListCommand) {
                 var remotePath = receipt.info.property("remotePath")
-                var dirContent = receipt.result;
+                var dirContent = receipt.result.dirContent;
                 directoryContents.insert(remotePath, dirContent);
                 return;
             }

@@ -43,7 +43,7 @@ CommandPageFlow {
                 var remotePath = receipt.info.property("remotePath")
                 var isRefresh = receipt.info.property("refresh")
 
-                var dirContent = receipt.result;
+                var dirContent = receipt.result.dirContent;
                 directoryContents.insert(remotePath, dirContent);
 
                 // Done in case of a refresh

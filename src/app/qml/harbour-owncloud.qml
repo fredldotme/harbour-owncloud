@@ -114,6 +114,14 @@ ApplicationWindow
         id: transferQueue
         settings: persistentSettings
         onCommandFinished: {
+            // Ignore invalid CommandReceipts
+            if (!receipt.valid)
+                return;
+
+            // Ignore if the command was intentionally aborted by the user
+            if (receipt.abortIntended)
+                return
+
             var transferType = receipt.info.property("type")
             console.log("transferType " + transferType)
             var fileName = receipt.info.property("fileName")

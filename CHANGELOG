@@ -1,3 +1,6 @@
+0.7.9.5:
+Hotfix to fix accepting self-signed SSL certificates
+
 0.7.9.4:
 Re-enable photo backup daemon functionality
 Photo backup cancellation from within the Transfer overview

@@ -57,10 +57,10 @@ ApplicationWindow
         Qt.createComponent("qrc:/qml/pages/browser/FileDetails.qml",
                            Component.PreferSynchronous);
     readonly property Component selectionDialogComponent :
-        Qt.createComponent("qrc:/sailfish-ui-set/ui/FileSelectionDialog.qml",
+        Qt.createComponent("qrc:/sailfish-ui-set/FileSelectionDialog.qml",
                            Component.PreferSynchronous);
     readonly property Component textEntryDialogComponent :
-        Qt.createComponent("qrc:/sailfish-ui-set/ui/TextEntryDialog.qml",
+        Qt.createComponent("qrc:/sailfish-ui-set/TextEntryDialog.qml",
                            Component.PreferSynchronous);
     readonly property Component authenticationEntranceComponent :
         Qt.createComponent("qrc:/qml/pages/login/Entrance.qml",

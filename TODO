@@ -1,3 +1,4 @@
+* QVariantMap as resultData type
 * Thumbnail cache clearing
 * Implement sync daemon using CommandQueue
 * Proper securing of credentials

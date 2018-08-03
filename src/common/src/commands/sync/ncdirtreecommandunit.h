@@ -6,10 +6,21 @@
 #include <qwebdav.h>
 #include <settings/nextcloudsettingsbase.h>
 
-class NcDirNode {
+class NcDirNode : public QObject {
     Q_GADGET
 
 public:
+    ~NcDirNode() {
+        qDebug() << Q_FUNC_INFO;
+        while (!directories.isEmpty()) {
+            NcDirNode* backReference = directories.back();
+            directories.pop_back();
+            if (backReference) {
+                delete backReference;
+            }
+        }
+    }
+
     NcDirNode* parentNode = nullptr;
 
     QString name;

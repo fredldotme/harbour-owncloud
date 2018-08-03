@@ -1,10 +1,23 @@
 #include "ncdirtreecommandunit.h"
+#include <QSharedPointer>
 
 #include <commands/webdav/davlistcommandentity.h>
 
 // NcDirTreeCommandUnit builds a tree view of the cloud instance
 
 #define REACHED_END(node) (node->directory_iterator == node->directories.end())
+
+inline QVariantMap buildResultData(bool success, NcDirNode* node)
+{
+    QSharedPointer<NcDirNode> tree(node);
+
+    QVariantMap result;
+    result.insert(QStringLiteral("success"),
+                  success);
+    result.insert(QStringLiteral("tree"),
+                  QVariant::fromValue(tree));
+    return result;
+}
 
 DavListCommandEntity* startingListCommand(QObject* parent,
                                           const QString& rootPath,
@@ -66,7 +79,18 @@ void NcDirTreeCommandUnit::decideAdditionalWorkRequired(CommandEntity *entity)
     QVector<QVariant> files;
     QVector<NcDirNode*> directories;
 
-    const QVariantList directoryContent = listCommand->resultData().toList();
+    QVariantMap commandResult = listCommand->resultData().toMap();
+
+    const int httpCode = commandResult.value(QStringLiteral("httpCode")).toInt();
+    const bool success = (httpCode >= 200 && httpCode < 300);
+    if (!success) {
+        qInfo() << "Parsing directory list failed, ignoring";
+        if (this->m_currentNode->name == QStringLiteral("/"))
+            this->m_resultData = buildResultData(success, this->m_rootNode);
+        return;
+    }
+
+    const QVariantList directoryContent = commandResult.value(QStringLiteral("dirContent")).toList();
 
     for (const QVariant& tmpEntry : directoryContent) {
         // Skip invalid variants
@@ -89,7 +113,6 @@ void NcDirTreeCommandUnit::decideAdditionalWorkRequired(CommandEntity *entity)
         // Prepare the necessary tree node
         // NcDirNode and the related DavListCommandEntity are inserted
         // into their respective lists/queues in the same order
-        //
         NcDirNode* node = new NcDirNode;
         node->name = entryName;
         node->parentNode = this->m_currentNode;
@@ -124,11 +147,13 @@ void NcDirTreeCommandUnit::decideAdditionalWorkRequired(CommandEntity *entity)
         }
     }
 
-    if (!this->m_currentNode) {
+    if (!potentialNode) {
         // At this point building the tree should be done
         // as all children of all nodes would be iterated.
         // Point resultData to the root node as finalization step.
-        this->m_resultData = QVariant::fromValue<NcDirNode*>(this->m_rootNode);
+        qDebug() << "Setting result" << this->m_rootNode;
+        this->m_resultData = buildResultData(success, this->m_rootNode);
+        this->m_currentNode = Q_NULLPTR;
     }
 
     qDebug() << Q_FUNC_INFO << "done";

@@ -12,6 +12,7 @@ QWebDavAuthenticator::QWebDavAuthenticator(QObject *parent,
     QObject::connect(&this->m_dirParser, &QWebdavDirParser::errorChanged,
                      this, [=](QString error) {
         qWarning() << "authentication failed due to" << error;
+        qDebug() << "authenticationFailed" << this;
         Q_EMIT authenticationFailed();
     });
 }
@@ -27,14 +28,10 @@ void QWebDavAuthenticator::authenticate(bool saveCredentials)
 
     if (!this->m_client) {
         qWarning() << "Invalid QWebdav client object created";
+        qDebug() << "authenticationFailed" << this;
         Q_EMIT authenticationFailed();
         return;
     }
-
-    QObject::connect(this->m_client, &QWebdav::checkSslCertifcate,
-                     this, &QWebDavAuthenticator::sslErrorOccured);
-    QObject::connect(this->m_client, &QNetworkAccessManager::finished,
-                     this, &QWebDavAuthenticator::testConnectionFinished);
 
     this->m_saveCredentials = saveCredentials;
     this->m_dirParser.listDirectory(this->m_client, "/");
@@ -52,6 +49,10 @@ void QWebDavAuthenticator::updateClientSettings()
     // Apply settings to new or existing QWebdav object
     if (!this->m_client) {
         this->m_client = getNewWebDav(this->settings(), NEXTCLOUD_ENDPOINT_WEBDAV, this);
+        QObject::connect(this->m_client, &QWebdav::checkSslCertifcate,
+                         this, &QWebDavAuthenticator::sslErrorOccured);
+        QObject::connect(this->m_client, &QNetworkAccessManager::finished,
+                         this, &QWebDavAuthenticator::testConnectionFinished);
     } else {
         applySettingsToWebdav(this->settings(), this->m_client, NEXTCLOUD_ENDPOINT_WEBDAV);
     }
@@ -69,6 +70,7 @@ void QWebDavAuthenticator::sslErrorOccured(const QList<QSslError> &errors)
                         digestToHex(cert.digest(QCryptographicHash::Sha1)));
     }
 
+    qDebug() << "authenticationFailed" << this;
     Q_EMIT authenticationFailed();
 }
 
@@ -77,6 +79,7 @@ void QWebDavAuthenticator::testConnectionFinished(QNetworkReply *reply)
     setRunning(false);
 
     if (!reply || reply->error() != QNetworkReply::NoError) {
+        qDebug() << "authenticationFailed" << this;
         Q_EMIT authenticationFailed();
         return;
     }
@@ -84,5 +87,6 @@ void QWebDavAuthenticator::testConnectionFinished(QNetworkReply *reply)
     if (this->m_saveCredentials && this->settings()) {
         this->settings()->writeSettings();
     }
+    qDebug() << "authenticationSuccessful" << this;
     Q_EMIT authenticationSuccessful();
 }

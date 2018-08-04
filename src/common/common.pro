@@ -47,7 +47,8 @@ SOURCES += \
     $$PWD/src/commands/nopcommandentity.cpp \
     $$PWD/src/commandunit.cpp \
     $$PWD/src/commands/sync/ncdirtreecommandunit.cpp \
-    $$PWD/src/commands/sync/ncsynccommandunit.cpp
+    $$PWD/src/commands/sync/ncsynccommandunit.cpp \
+    $$PWD/src/cacheprovider.cpp
 
 HEADERS += \
     $$PWD/src/net/abstractfetcher.h \
@@ -88,7 +89,8 @@ HEADERS += \
     $$PWD/src/commands/nopcommandentity.h \
     $$PWD/src/commandunit.h \
     $$PWD/src/commands/sync/ncdirtreecommandunit.h \
-    $$PWD/src/commands/sync/ncsynccommandunit.h
+    $$PWD/src/commands/sync/ncsynccommandunit.h \
+    $$PWD/src/cacheprovider.h
 
 INCLUDEPATH += $$PWD/src
 DEPENDPATH += $$PWD/src

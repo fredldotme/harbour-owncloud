@@ -61,7 +61,12 @@ ShareDialog {
         onInserted: {
             if (key !== remotePath)
                 return;
-            listView.model = directoryContents.value(key)
+            var dirContent = directoryContents.value(key);
+            if (remotePath === "/") {
+                dirContent = [{ name: "..", isDirectory: true }].concat(dirContent)
+            }
+
+            listView.model = dirContent
         }
         onRemoved: console.log("REMOVED!")
     }

@@ -296,8 +296,9 @@ Page {
             width: listView.width
 
             CircularImageButton {
-                source: avatarFetcher.source
-                enabled: (persistentSettings.providerType === NextcloudSettings.Nextcloud)
+                property bool __showAvatar : (persistentSettings.providerType === NextcloudSettings.Nextcloud)
+                source: __showAvatar ? avatarFetcher.source : ""
+                enabled: __showAvatar
                 visible: ocsUserInfo.userInfoEnabled
                 highlightColor:
                     Qt.rgba(Theme.highlightColor.r,

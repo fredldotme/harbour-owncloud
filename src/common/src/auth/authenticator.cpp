@@ -38,6 +38,8 @@ void Authenticator::setSettings(NextcloudSettingsBase *v)
                          this, &Authenticator::updateClientSettings);
         QObject::connect(this->m_settings, &NextcloudSettingsBase::passwordChanged,
                          this, &Authenticator::updateClientSettings);
+        QObject::connect(this->m_settings, &NextcloudSettingsBase::providerTypeChanged,
+                         this, &Authenticator::updateClientSettings);
         QObject::connect(this->m_settings, &NextcloudSettingsBase::customCertChanged,
                          this, &Authenticator::updateClientSettings);
     }

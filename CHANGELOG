@@ -1,3 +1,6 @@
+0.8.1:
+Adapt branding and fix ShareUI directory browsing
+
 0.8:
 Rename application to "GhostCloud"
 Support WebDav servers

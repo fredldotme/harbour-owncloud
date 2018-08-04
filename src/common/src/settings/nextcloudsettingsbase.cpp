@@ -171,6 +171,9 @@ QString NextcloudSettingsBase::sha1Hex()
 
 void NextcloudSettingsBase::acceptCertificate(QString md5, QString sha1)
 {
+    if (m_md5Hex == md5 && m_sha1Hex == sha1)
+        return;
+
     m_md5Hex = md5;
     m_sha1Hex = sha1;
     writeSettings();
@@ -185,5 +188,5 @@ void NextcloudSettingsBase::acceptCertificate(bool value)
 
 bool NextcloudSettingsBase::isCustomCert()
 {
-    return !m_md5Hex.isEmpty() && !m_sha1Hex.isEmpty();
+    return !(m_md5Hex.isEmpty() || m_sha1Hex.isEmpty());
 }

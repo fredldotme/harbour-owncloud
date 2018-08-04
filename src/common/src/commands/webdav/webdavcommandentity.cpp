@@ -1,7 +1,5 @@
 #include "webdavcommandentity.h"
 
-#include <net/webdav_utils.h>
-
 WebDavCommandEntity::WebDavCommandEntity(QObject* parent,
                                          QWebdav* client) :
     CommandEntity(parent), m_client(client)

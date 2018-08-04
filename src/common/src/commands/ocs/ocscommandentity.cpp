@@ -1,5 +1,4 @@
 #include "ocscommandentity.h"
-#include <net/webdav_utils.h>
 
 OcsCommandEntity::OcsCommandEntity(QObject *parent,
                                    QString path,

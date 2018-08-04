@@ -1,6 +1,7 @@
 #include "httpcommandentity.h"
+
 #include <QAuthenticator>
-#include <net/webdav_utils.h>
+#include <util/webdav_utils.h>
 
 HttpCommandEntity::HttpCommandEntity(QObject *parent,
                                      QString path,

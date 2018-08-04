@@ -1,7 +1,7 @@
 #include "webdavmediafeeder.h"
 
 #include <QNetworkRequest>
-#include <net/webdav_utils.h>
+#include <util/webdav_utils.h>
 
 inline QMediaPlayer* mediaPlayerObjectCast(QObject* object) {
     if (!object) {

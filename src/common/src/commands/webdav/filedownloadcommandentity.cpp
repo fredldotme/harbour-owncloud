@@ -1,6 +1,5 @@
 #include "filedownloadcommandentity.h"
 
-#include <net/webdav_utils.h>
 #include <qwebdavitem.h>
 
 FileDownloadCommandEntity::FileDownloadCommandEntity(QObject* parent,

@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <commands/http/httpgetcommandentity.h>
-#include <net/webdav_utils.h>
+#include <util/webdav_utils.h>
 #include <QMap>
 #include <QByteArray>
 

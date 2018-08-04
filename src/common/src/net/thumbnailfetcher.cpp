@@ -2,7 +2,7 @@
 
 #include <nextcloudendpointconsts.h>
 #include <commands/http/httpgetcommandentity.h>
-#include <net/webdav_utils.h>
+#include <util/webdav_utils.h>
 
 #include <QStandardPaths>
 

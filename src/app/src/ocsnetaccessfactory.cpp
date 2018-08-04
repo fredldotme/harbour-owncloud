@@ -3,7 +3,7 @@
 #include <QDebug>
 #include <QNetworkDiskCache>
 #include <QStandardPaths>
-#include <net/webdav_utils.h>
+#include <util/webdav_utils.h>
 
 OscNetAccess::OscNetAccess(QObject* parent, NextcloudSettingsBase* settings) :
     QNetworkAccessManager(parent), m_settings(settings)

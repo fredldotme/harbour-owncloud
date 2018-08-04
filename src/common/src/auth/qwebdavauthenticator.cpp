@@ -1,7 +1,7 @@
 #include "qwebdavauthenticator.h"
 
 #include <nextcloudendpointconsts.h>
-#include <net/webdav_utils.h>
+#include <util/webdav_utils.h>
 
 #include <QDebug>
 
@@ -48,13 +48,13 @@ void QWebDavAuthenticator::updateClientSettings()
 
     // Apply settings to new or existing QWebdav object
     if (!this->m_client) {
-        this->m_client = getNewWebDav(this->settings(), NEXTCLOUD_ENDPOINT_WEBDAV, this);
+        this->m_client = getNewWebDav(this->settings(), this);
         QObject::connect(this->m_client, &QWebdav::checkSslCertifcate,
                          this, &QWebDavAuthenticator::sslErrorOccured);
         QObject::connect(this->m_client, &QNetworkAccessManager::finished,
                          this, &QWebDavAuthenticator::testConnectionFinished);
     } else {
-        applySettingsToWebdav(this->settings(), this->m_client, NEXTCLOUD_ENDPOINT_WEBDAV);
+        applySettingsToWebdav(this->settings(), this->m_client);
     }
 }
 

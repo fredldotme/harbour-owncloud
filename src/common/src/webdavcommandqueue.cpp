@@ -15,8 +15,7 @@
 
 #include <util/filepathutil.h>
 #include <util/shellcommand.h>
-
-#include <net/webdav_utils.h>
+#include <util/webdav_utils.h>
 
 #include <nextcloudendpointconsts.h>
 
@@ -27,7 +26,7 @@ WebDavCommandQueue::WebDavCommandQueue(QObject* parent, NextcloudSettingsBase* s
     CommandQueue(parent)
 {
     this->m_settings = settings;
-    this->m_client = getNewWebDav(this->m_settings, NEXTCLOUD_ENDPOINT_WEBDAV, this);
+    this->m_client = getNewWebDav(this->m_settings, this);
 
     QObject::connect(this, &WebDavCommandQueue::settingsChanged,
                      this, &WebDavCommandQueue::updateConnectionSettings);
@@ -70,9 +69,9 @@ void WebDavCommandQueue::updateConnectionSettings()
 
     // Apply settings to new or existing QWebdav object
     if (!this->m_client) {
-        this->m_client = getNewWebDav(this->m_settings, NEXTCLOUD_ENDPOINT_WEBDAV, this);
+        this->m_client = getNewWebDav(this->m_settings, this);
     } else {
-        applySettingsToWebdav(this->m_settings, this->m_client, NEXTCLOUD_ENDPOINT_WEBDAV);
+        applySettingsToWebdav(this->m_settings, this->m_client);
     }
 }
 

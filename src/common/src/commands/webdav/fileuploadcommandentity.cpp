@@ -1,7 +1,5 @@
 #include "fileuploadcommandentity.h"
 
-#include <net/webdav_utils.h>
-
 FileUploadCommandEntity::FileUploadCommandEntity(QObject* parent,
                                                  QString localPath,
                                                  QString remotePath,

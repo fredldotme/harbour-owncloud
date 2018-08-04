@@ -33,7 +33,7 @@ void NextcloudPluginInfo::query()
     //       string here. This string will be visible in the share method list.
     //: Display name for example share plugin
     //% "Example plugin"
-    info.displayName     = QStringLiteral("Nextcloud/ownCloud");
+    info.displayName     = QStringLiteral("GhostCloud");
 
     // Method ID is a unique identifier for this plugin. It is used to identify which share plugin should be
     // used for starting the sharing.

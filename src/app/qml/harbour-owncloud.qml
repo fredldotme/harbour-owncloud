@@ -37,7 +37,10 @@ ApplicationWindow
         ocsCommandQueue: ocsCommandQueue
         browserCommandQueue: browserCommandQueue
         daemonCtrl: daemonCtrl
-        onResetOcsInfo: ocsUserInfo.reset()
+        onResetOcsInfo: {
+            ocsUserInfo.reset()
+            avatarFetcher.source = ""
+        }
     }
 
     readonly property bool isTransfering :

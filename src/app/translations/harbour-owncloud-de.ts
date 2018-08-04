@@ -4,18 +4,6 @@
 <context>
     <name>About</name>
     <message>
-        <source>About Nextcloud/ownCloud client</source>
-        <translation>Über Nextcloud/ownCloud Client</translation>
-    </message>
-    <message>
-        <source>Nextcloud/ownCloud client</source>
-        <translation>Nextcloud/ownCloud Client</translation>
-    </message>
-    <message>
-        <source>Easily access your ownCloud and NextCloud instances with a native free software application.</source>
-        <translation>Einfacher Zugriff auf deine ownCloud und Nextcloud Instanzen mit einer nativen Free Software Anwendung.</translation>
-    </message>
-    <message>
         <source>Donation</source>
         <translation>Spende</translation>
     </message>
@@ -46,6 +34,22 @@
     <message>
         <source>SailfishUiSet UI components (GPL v2)</source>
         <translation>SailfishUiSet UI Komponenten (GPL v2)</translation>
+    </message>
+    <message>
+        <source>About GhostCloud</source>
+        <translation>Über GhostCloud</translation>
+    </message>
+    <message>
+        <source>GhostCloud</source>
+        <translation>GhostCloud</translation>
+    </message>
+    <message>
+        <source>Easily access your Nextcloud, ownCloud and WebDav instances with a native Free Software application</source>
+        <translation>Einfacher Zugriff auf Ihre Nextcloud, ownCloud und WebDav Instanzen mit einer nativen Free Software Anwendung</translation>
+    </message>
+    <message>
+        <source>Icon based on &quot;Cute clouds for CSS sprites&quot; by Yug (CC BY-SA 3.0)</source>
+        <translation>Icon basierend auf &quot;Cute clouds for CSS sprites&quot; von Yug (CC BY-SA 3.0)</translation>
     </message>
 </context>
 <context>
@@ -89,6 +93,22 @@
     <message>
         <source>Please check your connection or try again later.</source>
         <translation>Bitte überprüfen Sie die Verbindung oder versuchen Sie es später noch einmal.</translation>
+    </message>
+    <message>
+        <source>Provider:</source>
+        <translation>Anbieter:</translation>
+    </message>
+    <message>
+        <source>Nextcloud/ownCloud</source>
+        <translation>Nextcloud/ownCloud</translation>
+    </message>
+    <message>
+        <source>WebDav</source>
+        <translation>WebDav</translation>
+    </message>
+    <message>
+        <source>About</source>
+        <translation>Über</translation>
     </message>
 </context>
 <context>
@@ -337,7 +357,7 @@
     </message>
     <message>
         <source>Clear cache</source>
-        <translation type="unfinished"></translation>
+        <translation>Zwischenspeicher leeren</translation>
     </message>
 </context>
 <context>
@@ -399,7 +419,7 @@
     </message>
     <message>
         <source>Cache cleared</source>
-        <translation type="unfinished"></translation>
+        <translation>Zwischenspeicher geleert</translation>
     </message>
 </context>
 </TS>

@@ -4,14 +4,6 @@
 <context>
     <name>About</name>
     <message>
-        <source>About Nextcloud/ownCloud client</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Nextcloud/ownCloud client</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Donation</source>
         <translation type="unfinished"></translation>
     </message>
@@ -44,7 +36,19 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Easily access your ownCloud and NextCloud instances with a native free software application.</source>
+        <source>About GhostCloud</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>GhostCloud</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Icon based on &quot;Cute clouds for CSS sprites&quot; by Yug (CC BY-SA 3.0)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Easily access your Nextcloud, ownCloud and WebDav instances with a native Free Software application</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -88,6 +92,22 @@
     </message>
     <message>
         <source>Please check your connection or try again later.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Provider:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nextcloud/ownCloud</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>WebDav</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

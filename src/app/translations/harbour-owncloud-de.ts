@@ -13,7 +13,7 @@
     </message>
     <message>
         <source>Easily access your ownCloud and NextCloud instances with a native free software application.</source>
-        <translation>Einfacher Zugriff auf deine ownCloud und Nextcloud Instanzen mit einer nativen Free Software Anwendung</translation>
+        <translation>Einfacher Zugriff auf deine ownCloud und Nextcloud Instanzen mit einer nativen Free Software Anwendung.</translation>
     </message>
     <message>
         <source>Donation</source>

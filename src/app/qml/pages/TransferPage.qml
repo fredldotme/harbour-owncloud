@@ -172,7 +172,7 @@ Page {
                     MenuItem {
                         text: qsTr("Cancel")
                         onClicked: {
-                            selectedEntry.abort()
+                            selectedEntry.abort(true)
                         }
                     }
                 }

@@ -335,6 +335,10 @@
         <comment>hoto backups via mobile internet connection description</comment>
         <translation>Speichere deine Kamerabilder automatisch wenn du eine mobile Verbindung hast (2G, 3G, LTE)</translation>
     </message>
+    <message>
+        <source>Clear cache</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>TransferPage</name>
@@ -392,6 +396,10 @@
     <message>
         <source>%1 couldn&apos;t be downloaded</source>
         <translation>%1 konnte nicht heruntergeladen werden</translation>
+    </message>
+    <message>
+        <source>Cache cleared</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

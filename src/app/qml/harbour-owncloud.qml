@@ -102,6 +102,14 @@ ApplicationWindow
 
         notifier.previewSummary = summary
         notifier.previewBody = body
+        notifier.isTransient = false
+        notifier.publish();
+    }
+
+    function notifyTransient(summary) {
+        notifier.body = ""
+        notifier.previewSummary = summary
+        notifier.isTransient = true
         notifier.publish();
     }
 
@@ -148,10 +156,18 @@ ApplicationWindow
         settings: persistentSettings
     }
 
+    CacheProvider {
+        id: thumbnailCache
+        onCacheCleared: {
+            notifyTransient(qsTr("Cache cleared"))
+        }
+    }
+
     AvatarFetcher {
         id: avatarFetcher
         commandQueue: ocsCommandQueue
         settings: ocsCommandQueue.settings
+        cacheProvider: thumbnailCache
         width: 128
         height: 128
     }

@@ -75,6 +75,7 @@ Page {
         remoteFile: entry.path
         settings: persistentSettings
         commandQueue: browserCommandQueue
+        cacheProvider: thumbnailCache
         width: fileImage.width
         height: fileImage.height
     }

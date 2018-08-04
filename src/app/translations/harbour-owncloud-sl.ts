@@ -335,6 +335,10 @@
         <comment>hoto backups via mobile internet connection description</comment>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Clear cache</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>TransferPage</name>
@@ -392,6 +396,10 @@
     </message>
     <message>
         <source>%1 couldn&apos;t be downloaded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cache cleared</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

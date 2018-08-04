@@ -16,6 +16,7 @@
 #include <sailfish-ui-set.h>
 #include <qmlmap.h>
 #include <nextcloudendpointconsts.h>
+#include <cacheprovider.h>
 #include "daemoncontrol.h"
 #include "directorycontentmodel.h"
 #include "ocsnetaccessfactory.h"
@@ -43,6 +44,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<CommandQueue>("harbour.owncloud", 1, 0, "CommandQueue");
     qmlRegisterType<WebDavCommandQueue>("harbour.owncloud", 1, 0, "WebDavCommandQueue");
     qmlRegisterType<OcsCommandQueue>("harbour.owncloud", 1, 0, "OcsCommandQueue");
+    qmlRegisterType<CacheProvider>("harbour.owncloud", 1, 0, "CacheProvider");
     qmlRegisterType<ThumbnailFetcher>("harbour.owncloud", 1, 0, "ThumbnailFetcher");
     qmlRegisterType<AvatarFetcher>("harbour.owncloud", 1, 0, "AvatarFetcher");
     qmlRegisterType<WebDavMediaFeeder>("harbour.owncloud", 1, 0, "WebDavMediaFeeder");

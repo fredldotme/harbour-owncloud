@@ -1,3 +1,47 @@
+0.8.1:
+Adapt branding and fix ShareUI directory browsing
+
+0.8:
+Rename application to "GhostCloud"
+Support WebDav servers
+
+0.7.9.6:
+Hotfix for directory creation and file uploads
+
+0.7.9.5:
+Hotfix to fix accepting self-signed SSL certificates
+
+0.7.9.4:
+Re-enable photo backup daemon functionality
+Photo backup cancellation from within the Transfer overview
+Cancellation button for browser refreshes
+Details view for directories, accessible through long press
+Dialog before overwriting an existing file
+Visual enhancements including improved hints and error reporting
+
+0.7.9.3:
+Visual enhancements in the file browser including avatar, user details & storage overview
+Fix file operations and transfers with self-signed SSL certificates
+Fix scrolling in the file details view with large file names
+
+0.7.9.2:
+Fix move, copy & rename operations
+Add 'File ID' to the file details view
+Fix upward directory navigation in the remote directory selection dialog
+
+0.7.9.1:
+Major refactoring, improving parallelism of concurrent operations
+User information on the application cover
+File uploads from SD card
+Thumbnails and audio/video previews
+Prevent destruction/modification of remote resources while they're transfering
+Allow cancellation of file opening after download completion
+Improved stability
+Visual improvements
+Reduce size of the additionals package by separating shared code
+Additionals package is now dependent on the main application package
+Note: photo backup daemon is non-functional in this version
+
 0.5.7:
 Support renaming of files and directories
 Icon for the TransferEngine Share UI

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+X-Nemo-Application-Type=silica-qt5
+Icon=harbour-owncloud
+Exec=harbour-owncloud
+Name=GhostCloud
+# translation example:
+# your app name in German locale (de)
+Name[de]=GhostCloud
+Name[sl]=GhostCloud

@@ -7,7 +7,7 @@ Name:       harbour-owncloud
 
 # >> macros
 %define debug_package %{nil}
-%define __requires_exclude ^libqwebdav|libnemonotifications-qt5.*$
+%define __requires_exclude ^libqwebdav|libharbourowncloudcommon.*|libnemonotifications-qt5.*$
 %define __provides_exclude_from ^%{_datadir}/.*$
 # << macros
 
@@ -16,7 +16,7 @@ Name:       harbour-owncloud
 %{!?qtc_make:%define qtc_make make}
 %{?qtc_builddir:%define _builddir %qtc_builddir}
 Summary:    ownCloud
-Version:    0.5.7
+Version:    0.8.1
 Release:    1
 Group:      Qt/Qt
 License:    GPLv2
@@ -36,6 +36,7 @@ Unofficial NextCloud/ownCloud client for SailfishOS
 
 %package daemon
 Summary:   NextCloud/ownCloud background task for automatic camera backups
+Requires:  harbour-owncloud = %{version}
 
 %description daemon
 Nextcloud/ownCloud background task for automatic camera backups
@@ -62,6 +63,7 @@ rm -rf %{buildroot}
 # >> install pre
 # << install pre
 %qmake5_install
+rm -r %{buildroot}%{_datadir}/%{name}/qml
 
 # >> install post
 mkdir -p %{buildroot}%{_libdir}/systemd/user/user-session.target.wants

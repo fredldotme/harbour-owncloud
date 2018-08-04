@@ -1,9 +1,9 @@
 [submodule "qwebdavlib"]
-	path = qwebdavlib
+	path = 3rdparty/qwebdavlib
 	url = https://github.com/beidl/qwebdavlib
 [submodule "nemo-qml-plugin-notifications"]
-	path = nemo-qml-plugin-notifications
+	path = 3rdparty/nemo-qml-plugin-notifications
 	url = https://github.com/nemomobile/nemo-qml-plugin-notifications
 [submodule "sailfish-ui-set"]
-	path = sailfish-ui-set
+	path = 3rdparty/sailfish-ui-set
 	url = https://github.com/beidl/sailfish-ui-set

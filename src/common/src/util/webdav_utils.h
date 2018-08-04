@@ -9,12 +9,10 @@
 #include <settings/nextcloudsettingsbase.h>
 
 QWebdav* getNewWebDav(NextcloudSettingsBase *settings,
-                      QString apiPath = QStringLiteral(""),
                       QObject* parent = Q_NULLPTR);
 
 void applySettingsToWebdav(NextcloudSettingsBase *settings,
-                           QWebdav *webdav,
-                           QString apiPath = QStringLiteral(""));
+                           QWebdav *webdav);
 
 QMap<QByteArray, QByteArray> prepareOcsHeaders(
         NextcloudSettingsBase* settings = Q_NULLPTR,

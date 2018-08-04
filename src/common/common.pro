@@ -15,12 +15,12 @@ CONFIG(release, debug|release) {
 SOURCES += \
     $$PWD/src/net/abstractfetcher.cpp \
     $$PWD/src/net/thumbnailfetcher.cpp \
-    $$PWD/src/net/webdav_utils.cpp \
     $$PWD/src/settings/nextcloudsettingsbase.cpp \
     $$PWD/src/settings/nextcloudsettings.cpp \
     $$PWD/src/settings/permittedsettings.cpp \
     $$PWD/src/util/filepathutil.cpp \
     $$PWD/src/util/shellcommand.cpp \
+    $$PWD/src/util/webdav_utils.cpp \
     $$PWD/src/commandqueue.cpp \
     $$PWD/src/commandentity.cpp \
     $$PWD/src/commands/webdav/fileuploadcommandentity.cpp \
@@ -53,12 +53,12 @@ SOURCES += \
 HEADERS += \
     $$PWD/src/net/abstractfetcher.h \
     $$PWD/src/net/thumbnailfetcher.h \
-    $$PWD/src/net/webdav_utils.h \
     $$PWD/src/settings/nextcloudsettingsbase.h \
     $$PWD/src/settings/nextcloudsettings.h \
     $$PWD/src/settings/permittedsettings.h \
     $$PWD/src/util/filepathutil.h \
     $$PWD/src/util/shellcommand.h \
+    $$PWD/src/util/webdav_utils.h \
     $$PWD/src/ownclouddbusconsts.h \
     $$PWD/src/commandqueue.h \
     $$PWD/src/commandentityinfo.h \

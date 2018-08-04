@@ -1,22 +1,28 @@
 #include "webdav_utils.h"
+#include <nextcloudendpointconsts.h>
 
-QWebdav* getNewWebDav(NextcloudSettingsBase *settings, QString apiPath, QObject* parent)
+QWebdav* getNewWebDav(NextcloudSettingsBase *settings, QObject* parent)
 {
     // Allocating QWebdav object without settings doesn't make sense.
     if (!settings)
         return Q_NULLPTR;
 
     QWebdav* newWebdav = new QWebdav(parent);
-    applySettingsToWebdav(settings, newWebdav, apiPath);
+    applySettingsToWebdav(settings, newWebdav);
     qDebug() << "Returning webdav for host" << settings->hostname();
 
     return newWebdav;
 }
 
-void applySettingsToWebdav(NextcloudSettingsBase *settings, QWebdav *webdav, QString apiPath)
+void applySettingsToWebdav(NextcloudSettingsBase *settings, QWebdav *webdav)
 {
     if (!settings || !webdav)
         return;
+
+    const QString apiPath =
+            (settings->providerType() == NextcloudSettingsBase::Nextcloud) ?
+                NEXTCLOUD_ENDPOINT_WEBDAV :
+                QStringLiteral("");
 
     webdav->setConnectionSettings(settings->isHttps() ? QWebdav::HTTPS : QWebdav::HTTP,
                                   settings->hostname(),

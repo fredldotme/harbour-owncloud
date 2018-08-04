@@ -62,6 +62,8 @@ CommandPageFlow {
                     return
                 }
 
+                nextDirectory.transientNotification.connect(transientNotificationRequest)
+
                 // Replace the current top page when requesting a directory
                 // lising for the remote root path, ie after initial login.
                 if (remotePath === "/") {

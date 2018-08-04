@@ -15,6 +15,7 @@ ApplicationWindow
         id: browserPageFlow
         commandQueue: browserCommandQueue
         onNotificationRequest: notify(summary, body)
+        onTransientNotificationRequest: notifyTransient(summary)
     }
     OcsUserInfo {
         id: ocsUserInfo
@@ -107,7 +108,7 @@ ApplicationWindow
     }
 
     function notifyTransient(summary) {
-        notifier.body = ""
+        notifier.previewBody = ""
         notifier.previewSummary = summary
         notifier.isTransient = true
         notifier.publish();

@@ -42,11 +42,9 @@ Page {
         listCommand = browserCommandQueue.directoryListingRequest(remotePath, refresh)
     }
 
+    signal transientNotification(string summary)
+
     FileDetailsHelper { id: fileDetailsHelper }
-    Notification {
-        id: transientNotifier
-        isTransient: true
-    }
 
     onStatusChanged: {
         if (status === PageStatus.Inactive) {
@@ -243,8 +241,7 @@ Page {
                                                                       {maximumSelections:Number.MAX_VALUE});
                     dialogObj.acceptText = qsTr("Upload")
                     dialogObj.errorOccured.connect(function(errorStr) {
-                        transientNotifier.previewSummary = errorStr
-                        transientNotifier.publish()
+                        transientNotification(errorStr)
                     });
                     dialogObj.accepted.connect(enqueueSelectedFiles)
                     dialogObj.rejected.connect(__dialogCleanup)

@@ -7,4 +7,5 @@ Item {
     property CommandQueue commandQueue : null
 
     signal notificationRequest(string summary, string body)
+    signal transientNotificationRequest(string summary)
 }

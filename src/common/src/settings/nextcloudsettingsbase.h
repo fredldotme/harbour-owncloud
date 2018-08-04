@@ -91,6 +91,8 @@ public slots:
 
 protected:
     void refreshHostString();
+    void setAutoLogin(bool value);
+    void setNotifications(bool value);
 
     QString m_hostname;
     QString m_path;
@@ -111,10 +113,6 @@ protected:
     bool m_uploadAutomatically;
     bool m_mobileUpload;
     QString m_localPicturesPath;
-
-private:
-    void setAutoLogin(bool value);
-    void setNotifications(bool value);
 
 signals:
     void settingsChanged();

@@ -41,36 +41,30 @@ bool NextcloudSettings::readSettings()
 
     if(settings.allKeys().contains(NEXTCLOUD_SETTINGS_KEY_AUTOLOGIN))
     {
-        m_autoLogin = settings.value(NEXTCLOUD_SETTINGS_KEY_AUTOLOGIN).toBool();
+        const bool autoLogin = settings.value(NEXTCLOUD_SETTINGS_KEY_AUTOLOGIN).toBool();
+        setAutoLogin(autoLogin);
     } else {
-        m_autoLogin = false;
+        setAutoLogin(false);
     }
-    emit autoLoginChanged();
 
     if(settings.allKeys().contains(NEXTCLOUD_SETTINGS_KEY_NOTIFICATIONS))
     {
-        m_notifications = settings.value(NEXTCLOUD_SETTINGS_KEY_NOTIFICATIONS).toBool();
+        const bool notifications = settings.value(NEXTCLOUD_SETTINGS_KEY_NOTIFICATIONS).toBool();
+        setNotifications(notifications);
     } else {
-        m_notifications = true;
+        setNotifications(true);
     }
-    emit notificationSettingsChanged();
 
     if(settings.allKeys().contains(NEXTCLOUD_SETTINGS_KEY_USERNAME))
     {
-        if (settings.value(NEXTCLOUD_SETTINGS_KEY_USERNAME).toString() != m_username) {
-            m_username = settings.value(NEXTCLOUD_SETTINGS_KEY_USERNAME).toString();
-            emit usernameChanged();
-        }
+        const QString username = settings.value(NEXTCLOUD_SETTINGS_KEY_USERNAME).toString();
+        setUsername(username);
     }
 
     if(settings.allKeys().contains(NEXTCLOUD_SETTINGS_KEY_PASSWORD))
     {
-        QString password = QString(QByteArray::fromBase64(settings.value(NEXTCLOUD_SETTINGS_KEY_PASSWORD).toByteArray()));
-
-        if (password != m_password) {
-            m_password = password;
-            emit passwordChanged();
-        }
+        const QString password = QString(QByteArray::fromBase64(settings.value(NEXTCLOUD_SETTINGS_KEY_PASSWORD).toByteArray()));
+        setPassword(password);
     }
 
     if(settings.allKeys().contains(NEXTCLOUD_SETTINGS_KEY_PROVIDERTYPE))

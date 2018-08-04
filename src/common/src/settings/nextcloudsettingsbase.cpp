@@ -95,12 +95,15 @@ void NextcloudSettingsBase::resetSettings()
 
 bool NextcloudSettingsBase::isAutoLogin()
 {
-    return m_autoLogin;
+    return this->m_autoLogin;
 }
 
 void NextcloudSettingsBase::setAutoLogin(bool value)
 {
-    m_autoLogin = value;
+    if (this->m_autoLogin == value)
+        return;
+
+    this->m_autoLogin = value;
     emit autoLoginChanged();
 }
 
@@ -111,18 +114,21 @@ bool NextcloudSettingsBase::notifications()
 
 void NextcloudSettingsBase::setNotifications(bool value)
 {
-    m_notifications = value;
+    if (this->m_notifications == value)
+        return;
+
+    this->m_notifications = value;
     emit notificationSettingsChanged();
 }
 
 QString NextcloudSettingsBase::hostname()
 {
-    return m_hostname;
+    return this->m_hostname;
 }
 
 QString NextcloudSettingsBase::path()
 {
-    return m_path.isEmpty() ? "/" : m_path;
+    return this->m_path.isEmpty() ? "/" : this->m_path;
 }
 
 int NextcloudSettingsBase::port()
@@ -147,7 +153,11 @@ QString NextcloudSettingsBase::username()
 
 void NextcloudSettingsBase::setUsername(QString value)
 {
-    m_username = value;
+    if (this->m_username == value)
+        return;
+
+    this->m_username = value;
+    Q_EMIT usernameChanged();
 }
 
 QString NextcloudSettingsBase::password()
@@ -157,7 +167,11 @@ QString NextcloudSettingsBase::password()
 
 void NextcloudSettingsBase::setPassword(QString value)
 {
-    m_password = value;
+    if (this->m_password == value)
+        return;
+
+    this->m_password = value;
+    Q_EMIT passwordChanged();
 }
 
 int NextcloudSettingsBase::providerType()
@@ -177,21 +191,21 @@ void NextcloudSettingsBase::setProviderType(int type)
 
 QString NextcloudSettingsBase::md5Hex()
 {
-    return m_md5Hex;
+    return this->m_md5Hex;
 }
 
 QString NextcloudSettingsBase::sha1Hex()
 {
-    return m_sha1Hex;
+    return this->m_sha1Hex;
 }
 
 void NextcloudSettingsBase::acceptCertificate(QString md5, QString sha1)
 {
-    if (m_md5Hex == md5 && m_sha1Hex == sha1)
+    if (this->m_md5Hex == md5 && this->m_sha1Hex == sha1)
         return;
 
-    m_md5Hex = md5;
-    m_sha1Hex = sha1;
+    this->m_md5Hex = md5;
+    this->m_sha1Hex = sha1;
     writeSettings();
     emit customCertChanged();
 }
@@ -204,5 +218,5 @@ void NextcloudSettingsBase::acceptCertificate(bool value)
 
 bool NextcloudSettingsBase::isCustomCert()
 {
-    return !(m_md5Hex.isEmpty() || m_sha1Hex.isEmpty());
+    return !(this->m_md5Hex.isEmpty() || this->m_sha1Hex.isEmpty());
 }

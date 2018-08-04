@@ -62,7 +62,7 @@ ShareDialog {
             if (key !== remotePath)
                 return;
             var dirContent = directoryContents.value(key);
-            if (remotePath === "/") {
+            if (remotePath !== "/") {
                 dirContent = [{ name: "..", isDirectory: true }].concat(dirContent)
             }
 
@@ -147,6 +147,7 @@ ShareDialog {
                         x: icon.x + icon.width + 6
                         y: icon.y - icon.height + 12
                         text: davInfo.name
+                        visible: text !== ".."
                         anchors.verticalCenter: parent.verticalCenter
                         color: bgItem.highlighted ? Theme.highlightColor : Theme.primaryColor
                         enabled: listView.enabled

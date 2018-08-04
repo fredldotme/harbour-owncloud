@@ -47,6 +47,8 @@ Item {
             if (ocsType !== "userInfo")
                 return;
 
+            if (receipt.result === undefined)
+                return;
             if (receipt.result.enabled === undefined)
                 return;
 

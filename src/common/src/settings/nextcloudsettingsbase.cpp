@@ -76,6 +76,7 @@ void NextcloudSettingsBase::resetSettings()
     m_port = 443;
     m_username = "";
     m_password = "";
+    m_providerType = ProviderType::Nextcloud;
     m_md5Hex = "";
     m_sha1Hex = "";
 

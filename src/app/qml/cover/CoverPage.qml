@@ -10,15 +10,16 @@ CoverBackground {
         id: icon
         source: "qrc:/icons/icon_gray.svg"
         anchors.top: parent.top
-        anchors.topMargin: -32
+        anchors.topMargin: -64
         anchors.right: parent.right
-        anchors.rightMargin: -32
+        anchors.rightMargin: -64
         anchors.left: parent.left
         anchors.leftMargin: parent.width/4
         height: width
         scale: 2
         sourceSize.width: width
         sourceSize.height: height
+        visible: true
     }
 
     Column {
@@ -32,12 +33,6 @@ CoverBackground {
             value: ocsUserInfo.hrDisplayName
             visible: value.length > 0
         }
-        /*CoverDetailItem {
-            width: parent.width
-            label: qsTr("Mail:")
-            value: hrMailAddress
-            visible: value.length > 0
-        }*/
         CoverDetailItem {
             width: parent.width
             label: qsTr("Usage:")

@@ -16,7 +16,7 @@ Page {
 
             PageHeader {
                 id: header
-                title: qsTr("About Nextcloud/ownCloud client")
+                title: qsTr("About GhostCloud")
             }
 
             Image {
@@ -25,14 +25,14 @@ Page {
                 anchors.horizontalCenter: parent.horizontalCenter
                 width: parent.width / 2
                 height: width
-                scale: 2
+                scale: 1.5
                 sourceSize.width: width
                 sourceSize.height: height
             }
 
             Label {
                 width: parent.width
-                text: qsTr("Nextcloud/ownCloud client")
+                text: qsTr("GhostCloud")
                 font.pixelSize: Theme.fontSizeLarge
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 horizontalAlignment: Text.AlignHCenter
@@ -40,10 +40,16 @@ Page {
 
             Label {
                 width: parent.width
-                text: qsTr("Easily access your ownCloud and NextCloud " +
-                           "instances with a native free software application.")
+                text: qsTr("Easily access your Nextcloud, ownCloud and WebDav " +
+                           "instances with a native Free Software application")
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 horizontalAlignment: Text.AlignHCenter
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                    leftMargin: Theme.paddingLarge
+                    rightMargin: Theme.paddingLarge
+                }
             }
 
             Separator {
@@ -96,10 +102,15 @@ Page {
             }
 
             Label {
-                width: parent.width
                 text: qsTr("Licensed under GPL v2")
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 horizontalAlignment: Text.AlignHCenter
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                    leftMargin: Theme.paddingLarge
+                    rightMargin: Theme.paddingLarge
+                }
             }
 
             Label {
@@ -107,7 +118,6 @@ Page {
                 color: Theme.highlightColor
                 font.underline: true
                 font.pixelSize: Theme.fontSizeSmall
-                width: parent.width
                 horizontalAlignment: Text.AlignHCenter
                 MouseArea {
                     anchors.fill: parent
@@ -115,21 +125,49 @@ Page {
                         Qt.openUrlExternally("https://github.com/beidl/harbour-owncloud")
                     }
                 }
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                    leftMargin: Theme.paddingLarge
+                    rightMargin: Theme.paddingLarge
+                }
             }
 
             Label {
-                width: parent.width
                 text: qsTr("QWebDAV library (qwebdavlib) version 1.0 (LGPL v2.1)")
                 font.pixelSize: Theme.fontSizeTiny
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 horizontalAlignment: Text.AlignHCenter
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                    leftMargin: Theme.paddingLarge
+                    rightMargin: Theme.paddingLarge
+                }
             }
             Label {
-                width: parent.width
                 text: qsTr("SailfishUiSet UI components (GPL v2)")
                 font.pixelSize: Theme.fontSizeTiny
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 horizontalAlignment: Text.AlignHCenter
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                    leftMargin: Theme.paddingLarge
+                    rightMargin: Theme.paddingLarge
+                }
+            }
+            Label {
+                text: qsTr("Icon based on \"Cute clouds for CSS sprites\" by Yug (CC BY-SA 3.0)")
+                font.pixelSize: Theme.fontSizeTiny
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                horizontalAlignment: Text.AlignHCenter
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                    leftMargin: Theme.paddingLarge
+                    rightMargin: Theme.paddingLarge
+                }
             }
         }
     }

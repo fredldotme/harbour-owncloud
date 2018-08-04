@@ -56,6 +56,8 @@ void WebDavCommandQueue::setSettings(NextcloudSettingsBase *v)
                          this, &WebDavCommandQueue::updateConnectionSettings);
         QObject::connect(this->m_settings, &NextcloudSettingsBase::passwordChanged,
                          this, &WebDavCommandQueue::updateConnectionSettings);
+        QObject::connect(this->m_settings, &NextcloudSettingsBase::providerTypeChanged,
+                         this, &WebDavCommandQueue::updateConnectionSettings);
         QObject::connect(this->m_settings, &NextcloudSettingsBase::customCertChanged,
                          this, &WebDavCommandQueue::updateConnectionSettings);
     }

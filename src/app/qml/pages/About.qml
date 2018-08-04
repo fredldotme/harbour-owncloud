@@ -67,10 +67,7 @@ Page {
                     MouseArea {
                         anchors.fill: parent
                         onClicked: {
-                            Qt.openUrlExternally("https://www.paypal.com/cgi-bin/webscr?cmd=_donations"+
-                                                 "&business=dev.beidl@gmail.com&lc=US&item_name="+
-                                                 "Nextcloud+ownCloud+client&no_note=0&no_shipping=2&"+
-                                                 "curency_code=EUR")
+                            Qt.openUrlExternally("https://paypal.me/beidl")
                         }
                     }
                 }

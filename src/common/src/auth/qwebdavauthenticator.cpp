@@ -84,6 +84,13 @@ void QWebDavAuthenticator::testConnectionFinished(QNetworkReply *reply)
         return;
     }
 
+    const int httpStatus = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    if (httpStatus < 200 || httpStatus >= 300) {
+        qWarning() << "HTTP status" << httpStatus;
+        Q_EMIT authenticationFailed();
+        return;
+    }
+
     if (this->m_saveCredentials && this->settings()) {
         this->settings()->writeSettings();
     }

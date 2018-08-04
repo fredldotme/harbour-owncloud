@@ -108,6 +108,22 @@ Page {
                 label: placeholderText
             }
 
+            ComboBox {
+                width: parent.width
+                enabled: !loginInProgress
+                label: qsTr("Provider:")
+                currentIndex: clientSettings.providerType
+                onCurrentIndexChanged: clientSettings.providerType = currentIndex
+                menu: ContextMenu {
+                    MenuItem {
+                        text: qsTr("Nextcloud/ownCloud")
+                    }
+                    MenuItem {
+                        text: qsTr("WebDav")
+                    }
+                }
+            }
+
             TextSwitch {
                 id: autoLoginSwitch
                 enabled: !loginInProgress

@@ -37,6 +37,10 @@ void ThumbnailFetcher::fetch()
         return;
     }
 
+    if (this->settings()->providerType() != NextcloudSettingsBase::ProviderType::Nextcloud) {
+        qDebug() << "Thumbnail fetching is only supported on Nextcloud and ownCloud servers";
+        return;
+    }
 
     // Make sure to use 128x128 dimension in case of negative values
     if (width() < 0) setWidth(128);

@@ -27,6 +27,11 @@ void AvatarFetcher::fetch()
         return;
     }
 
+    if (this->settings()->providerType() != NextcloudSettingsBase::ProviderType::Nextcloud) {
+        qDebug() << "Avatar thumbnail fetching is only supported on Nextcloud and ownCloud servers";
+        return;
+    }
+
     // Use 128x128 dimension in case of negative values
     if (width() < 0) setWidth(128);
     if (height() < 0) setHeight(128);

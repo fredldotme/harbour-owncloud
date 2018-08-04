@@ -13,6 +13,11 @@ CommandEntity* OcsCommandQueue::userInfoRequest()
     if (!this->m_settings)
         return Q_NULLPTR;
 
+    if (this->m_settings->providerType() != NextcloudSettingsBase::ProviderType::Nextcloud) {
+        qDebug() << "User info requests are only supported on Nextcloud and ownCloud servers";
+        return Q_NULLPTR;
+    }
+
     OcsUserInfoCommandEntity* command = new OcsUserInfoCommandEntity(this,
                                                                      this->m_settings);
     enqueue(command);

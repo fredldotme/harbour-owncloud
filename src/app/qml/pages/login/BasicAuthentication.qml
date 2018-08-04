@@ -121,7 +121,10 @@ Page {
                 text: qsTr("Accept certificate")
                 visible: clientSettings.isCustomCert
                 checked: clientSettings.isCustomCert
-                onVisibleChanged: checked = clientSettings.isCustomCert
+                onVisibleChanged: {
+                    if (clientSettings && visible)
+                        checked = clientSettings.isCustomCert
+                }
             }
 
             Button {

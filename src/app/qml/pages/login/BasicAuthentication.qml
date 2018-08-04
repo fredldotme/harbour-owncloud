@@ -34,16 +34,18 @@ Page {
             ocsCommandQueue.run()
         }
         onAuthenticationFailed: {
+            console.log("onAuthenticationFailed")
             daemonCtrl.reloadConfig()
             notificationRequest(qsTr("Login failed"),
                                 qsTr("Please check your connection or try again later."))
         }
         onSslError: {
+            console.log("onSslError")
             ocsCommandQueue.stop()
             browserCommandQueue.stop()
             pageStack.completeAnimation();
             pageStack.clear();
-            pageStack.replace(basicAuthenticationPage)
+            pageStack.replace(pageRoot)
             gc()
             pageStack.push(sslErrorDialogComponent,
                            {
@@ -119,6 +121,7 @@ Page {
                 text: qsTr("Accept certificate")
                 visible: clientSettings.isCustomCert
                 checked: clientSettings.isCustomCert
+                onVisibleChanged: checked = clientSettings.isCustomCert
             }
 
             Button {

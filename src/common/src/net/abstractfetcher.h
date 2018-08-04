@@ -4,6 +4,7 @@
 #include <QObject>
 #include <commandqueue.h>
 #include <settings/nextcloudsettingsbase.h>
+#include <cacheprovider.h>
 #include <qwebdav.h>
 
 class AbstractFetcher : public QObject
@@ -12,6 +13,7 @@ class AbstractFetcher : public QObject
 
     Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
     Q_PROPERTY(NextcloudSettingsBase* settings READ settings WRITE setSettings NOTIFY settingsChanged)
+    Q_PROPERTY(CacheProvider* cacheProvider READ cacheProvider WRITE setCacheProvider NOTIFY cacheProviderChanged)
     Q_PROPERTY(CommandQueue* commandQueue READ commandQueue WRITE setCommandQueue NOTIFY commandQueueChanged)
     Q_PROPERTY(int width READ width WRITE setWidth NOTIFY widthChanged)
     Q_PROPERTY(int height READ height WRITE setHeight NOTIFY heightChanged)
@@ -26,6 +28,8 @@ public slots:
 protected:
     NextcloudSettingsBase* settings();
     void setSettings(NextcloudSettingsBase* v);
+    CacheProvider* cacheProvider();
+    void setCacheProvider(CacheProvider* v);
     CommandQueue* commandQueue();
     void setCommandQueue(CommandQueue* v);
     QString source();
@@ -45,10 +49,12 @@ private:
     NextcloudSettingsBase* m_settings = Q_NULLPTR;
     CommandQueue* m_commandQueue = Q_NULLPTR;
     QWebdav* m_client = Q_NULLPTR;
+    CacheProvider* m_cacheProvider = Q_NULLPTR;
 
 signals:
     void sourceChanged();
     void settingsChanged();
+    void cacheProviderChanged();
     void commandQueueChanged();
     void widthChanged();
     void heightChanged();

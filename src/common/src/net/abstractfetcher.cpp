@@ -54,6 +54,20 @@ void AbstractFetcher::setSettings(NextcloudSettingsBase* v)
     Q_EMIT settingsChanged();
 }
 
+CacheProvider* AbstractFetcher::cacheProvider()
+{
+    return this->m_cacheProvider;
+}
+
+void AbstractFetcher::setCacheProvider(CacheProvider *v)
+{
+    if (this->m_cacheProvider == v)
+        return;
+
+    this->m_cacheProvider = v;
+    Q_EMIT cacheProviderChanged();
+}
+
 CommandQueue* AbstractFetcher::commandQueue()
 {
     return this->m_commandQueue;

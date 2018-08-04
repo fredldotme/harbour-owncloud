@@ -37,6 +37,7 @@ void ThumbnailFetcher::fetch()
         return;
     }
 
+
     // Make sure to use 128x128 dimension in case of negative values
     if (width() < 0) setWidth(128);
     if (height() < 0) setHeight(128);
@@ -45,16 +46,16 @@ void ThumbnailFetcher::fetch()
                                                                      QString::number(width()),
                                                                      QString::number(height()),
                                                                      this->remoteFile());
-    const QString cacheDirectory = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
-    const QString cachePath = cacheDirectory + QStringLiteral("/thumbnails") + this->remoteFile();
 
-    const QFileInfo cacheFile(cachePath);
-    const QString targetCacheDir = cacheFile.absolutePath();
-    const bool isCurrent = (QDateTime::currentDateTime().addDays(-5) <
-                            cacheFile.lastModified());
-    if (cacheFile.exists() && isCurrent) {
+    const QString identifier = QStringLiteral("/thumbnails") + this->remoteFile();
+
+
+    const bool fileExists = this->cacheProvider()->cacheFileExists(identifier);
+    const bool isCurrent = this->cacheProvider()->isFileCurrent(identifier);
+
+    if (fileExists && isCurrent) {
         qDebug() << "Reusing existing thumbnail from cache";
-        setSource(QStringLiteral("file://") + cacheFile.absoluteFilePath());
+        setSource(QStringLiteral("file://") + this->cacheProvider()->getPathForIdentifier(identifier));
         return;
     }
 
@@ -66,30 +67,25 @@ void ThumbnailFetcher::fetch()
 
     QObject::connect(thumbnailDownloadCommand, &CommandEntity::done, this, [=]() {
         setFetching(false);
+        const QString cacheFilePath = this->cacheProvider()->getPathForIdentifier(identifier);
 
-        QFile thumbnail(cachePath);
-        QDir cacheDir(targetCacheDir);
-        if (!cacheDir.exists()) {
-            if (!cacheDir.mkpath(targetCacheDir)) {
-                qWarning() << "Failed to create cache directory" << targetCacheDir;
-                return;
-            }
-        }
-
-        if (!thumbnail.open(QFile::ReadWrite)) {
-            qWarning() << "Failed to open" << cachePath << "for write operation";
+        QFile* thumbnail = this->cacheProvider()->getCacheFile(identifier, QFile::ReadWrite);
+        if (!thumbnail) {
+            qWarning() << "Failed to open cache identifier" << identifier << "for write operation";
             return;
         }
 
         const QByteArray content =
                 thumbnailDownloadCommand->resultData().toMap()["content"].toByteArray();
 
-        if (thumbnail.write(content) < 0) {
+        if (thumbnail->write(content) < 0) {
             qWarning() << "Failed to write thumbnail file";
             return;
         }
-        thumbnail.close();
-        setSource(QStringLiteral("file://") + cachePath);
+        thumbnail->flush();
+        thumbnail->close();
+        delete thumbnail;
+        setSource(QStringLiteral("file://") + cacheFilePath);
     });
     QObject::connect(thumbnailDownloadCommand, &CommandEntity::aborted, this, [=]() {
         setFetching(false);

@@ -25,7 +25,7 @@ Page {
 
     QWebDavAuthenticator {
         id: authenticator
-        settings: persistentSettings
+        settings: clientSettings
         onAuthenticationSuccessful: {
             pageStack.pop()
             daemonCtrl.reloadConfig()

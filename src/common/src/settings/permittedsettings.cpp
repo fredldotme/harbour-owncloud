@@ -36,6 +36,7 @@ bool PermittedSettings::readSettings()
                 m_path = values.value(NEXTCLOUD_SETTINGS_KEY_PATH).toString();
                 m_username = values.value(NEXTCLOUD_SETTINGS_KEY_USERNAME).toString();
                 m_password = values.value(NEXTCLOUD_SETTINGS_KEY_PASSWORD).toString();
+                m_providerType = (ProviderType)values.value(NEXTCLOUD_SETTINGS_KEY_PROVIDERTYPE).toInt();
                 refreshHostString();
             }
 

@@ -33,6 +33,7 @@ void PermissionRequestQueue::permitFirstInQueue()
     values.insert(NEXTCLOUD_SETTINGS_KEY_PATH, NextcloudSettings::instance()->path());
     values.insert(NEXTCLOUD_SETTINGS_KEY_USERNAME, NextcloudSettings::instance()->username());
     values.insert(NEXTCLOUD_SETTINGS_KEY_PASSWORD, NextcloudSettings::instance()->password());
+    values.insert(NEXTCLOUD_SETTINGS_KEY_PROVIDERTYPE, NextcloudSettings::instance()->providerType());
     values.insert(NEXTCLOUD_SETTINGS_KEY_PICTURESPATH, NextcloudSettings::instance()->localPicturesPath());
     values.insert(NEXTCLOUD_SETTINGS_KEY_MOBILEUPLOAD, NextcloudSettings::instance()->mobileUpload());
     values.insert(NEXTCLOUD_SETTINGS_KEY_NOTIFICATIONS, NextcloudSettings::instance()->notifications());

@@ -59,6 +59,7 @@ Page {
 
     SilicaFlickable {
         anchors.fill: parent
+        contentHeight: topIcon.height + mainColumn.height
 
         Image {
             id: topIcon
@@ -71,10 +72,11 @@ Page {
             height: width
             sourceSize.width: width
             sourceSize.height: height
-            scale: 2
+            scale: 1.5
         }
 
         Column {
+            id: mainColumn
             width: parent.width
             anchors.top: topIcon.bottom
             anchors.topMargin: 48
@@ -164,6 +166,15 @@ Page {
                     } else {
                         notificationRequest(qsTr("Invalid URL"), qsTr("Please check your host address"))
                     }
+                }
+            }
+        }
+
+        PushUpMenu {
+            MenuItem {
+                text: qsTr("About")
+                onClicked: {
+                    pageStack.push(aboutPageComponent)
                 }
             }
         }

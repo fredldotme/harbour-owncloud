@@ -200,14 +200,54 @@ QString NextcloudSettingsBase::sha1Hex()
     return this->m_sha1Hex;
 }
 
-void NextcloudSettingsBase::acceptCertificate(QString md5, QString sha1)
+bool NextcloudSettingsBase::uploadAutomatically()
+{
+    return m_uploadAutomatically;
+}
+
+void NextcloudSettingsBase::setUploadAutomatically(bool enabled)
+{
+    if (this->m_uploadAutomatically == enabled)
+        return;
+    this->m_uploadAutomatically = enabled;
+    Q_EMIT uploadAutomaticallyChanged();
+}
+
+bool NextcloudSettingsBase::mobileUpload()
+{
+    return m_mobileUpload;
+}
+
+void NextcloudSettingsBase::setMobileUpload(bool enabled)
+{
+    if (this->m_mobileUpload == enabled)
+        return;
+    this->m_mobileUpload = enabled;
+    Q_EMIT mobileUploadChanged();
+}
+
+QString NextcloudSettingsBase::localPicturesPath()
+{
+    return m_localPicturesPath;
+}
+
+void NextcloudSettingsBase::setLocalPicturesPath(QString newPath)
+{
+    if (this->m_localPicturesPath == newPath)
+        return;
+    this->m_localPicturesPath = newPath;
+    Q_EMIT localPicturesPathChanged();
+}
+
+void NextcloudSettingsBase::acceptCertificate(QString md5, QString sha1, bool write)
 {
     if (this->m_md5Hex == md5 && this->m_sha1Hex == sha1)
         return;
 
     this->m_md5Hex = md5;
     this->m_sha1Hex = sha1;
-    writeSettings();
+    if (write)
+        writeSettings();
     emit customCertChanged();
 }
 

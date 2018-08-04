@@ -69,12 +69,12 @@ public:
     QString md5Hex();
     QString sha1Hex();
 
-    bool uploadAutomatically() { return m_uploadAutomatically; }
-    void setUploadAutomatically(bool enabled) { m_uploadAutomatically = enabled; emit uploadAutomaticallyChanged(); }
-    bool mobileUpload() { return m_mobileUpload; }
-    void setMobileUpload(bool enabled) { m_mobileUpload = enabled; emit mobileUploadChanged(); }
-    QString localPicturesPath() { return m_localPicturesPath; }
-    void setLocalPicturesPath(QString newPath) { m_localPicturesPath = newPath; emit localPicturesPathChanged(); }
+    bool uploadAutomatically();
+    void setUploadAutomatically(bool enabled);
+    bool mobileUpload();
+    void setMobileUpload(bool enabled);
+    QString localPicturesPath();
+    void setLocalPicturesPath(QString newPath);
 
     Q_INVOKABLE bool parseFromAddressString(QString value);
 
@@ -86,7 +86,7 @@ public slots:
     void setUsername(QString value);
     void setPassword(QString value);
     void setProviderType(int type);
-    void acceptCertificate(QString md5, QString sha1);
+    void acceptCertificate(QString md5, QString sha1, bool write = true);
     void acceptCertificate(bool value);
 
 protected:

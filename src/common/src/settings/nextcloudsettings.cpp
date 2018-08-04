@@ -78,21 +78,20 @@ bool NextcloudSettings::readSettings()
     {
         QString md5Hex = settings.value(NEXTCLOUD_SETTINGS_KEY_CERTMD5).toString();
         QString sha1Hex = settings.value(NEXTCLOUD_SETTINGS_KEY_CERTSHA1).toString();
-        if (md5Hex != m_md5Hex || sha1Hex != m_sha1Hex) {
-            m_md5Hex = md5Hex;
-            m_sha1Hex = sha1Hex;
-            emit customCertChanged();
-        }
+        acceptCertificate(md5Hex, sha1Hex, false);
     }
 
-    m_uploadAutomatically = settings.value(NEXTCLOUD_SETTINGS_KEY_UPLOADAUTOMATICALLY,
-                                           false).toBool();
+    const bool uploadAutomatically = settings.value(NEXTCLOUD_SETTINGS_KEY_UPLOADAUTOMATICALLY,
+                                                    false).toBool();
+    setUploadAutomatically(uploadAutomatically);
 
-    m_mobileUpload = settings.value(NEXTCLOUD_SETTINGS_KEY_MOBILEUPLOAD,
-                                    false).toBool();
+    const bool mobileUpload = settings.value(NEXTCLOUD_SETTINGS_KEY_MOBILEUPLOAD,
+                                             false).toBool();
+    setMobileUpload(mobileUpload);
 
-    m_localPicturesPath = settings.value(NEXTCLOUD_SETTINGS_KEY_PICTURESPATH,
-                                         QStandardPaths::writableLocation(QStandardPaths::PicturesLocation)).toString();
+    const QString localPicturesPath = settings.value(NEXTCLOUD_SETTINGS_KEY_PICTURESPATH,
+                                                     QStandardPaths::writableLocation(QStandardPaths::PicturesLocation)).toString();
+    setLocalPicturesPath(localPicturesPath);
 
     settings.endGroup();
 

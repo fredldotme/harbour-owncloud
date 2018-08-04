@@ -9,6 +9,7 @@ NextcloudSettingsBase::NextcloudSettingsBase(QObject *parent) : QObject(parent)
     m_isHttps = true;
     m_autoLogin = false;
     m_notifications = true;
+    m_providerType = ProviderType::Nextcloud;
 
 //    connect(this, &NextcloudSettingsBase::hoststringChanged, this, &NextcloudSettingsBase::settingsChanged);
 //    connect(this, &NextcloudSettingsBase::usernameChanged, this, &NextcloudSettingsBase::settingsChanged);
@@ -157,6 +158,21 @@ QString NextcloudSettingsBase::password()
 void NextcloudSettingsBase::setPassword(QString value)
 {
     m_password = value;
+}
+
+int NextcloudSettingsBase::providerType()
+{
+    return this->m_providerType;
+}
+
+void NextcloudSettingsBase::setProviderType(int type)
+{
+    const ProviderType providerType = (ProviderType)type;
+    if (this->m_providerType == providerType)
+        return;
+
+    this->m_providerType = providerType;
+    Q_EMIT providerTypeChanged();
 }
 
 QString NextcloudSettingsBase::md5Hex()

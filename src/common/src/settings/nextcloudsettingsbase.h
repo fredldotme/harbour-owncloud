@@ -12,6 +12,7 @@ const QString NEXTCLOUD_SETTINGS_KEY_PORT = QStringLiteral("port");
 const QString NEXTCLOUD_SETTINGS_KEY_PATH = QStringLiteral("path");
 const QString NEXTCLOUD_SETTINGS_KEY_USERNAME = QStringLiteral("username");
 const QString NEXTCLOUD_SETTINGS_KEY_PASSWORD = QStringLiteral("password");
+const QString NEXTCLOUD_SETTINGS_KEY_PROVIDERTYPE = QStringLiteral("providerType");
 const QString NEXTCLOUD_SETTINGS_KEY_PICTURESPATH = QStringLiteral("localPicturesPath");
 const QString NEXTCLOUD_SETTINGS_KEY_MOBILEUPLOAD = QStringLiteral("mobileUpload");
 const QString NEXTCLOUD_SETTINGS_KEY_NOTIFICATIONS = QStringLiteral("notifications");
@@ -31,6 +32,8 @@ class NextcloudSettingsBase : public QObject
     Q_PROPERTY(QString password READ password WRITE setPassword NOTIFY passwordChanged)
     Q_PROPERTY(bool isCustomCert READ isCustomCert WRITE acceptCertificate NOTIFY customCertChanged)
 
+    Q_PROPERTY(int providerType READ providerType WRITE setProviderType NOTIFY providerTypeChanged)
+
     Q_PROPERTY(bool uploadAutomatically READ uploadAutomatically WRITE setUploadAutomatically NOTIFY uploadAutomaticallyChanged)
     Q_PROPERTY(bool mobileUpload READ mobileUpload WRITE setMobileUpload NOTIFY mobileUploadChanged)
     Q_PROPERTY(QString localPicturesPath READ localPicturesPath WRITE setLocalPicturesPath NOTIFY localPicturesPathChanged)
@@ -43,6 +46,12 @@ class NextcloudSettingsBase : public QObject
 public:
     NextcloudSettingsBase(QObject *parent = 0);
 
+    enum ProviderType {
+        Nextcloud = 0,
+        WebDav
+    };
+    Q_ENUMS(ProviderType)
+
     QString hostname();
     QString path();
     int port();
@@ -51,6 +60,7 @@ public:
     QString hoststring();
     QString username();
     QString password();
+    int providerType();
     bool isCustomCert();
 
     bool isAutoLogin();
@@ -75,6 +85,7 @@ public slots:
 
     void setUsername(QString value);
     void setPassword(QString value);
+    void setProviderType(int type);
     void acceptCertificate(QString md5, QString sha1);
     void acceptCertificate(bool value);
 
@@ -85,6 +96,7 @@ protected:
     QString m_path;
     int m_port;
     bool m_isHttps;
+    ProviderType m_providerType;
 
     bool m_autoLogin;
     bool m_notifications;
@@ -109,6 +121,7 @@ signals:
 
     void usernameChanged();
     void passwordChanged();
+    void providerTypeChanged();
     void hoststringChanged();
     void customCertChanged();
     void autoLoginChanged();

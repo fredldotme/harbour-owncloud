@@ -73,6 +73,12 @@ bool NextcloudSettings::readSettings()
         }
     }
 
+    if(settings.allKeys().contains(NEXTCLOUD_SETTINGS_KEY_PROVIDERTYPE))
+    {
+        ProviderType providerType = (ProviderType)settings.value(NEXTCLOUD_SETTINGS_KEY_PROVIDERTYPE).toInt();
+        setProviderType(providerType);
+    }
+
     if(settings.allKeys().contains(NEXTCLOUD_SETTINGS_KEY_CERTMD5) &&
             settings.allKeys().contains(NEXTCLOUD_SETTINGS_KEY_CERTSHA1))
     {
@@ -111,6 +117,7 @@ void NextcloudSettings::writeSettings()
     settings.setValue(NEXTCLOUD_SETTINGS_KEY_NOTIFICATIONS, QVariant::fromValue<bool>(m_notifications));
     settings.setValue(NEXTCLOUD_SETTINGS_KEY_USERNAME, QVariant::fromValue<QString>(m_username));
     settings.setValue(NEXTCLOUD_SETTINGS_KEY_PASSWORD, QVariant::fromValue<QString>(m_password.toLatin1().toBase64()));
+    settings.setValue(NEXTCLOUD_SETTINGS_KEY_PROVIDERTYPE, QVariant::fromValue<int>(m_providerType));
     settings.setValue(NEXTCLOUD_SETTINGS_KEY_CERTMD5, QVariant::fromValue<QString>(m_md5Hex));
     settings.setValue(NEXTCLOUD_SETTINGS_KEY_CERTSHA1, QVariant::fromValue<QString>(m_sha1Hex));
     settings.setValue(NEXTCLOUD_SETTINGS_KEY_UPLOADAUTOMATICALLY, QVariant::fromValue<bool>(m_uploadAutomatically));

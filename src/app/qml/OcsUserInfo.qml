@@ -28,6 +28,14 @@ Item {
             totalBytes :
             totalBytes.substring(0, 15) + ".."
 
+    function reset() {
+        userInfoEnabled = false
+        displayName = ""
+        emailAddress = ""
+        usedBytes = ""
+        totalBytes = ""
+    }
+
     FileDetailsHelper {
         id: fileDetailsHelper
     }

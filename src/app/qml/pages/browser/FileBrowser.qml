@@ -297,6 +297,7 @@ Page {
 
             CircularImageButton {
                 source: avatarFetcher.source
+                enabled: (persistentSettings.providerType === NextcloudSettings.Nextcloud)
                 visible: ocsUserInfo.userInfoEnabled
                 highlightColor:
                     Qt.rgba(Theme.highlightColor.r,

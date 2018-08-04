@@ -37,6 +37,7 @@ ApplicationWindow
         ocsCommandQueue: ocsCommandQueue
         browserCommandQueue: browserCommandQueue
         daemonCtrl: daemonCtrl
+        onResetOcsInfo: ocsUserInfo.reset()
     }
 
     readonly property bool isTransfering :

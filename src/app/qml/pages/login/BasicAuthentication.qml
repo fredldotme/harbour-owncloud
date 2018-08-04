@@ -13,6 +13,7 @@ Page {
     property WebDavCommandQueue browserCommandQueue : null
     property DaemonControl daemonCtrl : null
 
+    signal resetOcsInfo()
     signal notificationRequest(string summary, string body)
 
     Component.onCompleted: {
@@ -150,6 +151,7 @@ Page {
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 onClicked: {
+                    resetOcsInfo()
                     if (clientSettings.parseFromAddressString(hostaddress.text)) {
                         clientSettings.username = username.text;
                         clientSettings.password = password.text;

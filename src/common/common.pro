@@ -48,7 +48,8 @@ SOURCES += \
     $$PWD/src/commandunit.cpp \
     $$PWD/src/commands/sync/ncdirtreecommandunit.cpp \
     $$PWD/src/commands/sync/ncsynccommandunit.cpp \
-    $$PWD/src/cacheprovider.cpp
+    $$PWD/src/cacheprovider.cpp \
+    $$PWD/src/cloudstorageprovider.cpp
 
 HEADERS += \
     $$PWD/src/net/abstractfetcher.h \
@@ -90,7 +91,8 @@ HEADERS += \
     $$PWD/src/commandunit.h \
     $$PWD/src/commands/sync/ncdirtreecommandunit.h \
     $$PWD/src/commands/sync/ncsynccommandunit.h \
-    $$PWD/src/cacheprovider.h
+    $$PWD/src/cacheprovider.h \
+    $$PWD/src/cloudstorageprovider.h
 
 INCLUDEPATH += $$PWD/src
 DEPENDPATH += $$PWD/src

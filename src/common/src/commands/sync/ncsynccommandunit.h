@@ -15,7 +15,10 @@ public:
     explicit NcSyncCommandUnit(QObject* parent = Q_NULLPTR,
                                QWebdav* client = Q_NULLPTR,
                                QString localPath = QStringLiteral(""),
-                               QString remotePath = QStringLiteral(""));
+                               QString remotePath = QStringLiteral(""),
+                               QSharedPointer<NcDirNode> cachedTree = QSharedPointer<NcDirNode>(Q_NULLPTR));
+
+    QSharedPointer<NcDirNode> cachedTree();
 
 protected:
     void decideAdditionalWorkRequired(CommandEntity *entity);

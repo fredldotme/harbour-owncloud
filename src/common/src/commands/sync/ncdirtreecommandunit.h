@@ -13,17 +13,25 @@ public:
     ~NcDirNode() {
         qDebug() << Q_FUNC_INFO;
         while (!directories.isEmpty()) {
-            NcDirNode* backReference = directories.back();
-            directories.pop_back();
+            NcDirNode* backReference = this->directories.back();
+            this->directories.pop_back();
             if (backReference) {
                 delete backReference;
             }
         }
     }
+    bool containsDirWithUniqueId(const QString& uniqueId){
+        for (const NcDirNode* directory : directories) {
+            if (directory->uniqueId == uniqueId)
+                return true;
+        }
+        return false;
+    }
 
     NcDirNode* parentNode = nullptr;
 
     QString name;
+    QString uniqueId;
     QVector<QVariant> files;
     QVector<NcDirNode*> directories;
     QVector<NcDirNode*>::iterator directory_iterator;
@@ -37,7 +45,8 @@ class NcDirTreeCommandUnit : public CommandUnit
 public:
     NcDirTreeCommandUnit(QObject* parent = Q_NULLPTR,
                          QWebdav* client = Q_NULLPTR,
-                         QString rootPath = QStringLiteral("/"));
+                         QString rootPath = QStringLiteral("/"),
+                         QSharedPointer<NcDirNode> cachedTree = QSharedPointer<NcDirNode>());
 
 protected:
     void decideAdditionalWorkRequired(CommandEntity *entity) Q_DECL_OVERRIDE;
@@ -45,7 +54,7 @@ protected:
 private:
     QWebdav* m_client;
     NextcloudSettingsBase* m_settings;
-    NcDirNode* m_rootNode = Q_NULLPTR;
+    QSharedPointer<NcDirNode> m_rootNode;
 
     // As the list commands are run serially we can keep
     // a pointer to the currently processed node to avoid

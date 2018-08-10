@@ -10,9 +10,10 @@
 
 CommandEntity* defaultCommandEntity(QObject* parent,
                                     QWebdav* client,
-                                    QString remotePath)
+                                    QString remotePath,
+                                    QSharedPointer<NcDirNode> cachedTree)
 {
-    return new NcDirTreeCommandUnit(parent, client, remotePath);
+    return new NcDirTreeCommandUnit(parent, client, remotePath, cachedTree);
 }
 
 CommandEntityInfo defaultCommandInfo(const QString& localPath, const QString& remotePath)
@@ -27,15 +28,21 @@ CommandEntityInfo defaultCommandInfo(const QString& localPath, const QString& re
 NcSyncCommandUnit::NcSyncCommandUnit(QObject* parent,
                                      QWebdav* client,
                                      QString localPath,
-                                     QString remotePath) :
-    CommandUnit(parent, {defaultCommandEntity(parent, client, remotePath)},
+                                     QString remotePath,
+                                     QSharedPointer<NcDirNode> cachedTree) :
+    CommandUnit(parent, {defaultCommandEntity(parent, client, remotePath, cachedTree)},
                 defaultCommandInfo(localPath, remotePath)),
     m_localPath(localPath),
     m_remotePath(remotePath),
     m_client(client),
-    m_cachedTree(Q_NULLPTR)
+    m_cachedTree(cachedTree)
 {
 
+}
+
+QSharedPointer<NcDirNode> NcSyncCommandUnit::cachedTree()
+{
+    return this->m_cachedTree;
 }
 
 bool NcSyncCommandUnit::fileExistsRemotely(const QString& localFilePath,
@@ -105,7 +112,7 @@ void NcSyncCommandUnit::decideAdditionalWorkRequired(CommandEntity *entity)
         return;
     }
 
-    QVariantMap dirTreeCommandResult = treeCommandUnit->resultData().toMap();
+    QVariantMap dirTreeCommandResult = treeCommandUnit->resultData();
     const bool success = dirTreeCommandResult.value(QStringLiteral("success")).toBool();
     if (!success) {
         if (!this->m_directoryCreation) {
@@ -120,7 +127,8 @@ void NcSyncCommandUnit::decideAdditionalWorkRequired(CommandEntity *entity)
             this->queue()->push_back(mkdirCommand);
             this->queue()->push_back(defaultCommandEntity(parent(),
                                                           this->m_client,
-                                                          this->m_remotePath));
+                                                          this->m_remotePath,
+                                                          this->m_cachedTree));
             return;
         } else {
             qWarning() << "Failed to create remote target directory. Bailing out.";
@@ -183,8 +191,7 @@ void NcSyncCommandUnit::decideAdditionalWorkRequired(CommandEntity *entity)
         // Remove m_localPath from sourcePath and build list of directories
         QStringList targetDirectory =
                 sourcePath.mid(this->m_localPath.length())
-                .split('/',
-                       QString::SkipEmptyParts);
+                .split('/', QString::SkipEmptyParts);
 
         QString relativeTargetDir;
 

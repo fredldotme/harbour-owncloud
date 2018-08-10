@@ -7,10 +7,8 @@
 
 #define REACHED_END(node) (node->directory_iterator == node->directories.end())
 
-inline QVariantMap buildResultData(bool success, NcDirNode* node)
+inline QVariantMap buildResultData(bool success, QSharedPointer<NcDirNode> tree)
 {
-    QSharedPointer<NcDirNode> tree(node);
-
     QVariantMap result;
     result.insert(QStringLiteral("success"),
                   success);
@@ -38,7 +36,8 @@ CommandEntityInfo defaultCommandInfo(const QString& rootPath)
 
 NcDirTreeCommandUnit::NcDirTreeCommandUnit(QObject *parent,
                                            QWebdav *client,
-                                           QString rootPath) :
+                                           QString rootPath,
+                                           QSharedPointer<NcDirNode> cachedTree) :
     CommandUnit(parent, {startingListCommand(parent, rootPath, client)},
                 defaultCommandInfo(rootPath)),
     m_client(client)
@@ -48,11 +47,16 @@ NcDirTreeCommandUnit::NcDirTreeCommandUnit(QObject *parent,
         return;
     }
 
+    if (!cachedTree.isNull()) {
+        this->m_rootNode = cachedTree;
+    } else {
+        this->m_rootNode = QSharedPointer<NcDirNode>(new NcDirNode);
+        this->m_rootNode->name = this->queue()->front()->info().property(QStringLiteral("name")).toString();
+        this->m_rootNode->parentNode = nullptr;
+    }
+
     // Start content list retrieval at the root node
-    this->m_rootNode = new NcDirNode;
-    this->m_rootNode->name = this->queue()->front()->info().property(QStringLiteral("name")).toString();
-    this->m_rootNode->parentNode = nullptr;
-    this->m_currentNode = this->m_rootNode;
+    this->m_currentNode = this->m_rootNode.data();
 }
 
 void NcDirTreeCommandUnit::decideAdditionalWorkRequired(CommandEntity *entity)
@@ -65,24 +69,22 @@ void NcDirTreeCommandUnit::decideAdditionalWorkRequired(CommandEntity *entity)
         return;
 
     // Command hasn't successfully finished
-    if (!listCommand->isFinished())
-        return;
+    if (!listCommand->isFinished()) {
+        // iterating through child directories wouldn't be possible,
+        // so go back to the parent node if possible.
+        if (this->m_currentNode)
+            this->m_currentNode = this->m_currentNode->parentNode;
+    }
 
     if (!this->m_currentNode) {
         qInfo() << "currentNode == nullptr, traversing remote tree should be complete.";
         return;
     }
 
-    const QString remotePath = listCommand->info().property(QStringLiteral("remotePath")).toString();
-    const QString directoryNameOfCommand = listCommand->info().property(QStringLiteral("remotePath")).toString();
-
-    QVector<QVariant> files;
-    QVector<NcDirNode*> directories;
-
-    QVariantMap commandResult = listCommand->resultData().toMap();
-
+    const QVariantMap commandResult = listCommand->resultData();
     const int httpCode = commandResult.value(QStringLiteral("httpCode")).toInt();
     const bool success = (httpCode >= 200 && httpCode < 300);
+
     if (!success) {
         qInfo() << "Parsing directory list failed, ignoring";
         if (this->m_currentNode->name == QStringLiteral("/"))
@@ -90,7 +92,11 @@ void NcDirTreeCommandUnit::decideAdditionalWorkRequired(CommandEntity *entity)
         return;
     }
 
+    const QString remotePath = listCommand->info().property(QStringLiteral("remotePath")).toString();
     const QVariantList directoryContent = commandResult.value(QStringLiteral("dirContent")).toList();
+
+    QVector<QVariant> files;
+    QVector<NcDirNode*> directories;
 
     for (const QVariant& tmpEntry : directoryContent) {
         // Skip invalid variants
@@ -100,6 +106,7 @@ void NcDirTreeCommandUnit::decideAdditionalWorkRequired(CommandEntity *entity)
         QVariantMap entry = tmpEntry.toMap();
         const bool entryIsDirectory = entry.value(QStringLiteral("isDirectory")).toBool();
         const QString entryName = entry.value(QStringLiteral("name")).toString();
+        const QString entityTag = entry.value(QStringLiteral("entityTag")).toString();
 
         qDebug() << "entryName:" << entryName;
 
@@ -110,20 +117,25 @@ void NcDirTreeCommandUnit::decideAdditionalWorkRequired(CommandEntity *entity)
             continue;
         }
 
+        // Skip directory examination in case the unique ID (entity tag) already exists
+        const bool uniqueIdsMatch = this->m_currentNode->containsDirWithUniqueId(entityTag);
+        if (uniqueIdsMatch)
+            continue;
+
         // Prepare the necessary tree node
         // NcDirNode and the related DavListCommandEntity are inserted
         // into their respective lists/queues in the same order
         NcDirNode* node = new NcDirNode;
         node->name = entryName;
+        node->uniqueId = entityTag;
         node->parentNode = this->m_currentNode;
-
         directories.prepend(node);
 
         const QString fullPath = remotePath + entryName + "/";
 
         // then add required DavListCommandEntity
         DavListCommandEntity* additionalCommand =
-                new DavListCommandEntity(parent(),
+                new DavListCommandEntity(this,
                                          fullPath,
                                          true,
                                          this->m_client);
@@ -131,7 +143,7 @@ void NcDirTreeCommandUnit::decideAdditionalWorkRequired(CommandEntity *entity)
         qDebug() << "DavListCommandEntity" << fullPath;
     }
 
-    qDebug() << "directoryNameOfCommand" << directoryNameOfCommand;
+    qDebug() << "remotePath of command" << remotePath;
     qDebug() << "current node" << this->m_currentNode->name;
     this->m_currentNode->files = files;
     this->m_currentNode->directories = directories;
@@ -140,6 +152,7 @@ void NcDirTreeCommandUnit::decideAdditionalWorkRequired(CommandEntity *entity)
     NcDirNode* potentialNode = this->m_currentNode;
     while (potentialNode) {
         if (REACHED_END(potentialNode)) {
+            potentialNode->directory_iterator = potentialNode->directories.begin();
             potentialNode = potentialNode->parentNode;
         } else {
             this->m_currentNode = *potentialNode->directory_iterator++;

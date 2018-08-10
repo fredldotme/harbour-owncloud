@@ -1,5 +1,6 @@
 #include "nextcloudsettingsbase.h"
 
+#include <QDebug>
 #include <QStandardPaths>
 #include <QUrl>
 
@@ -207,6 +208,7 @@ bool NextcloudSettingsBase::uploadAutomatically()
 
 void NextcloudSettingsBase::setUploadAutomatically(bool enabled)
 {
+    qDebug() << Q_FUNC_INFO << enabled;
     if (this->m_uploadAutomatically == enabled)
         return;
     this->m_uploadAutomatically = enabled;

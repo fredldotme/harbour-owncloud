@@ -17,6 +17,9 @@ NextcloudSettings::NextcloudSettings(QObject *parent) :
 
 bool NextcloudSettings::readSettings()
 {
+    qDebug() << Q_FUNC_INFO;
+
+    settings.sync();
     settings.beginGroup("Settings");
     if(settings.allKeys().contains(NEXTCLOUD_SETTINGS_KEY_HOSTNAME) &&
             settings.allKeys().contains(NEXTCLOUD_SETTINGS_KEY_PATH) &&

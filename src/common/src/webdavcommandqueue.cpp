@@ -23,58 +23,38 @@
 #include <utime.h>
 
 WebDavCommandQueue::WebDavCommandQueue(QObject* parent, NextcloudSettingsBase* settings) :
-    CommandQueue(parent)
+    CloudStorageProvider(parent, settings)
 {
-    setSettings(settings);
     updateConnectionSettings();
-
     QObject::connect(this, &WebDavCommandQueue::settingsChanged,
                      this, &WebDavCommandQueue::updateConnectionSettings);
 }
 
-NextcloudSettingsBase* WebDavCommandQueue::settings()
-{
-    return this->m_settings;
-}
-
-void WebDavCommandQueue::setSettings(NextcloudSettingsBase *v)
-{
-    if (this->m_settings == v)
-        return;
-
-    // Disconnect from current settings object if it exists
-    if (this->m_settings)
-        QObject::disconnect(this->m_settings, 0, 0, 0);
-
-    this->m_settings = v;
-
-    // Connect to changes of credentials, certificate and hostname settings
-    if (this->m_settings) {
-        QObject::connect(this->m_settings, &NextcloudSettingsBase::hoststringChanged,
-                         this, &WebDavCommandQueue::updateConnectionSettings);
-        QObject::connect(this->m_settings, &NextcloudSettingsBase::usernameChanged,
-                         this, &WebDavCommandQueue::updateConnectionSettings);
-        QObject::connect(this->m_settings, &NextcloudSettingsBase::passwordChanged,
-                         this, &WebDavCommandQueue::updateConnectionSettings);
-        QObject::connect(this->m_settings, &NextcloudSettingsBase::providerTypeChanged,
-                         this, &WebDavCommandQueue::updateConnectionSettings);
-        QObject::connect(this->m_settings, &NextcloudSettingsBase::customCertChanged,
-                         this, &WebDavCommandQueue::updateConnectionSettings);
-    }
-    Q_EMIT settingsChanged();
-}
-
 void WebDavCommandQueue::updateConnectionSettings()
 {
-    if (!this->m_settings)
+    if (!this->settings())
         return;
 
-    // Apply settings to new or existing QWebdav object
+    QObject::disconnect(this->settings(), 0, 0, 0);
+
+    // Apply new settings to existing QWebdav object
     if (!this->m_client) {
-        this->m_client = getNewWebDav(this->m_settings, this);
+        this->m_client = getNewWebDav(this->settings(), this);
     } else {
-        applySettingsToWebdav(this->m_settings, this->m_client);
+        applySettingsToWebdav(this->settings(), this->m_client);
     }
+
+    // Connect to changes of credentials, certificate, hostname and provider settings
+    QObject::connect(this->settings(), &NextcloudSettingsBase::hoststringChanged,
+                     this, &WebDavCommandQueue::updateConnectionSettings);
+    QObject::connect(this->settings(), &NextcloudSettingsBase::usernameChanged,
+                     this, &WebDavCommandQueue::updateConnectionSettings);
+    QObject::connect(this->settings(), &NextcloudSettingsBase::passwordChanged,
+                     this, &WebDavCommandQueue::updateConnectionSettings);
+    QObject::connect(this->settings(), &NextcloudSettingsBase::providerTypeChanged,
+                     this, &WebDavCommandQueue::updateConnectionSettings);
+    QObject::connect(this->settings(), &NextcloudSettingsBase::customCertChanged,
+                     this, &WebDavCommandQueue::updateConnectionSettings);
 }
 
 CommandEntity* WebDavCommandQueue::makeDirectoryRequest(QString dirName)

@@ -2,42 +2,40 @@
 #define WEBDAVCOMMANDQUEUE_H
 
 #include <QObject>
+#include "cloudstorageprovider.h"
 #include "commandqueue.h"
 
 #include <settings/nextcloudsettingsbase.h>
 #include <qwebdav.h>
 
 
-class WebDavCommandQueue : public CommandQueue
+class WebDavCommandQueue : public CloudStorageProvider
 {
     Q_OBJECT
-
-    Q_PROPERTY(NextcloudSettingsBase* settings READ settings WRITE setSettings NOTIFY settingsChanged)
 
 public:
     explicit WebDavCommandQueue(QObject* parent = Q_NULLPTR,
                                 NextcloudSettingsBase* settings = Q_NULLPTR);
 
-    NextcloudSettingsBase* settings();
-    void setSettings(NextcloudSettingsBase* v);
-
 public slots:
-    CommandEntity* fileDownloadRequest(QString from,
-                                       QString mimeType = QStringLiteral(""),
-                                       bool open = false,
-                                       QDateTime lastModified = QDateTime());
-    CommandEntity* fileUploadRequest(QString from,
-                                     QString to,
-                                     QDateTime lastModified = QDateTime());
-    CommandEntity* makeDirectoryRequest(QString dirName);
-    CommandEntity* removeRequest(QString name);
-    CommandEntity* moveRequest(QString from, QString to);
-    CommandEntity* copyRequest(QString from, QString to);
-    CommandEntity* directoryListingRequest(QString path, bool refresh);
+    virtual CommandEntity* fileDownloadRequest(QString from,
+                                               QString mimeType = QStringLiteral(""),
+                                               bool open = false,
+                                               QDateTime lastModified = QDateTime()) Q_DECL_OVERRIDE;
+    virtual CommandEntity* fileUploadRequest(QString from,
+                                             QString to,
+                                             QDateTime lastModified = QDateTime()) Q_DECL_OVERRIDE;
+    virtual CommandEntity* makeDirectoryRequest(QString dirName) Q_DECL_OVERRIDE;
+    virtual CommandEntity* removeRequest(QString name) Q_DECL_OVERRIDE;
+    virtual CommandEntity* moveRequest(QString from, QString to) Q_DECL_OVERRIDE;
+    virtual CommandEntity* copyRequest(QString from, QString to) Q_DECL_OVERRIDE;
+    virtual CommandEntity* directoryListingRequest(QString path, bool refresh) Q_DECL_OVERRIDE;
 
-    QWebdav* getWebdav() { return m_client; }
-
-    //protected:
+    QWebdav* getWebdav()
+    {
+        qDebug() << Q_FUNC_INFO << m_client;
+        return m_client;
+    }
 
 private:
     CommandEntity* localLastModifiedRequest(const QString& destination,
@@ -49,11 +47,9 @@ private:
 
     void updateConnectionSettings();
 
-    NextcloudSettingsBase* m_settings = Q_NULLPTR;
     QWebdav* m_client = Q_NULLPTR;
 
 signals:
-    void settingsChanged();
     void sslErrorOccured(QString md5Digest, QString sha1Digest);
 
 };

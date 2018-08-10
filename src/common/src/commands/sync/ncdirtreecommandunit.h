@@ -6,11 +6,13 @@
 #include <qwebdav.h>
 #include <settings/nextcloudsettingsbase.h>
 
-class NcDirNode : public QObject {
-    Q_GADGET
+class NcDirNode : public QObject
+{
+    Q_OBJECT
 
 public:
-    ~NcDirNode() {
+    ~NcDirNode()
+    {
         qDebug() << Q_FUNC_INFO;
         while (!directories.isEmpty()) {
             NcDirNode* backReference = this->directories.back();
@@ -20,7 +22,10 @@ public:
             }
         }
     }
-    bool containsDirWithUniqueId(const QString& uniqueId){
+    bool containsDirWithUniqueId(const QString& uniqueId)
+    {
+        if (uniqueId.isEmpty())
+            return false;
         for (const NcDirNode* directory : directories) {
             if (directory->uniqueId == uniqueId)
                 return true;

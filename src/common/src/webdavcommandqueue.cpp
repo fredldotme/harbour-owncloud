@@ -25,8 +25,8 @@
 WebDavCommandQueue::WebDavCommandQueue(QObject* parent, NextcloudSettingsBase* settings) :
     CommandQueue(parent)
 {
-    this->m_settings = settings;
-    this->m_client = getNewWebDav(this->m_settings, this);
+    setSettings(settings);
+    updateConnectionSettings();
 
     QObject::connect(this, &WebDavCommandQueue::settingsChanged,
                      this, &WebDavCommandQueue::updateConnectionSettings);

@@ -7,15 +7,18 @@ CoverBackground {
     anchors.fill: parent
 
     Image {
+        readonly property int __positioningOffset : 64
         id: icon
         source: "qrc:/icons/icon_gray.svg"
         anchors.top: parent.top
-        anchors.topMargin: -64
+        anchors.topMargin: -__positioningOffset
         anchors.right: parent.right
-        anchors.rightMargin: -64
+        anchors.rightMargin: -__positioningOffset
         anchors.left: parent.left
-        anchors.leftMargin: parent.width/4
-        height: width
+        anchors.leftMargin: __positioningOffset
+        anchors.bottom: parent.verticalCenter
+        anchors.bottomMargin: __positioningOffset
+        fillMode: Image.PreserveAspectFit
         scale: 2
         sourceSize.width: width
         sourceSize.height: height

@@ -1,67 +1,36 @@
 #ifndef UPLOADER_H
 #define UPLOADER_H
 
-#include "qwebdav.h"
-#include "qwebdavdirparser.h"
-
 #include <QObject>
-#include <QSet>
+#include <webdavcommandqueue.h>
+#include <settings/nextcloudsettingsbase.h>
+#include "networkmonitor.h"
 
 class Uploader : public QObject
 {
     Q_OBJECT
-
 public:
-    Uploader(QObject *parent = 0);
-
-    static Uploader* instance();
-    bool isOnline() { return m_online; }
-
-private:
-    void abort();
-
-signals:
-    void uploadError(QString errorMessage);
-    void pokeFilesystemScanner();
-    void connectError(QString errorMessage);
-    void fileUploaded(QString file);
-    void uploadingChanged(bool uploading);
+    explicit Uploader(QObject *parent = Q_NULLPTR,
+                      const QString& targetDirectory = QStringLiteral(""),
+                      NetworkMonitor* networkMonitor = Q_NULLPTR,
+                      NextcloudSettingsBase* settings = Q_NULLPTR);
+public:
+    bool running();
+    bool shouldSync();
 
 public slots:
-    void fileFound(QString filePath);
-    void setOnline(bool online);
-    void settingsChanged();
-
-private slots:
-    void uploadFinished();
-    void remoteListingFinished();
-    void resetReply();
+    void triggerSync();
+    void stopSync();
 
 private:
-    void uploadFile();
-    void getExistingRemote();
-    void remotePathCreated();
-    void applySettings();
-    void setRemoteDirectory();
+    const QString m_targetDirectory;
+    NetworkMonitor* m_networkMonitor = Q_NULLPTR;
+    NextcloudSettingsBase* m_settings = Q_NULLPTR;
+    WebDavCommandQueue* m_webDavCommandQueue = Q_NULLPTR;
 
-    QString relativeToRemote(QString path);
-    QString relativeLocalPath(QString absolutePath);
-    QString relativeRemotePath(QString absolutePath);
+signals:
+    void runningChanged();
 
-    QSet<QString> m_existingFiles;
-    QSet<QString> m_existingDirs;
-
-    QNetworkReply *m_currentReply;
-    TransferEntry *m_currentEntry;
-    QList<QString> m_uploadQueue;
-    QWebdav m_connection;
-    QWebdavDirParser m_remoteDir;
-    bool m_uploading;
-    bool m_fetchedExisting;
-    QString m_remotePath;
-    QStringList m_dirsToFetch;
-    bool m_online;
 };
 
-
-#endif//UPLOADER_H
+#endif // UPLOADER_H

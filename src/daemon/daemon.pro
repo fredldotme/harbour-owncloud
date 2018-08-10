@@ -9,12 +9,14 @@ SOURCES += \
     $$PWD/main.cpp \
     $$PWD/filesystem.cpp \
     $$PWD/networkmonitor.cpp \
-    $$PWD/dbushandler.cpp
+    $$PWD/dbushandler.cpp \
+    $$PWD/uploader.cpp
 
 HEADERS += \
     $$PWD/filesystem.h \
     $$PWD/networkmonitor.h \
-    $$PWD/dbushandler.h
+    $$PWD/dbushandler.h \
+    $$PWD/uploader.h
 
 OTHER_FILES += harbour-owncloud-daemon.service
 

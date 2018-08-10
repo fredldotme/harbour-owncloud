@@ -31,6 +31,9 @@ void Filesystem::prepareScan(QString dirPath)
 
 void Filesystem::scan(QString dirPath, bool recursive)
 {
+    if (this->m_inhibit)
+        return;
+
     qDebug() << "scanning" << dirPath;
 
     QDir dir(dirPath);
@@ -44,7 +47,7 @@ void Filesystem::scan(QString dirPath, bool recursive)
                                                     QDir::NoDotAndDotDot |
                                                     QDir::Readable);
 
-    foreach(const QFileInfo &entry, entries) {
+    for (const QFileInfo &entry : entries) {
         QString path = entry.absoluteFilePath();
         if (entry.isDir() && recursive) {
             scan(path, recursive);
@@ -77,8 +80,15 @@ void Filesystem::rescan()
     scan(dirInfo.absoluteFilePath(), true);
 }
 
+void Filesystem::inhibitScan(bool inhibit)
+{
+    this->m_inhibit = inhibit;
+}
+
 void Filesystem::triggerRescan()
 {
+    qDebug() << Q_FUNC_INFO;
+
     QString newPath = NextcloudSettings::instance()->localPicturesPath();
 
     if (!m_watcher.directories().isEmpty()) {

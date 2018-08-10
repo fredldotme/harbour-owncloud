@@ -24,6 +24,7 @@ signals:
     void fileFound(QString fullPath);
 
 public slots:
+    void inhibitScan(bool inhibit);
     void triggerRescan();
 
 private slots:
@@ -36,6 +37,7 @@ private:
     QFileSystemWatcher m_watcher;
     QString m_localPath;
     QSet<QString> m_existingFiles;
+    bool m_inhibit = false;
 
     /* Camera creates temporary files before writing out content.
      * This condition can be triggered by having ~/Pictures be a

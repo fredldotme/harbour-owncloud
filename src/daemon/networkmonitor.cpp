@@ -7,11 +7,15 @@ NetworkMonitor::NetworkMonitor(QObject *parent,
                                NextcloudSettings* settings) :
     QObject(parent), m_settings(settings)
 {
-    m_shouldDownload = false;
-    connect(&m_configManager, &QNetworkConfigurationManager::configurationAdded, this, &NetworkMonitor::recheckNetworks);
-    connect(&m_configManager, &QNetworkConfigurationManager::configurationChanged, this, &NetworkMonitor::recheckNetworks);
-    connect(&m_configManager, &QNetworkConfigurationManager::configurationRemoved, this, &NetworkMonitor::recheckNetworks);
-    connect(&m_configManager, &QNetworkConfigurationManager::onlineStateChanged, this, &NetworkMonitor::recheckNetworks);
+    this->m_shouldSync = false;
+    connect(&this->m_configManager, &QNetworkConfigurationManager::configurationAdded,
+            this, &NetworkMonitor::recheckNetworks);
+    connect(&this->m_configManager, &QNetworkConfigurationManager::configurationChanged,
+            this, &NetworkMonitor::recheckNetworks);
+    connect(&this->m_configManager, &QNetworkConfigurationManager::configurationRemoved,
+            this, &NetworkMonitor::recheckNetworks);
+    connect(&this->m_configManager, &QNetworkConfigurationManager::onlineStateChanged,
+            this, &NetworkMonitor::recheckNetworks);
 }
 
 NetworkMonitor::~NetworkMonitor()
@@ -29,27 +33,25 @@ void NetworkMonitor::recheckNetworks()
 {
     QMutexLocker locker(&checkerMutex);
 
-    const bool uploadOverCellular = this->m_settings->mobileUpload();
+    if (this->m_settings) {
+        const bool uploadOverCellular = this->m_settings->mobileUpload();
+        const bool uploadAutomatically = this->m_settings->uploadAutomatically();
 
-    if (!m_configManager.isOnline()) {
-        if (!m_shouldDownload) {
+        if (!uploadAutomatically) {
+            setShouldDownload(false);
             return;
         }
 
-        m_shouldDownload = false;
-        emit shouldDownloadChanged(false);
-        return;
+        // Don't explicitly check for bearer types in case cellular
+        // upload is enabled, fall through otherwise
+        if (uploadOverCellular) {
+            setShouldDownload(true);
+            return;
+        }
     }
 
-    // Don't explicitly check for bearer types in case cellular
-    // upload is enabled, fall through otherwise
-    if (uploadOverCellular) {
-        if (m_shouldDownload) {
-            return;
-        }
-
-        m_shouldDownload = true;
-        emit shouldDownloadChanged(true);
+    if (!m_configManager.isOnline()) {
+        setShouldDownload(false);
         return;
     }
 
@@ -64,19 +66,19 @@ void NetworkMonitor::recheckNetworks()
     }
 
     if (hasNonCellular) {
-        if (m_shouldDownload) {
-            return;
-        }
-
-        m_shouldDownload = true;
-        emit shouldDownloadChanged(true);
+        setShouldDownload(true);
         return;
     }
 
-    if (!m_shouldDownload) {
+    setShouldDownload(false);
+}
+
+void NetworkMonitor::setShouldDownload(bool value)
+{
+    if (this->m_shouldSync == value) {
         return;
     }
 
-    m_shouldDownload = false;
-    emit shouldDownloadChanged(false);
+    this->m_shouldSync = value;
+    Q_EMIT shouldSyncChanged(value);
 }

@@ -12,6 +12,7 @@
 #include "settings/nextcloudsettings.h"
 #include "dbushandler.h"
 #include "networkmonitor.h"
+#include "uploader.h"
 
 #include <commands/sync/ncdirtreecommandunit.h>
 #include <commands/sync/ncsynccommandunit.h>
@@ -39,43 +40,11 @@ QString remoteDirectoryFromHwRelease()
     return QStringLiteral("/Jolla/");
 }
 
-inline void filePushRequested(WebDavCommandQueue* webDavQueue,
-                              NextcloudSettings* settings,
-                              NetworkMonitor* netMonitor,
-                              QString targetDirectory) {
-    if (!(webDavQueue && settings && netMonitor)) {
-        qCritical() << "Invalid object existance (webDavQueue, settings, netMonitor)"
-                    << ", bailing out.";
-        return;
-    }
-
-    if (!settings->uploadAutomatically())
-        return;
-
-    if (!netMonitor->shouldDownload() && webDavQueue->isRunning()) {
-        webDavQueue->stop();
-        return;
-    }
-
-    if (!netMonitor->shouldDownload())
-        return;
-
-    if (webDavQueue->queue().length() > 0)
-        return;
-
-    NcSyncCommandUnit* syncDirectoriesUnit = new NcSyncCommandUnit(webDavQueue,
-                                                                   webDavQueue->getWebdav(),
-                                                                   settings->localPicturesPath(),
-                                                                   targetDirectory);
-    webDavQueue->enqueue((CommandEntity*)syncDirectoriesUnit);
-}
-
 int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
 
     NextcloudSettings* settings = NextcloudSettings::instance();
-    settings->readSettings();
 
     // Status updates and config reload requests through DBus
     DBusHandler *dbusHandler = new DBusHandler();
@@ -92,10 +61,8 @@ int main(int argc, char *argv[])
     const QString targetDirectory = remoteDirectoryFromHwRelease();
 
     Filesystem *fsHandler = Filesystem::instance();
-    NetworkMonitor *netMonitor = NetworkMonitor::instance(NextcloudSettings::instance());
-
-    WebDavCommandQueue* webDavQueue = new WebDavCommandQueue(&app, settings);
-    webDavQueue->setImmediate(true);
+    NetworkMonitor *netMonitor = NetworkMonitor::instance(settings);
+    Uploader* uploader = new Uploader(Q_NULLPTR, targetDirectory, netMonitor, settings);
 
     // Periodically check for existance of the local pictures path until found.
     // Don't stop the timer as the external storage could be ejected anytime.
@@ -106,57 +73,60 @@ int main(int argc, char *argv[])
     localPathCheck.setSingleShot(false);
     QObject::connect(&localPathCheck, &QTimer::timeout, &localPathCheck,
                      [&localPath, &localPathCheck, fsHandler]() {
-        if (localPath.exists()) fsHandler->triggerRescan();
+        if (!localPath.exists())
+            return;
+
+        fsHandler->triggerRescan();
     });
     localPathCheck.start();
 
-    QObject::connect(fsHandler, &Filesystem::fileFound,
-                     [fsHandler, webDavQueue, settings, netMonitor, targetDirectory]
-                     (QString fullPath){
-        filePushRequested(webDavQueue, settings, netMonitor, targetDirectory);
+    QObject::connect(fsHandler, &Filesystem::fileFound, [uploader](QString fullPath){
+        Q_UNUSED(fullPath)
+        uploader->triggerSync();
     });
 
     // DBus connections
-    QObject::connect(dbusHandler, &DBusHandler::abortRequested, webDavQueue, &WebDavCommandQueue::stop);
-    QObject::connect(dbusHandler, &DBusHandler::configReloadRequested, settings, &NextcloudSettings::readSettings);
+    QObject::connect(dbusHandler, &DBusHandler::configReloadRequested,
+                     settings, &NextcloudSettings::readSettings,
+                     Qt::QueuedConnection);
+    QObject::connect(dbusHandler, &DBusHandler::abortRequested, uploader, &Uploader::stopSync);
 
-    QObject::connect(netMonitor, &NetworkMonitor::shouldDownloadChanged,
-                     [netMonitor, dbusHandler, webDavQueue, settings, targetDirectory](){
-        if (!(netMonitor && dbusHandler)) {
-            qCritical() << "Invalid object existance (netMonitor, dbusHandler),"
-                        << "bailing out.";
+    QObject::connect(netMonitor, &NetworkMonitor::shouldSyncChanged, [uploader, fsHandler] (bool shouldSync) {
+        if (!(uploader && fsHandler)) {
+            qCritical() << "Invalid object existance (uploader, fsHandler), bailing out.";
             return;
         }
-        dbusHandler->setOnline(netMonitor->shouldDownload());
 
-        filePushRequested(webDavQueue, settings, netMonitor, targetDirectory);
+        fsHandler->inhibitScan(!uploader->shouldSync());
+
+        if (shouldSync) {
+            uploader->triggerSync();
+        } else {
+            uploader->stopSync();
+        }
     });
 
-    QObject::connect(webDavQueue, &WebDavCommandQueue::runningChanged, [dbusHandler, webDavQueue]() {
-        if (!(dbusHandler && webDavQueue)) {
-            qCritical() << "Invalid object existance (dbusHandler, webDavQueue), bailing out.";
+    QObject::connect(uploader, &Uploader::runningChanged, [dbusHandler, uploader]() {
+        if (!(dbusHandler && uploader)) {
+            qCritical() << "Invalid object existance (dbusHandler, uploader), bailing out.";
             return;
         }
-        dbusHandler->setUploading(webDavQueue->isRunning());
+        dbusHandler->setUploading(uploader->running());
     });
-
-    //QObject::connect(uploader, &Uploader::fileUploaded, dbusHandler, &DBusHandler::fileUploaded);
-    //QObject::connect(uploader, &Uploader::connectError, dbusHandler, &DBusHandler::connectError);
-    //QObject::connect(uploader, &Uploader::uploadError, dbusHandler, &DBusHandler::uploadError);
 
     QObject::connect(settings, &NextcloudSettings::uploadAutomaticallyChanged,
-                     [webDavQueue, netMonitor, dbusHandler]() {
-        if (!netMonitor || !webDavQueue) {
-            qCritical() << "Invalid object existance (netMonitor, webDavQueue), bailing out.";
+                     &app, [uploader, fsHandler](){
+        if (!(uploader && fsHandler)) {
+            qCritical() << "Invalid object existance (uploader, fsHandler), bailing out.";
             return;
         }
-        dbusHandler->setOnline(netMonitor->shouldDownload());
-        if (!netMonitor->shouldDownload() && webDavQueue->isRunning())
-            webDavQueue->stop();
-    });
+        fsHandler->inhibitScan(!uploader->shouldSync());
+        uploader->triggerSync();
+    }, Qt::QueuedConnection);
 
+    settings->readSettings();
     netMonitor->recheckNetworks();
-    dbusHandler->setOnline(netMonitor->shouldDownload());
+    fsHandler->inhibitScan(!uploader->shouldSync());
     fsHandler->triggerRescan();
 
     return app.exec();

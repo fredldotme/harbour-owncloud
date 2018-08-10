@@ -16,18 +16,20 @@ public:
                             NextcloudSettings* settings = Q_NULLPTR);
     ~NetworkMonitor();
     static NetworkMonitor* instance(NextcloudSettings* settings);
-    bool shouldDownload() { return m_shouldDownload; }
+    bool shouldSync() { return m_shouldSync; }
 
 signals:
-    void shouldDownloadChanged(bool);
+    void shouldSyncChanged(bool);
 
 public slots:
     void recheckNetworks();
 
 private:
+    void setShouldDownload(bool value);
+
     QNetworkConfigurationManager m_configManager;
     NextcloudSettings* m_settings = Q_NULLPTR;
-    bool m_shouldDownload;
+    bool m_shouldSync;
     QMutex checkerMutex;
 };
 

@@ -22,10 +22,12 @@ public:
             }
         }
     }
+
     bool containsDirWithUniqueId(const QString& uniqueId)
     {
         if (uniqueId.isEmpty())
             return false;
+
         for (const NcDirNode* directory : directories) {
             if (directory->uniqueId == uniqueId)
                 return true;

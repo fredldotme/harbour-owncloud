@@ -79,9 +79,9 @@ public:
     Q_INVOKABLE bool parseFromAddressString(QString value);
 
 public slots:
-    void resetSettings();
     virtual bool readSettings();
     virtual void writeSettings();
+    virtual void resetSettings();
 
     void setUsername(QString value);
     void setPassword(QString value);

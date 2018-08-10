@@ -17,7 +17,7 @@ public:
 public slots:
     bool readSettings() Q_DECL_OVERRIDE;
     void writeSettings() Q_DECL_OVERRIDE;
-    void resetSettings();
+    void resetSettings() Q_DECL_OVERRIDE;
 
 private:
     QSettings settings;

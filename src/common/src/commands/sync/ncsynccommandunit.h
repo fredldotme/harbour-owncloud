@@ -21,7 +21,7 @@ public:
     QSharedPointer<NcDirNode> cachedTree();
 
 protected:
-    void decideAdditionalWorkRequired(CommandEntity *entity);
+    void expand(CommandEntity* previousCommandEntity);
 
 private:
     bool fileExistsRemotely(const QString& localFilePath,

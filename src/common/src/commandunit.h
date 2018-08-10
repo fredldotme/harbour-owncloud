@@ -37,7 +37,7 @@ public:
 protected:
     bool startWork() Q_DECL_OVERRIDE;
     bool abortWork() Q_DECL_OVERRIDE;
-    virtual void decideAdditionalWorkRequired(CommandEntity* entity);
+    virtual void expand(CommandEntity* previousCommandEntity);
     std::deque<CommandEntity*>* queue();
 
 private:

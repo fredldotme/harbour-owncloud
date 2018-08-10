@@ -59,12 +59,12 @@ NcDirTreeCommandUnit::NcDirTreeCommandUnit(QObject *parent,
     this->m_currentNode = this->m_rootNode.data();
 }
 
-void NcDirTreeCommandUnit::decideAdditionalWorkRequired(CommandEntity *entity)
+void NcDirTreeCommandUnit::expand(CommandEntity* previousCommandEntity)
 {
-    if (!entity)
+    if (!previousCommandEntity)
         return;
 
-    DavListCommandEntity* listCommand = qobject_cast<DavListCommandEntity*>(entity);
+    DavListCommandEntity* listCommand = qobject_cast<DavListCommandEntity*>(previousCommandEntity);
     if (!listCommand)
         return;
 

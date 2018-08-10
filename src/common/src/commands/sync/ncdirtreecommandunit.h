@@ -54,7 +54,7 @@ public:
                          QSharedPointer<NcDirNode> cachedTree = QSharedPointer<NcDirNode>());
 
 protected:
-    void decideAdditionalWorkRequired(CommandEntity *entity) Q_DECL_OVERRIDE;
+    void expand(CommandEntity* previousCommandEntity) Q_DECL_OVERRIDE;
 
 private:
     QWebdav* m_client;

@@ -93,20 +93,20 @@ bool NcSyncCommandUnit::fileExistsRemotely(const QString& localFilePath,
     return fileFound;
 }
 
-void NcSyncCommandUnit::decideAdditionalWorkRequired(CommandEntity *entity)
+void NcSyncCommandUnit::expand(CommandEntity *previousCommandEntity)
 {
-    if (!entity) {
+    if (!previousCommandEntity) {
         qWarning() << Q_FUNC_INFO << "entity is not valid.";
         return;
     }
 
-    const QString commandType = entity->info().property(QStringLiteral("type")).toString();
+    const QString commandType = previousCommandEntity->info().property(QStringLiteral("type")).toString();
 
     if (commandType != QStringLiteral("dirTree")) {
         return;
     }
 
-    NcDirTreeCommandUnit* treeCommandUnit = qobject_cast<NcDirTreeCommandUnit*>(entity);
+    NcDirTreeCommandUnit* treeCommandUnit = qobject_cast<NcDirTreeCommandUnit*>(previousCommandEntity);
     if (!treeCommandUnit) {
         qWarning() << "NcDirTreeCommandUnit couldn't be retrieved";
         return;

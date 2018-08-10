@@ -46,9 +46,9 @@ bool CommandUnit::staticProgress() const
     return this->m_numProgressingEntities < 1;
 }
 
-void CommandUnit::decideAdditionalWorkRequired(CommandEntity *entity)
+void CommandUnit::expand(CommandEntity* previousCommandEntity)
 {
-    Q_UNUSED(entity);
+    Q_UNUSED(previousCommandEntity);
 }
 
 std::deque<CommandEntity*>* CommandUnit::queue()
@@ -111,7 +111,7 @@ void CommandUnit::runNext()
         // queue before running the front entity.
         // This decision has to be based upon the previous CommandEntity.
         // The method is virtual and has to be implemented by inheriting CommandUnit types.
-        decideAdditionalWorkRequired(command);
+        expand(command);
 
         qDebug() << "deleting command:" << command << command->state();
         delete command;

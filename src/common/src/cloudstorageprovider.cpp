@@ -1,7 +1,7 @@
 #include "cloudstorageprovider.h"
 
 CloudStorageProvider::CloudStorageProvider(QObject *parent, NextcloudSettingsBase* settings) :
-    CommandQueue(parent), m_settings(settings)
+    CommandQueue(parent)
 {
     setSettings(settings);
 }

@@ -40,8 +40,8 @@ public slots:
     CommandEntityState state() { return m_state; }
     const CommandEntityInfo info() const
     { return m_commandInfo; }
-    const QVariant resultData() const
-    { return isFinished() ? m_resultData : QVariant(); }
+    const QVariantMap resultData() const
+    { return isFinished() ? m_resultData : QVariantMap(); }
 
 protected:
     virtual bool startWork() {
@@ -66,7 +66,7 @@ protected:
     void setState(const CommandEntityState& state);
 
     CommandEntityInfo m_commandInfo;
-    QVariant m_resultData;
+    QVariantMap m_resultData;
 
 private:
     qreal m_progress = 0.0;

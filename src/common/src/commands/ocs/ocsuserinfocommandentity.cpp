@@ -88,7 +88,7 @@ OcsUserInfoCommandEntity::OcsUserInfoCommandEntity(QObject *parent,
 
     QObject::connect(this, &OcsUserInfoCommandEntity::contentReady,
                      this, [=](){
-        QVariantMap resultMap = this->m_resultData.toMap();
+        QVariantMap resultMap = this->m_resultData;
         const int statusCode = resultMap["statusCode"].toInt();
         if (statusCode < 200 || statusCode >= 300)
             return;

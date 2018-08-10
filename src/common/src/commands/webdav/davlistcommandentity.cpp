@@ -41,8 +41,11 @@ bool DavListCommandEntity::startWork()
         qInfo() << "DIRECTORY SIZE" << this->m_parser.getList().size();
 
         QVariantMap result;
-        result.insert(QStringLiteral("success"), (this->m_parser.error() == QNetworkReply::NoError));
-        result.insert(QStringLiteral("httpCode"), this->m_parser.httpCode());
+        const int httpCode = this->m_parser.httpCode();
+        const bool success = (httpCode >= 200 && httpCode < 300);
+
+        result.insert(QStringLiteral("success"), success && (this->m_parser.error() == QNetworkReply::NoError));
+        result.insert(QStringLiteral("httpCode"), httpCode);
 
         QVariantList directoryContent;
 

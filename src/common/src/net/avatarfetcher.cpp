@@ -68,7 +68,7 @@ void AvatarFetcher::fetch()
         }
 
         const QByteArray content =
-                thumbnailDownloadCommand->resultData().toMap()["content"].toByteArray();
+                thumbnailDownloadCommand->resultData()["content"].toByteArray();
 
         if (thumbnail->write(content) < 0) {
             qWarning() << "Failed to write thumbnail file";

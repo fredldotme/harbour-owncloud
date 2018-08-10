@@ -30,7 +30,7 @@ bool AuthenticationExaminer::examine(QString serverUrl, AuthenticationMethod met
                                                                          &this->m_tempSettings);
         QObject::connect(flowExamination, &HttpGetCommandEntity::done,
                          this, [=]() {
-            const int statusCode = flowExamination->resultData().toMap()["statusCode"].toInt();
+            const int statusCode = flowExamination->resultData()["statusCode"].toInt();
             if (statusCode < 200 || statusCode >= 300)
                 Q_EMIT examinationFailed(AuthenticationMethod::FLOW_DIALOG);
             else

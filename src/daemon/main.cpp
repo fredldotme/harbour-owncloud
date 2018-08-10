@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
 
     Filesystem *fsHandler = Filesystem::instance();
     NetworkMonitor *netMonitor = NetworkMonitor::instance(settings);
-    Uploader* uploader = new Uploader(Q_NULLPTR, targetDirectory, netMonitor, settings);
+    Uploader* uploader = new Uploader(&app, targetDirectory, netMonitor, settings);
 
     // Periodically check for existance of the local pictures path until found.
     // Don't stop the timer as the external storage could be ejected anytime.

@@ -17,7 +17,7 @@ public:
                            NextcloudSettingsBase* settings = Q_NULLPTR);
 
 public slots:
-    virtual void authenticate(bool saveCredentials = false) = 0;
+    virtual void authenticate() = 0;
 
 protected:
     virtual void updateClientSettings() = 0;
@@ -26,8 +26,6 @@ protected:
     void setSettings(NextcloudSettingsBase* v);
     bool running();
     void setRunning(bool v);
-
-    bool m_saveCredentials = false;
 
 private:
     NextcloudSettingsBase* m_settings = Q_NULLPTR;

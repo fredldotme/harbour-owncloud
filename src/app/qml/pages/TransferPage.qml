@@ -8,6 +8,7 @@ Page {
     objectName: "TransferPage"
 
     property CommandEntity selectedEntry : null;
+    property AccountWorkers accountWorkers : null
 
     PageHeader {
         id: header

@@ -28,18 +28,67 @@ public:
         if (uniqueId.isEmpty())
             return false;
 
-        for (const NcDirNode* directory : directories) {
+        for (const NcDirNode* directory : this->directories) {
             if (directory->uniqueId == uniqueId)
                 return true;
         }
         return false;
     }
 
+    bool containsFileWithUniqueId(const QString& uniqueId)
+    {
+        if (uniqueId.isEmpty())
+            return false;
+
+        for (const QVariantMap& file : this->files) {
+            const QString fileUniqueId = file.value(QStringLiteral("uniqueId")).toString();
+            if (fileUniqueId.isEmpty())
+                continue;
+            if (uniqueId == fileUniqueId)
+                return true;
+        }
+        return false;
+    }
+
+    NcDirNode* getNode(const QString& path)
+    {
+        if (this->directories.empty())
+            return nullptr;
+
+        QStringList crumbs = path.split("/", QString::SkipEmptyParts);
+        if (crumbs.empty())
+            return nullptr;
+
+        QVector<NcDirNode*>::iterator potentialNodeIterator = directories.begin();
+        NcDirNode* potentialNode = this;
+        while (potentialNode) {
+            if (potentialNode->name == crumbs.first()) {
+                crumbs.takeFirst();
+            }
+
+            if (crumbs.empty())
+                break;
+
+            if (potentialNodeIterator == directories.end()) {
+                potentialNode = nullptr;
+                break;
+            }
+
+            potentialNode = *(potentialNodeIterator++);
+        }
+
+        // If there are remaining crumbs the path couldn't be fully resolved
+        if (!crumbs.empty())
+            return nullptr;
+
+        return potentialNode;
+    }
+
     NcDirNode* parentNode = nullptr;
 
     QString name;
     QString uniqueId;
-    QVector<QVariant> files;
+    QVector<QVariantMap> files;
     QVector<NcDirNode*> directories;
     QVector<NcDirNode*>::iterator directory_iterator;
 };

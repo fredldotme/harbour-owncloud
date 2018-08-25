@@ -95,41 +95,41 @@ void NcDirTreeCommandUnit::expand(CommandEntity* previousCommandEntity)
     const QString remotePath = listCommand->info().property(QStringLiteral("remotePath")).toString();
     const QVariantList directoryContent = commandResult.value(QStringLiteral("dirContent")).toList();
 
-    QVector<QVariant> files;
-    QVector<NcDirNode*> directories;
-
     for (const QVariant& tmpEntry : directoryContent) {
         // Skip invalid variants
         if (!tmpEntry.canConvert(QMetaType::QVariantMap))
             continue;
 
-        QVariantMap entry = tmpEntry.toMap();
+        const QVariantMap entry = tmpEntry.toMap();
         const bool entryIsDirectory = entry.value(QStringLiteral("isDirectory")).toBool();
         const QString entryName = entry.value(QStringLiteral("name")).toString();
-        const QString entityTag = entry.value(QStringLiteral("entityTag")).toString();
+        const QString uniqueId = entry.value(QStringLiteral("uniqueId")).toString();
 
         qDebug() << "entryName:" << entryName;
+
+        // Skip directory examination/file appendage in case the unique ID (entity tag) already exists
+        const bool uniqueIdsMatch = entryIsDirectory ?
+                    this->m_currentNode->containsDirWithUniqueId(uniqueId) :
+                    this->m_currentNode->containsFileWithUniqueId(uniqueId);
+
+        if (uniqueIdsMatch)
+            continue;
 
         if (!entryIsDirectory) {
             // Add to the list of files and
             // continue with the next tmpEntry
-            files.append(entry);
+            this->m_currentNode->files.append(entry);
             continue;
         }
-
-        // Skip directory examination in case the unique ID (entity tag) already exists
-        const bool uniqueIdsMatch = this->m_currentNode->containsDirWithUniqueId(entityTag);
-        if (uniqueIdsMatch)
-            continue;
 
         // Prepare the necessary tree node
         // NcDirNode and the related DavListCommandEntity are inserted
         // into their respective lists/queues in the same order
         NcDirNode* node = new NcDirNode;
         node->name = entryName;
-        node->uniqueId = entityTag;
+        node->uniqueId = uniqueId ;
         node->parentNode = this->m_currentNode;
-        directories.prepend(node);
+        this->m_currentNode->directories.prepend(node);
 
         const QString fullPath = remotePath + entryName + "/";
 
@@ -145,8 +145,6 @@ void NcDirTreeCommandUnit::expand(CommandEntity* previousCommandEntity)
 
     qDebug() << "remotePath of command" << remotePath;
     qDebug() << "current node" << this->m_currentNode->name;
-    this->m_currentNode->files = files;
-    this->m_currentNode->directories = directories;
     this->m_currentNode->directory_iterator = this->m_currentNode->directories.begin();
 
     NcDirNode* potentialNode = this->m_currentNode;

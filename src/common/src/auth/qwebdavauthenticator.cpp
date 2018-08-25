@@ -17,7 +17,7 @@ QWebDavAuthenticator::QWebDavAuthenticator(QObject *parent,
     });
 }
 
-void QWebDavAuthenticator::authenticate(bool saveCredentials)
+void QWebDavAuthenticator::authenticate()
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -33,7 +33,6 @@ void QWebDavAuthenticator::authenticate(bool saveCredentials)
         return;
     }
 
-    this->m_saveCredentials = saveCredentials;
     this->m_dirParser.listDirectory(this->m_client, "/");
 
     setRunning(true);
@@ -91,9 +90,6 @@ void QWebDavAuthenticator::testConnectionFinished(QNetworkReply *reply)
         return;
     }
 
-    if (this->m_saveCredentials && this->settings()) {
-        this->settings()->writeSettings();
-    }
     qDebug() << "authenticationSuccessful" << this;
     Q_EMIT authenticationSuccessful();
 }

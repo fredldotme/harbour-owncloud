@@ -32,12 +32,12 @@ void ThumbnailFetcher::fetch()
         return;
     }
 
-    if (!this->settings()) {
+    if (!this->commandQueue()->settings()) {
         qWarning() << "No user settings provided";
         return;
     }
 
-    if (this->settings()->providerType() != NextcloudSettingsBase::ProviderType::Nextcloud) {
+    if (this->commandQueue()->settings()->providerType() != NextcloudSettingsBase::ProviderType::Nextcloud) {
         qDebug() << "Thumbnail fetching is only supported on Nextcloud and ownCloud servers";
         return;
     }
@@ -66,8 +66,8 @@ void ThumbnailFetcher::fetch()
     HttpGetCommandEntity* thumbnailDownloadCommand =
             new HttpGetCommandEntity(this->commandQueue(),
                                      thumbnailPath,
-                                     prepareOcsHeaders(this->settings()),
-                                     this->settings());
+                                     prepareOcsHeaders(this->commandQueue()->settings()),
+                                     this->commandQueue()->settings());
 
     QObject::connect(thumbnailDownloadCommand, &CommandEntity::done, this, [=]() {
         setFetching(false);

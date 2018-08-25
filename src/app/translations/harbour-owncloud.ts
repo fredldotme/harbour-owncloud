@@ -417,9 +417,5 @@
         <source>%1 couldn&apos;t be downloaded</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Cache cleared</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 </TS>

@@ -1,17 +1,16 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import harbour.owncloud 1.0
 
 Page {
     id: pageRoot
 
-    Component.onCompleted: {
-        persistentSettings.readSettings();
-    }
+    property var accountWorkers : null
+    property AccountDb accountDb : null
 
     onStatusChanged: {
         if (status === PageStatus.Deactivating) {
             if (_navigation === PageNavigation.Back) {
-                persistentSettings.writeSettings()
                 daemonCtrl.reloadConfig()
             }
         }
@@ -30,10 +29,10 @@ Page {
             MenuItem {
                 text: qsTr("Reset connection settings")
                 onClicked: {
-                    transferQueue.stop()
-                    persistentSettings.resetSettings();
+                    accountWorkers.transferQueue.stop()
+                    accountWorkers.settings.resetSettings();
                     pageStack.clear();
-                    pageStack.push(basicAuthenticationPage);
+                    pageStack.push(accountSelection);
                 }
             }
         }
@@ -51,8 +50,8 @@ Page {
                 id: autoLoginSwitch
                 text: qsTr("Login automatically")
                 description: qsTr("Automatically log in to your ownCloud server when starting the app", "Login automatically description")
-                checked: persistentSettings.autoLogin
-                onClicked: persistentSettings.autoLogin = checked
+                checked: accountWorkers.settings.autoLogin
+                onClicked: accountWorkers.settings.autoLogin = checked
             }
 
             TextSwitch {

@@ -2,8 +2,10 @@ import QtQuick 2.0
 import harbour.owncloud 1.0
 
 CommandPageFlow {
+    property string targetRemotePath : "/"
+
     Connections {
-        target: commandQueue
+        target: accountWorkers.browserCommandQueue
         onCommandFinished: {
             console.log("onCommandFinished")
             var isDavListCommand = (receipt.info.property("type") === "davList")
@@ -41,9 +43,12 @@ CommandPageFlow {
             // a new page into the PageStack in case a refresh was not requested
             if (isDavListCommand) {
                 var remotePath = receipt.info.property("remotePath")
-                var isRefresh = receipt.info.property("refresh")
+                if (remotePath !== targetRemotePath)
+                    return;
 
+                var isRefresh = receipt.info.property("refresh")
                 var dirContent = receipt.result.dirContent;
+
                 directoryContents.insert(remotePath, dirContent);
 
                 // Done in case of a refresh
@@ -55,7 +60,10 @@ CommandPageFlow {
                     pageStack.completeAnimation()
 
                 var nextDirectory = browserComponent.createObject(pageStack,
-                                                                  { remotePath : remotePath });
+                                                                  {
+                                                                      remotePath : remotePath,
+                                                                      accountWorkers: accountWorkers
+                                                                  });
 
                 if (!nextDirectory) {
                     console.warn(browserComponent.errorString())
@@ -64,24 +72,20 @@ CommandPageFlow {
 
                 nextDirectory.transientNotification.connect(transientNotificationRequest)
 
-                // Replace the current top page when requesting a directory
-                // lising for the remote root path, ie after initial login.
+                // Try to fetch the avatar which
+                // will only succeed if the server supports it.
                 if (remotePath === "/") {
-                    pageStack.replace(nextDirectory)
-
-                    // Additionally try to fetch the avatar which
-                    // will only succeed if the server supports it.
-                    avatarFetcher.fetch()
-                } else {
-                    pageStack.push(nextDirectory)
+                    userInfoUpdateRequest()
+                    avatarFetchRequest()
                 }
+                pageStack.push(nextDirectory)
 
                 return
             }
 
             // Refresh userInfo after remote removal or copy
             if (isDavRmCommand || isDavCopyCommand) {
-                refreshUserInfo()
+                userInfoUpdateRequest()
                 return
             }
         }

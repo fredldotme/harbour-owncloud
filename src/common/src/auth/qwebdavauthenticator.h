@@ -17,7 +17,7 @@ public:
                                   NextcloudSettingsBase* settings = Q_NULLPTR);
 
 public slots:
-    void authenticate(bool saveCredentials = false) Q_DECL_OVERRIDE;
+    void authenticate() Q_DECL_OVERRIDE;
 
 protected:
     void updateClientSettings() Q_DECL_OVERRIDE;

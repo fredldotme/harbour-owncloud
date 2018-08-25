@@ -1,5 +1,5 @@
 CONFIG += qt c++11
-QT += dbus network xml
+QT += dbus network xml sql
 
 DEFINES += QWEBDAVITEM_EXTENDED_PROPERTIES
 

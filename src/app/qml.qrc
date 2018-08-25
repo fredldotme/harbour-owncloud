@@ -17,5 +17,6 @@
         <file>qml/navigation/CommandPageFlow.qml</file>
         <file>qml/navigation/BrowserCommandPageFlow.qml</file>
         <file>qml/pages/About.qml</file>
+        <file>qml/pages/login/AccountSelection.qml</file>
     </qresource>
 </RCC>

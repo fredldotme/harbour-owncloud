@@ -1,17 +1,17 @@
-#include "cloudstorageprovider.h"
+#include "settingsbackedcommandqueue.h"
 
-CloudStorageProvider::CloudStorageProvider(QObject *parent, NextcloudSettingsBase* settings) :
+SettingsBackedCommandQueue::SettingsBackedCommandQueue(QObject *parent, NextcloudSettingsBase* settings) :
     CommandQueue(parent)
 {
     setSettings(settings);
 }
 
-NextcloudSettingsBase* CloudStorageProvider::settings()
+NextcloudSettingsBase* SettingsBackedCommandQueue::settings()
 {
     return this->m_settings;
 }
 
-void CloudStorageProvider::setSettings(NextcloudSettingsBase *v)
+void SettingsBackedCommandQueue::setSettings(NextcloudSettingsBase *v)
 {
     if (this->m_settings == v)
         return;

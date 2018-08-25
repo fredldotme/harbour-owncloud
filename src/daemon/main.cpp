@@ -7,9 +7,8 @@
 
 #include <ownclouddbusconsts.h>
 
-#include <webdavcommandqueue.h>
 #include "filesystem.h"
-#include "settings/nextcloudsettings.h"
+#include "settings/inifilesettings.h"
 #include "dbushandler.h"
 #include "networkmonitor.h"
 #include "uploader.h"
@@ -44,7 +43,7 @@ int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
 
-    NextcloudSettings* settings = NextcloudSettings::instance();
+    IniFileSettings* settings = IniFileSettings::instance();
 
     // Status updates and config reload requests through DBus
     DBusHandler *dbusHandler = new DBusHandler();
@@ -87,7 +86,7 @@ int main(int argc, char *argv[])
 
     // DBus connections
     QObject::connect(dbusHandler, &DBusHandler::configReloadRequested,
-                     settings, &NextcloudSettings::readSettings,
+                     settings, &IniFileSettings::readSettings,
                      Qt::QueuedConnection);
     QObject::connect(dbusHandler, &DBusHandler::abortRequested, uploader, &Uploader::stopSync);
 
@@ -114,7 +113,7 @@ int main(int argc, char *argv[])
         dbusHandler->setUploading(uploader->running());
     });
 
-    QObject::connect(settings, &NextcloudSettings::uploadAutomaticallyChanged,
+    QObject::connect(settings, &IniFileSettings::uploadAutomaticallyChanged,
                      &app, [uploader, fsHandler](){
         if (!(uploader && fsHandler)) {
             qCritical() << "Invalid object existance (uploader, fsHandler), bailing out.";

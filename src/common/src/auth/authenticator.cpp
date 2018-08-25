@@ -5,13 +5,6 @@
 Authenticator::Authenticator(QObject *parent, NextcloudSettingsBase* settings) :
     QObject(parent), m_settings(settings)
 {
-    QObject::connect(this, &Authenticator::authenticationSuccessful,
-                     this, [=]() {
-        if (this->m_saveCredentials && this->m_settings) {
-            this->m_settings->writeSettings();
-            qInfo() << "Credentials saved";
-        }
-    });
 }
 
 NextcloudSettingsBase* Authenticator::settings()

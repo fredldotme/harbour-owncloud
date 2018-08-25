@@ -12,12 +12,12 @@ Page {
     property OcsCommandQueue ocsCommandQueue : null
     property WebDavCommandQueue browserCommandQueue : null
     property DaemonControl daemonCtrl : null
+    property AccountDb accountDatabase : null
 
     signal resetOcsInfo()
     signal notificationRequest(string summary, string body)
 
     Component.onCompleted: {
-        clientSettings.readSettings();
         if (clientSettings.autoLogin) {
             authenticator.authenticate(false)
         }
@@ -27,6 +27,12 @@ Page {
         id: authenticator
         settings: clientSettings
         onAuthenticationSuccessful: {
+            var addAccountSuccess = accountDatabase.addAccount(clientSettings)
+            if (!addAccountSuccess) {
+                console.warn("Failed to add account to database")
+                return;
+            }
+
             pageStack.pop()
             daemonCtrl.reloadConfig()
             browserCommandQueue.directoryListingRequest("/", false)
@@ -154,13 +160,11 @@ Page {
 
                 onClicked: {
                     resetOcsInfo()
-                    if (clientSettings.parseFromAddressString(hostaddress.text)) {
+                    if (clientSettings.setHostname(hostaddress.text)) {
                         clientSettings.username = username.text;
                         clientSettings.password = password.text;
                         clientSettings.autoLogin = autoLoginSwitch.checked;
                         clientSettings.isCustomCert = certSwitch.checked;
-                        clientSettings.writeSettings();
-                        clientSettings.readSettings()
 
                         authenticator.authenticate(true)
                     } else {

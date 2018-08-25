@@ -1,6 +1,6 @@
 #include "filesystem.h"
 
-#include "settings/nextcloudsettings.h"
+#include "settings/inifilesettings.h"
 //#include "uploader.h"
 
 #include <QDebug>
@@ -89,7 +89,7 @@ void Filesystem::triggerRescan()
 {
     qDebug() << Q_FUNC_INFO;
 
-    QString newPath = NextcloudSettings::instance()->localPicturesPath();
+    QString newPath = IniFileSettings::instance()->localPicturesPath();
 
     if (!m_watcher.directories().isEmpty()) {
         m_watcher.removePaths(m_watcher.directories());

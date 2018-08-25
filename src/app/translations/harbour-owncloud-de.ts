@@ -417,9 +417,5 @@
         <source>%1 couldn&apos;t be downloaded</source>
         <translation>%1 konnte nicht heruntergeladen werden</translation>
     </message>
-    <message>
-        <source>Cache cleared</source>
-        <translation>Zwischenspeicher geleert</translation>
-    </message>
 </context>
 </TS>

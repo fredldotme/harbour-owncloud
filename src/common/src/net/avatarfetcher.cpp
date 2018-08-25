@@ -17,7 +17,7 @@ void AvatarFetcher::fetch()
         return;
     }
 
-    if (!this->settings()) {
+    if (!this->commandQueue()->settings()) {
         qWarning() << "No user settings provided";
         return;
     }
@@ -27,7 +27,7 @@ void AvatarFetcher::fetch()
         return;
     }
 
-    if (this->settings()->providerType() != NextcloudSettingsBase::ProviderType::Nextcloud) {
+    if (this->commandQueue()->settings()->providerType() != NextcloudSettingsBase::ProviderType::Nextcloud) {
         qDebug() << "Avatar thumbnail fetching is only supported on Nextcloud and ownCloud servers";
         return;
     }
@@ -36,7 +36,7 @@ void AvatarFetcher::fetch()
     if (width() < 0) setWidth(128);
     if (height() < 0) setHeight(128);
 
-    const QString thumbnailPath = NEXTCLOUD_ENDPOINT_AVATAR.arg(this->settings()->username(),
+    const QString thumbnailPath = NEXTCLOUD_ENDPOINT_AVATAR.arg(this->commandQueue()->settings()->username(),
                                                                 QString::number(width()));
 
 
@@ -54,8 +54,8 @@ void AvatarFetcher::fetch()
     HttpGetCommandEntity* thumbnailDownloadCommand =
             new HttpGetCommandEntity(this->commandQueue(),
                                      thumbnailPath,
-                                     prepareOcsHeaders(this->settings()),
-                                     this->settings());
+                                     prepareOcsHeaders(this->commandQueue()->settings()),
+                                     this->commandQueue()->settings());
 
     QObject::connect(thumbnailDownloadCommand, &CommandEntity::done, this, [=]() {
         setFetching(false);

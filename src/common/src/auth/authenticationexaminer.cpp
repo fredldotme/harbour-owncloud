@@ -19,7 +19,7 @@ bool AuthenticationExaminer::examine(QString serverUrl, AuthenticationMethod met
         return false;
     }
 
-    this->m_tempSettings.setHostString(serverUrl);
+    this->m_tempSettings.setHoststring(serverUrl);
 
     switch (method) {
     case AuthenticationMethod::FLOW_DIALOG:

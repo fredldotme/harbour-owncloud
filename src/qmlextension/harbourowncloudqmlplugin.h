@@ -3,7 +3,7 @@
 
 #include <settings/permittedsettings.h>
 #include <commandentity.h>
-#include <webdavcommandqueue.h>
+#include <provider/storage/webdavcommandqueue.h>
 #include <qmlmap.h>
 #include <util/filepathutil.h>
 

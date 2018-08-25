@@ -161,7 +161,12 @@ void NcSyncCommandUnit::expand(CommandEntity *previousCommandEntity)
         const bool exists = fileExistsRemotely(sourcePath, missingDirectories);
         qDebug() << "file exists remotely?" << exists;
 
-        // No need to upload a file if the file exists remotely
+        /*const QString remoteRelativeFilePath = localFilePath.mid(this->m_localPath.length());
+        const QString remoteRelativeDir = remoteRelativeFilePath.split('/', QString::SkipEmptyParts).join('/');
+        NcDirNode* node = this->m_cachedTree->getNode(remoteRelativeDir);
+        const bool uniqueIdExists = (node && node->containsFileWithUniqueId());*/
+
+        // Skip the file upload if it already exists remotely
         if (exists)
             continue;
 

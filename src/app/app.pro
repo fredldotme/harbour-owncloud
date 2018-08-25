@@ -8,17 +8,21 @@ include($$PWD/../qmlcommon/qmlcommon.pri)
 include($$PWD/../../3rdparty/sailfish-ui-set/sailfish-ui-set.pri)
 
 SOURCES += \
-    src/harbour-owncloud.cpp \
-    src/daemoncontrol.cpp \
-    src/directorycontentmodel.cpp \
-    src/ocsnetaccessfactory.cpp \
-    src/webdavmediafeeder.cpp
+    $$PWD/src/harbour-owncloud.cpp \
+    $$PWD/src/daemoncontrol.cpp \
+    $$PWD/src/directorycontentmodel.cpp \
+    $$PWD/src/ocsnetaccessfactory.cpp \
+    $$PWD/src/webdavmediafeeder.cpp \
+    $$PWD/src/accountworkers.cpp \
+    $$PWD/src/accountworkergenerator.cpp
 
 HEADERS += \
-    src/daemoncontrol.h \
-    src/directorycontentmodel.h \
-    src/ocsnetaccessfactory.h \
-    src/webdavmediafeeder.h
+    $$PWD/src/daemoncontrol.h \
+    $$PWD/src/directorycontentmodel.h \
+    $$PWD/src/ocsnetaccessfactory.h \
+    $$PWD/src/webdavmediafeeder.h \
+    $$PWD/src/accountworkers.h \
+    $$PWD/src/accountworkergenerator.h
 
 RESOURCES += \
     qml.qrc \

@@ -6,6 +6,7 @@ import harbour.owncloud 1.0
 import SailfishUiSet 1.0
 import Nemo.Notifications 1.0
 import "qrc:/qml/pages/browser/controls"
+import "qrc:/qml/navigation"
 import "qrc:/sailfish-ui-set"
 
 Page {
@@ -19,9 +20,13 @@ Page {
 
     property string remotePath : "/"
     property string pageHeaderText : "/"
+    property var accountWorkers : null
+
+    property var browserCommandQueue : accountWorkers.browserCommandQueue
+    property var transferCommandQueue : accountWorkers.transferCommandQueue
 
     // Keep track of directory listing requests
-    property var listCommand : null
+    property var __listCommand : null
 
     // Keep track of active dialog.
     // There can only be one of them active at a time due to their modal nature.
@@ -31,26 +36,31 @@ Page {
     // reloading content of current directory.
     readonly property bool __enableMenuItems :
         (listView.model !== undefined &&
-         listCommand === null);
+         __listCommand === null);
 
     function __dialogCleanup() {
-        //dialogObj.destroy()
         dialogObj = null
     }
 
     function refreshListView(refresh) {
-        listCommand = browserCommandQueue.directoryListingRequest(remotePath, refresh)
+        __listCommand = accountWorkers.browserCommandQueue.directoryListingRequest(remotePath, refresh)
+    }
+
+    function changeDirectory(newPath) {
+        pageFlow.targetRemotePath = newPath
+        __listCommand = accountWorkers.browserCommandQueue.directoryListingRequest(newPath, false)
     }
 
     signal transientNotification(string summary)
+    signal notification(string summary, string body)
 
     FileDetailsHelper { id: fileDetailsHelper }
 
     onStatusChanged: {
         if (status === PageStatus.Inactive) {
             if (_navigation !== undefined && _navigation === PageNavigation.Back) {
-                if (listCommand !== null)
-                    listCommand.abort(true)
+                if (__listCommand !== null)
+                    __listCommand.abort(true)
                 directoryContents.remove(remotePath)
                 pageRoot.destroy()
             }
@@ -70,8 +80,16 @@ Page {
         }
     }
 
+    BrowserCommandPageFlow {
+        id: pageFlow
+        targetRemotePath: remotePath
+        accountWorkers: pageRoot.accountWorkers
+        onNotificationRequest: notification(summary, body)
+        onTransientNotificationRequest: transientNotification(summary)
+    }
+
     Connections {
-        target: browserCommandQueue
+        target: pageRoot.accountWorkers.browserCommandQueue
         onCommandStarted: {
             // Get the handle to davList commands when remotePaths match
             var isDavListCommand = (command.info.property("type") === "davList")
@@ -79,15 +97,15 @@ Page {
                 return;
 
             // Don't replace existing handle
-            if (!listCommand && command.info.property("remotePath") === remotePath) {
-                listCommand = command;
+            if (!__listCommand && command.info.property("remotePath") === remotePath) {
+                __listCommand = command;
             }
         }
 
         onCommandFinished: {
-            // Invalidate listCommand after completion
+            // Invalidate __listCommand after completion
             if (receipt.info.property("type") === "davList") {
-                listCommand = null
+                __listCommand = null
                 return;
             }
 
@@ -173,7 +191,7 @@ Page {
                     width: (parent.width / 3)
                     height: width
                     CircularImageButton {
-                        source: avatarFetcher.source
+                        source: accountWorkers.avatarFetcher.source
                         Layout.fillWidth: true
                         anchors.fill: parent
                         anchors.margins: Theme.paddingLarge
@@ -296,8 +314,9 @@ Page {
             width: listView.width
 
             CircularImageButton {
-                property bool __showAvatar : (persistentSettings.providerType === NextcloudSettings.Nextcloud)
-                source: __showAvatar ? avatarFetcher.source : ""
+                property bool __showAvatar :
+                    (accountWorkers.account.providerType === NextcloudSettings.Nextcloud)
+                source: __showAvatar ? accountWorkers.avatarFetcher.source : ""
                 enabled: __showAvatar
                 visible: ocsUserInfo.userInfoEnabled
                 highlightColor:
@@ -336,7 +355,7 @@ Page {
 
         delegate: ListItem {
             id: delegate
-            enabled: (listCommand === null)
+            enabled: (__listCommand === null)
 
             property var davInfo : listView.model[index]
 
@@ -372,7 +391,7 @@ Page {
             onClicked: {
                 if(davInfo.isDirectory) {
                     var nextPath = remotePath + davInfo.name + "/";
-                    listCommand = browserCommandQueue.directoryListingRequest(nextPath, false)
+                    changeDirectory(nextPath)
                 } else {
                     var fileDetails = fileDetailsComponent.createObject(pageRoot, { entry: davInfo });
                     if (!fileDetails) {
@@ -411,21 +430,21 @@ Page {
         VerticalScrollDecorator {}
 
         AbortableBusyIndicator {
-            running: (listCommand !== null)
+            running: (__listCommand !== null)
             enabled: running
             size: BusyIndicatorSize.Large
             buttonVisibiltyDelay: 5000
             anchors.centerIn: parent
             onAbort: {
-                if (!listCommand)
+                if (!__listCommand)
                     return
-                listCommand.abort(true)
+                __listCommand.abort(true)
             }
         }
 
         ViewPlaceholder {
             text: qsTr("Folder is empty")
-            enabled: (listCommand === null &&
+            enabled: (__listCommand === null &&
                       listView.model.length < 1)
         }
     }

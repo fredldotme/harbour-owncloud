@@ -11,9 +11,8 @@ FlowLoginAuthenticator::FlowLoginAuthenticator(QObject *parent,
                      this, &FlowLoginAuthenticator::urlChanged);
 }
 
-void FlowLoginAuthenticator::authenticate(bool saveCredentials)
+void FlowLoginAuthenticator::authenticate()
 {
-    this->m_saveCredentials = saveCredentials;
     setRunning(true);
 }
 
@@ -52,7 +51,7 @@ void FlowLoginAuthenticator::validateFlowResponse(QString responseUrl)
     }
 
     qDebug() << "nc:" << server << username;
-    if (this->m_saveCredentials && this->settings()) {
+    if (this->settings()) {
         this->settings()->setUsername(username);
         this->settings()->setPassword(password);
     }

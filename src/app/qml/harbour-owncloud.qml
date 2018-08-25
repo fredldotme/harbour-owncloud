@@ -8,18 +8,17 @@ import "qrc:/qml/pages/login"
 ApplicationWindow
 {
     id: applicationWindow
-    initialPage: basicAuthenticationPage
+    initialPage: accountSelection
     cover: coverPage
 
-    BrowserCommandPageFlow {
-        id: browserPageFlow
-        commandQueue: browserCommandQueue
-        onNotificationRequest: notify(summary, body)
-        onTransientNotificationRequest: notifyTransient(summary)
+    AccountWorkerGenerator {
+        id: accountWorkerGenerator
+        database: AccountDb { }
     }
+
     OcsUserInfo {
         id: ocsUserInfo
-        commandQueue: ocsCommandQueue
+        //commandQueue: ocsCommandQueue
     }
     DaemonControl {
         id: daemonCtrl
@@ -30,17 +29,11 @@ ApplicationWindow
     QmlMap {
         id: directoryContents
     }
-    BasicAuthentication {
-        id: basicAuthenticationPage
-        onNotificationRequest: notify(summary, body)
-        clientSettings: persistentSettings
-        ocsCommandQueue: ocsCommandQueue
-        browserCommandQueue: browserCommandQueue
-        daemonCtrl: daemonCtrl
-        onResetOcsInfo: {
-            ocsUserInfo.reset()
-            avatarFetcher.source = ""
-        }
+
+    AccountSelection {
+        id: accountSelection
+        accountGenerator: accountWorkerGenerator
+        browserPage: browserComponent
     }
 
     readonly property bool isTransfering :
@@ -89,8 +82,8 @@ ApplicationWindow
 
     function refreshUserInfo() {
         // Skip in case there's already a userInfo command in the queue
-        for (var i = 0; i < ocsCommandQueue.queue.length; i++) {
-            var commandInfo = ocsCommandQueue.queue[i].info;
+        for (var i = 0; i < accountInfoCommandQueue.queue.length; i++) {
+            var commandInfo = accountInfoCommandQueue.queue[i].info;
             if (commandInfo.type === "userInfo")
                 return;
         }
@@ -119,13 +112,8 @@ ApplicationWindow
     }
 
     WebDavCommandQueue {
-        id: browserCommandQueue
-        settings: persistentSettings
-        immediate: true
-    }
-    WebDavCommandQueue {
         id: transferQueue
-        settings: persistentSettings
+        //settings: persistentSettings
         onCommandFinished: {
             // Ignore invalid CommandReceipts
             if (!receipt.valid)
@@ -155,26 +143,6 @@ ApplicationWindow
                     notify(qsTr("Download failed!"), qsTr("%1 couldn't be downloaded").arg(fileName))
             }
         }
-    }
-    OcsCommandQueue {
-        id: ocsCommandQueue
-        settings: persistentSettings
-    }
-
-    CacheProvider {
-        id: thumbnailCache
-        onCacheCleared: {
-            notifyTransient(qsTr("Cache cleared"))
-        }
-    }
-
-    AvatarFetcher {
-        id: avatarFetcher
-        commandQueue: ocsCommandQueue
-        settings: ocsCommandQueue.settings
-        cacheProvider: thumbnailCache
-        width: 128
-        height: 128
     }
 
     function isTransferEnqueued(remoteFilePath) {

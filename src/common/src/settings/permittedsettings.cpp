@@ -28,19 +28,37 @@ bool PermittedSettings::readSettings()
             const bool isDenied = values.value(NEXTCLOUD_PERMD_REQUESTDENIED).toBool();
 
             if (!isDenied) {
-                m_md5Hex = values.value(NEXTCLOUD_SETTINGS_KEY_CERTMD5).toString();
-                m_sha1Hex = values.value(NEXTCLOUD_SETTINGS_KEY_CERTSHA1).toString();
-                m_isHttps = values.value(NEXTCLOUD_SETTINGS_KEY_ISHTTPS).toBool();
-                m_hostname = values.value(NEXTCLOUD_SETTINGS_KEY_HOSTNAME).toString();
-                m_port = values.value(NEXTCLOUD_SETTINGS_KEY_PORT).toInt();
-                m_path = values.value(NEXTCLOUD_SETTINGS_KEY_PATH).toString();
-                m_username = values.value(NEXTCLOUD_SETTINGS_KEY_USERNAME).toString();
-                m_password = values.value(NEXTCLOUD_SETTINGS_KEY_PASSWORD).toString();
-                m_providerType = (ProviderType)values.value(NEXTCLOUD_SETTINGS_KEY_PROVIDERTYPE).toInt();
+                const QString md5Hex = values.value(NEXTCLOUD_SETTINGS_KEY_CERTMD5).toString();
+                setMd5Hex(md5Hex);
+
+                const QString sha1Hex = values.value(NEXTCLOUD_SETTINGS_KEY_CERTSHA1).toString();
+                setSha1Hex(sha1Hex);
+
+                const bool isHttps = values.value(NEXTCLOUD_SETTINGS_KEY_ISHTTPS).toBool();
+                setIsHttps(isHttps);
+
+                const QString hostname = values.value(NEXTCLOUD_SETTINGS_KEY_HOSTNAME).toString();
+                setHostname(hostname);
+
+                const int port = values.value(NEXTCLOUD_SETTINGS_KEY_PORT).toInt();
+                setPort(port);
+
+                const QString path = values.value(NEXTCLOUD_SETTINGS_KEY_PATH).toString();
+                setPath(path);
+
+                const QString username = values.value(NEXTCLOUD_SETTINGS_KEY_USERNAME).toString();
+                setUsername(username);
+
+                const QString password = values.value(NEXTCLOUD_SETTINGS_KEY_PASSWORD).toString();
+                setPassword(password);
+
+                const int providerType = values.value(NEXTCLOUD_SETTINGS_KEY_PROVIDERTYPE).toInt();
+                setProviderType(providerType);
+
                 refreshHostString();
             }
 
-            // Since settings are read, propagate changes to the ownCloud browser object
+            // Since settings are read, propagate changes to the SettingsBasedCommandQueue object
             emit settingsChanged();
         } else {
             qWarning() << QDBusError::errorString(reply.error().type());

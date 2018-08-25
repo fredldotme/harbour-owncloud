@@ -39,20 +39,6 @@ void AbstractFetcher::setSource(const QString &v)
     Q_EMIT sourceChanged();
 }
 
-NextcloudSettingsBase* AbstractFetcher::settings()
-{
-    return this->m_settings;
-}
-
-void AbstractFetcher::setSettings(NextcloudSettingsBase* v)
-{
-    if (this->m_settings == v)
-        return;
-
-    this->m_settings = v;
-    Q_EMIT settingsChanged();
-}
-
 CacheProvider* AbstractFetcher::cacheProvider()
 {
     return this->m_cacheProvider;
@@ -67,18 +53,18 @@ void AbstractFetcher::setCacheProvider(CacheProvider *v)
     Q_EMIT cacheProviderChanged();
 }
 
-CommandQueue* AbstractFetcher::commandQueue()
+CloudStorageProvider* AbstractFetcher::commandQueue()
 {
     return this->m_commandQueue;
 }
 
-void AbstractFetcher::setCommandQueue(CommandQueue* v)
+void AbstractFetcher::setCommandQueue(CloudStorageProvider* v)
 {
     if (this->m_commandQueue == v)
         return;
 
     this->m_commandQueue = v;
-    Q_EMIT settingsChanged();
+    Q_EMIT commandQueueChanged();
 }
 
 int AbstractFetcher::width()

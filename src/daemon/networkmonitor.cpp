@@ -1,10 +1,10 @@
 #include "networkmonitor.h"
 
-#include <settings/nextcloudsettings.h>
+#include <settings/inifilesettings.h>
 #include <QCoreApplication>
 
 NetworkMonitor::NetworkMonitor(QObject *parent,
-                               NextcloudSettings* settings) :
+                               IniFileSettings* settings) :
     QObject(parent), m_settings(settings)
 {
     this->m_shouldSync = false;
@@ -23,7 +23,7 @@ NetworkMonitor::~NetworkMonitor()
 
 }
 
-NetworkMonitor* NetworkMonitor::instance(NextcloudSettings* settings)
+NetworkMonitor* NetworkMonitor::instance(IniFileSettings* settings)
 {
     static NetworkMonitor monitor(qApp, settings);
     return &monitor;

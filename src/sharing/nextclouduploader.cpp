@@ -1,12 +1,12 @@
 #include "nextclouduploader.h"
 
 #include <QDebug>
-#include <settings/nextcloudsettings.h>
+#include <settings/inifilesettings.h>
 
 NextcloudUploader::NextcloudUploader(QObject *parent) : MediaTransferInterface(parent)
 {
-    NextcloudSettings::instance()->readSettings();
-    this->m_commandQueue.setSettings(NextcloudSettings::instance());
+    IniFileSettings::instance()->readSettings();
+    this->m_commandQueue.setSettings(IniFileSettings::instance());
 
     QObject::connect(&this->m_commandQueue, &WebDavCommandQueue::commandFinished,
                      this, [=](CommandReceipt receipt) {

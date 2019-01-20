@@ -15,7 +15,7 @@ apps:
 parts:
   qhostcloud:
     plugin: qmake
-    options: [ 'CONFIG+="noadditionals quickcontrols"' ]
+    options: [ "'CONFIG+=noadditionals quickcontrols'" ]
     qt-version: qt5
     project-files: [ 'harbour-owncloud.pro' ]
     build-packages:

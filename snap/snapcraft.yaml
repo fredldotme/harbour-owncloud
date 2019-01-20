@@ -42,6 +42,9 @@ parts:
       - qml-module-qtquick-controls
       - qml-module-qt-labs-settings
       - qml-module-qtquick-localstorage
+    prime:
+      - usr/bin
+      - usr/share
     after: [ desktop-qt5 ]
   env:
     plugin: nil

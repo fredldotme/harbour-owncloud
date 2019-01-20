@@ -13,6 +13,7 @@ contains(CONFIG, quickcontrols) {
     include($$PWD/../../3rdparty/qml-ui-set/qml-ui-set.pri)
 
     TEMPLATE = app
+    target.path = /usr/bin
     TARGET = qhostcloud
 }
 

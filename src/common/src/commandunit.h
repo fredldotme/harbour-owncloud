@@ -41,7 +41,7 @@ protected:
     std::deque<CommandEntity*>* queue();
 
 private:
-    unsigned int numberOfProgressingEntities();
+    unsigned int progressingEntities();
     void updateProgress();
     void runNext();
     void runFirst();

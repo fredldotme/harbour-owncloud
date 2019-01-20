@@ -1,8 +1,22 @@
+// Qt Core & QML
+#include <QGuiApplication>
 #include <QtQuick>
 #include <QDebug>
 #include <QFile>
-#include <sailfishapp.h>
+#include <QStandardPaths>
 
+// Contained in both Sailfish- and QML-UI-Set
+#include <localfilebrowser.h>
+
+// Platform specific headers
+#ifndef QHOSTCLOUD_UI_QUICKCONTROLS
+#include <sailfishapp.h>
+#include <sailfish-ui-set.h>
+#else
+#include <qml-ui-set.h>
+#endif
+
+// Common library
 #include <commandqueue.h>
 #include <provider/storage/webdavcommandqueue.h>
 #include <provider/accountinfo/ocscommandqueue.h>
@@ -15,11 +29,11 @@
 #include <util/filepathutil.h>
 #include <net/thumbnailfetcher.h>
 #include <net/avatarfetcher.h>
-#include <localfilebrowser.h>
-#include <sailfish-ui-set.h>
 #include <qmlmap.h>
 #include <nextcloudendpointconsts.h>
 #include <cacheprovider.h>
+
+// Application-specific functionality
 #include "daemoncontrol.h"
 #include "directorycontentmodel.h"
 #include "ocsnetaccessfactory.h"
@@ -27,6 +41,19 @@
 #include "accountworkers.h"
 #include "accountworkergenerator.h"
 
+// Provide a fake SailfishOS namespace
+// on QtQuick.Controls-based environments
+#ifdef QHOSTCLOUD_UI_QUICKCONTROLS
+namespace SailfishApp {
+static QGuiApplication* application(int& argc, char** argv) {
+    if (qApp)
+        return static_cast<QGuiApplication*>(qApp);
+    return new QGuiApplication(argc, argv);
+}
+}
+#endif
+
+namespace {
 static QJSValue filePathUtilProvider(QQmlEngine *engine, QJSEngine *scriptEngine)
 {
     Q_UNUSED(engine)
@@ -36,9 +63,29 @@ static QJSValue filePathUtilProvider(QQmlEngine *engine, QJSEngine *scriptEngine
     return filePathUtilObj;
 }
 
+static void createNecessaryDir(const QString& path) {
+    const QDir configDir = QDir(path);
+    if (!configDir.exists()) {
+        const auto success = configDir.mkpath(configDir.absolutePath());
+        if (success)
+            return;
+
+        qWarning() << "Failed to create" << configDir.absolutePath();
+        return;
+    }
+}
+}
+
 int main(int argc, char *argv[])
 {
+#ifndef QHOSTCLOUD_UI_QUICKCONTROLS
     SailfishUiSet::registerQmlTypes();
+    const QString QHOSTCLOUD_APP_NAME = QStringLiteral("harbour-owncloud");
+#else
+    QmlUiSet::registerQmlTypes();
+    const QString QHOSTCLOUD_APP_NAME = QStringLiteral("QhostCloud");
+#endif
+
     qmlRegisterType<QmlMap>("harbour.owncloud", 1, 0, "QmlMap");
     qmlRegisterType<DirectoryContentModel>("harbour.owncloud", 1, 0, "DirectoryContentModel");
     qmlRegisterType<IniFileSettings>("harbour.owncloud", 1, 0, "NextcloudSettings");
@@ -49,6 +96,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<AuthenticationExaminer>("harbour.owncloud", 1, 0, "AuthenticationExaminer");
     qmlRegisterType<CommandEntity>("harbour.owncloud", 1, 0, "CommandEntity");
     qmlRegisterType<CommandQueue>("harbour.owncloud", 1, 0, "CommandQueue");
+    qmlRegisterType<CloudStorageProvider>("harbour.owncloud", 1, 0, "CloudStorageProvider");
     qmlRegisterType<WebDavCommandQueue>("harbour.owncloud", 1, 0, "WebDavCommandQueue");
     qmlRegisterType<OcsCommandQueue>("harbour.owncloud", 1, 0, "OcsCommandQueue");
     qmlRegisterType<CacheProvider>("harbour.owncloud", 1, 0, "CacheProvider");
@@ -62,10 +110,15 @@ int main(int argc, char *argv[])
                                                "AccountWorkers are provided through the AccountDbWorkers type");
     qmlRegisterSingletonType("harbour.owncloud", 1, 0, "FilePathUtil", filePathUtilProvider);
 
-    QGuiApplication *app = SailfishApp::application(argc, argv);
-    app->setOrganizationName("harbour-owncloud");
-    app->setOrganizationDomain("harbour-owncloud");
-    app->setApplicationName("harbour-owncloud");
+    QGuiApplication* app = SailfishApp::application(argc, argv);
+    app->setOrganizationName(QHOSTCLOUD_APP_NAME);
+    app->setOrganizationDomain(QHOSTCLOUD_APP_NAME);
+    app->setApplicationName(QHOSTCLOUD_APP_NAME);
+
+    {
+        createNecessaryDir(QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation));
+        createNecessaryDir(QStandardPaths::writableLocation(QStandardPaths::CacheLocation));
+    }
 
     {
         AccountDb accounts;
@@ -84,18 +137,16 @@ int main(int argc, char *argv[])
         }
     }
 
+#ifndef QHOSTCLOUD_UI_QUICKCONTROLS
     QQmlEngine* newEngine = new QQmlEngine;
-    /*QQmlNetworkAccessManagerFactory* accessInterceptor =
-            new OcsNetAccessFactory(IniFileSettings::instance());
-
-    newEngine->setNetworkAccessManagerFactory(accessInterceptor);
-    newEngine->rootContext()->setContextProperty("persistentSettings",
-                                                 IniFileSettings::instance());*/
-
     QQuickView *view = new QQuickView(newEngine, Q_NULLPTR); //SailfishApp::createView();
 
     view->setSource(QUrl("qrc:/qml/harbour-owncloud.qml"));
     view->showFullScreen();
+#else
+    QQmlApplicationEngine* newEngine = new QQmlApplicationEngine(app);
+    newEngine->load(QUrl("qrc:/qml/ghostcloud/main.qml"));
+#endif
 
     return app->exec();
 }

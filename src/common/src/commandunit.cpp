@@ -8,7 +8,7 @@ CommandUnit::CommandUnit(QObject *parent,
                          CommandEntityInfo commandInfo) :
     CommandEntity(parent, commandInfo),
     m_queue(commands),
-    m_numProgressingEntities(numberOfProgressingEntities()),
+    m_numProgressingEntities(progressingEntities()),
     m_completedProgressingEntities(0)
 {
 }
@@ -18,7 +18,7 @@ CommandUnit::CommandUnit(QObject *parent,
                          CommandEntityInfo commandInfo) :
     CommandEntity(parent, commandInfo),
     m_queue(commands),
-    m_numProgressingEntities(numberOfProgressingEntities()),
+    m_numProgressingEntities(progressingEntities()),
     m_completedProgressingEntities(0)
 {
 }
@@ -32,7 +32,7 @@ CommandUnit::CommandUnit(QObject* parent,
         this->m_queue.push_back(command);
     }
 
-    this->m_numProgressingEntities = numberOfProgressingEntities();
+    this->m_numProgressingEntities = progressingEntities();
     this->m_completedProgressingEntities = 0;
 }
 
@@ -56,15 +56,17 @@ std::deque<CommandEntity*>* CommandUnit::queue()
     return &this->m_queue;
 }
 
-unsigned int CommandUnit::numberOfProgressingEntities()
+unsigned int CommandUnit::progressingEntities()
 {
-    unsigned int c = 0;
+    unsigned int count = 0;
     for (const CommandEntity* command : this->m_queue) {
         if (!command)
             continue;
-        if (!command->staticProgress()) c++;
+
+        if (!command->staticProgress())
+            count++;
     }
-    return c;
+    return count;
 }
 
 bool CommandUnit::startWork()

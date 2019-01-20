@@ -174,7 +174,7 @@ void NcSyncCommandUnit::expand(CommandEntity *previousCommandEntity)
         if (missingDirectories.length() > 0) {
             QString missingRelativeDir = this->m_remotePath;
             for (QString remainingCrumb : missingDirectories) {
-                missingRelativeDir += remainingCrumb + QStringLiteral("/");
+                missingRelativeDir += remainingCrumb + NODE_PATH_SEPARATOR;
 
                 if (dirsToCreate.contains(missingRelativeDir))
                     break;
@@ -203,7 +203,7 @@ void NcSyncCommandUnit::expand(CommandEntity *previousCommandEntity)
         // Join directories back together without the file name
         if (!targetDirectory.isEmpty()) {
             targetDirectory.takeLast();
-            relativeTargetDir = targetDirectory.join('/') + QStringLiteral("/");
+            relativeTargetDir = targetDirectory.join('/') + NODE_PATH_SEPARATOR;
         }
 
         qDebug() << "relativeTargetDir" << relativeTargetDir;

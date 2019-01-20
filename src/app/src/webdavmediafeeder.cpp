@@ -12,6 +12,7 @@ inline QMediaPlayer* mediaPlayerObjectCast(QObject* object) {
     QMediaPlayer* mediaPlayer = qvariant_cast<QMediaPlayer*>(object->property("mediaObject"));
     if (!mediaPlayer) {
         qWarning() << "the object doesn't contain a QMediaPlayer*";
+        qWarning() << "is mediaObject null?" << object->property("mediaObject").isNull();
         return Q_NULLPTR;
     }
     return mediaPlayer;

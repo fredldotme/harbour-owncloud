@@ -1,11 +1,24 @@
 TARGET = harbour-owncloud
 
-CONFIG += sailfishapp qt
-QT += xml dbus quick qml multimedia
+!contains(CONFIG, quickcontrols) {
+    CONFIG += sailfishapp
+    include($$PWD/../../3rdparty/sailfish-ui-set/sailfish-ui-set.pri)
+    RESOURCES += \
+        qml-sfos.qrc
+}
+contains(CONFIG, quickcontrols) {
+    TARGET = qhostcloud
+    QMAKE_RPATHDIR += $$OUT_PWD/../../3rdparty/qwebdav
+    QMAKE_RPATHDIR += $$OUT_PWD/../common
+    DEFINES *= QHOSTCLOUD_UI_QUICKCONTROLS
+    include($$PWD/../../3rdparty/qml-ui-set/qml-ui-set.pri)
+}
 
 include($$PWD/../common/common.pri)
 include($$PWD/../qmlcommon/qmlcommon.pri)
-include($$PWD/../../3rdparty/sailfish-ui-set/sailfish-ui-set.pri)
+
+CONFIG += qt
+QT += xml dbus quick qml multimedia
 
 SOURCES += \
     $$PWD/src/harbour-owncloud.cpp \

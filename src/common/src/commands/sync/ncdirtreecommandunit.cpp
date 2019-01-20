@@ -87,7 +87,7 @@ void NcDirTreeCommandUnit::expand(CommandEntity* previousCommandEntity)
 
     if (!success) {
         qInfo() << "Parsing directory list failed, ignoring";
-        if (this->m_currentNode->name == QStringLiteral("/"))
+        if (this->m_currentNode->name == NODE_PATH_SEPARATOR)
             this->m_resultData = buildResultData(success, this->m_rootNode);
         return;
     }
@@ -131,7 +131,7 @@ void NcDirTreeCommandUnit::expand(CommandEntity* previousCommandEntity)
         node->parentNode = this->m_currentNode;
         this->m_currentNode->directories.prepend(node);
 
-        const QString fullPath = remotePath + entryName + "/";
+        const QString fullPath = remotePath + entryName + NODE_PATH_SEPARATOR;
 
         // then add required DavListCommandEntity
         DavListCommandEntity* additionalCommand =

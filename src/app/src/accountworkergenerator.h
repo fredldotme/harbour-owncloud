@@ -5,6 +5,7 @@
 #include "accountworkers.h"
 #include <QVariantList>
 #include "settings/db/accountdb.h"
+#include <memory>
 
 class AccountWorkerGenerator : public QObject
 {
@@ -20,6 +21,9 @@ public:
     AccountDb* database();
     void setDatabase(AccountDb* database);
 
+public slots:
+    AccountWorkers* newAccount();
+
 private:
     void setAccountWorkers(QVector<AccountWorkers*> accountWorkers);
     void generateAccountWorkers();
@@ -27,6 +31,7 @@ private:
     
     AccountDb* m_database = Q_NULLPTR;
     QVector<AccountWorkers*> m_accountWorkers;
+    std::unique_ptr<AccountWorkers> m_defaultNewAW;
 
 signals:
     void accountWorkersChanged();

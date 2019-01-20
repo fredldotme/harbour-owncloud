@@ -23,7 +23,8 @@ class AccountWorkers : public QObject
     Q_PROPERTY(ThumbnailFetcher* thumbnailFetcher READ thumbnailFetcher CONSTANT)
 
 public:
-    explicit AccountWorkers(QObject *parent = Q_NULLPTR,
+    explicit AccountWorkers();
+    explicit AccountWorkers(QObject *parent,
                             NextcloudSettingsBase* account = Q_NULLPTR,
                             CloudStorageProvider* browserCommandQueue = Q_NULLPTR,
                             CloudStorageProvider* transferCommandQueue = Q_NULLPTR,

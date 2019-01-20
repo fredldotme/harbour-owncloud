@@ -6,6 +6,8 @@
 #include <qwebdav.h>
 #include <settings/nextcloudsettingsbase.h>
 
+const QString NODE_PATH_SEPARATOR = QStringLiteral("/");
+
 class NcDirNode : public QObject
 {
     Q_OBJECT
@@ -101,7 +103,7 @@ class NcDirTreeCommandUnit : public CommandUnit
 public:
     NcDirTreeCommandUnit(QObject* parent = Q_NULLPTR,
                          QWebdav* client = Q_NULLPTR,
-                         QString rootPath = QStringLiteral("/"),
+                         QString rootPath = NODE_PATH_SEPARATOR,
                          QSharedPointer<NcDirNode> cachedTree = QSharedPointer<NcDirNode>());
 
 protected:

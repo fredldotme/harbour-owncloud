@@ -3,3 +3,6 @@ build-*
 moc*
 *.o
 rpm/harbour-owncloud.spec.*
+parts/
+stage/
+prime/

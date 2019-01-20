@@ -10,6 +10,36 @@ AccountWorkerGenerator::AccountWorkerGenerator(QObject *parent) : QObject(parent
                      this, &AccountWorkerGenerator::generateAccountWorkers);
 }
 
+AccountWorkers* AccountWorkerGenerator::newAccount()
+{
+    // TODO: dynamic account type switching before saving
+    //       into accounts database
+
+    if (!this->m_defaultNewAW.get()) {
+        NextcloudSettingsBase* newAccountSettings =
+                new NextcloudSettingsBase(this);
+
+        CloudStorageProvider* browserCommandQueue =
+                ProviderUtils::newStorageProviderByType(this, newAccountSettings);
+        CloudStorageProvider* transferCommandQueue =
+                ProviderUtils::newStorageProviderByType(this, newAccountSettings);
+        AccountInfoProvider* accountInfoProvider =
+                ProviderUtils::newAccountInfoProviderByType(this, newAccountSettings);
+
+        AccountWorkers* newDefaultWorkers =
+                new AccountWorkers(Q_NULLPTR,
+                                   newAccountSettings,
+                                   browserCommandQueue,
+                                   transferCommandQueue,
+                                   accountInfoProvider);
+
+        this->m_defaultNewAW = std::unique_ptr<AccountWorkers>(newDefaultWorkers);
+    }
+
+    qDebug() << Q_FUNC_INFO << this->m_defaultNewAW.get();
+    return this->m_defaultNewAW.get();
+}
+
 void AccountWorkerGenerator::generateAccountWorkers()
 {
     if (!this->m_database) {
@@ -18,6 +48,8 @@ void AccountWorkerGenerator::generateAccountWorkers()
     }
 
     QVector<AccountWorkers*> newAccountWorkers;
+    qDebug() << "this->m_database->accounts().length() " << this->m_database->accounts().length();
+
     for (NextcloudSettingsBase* account : this->m_database->accounts()) {
         CloudStorageProvider* browserCommandQueue =
                 ProviderUtils::newStorageProviderByType(this, account);
@@ -53,11 +85,12 @@ void AccountWorkerGenerator::setAccountWorkers(QVector<AccountWorkers *> account
 void AccountWorkerGenerator::cleanup()
 {
     while (!this->m_accountWorkers.empty()) {
-        AccountWorkers* workers = this->m_accountWorkers.takeFirst();
+        AccountWorkers* workers = this->m_accountWorkers.takeLast();
         if (!workers)
             continue;
         delete workers;
     }
+    accountWorkersChanged();
 }
 
 QVariantList AccountWorkerGenerator::accountWorkers()
@@ -80,7 +113,10 @@ void AccountWorkerGenerator::setDatabase(AccountDb* database)
         return;
 
     if (this->m_database) {
-        QObject::disconnect(this->m_database, 0, 0, 0);
+        QObject::disconnect(this->m_database,
+                            nullptr,
+                            nullptr,
+                            nullptr);
     }
 
     this->m_database = database;

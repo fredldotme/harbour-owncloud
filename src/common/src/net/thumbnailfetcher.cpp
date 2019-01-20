@@ -99,6 +99,9 @@ void ThumbnailFetcher::fetch()
     if (!this->commandQueue()->isRunning())
         this->commandQueue()->run();
 
+    // Reset source property for avoiding erroneous reuse of
+    // previously fetched thumbnails
+    setSource("");
     setFetching(true);
     qDebug() << "Fetching started";
 }

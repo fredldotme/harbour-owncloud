@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/qml-ui-set">
+        <file alias="FileSelectionDialog.qml">ui/FileSelectionDialog.qml</file>
+        <file alias="TextEntryDialog.qml">ui/TextEntryDialog.qml</file>
+        <file alias="HidingPanel.qml">ui/HidingPanel.qml</file>
+        <file alias="AbortableBusyIndicator.qml">ui/AbortableBusyIndicator.qml</file>
+        <file alias="CircularImageButton.qml">ui/CircularImageButton.qml</file>
+    </qresource>
+</RCC>

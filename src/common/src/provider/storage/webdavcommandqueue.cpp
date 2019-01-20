@@ -151,6 +151,10 @@ CommandEntity* WebDavCommandQueue::fileUploadRequest(QString localPath,
                                                      QString remotePath,
                                                      QDateTime lastModified)
 {
+    if (localPath.startsWith("file://")) {
+        localPath = localPath.mid(7);
+    }
+    qDebug() << localPath;
     const QString fileName = localPath.mid(localPath.lastIndexOf('/') + 1);
 
     qDebug() << "upload requested";

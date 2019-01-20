@@ -1,0 +1,71 @@
+name: ghostcloud
+version: 0.9.0
+grade: stable
+confinement: strict
+base: core18
+summary: A modern cross-platform client for Nextcloud, ownCloud, WebDav & more.
+description: |
+  Alpha
+
+apps:
+  ghostcloud:
+    command: desktop-launch qhostcloud
+    plugs: [ x11, wayland, desktop, opengl, home, removable-media ]
+
+parts:
+  qhostcloud:
+    plugin: qmake
+    options: [ 'CONFIG+="noadditionals quickcontrols"' ]
+    qt-version: qt5
+    project-files: [ 'harbour-owncloud.pro' ]
+    build-packages:
+      - make
+      - build-essential
+      - qt5-qmake
+      - qttools5-dev
+      - qtdeclarative5-dev
+      - libqt5svg5-dev
+      - qttools5-dev-tools
+      - libqt5xmlpatterns5-dev
+      - qtmultimedia5-dev
+      - qtbase5-dev
+      - libevdev-dev
+      - libudev-dev
+      - qml-module-qtquick2
+      - qml-module-qtgraphicaleffects
+      - qml-module-qtquick-window2
+      - qml-module-qtquick-layouts
+      - qml-module-qtquick-extras
+      - qml-module-qt-labs-folderlistmodel
+      - qml-module-qtquick-controls
+      - qml-module-qt-labs-settings
+      - qml-module-qtquick-localstorage
+    after: [ desktop-qt5 ]
+  env:
+    plugin: nil
+    stage-packages:
+      - gstreamer1.0-plugins-bad
+      - libqt5gui5
+      - libqt5qml5
+      - libqt5quick5
+      - libqt5network5
+      - libqt5multimedia5
+      - libqt5multimediawidgets5
+      - libqt5multimedia5-plugins
+      - libqt5svg5
+      - libqt5xml5
+      - libqt5xmlpatterns5
+      - libqt5sql5-sqlite
+      - libqt5waylandclient5
+      - qml-module-qtquick2
+      - qml-module-qtgraphicaleffects
+      - qml-module-qtquick-window2
+      - qml-module-qtquick-layouts
+      - qml-module-qt-labs-folderlistmodel
+      - qml-module-qtquick-controls
+      - qml-module-qtquick-extras
+      - qml-module-qt-labs-settings
+      - qml-module-qtquick-localstorage
+      - qml-module-qtmultimedia-gles
+      - qtwayland5
+    after: [ qhostcloud ]

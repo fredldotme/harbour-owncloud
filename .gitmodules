@@ -7,3 +7,6 @@
 [submodule "sailfish-ui-set"]
 	path = 3rdparty/sailfish-ui-set
 	url = https://github.com/beidl/sailfish-ui-set
+[submodule "3rdparty/qtdropbox2"]
+	path = 3rdparty/qtdropbox2
+	url = https://github.com/beidl/QtDropbox2

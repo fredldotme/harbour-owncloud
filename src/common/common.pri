@@ -8,6 +8,8 @@ CONFIG(release, debug|release) {
     DEFINES += QT_NO_DEBUG_OUTPUT
 }
 
+contains(CONFIG, quickcontrols): DEFINES += GHOSTCLOUD_UI_QUICKCONTROLS
+
 INCLUDEPATH += $$PWD/src
 DEPENDPATH += $$PWD/src
 

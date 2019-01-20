@@ -1,22 +1,18 @@
 <RCC>
     <qresource prefix="/">
-        <file>qml/harbour-owncloud.qml</file>
-        <file>qml/cover/CoverPage.qml</file>
-        <file>qml/pages/browser/FileBrowser.qml</file>
-        <file>qml/pages/browser/FileDetails.qml</file>
-        <file>qml/pages/login/BasicAuthentication.qml</file>
-        <file>qml/pages/browser/RemoteDirSelectDialog.qml</file>
-        <file>qml/pages/SettingsPage.qml</file>
-        <file>qml/pages/login/SSLErrorDialog.qml</file>
-        <file>qml/pages/TransferPage.qml</file>
-        <file>qml/pages/login/FlowAuthentication.qml</file>
-        <file>qml/pages/login/Entrance.qml</file>
-        <file>qml/cover/CoverDetailItem.qml</file>
-        <file>qml/pages/browser/controls/FileOperationsContextMenu.qml</file>
-        <file>qml/OcsUserInfo.qml</file>
-        <file>qml/navigation/CommandPageFlow.qml</file>
-        <file>qml/navigation/BrowserCommandPageFlow.qml</file>
-        <file>qml/pages/About.qml</file>
-        <file>qml/pages/login/AccountSelection.qml</file>
+        <file>qml/ghostcloud/main.qml</file>
+        <file>qml/ghostcloud/pages/AccountSelection.qml</file>
+        <file>qml/ghostcloud/BrowserCommandPageFlow.qml</file>
+        <file>qml/ghostcloud/CommandPageFlow.qml</file>
+        <file>qml/ghostcloud/pages/browser/FileBrowser.qml</file>
+        <file>qml/ghostcloud/pages/browser/FileDetails.qml</file>
+        <file>qml/ghostcloud/dialogs/WebDavAccountDialog.qml</file>
+        <file>qml/ghostcloud/controls/DetailItem.qml</file>
+        <file>qml/ghostcloud/pages/TransferPage.qml</file>
+        <file>qml/ghostcloud/dialogs/RemoteDirSelectDialog.qml</file>
+        <file>qml/ghostcloud/dialogs/TextEntryDialog.qml</file>
+        <file>qml/ghostcloud/dialogs/SSLErrorDialog.qml</file>
+        <file>qml/ghostcloud/pages/SettingsPage.qml</file>
+        <file>qml/ghostcloud/pages/About.qml</file>
     </qresource>
 </RCC>

@@ -6,6 +6,11 @@
 
 NextcloudSettingsBase::NextcloudSettingsBase(QObject *parent) : QObject(parent)
 {
+    QObject::connect(this, &NextcloudSettingsBase::customCertChanged,
+                     this, [=](){
+        qDebug() << "customCertChanged" << this->isCustomCert();
+    });
+
     m_hoststring = "https://";
     m_isHttps = true;
     m_autoLogin = false;
@@ -199,15 +204,16 @@ void NextcloudSettingsBase::setPassword(QString value)
 
 int NextcloudSettingsBase::providerType() const
 {
-    return this->m_providerType;
+    return static_cast<int>(this->m_providerType);
 }
 
 void NextcloudSettingsBase::setProviderType(int type)
 {
-    const ProviderType providerType = (ProviderType)type;
+    const ProviderType providerType = static_cast<ProviderType>(type);
     if (this->m_providerType == providerType)
         return;
 
+    qDebug() << "New value:" << providerType;
     this->m_providerType = providerType;
     Q_EMIT providerTypeChanged();
 }
@@ -280,7 +286,7 @@ void NextcloudSettingsBase::setLocalPicturesPath(QString newPath)
     Q_EMIT localPicturesPathChanged();
 }
 
-void NextcloudSettingsBase::acceptCertificate(QString md5, QString sha1)
+void NextcloudSettingsBase::acceptTlsFingerprints(QString md5, QString sha1)
 {
     if (this->m_md5Hex == md5 && this->m_sha1Hex == sha1)
         return;
@@ -288,13 +294,13 @@ void NextcloudSettingsBase::acceptCertificate(QString md5, QString sha1)
     setMd5Hex(md5);
     setSha1Hex(sha1);
 
-    emit customCertChanged();
+    Q_EMIT customCertChanged();
 }
 
-void NextcloudSettingsBase::acceptCertificate(bool value)
+void NextcloudSettingsBase::setCustomCert(bool value)
 {
     if (!value)
-        acceptCertificate("", "");
+        acceptTlsFingerprints("", "");
 }
 
 bool NextcloudSettingsBase::isCustomCert() const

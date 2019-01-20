@@ -31,7 +31,7 @@ class NextcloudSettingsBase : public QObject
     Q_PROPERTY(QString hoststring READ hoststring NOTIFY hoststringChanged)
     Q_PROPERTY(QString username READ username WRITE setUsername NOTIFY usernameChanged)
     Q_PROPERTY(QString password READ password WRITE setPassword NOTIFY passwordChanged)
-    Q_PROPERTY(bool isCustomCert READ isCustomCert WRITE acceptCertificate NOTIFY customCertChanged)
+    Q_PROPERTY(bool isCustomCert READ isCustomCert WRITE setCustomCert NOTIFY customCertChanged)
 
     Q_PROPERTY(int providerType READ providerType WRITE setProviderType NOTIFY providerTypeChanged)
 
@@ -45,7 +45,7 @@ class NextcloudSettingsBase : public QObject
     Q_PROPERTY(bool isHttps READ isHttps)
 
 public:
-    NextcloudSettingsBase(QObject *parent = 0);
+    NextcloudSettingsBase(QObject *parent = Q_NULLPTR);
 
     enum ProviderType {
         Nextcloud = 0,
@@ -86,14 +86,14 @@ public:
     QString password() const;
     void setPassword(QString value);
     void setProviderType(int type);
-    void acceptCertificate(QString md5, QString sha1);
-    void acceptCertificate(bool value);
+    void setCustomCert(bool value);
     void setAutoLogin(bool value);
     void setNotifications(bool value);
 
-    Q_INVOKABLE bool setHoststring(QString value);
 
 public slots:
+    bool setHoststring(QString value);
+    void acceptTlsFingerprints(QString md5, QString sha1);
     void resetSettings();
 
 protected:

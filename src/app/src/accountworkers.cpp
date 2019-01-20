@@ -1,5 +1,10 @@
 #include "accountworkers.h"
 
+AccountWorkers::AccountWorkers() : AccountWorkers(Q_NULLPTR,
+                                                  new NextcloudSettingsBase)
+{
+}
+
 AccountWorkers::AccountWorkers(QObject *parent,
                                NextcloudSettingsBase* account,
                                CloudStorageProvider* browserCommandQueue,

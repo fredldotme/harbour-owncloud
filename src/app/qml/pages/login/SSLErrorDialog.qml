@@ -84,7 +84,7 @@ Dialog {
             return;
         }
 
-        settings.acceptCertificate(md5Digest, sha1Digest);
+        settings.acceptTlsFingerprints(md5Digest, sha1Digest);
         settings.readSettings()
     }
 }

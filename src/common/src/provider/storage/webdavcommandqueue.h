@@ -31,6 +31,10 @@ public slots:
     virtual CommandEntity* copyRequest(QString from, QString to) Q_DECL_OVERRIDE;
     virtual CommandEntity* directoryListingRequest(QString path, bool refresh) Q_DECL_OVERRIDE;
 
+    virtual bool supportsQFile() Q_DECL_OVERRIDE {
+        return false;
+    }
+
     QWebdav* getWebdav()
     {
         qDebug() << Q_FUNC_INFO << m_client;
@@ -41,7 +45,6 @@ private:
     CommandEntity* localLastModifiedRequest(const QString& destination,
                                             const QDateTime& lastModified);
     CommandEntity* openFileRequest(const QString& destination);
-
     CommandEntity* remoteLastModifiedRequest(const QString& destination,
                                             const QDateTime& lastModified);
 

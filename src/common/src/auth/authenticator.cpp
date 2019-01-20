@@ -19,7 +19,10 @@ void Authenticator::setSettings(NextcloudSettingsBase *v)
         return;
 
     if (this->m_settings)
-        QObject::disconnect(this->m_settings, 0, 0, 0);
+        QObject::disconnect(this->m_settings,
+                            nullptr,
+                            nullptr,
+                            nullptr);
 
     this->m_settings = v;
 

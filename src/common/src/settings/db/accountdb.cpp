@@ -290,7 +290,9 @@ bool AccountDb::updateAccount(NextcloudSettingsBase *account)
         return false;
     }
 
-    return insertAccountIntoDatabase(account);
+    const bool insertSuccess = insertAccountIntoDatabase(account);
+    Q_EMIT accountsChanged();
+    return insertSuccess;
 }
 
 bool AccountDb::removeAccount(NextcloudSettingsBase *account)
@@ -306,10 +308,10 @@ bool AccountDb::removeAccount(NextcloudSettingsBase *account)
     }
 
     const QString deleteString =
-            QStringLiteral("DELETE from accounts "
-                           "WHERE hoststring=':hoststring' "
-                           "AND username=':username' "
-                           "AND providerType=':providerType'");
+            QStringLiteral("DELETE from accounts"
+                           " WHERE hoststring=:hoststring"
+                           " AND username=:username"
+                           " AND providerType=:providerType");
 
     QSqlQuery deleteQuery(this->m_database);
     deleteQuery.prepare(deleteString);
@@ -325,6 +327,14 @@ bool AccountDb::removeAccount(NextcloudSettingsBase *account)
                    << deleteQuery.lastError().text();
         return false;
     }
+
+    if (this->m_accounts.contains(account)) {
+        this->m_accounts.removeAll(account);
+    }
+
+    Q_EMIT accountsChanged();
+
+    qDebug() << deleteQuery.executedQuery();
 
     return true;
 }

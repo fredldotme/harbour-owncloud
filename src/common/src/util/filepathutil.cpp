@@ -1,5 +1,6 @@
 #include "filepathutil.h"
 
+#include <QDebug>
 #include <QFileInfo>
 #include <QStandardPaths>
 
@@ -52,7 +53,9 @@ QString FilePathUtil::getWebDavFileUrl(const QString &path,
         return QStringLiteral();
     }
 
-    const QString urlString = settings->hoststring() + NEXTCLOUD_ENDPOINT_WEBDAV + path;
+    const QString urlString = settings->hoststring() + "/" +
+            NEXTCLOUD_ENDPOINT_WEBDAV + path;
+    qDebug() << Q_FUNC_INFO << urlString;
     return urlString;
 }
 

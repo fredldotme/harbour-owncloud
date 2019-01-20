@@ -1,0 +1,4 @@
+{
+  "template": "qmake",
+  "default": "clean build click-build"
+}

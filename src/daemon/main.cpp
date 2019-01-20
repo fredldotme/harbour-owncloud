@@ -28,7 +28,7 @@ QString remoteDirectoryFromHwRelease()
 
                 // Replace characters which would be invalid
                 // within a WebDav directory name
-                return QStringLiteral("/") +
+                return NODE_PATH_SEPARATOR +
                         line.replace("NAME=", "")
                         .replace("\"", "")
                         .replace("/", "_")

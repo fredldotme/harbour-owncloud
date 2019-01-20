@@ -1,0 +1,41 @@
+Active accounts at runtime
+    - Account 1
+        - OSC
+        - BrowserQueue
+        - MiscQueue
+    - Account 2
+        - OSC
+        - BrowserQueue
+        - MiscQueue
+
+CommandQueue
+    - SettingsBackedCommandQueue
+        - CloudStorageProvider
+            - WebDavCommandQueue
+        - OscCommandQueue
+
+TransferQueue
+    - TransferCommand
+        - client + credentials
+        
+        Implementations:
+            - FileDownloadCommand
+                - string target (remote)
+                - string destination (local)
+                - transferImpl
+            - FileUploadCommand
+                - string target (local)
+                - string destination (remote)
+                - transferImpl
+        Ideas for further improvements:
+            - FileCopyCrossCommand
+                - QFile target
+                - QFile destination
+            - FileMoveCrossCommand
+                - QFile target
+                - QFile destination
+
+
+Interesting additional features:
+    - "ghost" file entry in the FileBrowser view
+        - allowing further command enqueuing (rename after upload, etc)

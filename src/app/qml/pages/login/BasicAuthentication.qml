@@ -183,10 +183,14 @@ Page {
             }
         }
 
-        BusyIndicator {
+        AbortableBusyIndicator {
             anchors.centerIn: parent
             running: loginInProgress
             size: BusyIndicatorSize.Large
+            // TODO: cancelable authentication
+            /*onClicked: {
+                authenticator.abortAuthentication();
+            }*/
         }
     }
 }

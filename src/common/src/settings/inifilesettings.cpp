@@ -93,7 +93,7 @@ bool IniFileSettings::readSettings()
     {
         QString md5Hex = this->m_settings.value(NEXTCLOUD_SETTINGS_KEY_CERTMD5).toString();
         QString sha1Hex = this->m_settings.value(NEXTCLOUD_SETTINGS_KEY_CERTSHA1).toString();
-        acceptCertificate(md5Hex, sha1Hex);
+        acceptTlsFingerprints(md5Hex, sha1Hex);
     }
 
     const bool uploadAutomatically = this->m_settings.value(NEXTCLOUD_SETTINGS_KEY_UPLOADAUTOMATICALLY,

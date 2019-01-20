@@ -68,6 +68,5 @@ parts:
       - qml-module-qtquick-extras
       - qml-module-qt-labs-settings
       - qml-module-qtquick-localstorage
-      - qml-module-qtmultimedia-gles
       - qtwayland5
     after: [ qhostcloud ]

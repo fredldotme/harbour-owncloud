@@ -3,7 +3,7 @@ version: 0.9.0
 grade: stable
 confinement: strict
 base: core18
-summary: A modern cross-platform client for Nextcloud, ownCloud, WebDav & more.
+summary: A modern cross-platform client for Nextcloud, ownCloud, WebDav.
 description: |
   Alpha
 
@@ -44,15 +44,16 @@ parts:
       - qml-module-qt-labs-settings
       - qml-module-qtquick-localstorage
     stage:
-      - usr/bin/*
+      - usr/bin/qhostcloud
       - usr/share/*
     prime:
-      - usr/bin/*
+      - usr/bin/qhoshcloud
       - usr/share/*
     after: [ desktop-qt5 ]
   env:
     plugin: nil
     stage-packages:
+      - gstreamer1.0-plugins-good
       - gstreamer1.0-plugins-bad
       - libqt5gui5
       - libqt5qml5

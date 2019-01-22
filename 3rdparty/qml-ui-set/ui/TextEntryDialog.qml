@@ -1,37 +1,28 @@
-import QtQuick 2.0
-import Sailfish.Silica 1.0
-import harbour.owncloud 1.0
+import QtQuick 2.6
+import QtQuick.Controls 2.2
+import QtQuick.Dialogs 1.2
+
 
 Dialog {
-    id: dialogRoot
-    canAccept: textEntryField.text !== "";
+    id: textEntryDialog
+    standardButtons: Dialog.Ok | Dialog.Cancel
+    height: 100
 
     property alias text : textEntryField.text
-    property string acceptText : header.defaultAcceptText
-    property string cancelText : header.defaultCancelText
-    property string placeholderText : ""
-    property string labelText : ""
 
-    onDone: {
-        textEntryField.focus = false
-    }
-
-    SilicaFlickable {
+    Column {
         anchors.fill: parent
-
-        DialogHeader {
-            id: header
-            acceptText: dialogRoot.acceptText
-            cancelText: dialogRoot.cancelText
-        }
-
+        anchors.margins: fontSizeSmall
         TextField {
             id: textEntryField
-            anchors.centerIn: parent
-            width: parent.width - 64
+            width: parent.width
+            text: ""
             focus: true
-            placeholderText: dialogRoot.placeholderText
-            label: dialogRoot.labelText
         }
+    }
+
+    onVisibleChanged: {
+        if (visible)
+            textEntryField.focus = true
     }
 }

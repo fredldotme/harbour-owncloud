@@ -5,7 +5,7 @@ Item {
     property alias value : detailValue.text
 
     Row {
-        anchors.fill: parent
+        anchors.horizontalCenter: parent.horizontalCenter
         spacing: 8
 
         Text {

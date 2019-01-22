@@ -18,8 +18,9 @@ contains(CONFIG, quickcontrols) {
     unix {
         desktop.files += harbour-owncloud.desktop
         desktop.path = /usr/share/applications
+        target.files = $$OUT_PWD/qhostcloud
         target.path = /usr/bin
-        INSTALLS += desktop
+        INSTALLS += desktop target
     }
     
     RESOURCES += \

@@ -1,6 +1,6 @@
 import QtQuick 2.0
 import harbour.owncloud 1.0
-import "qrc:/qml/ghostcloud/dialogs"
+import "qrc:/qml/qqc/dialogs"
 
 CommandPageFlow {
     id: pageFlowItemRoot

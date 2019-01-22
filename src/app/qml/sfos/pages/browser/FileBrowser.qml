@@ -5,8 +5,8 @@ import Sailfish.Silica 1.0
 import harbour.owncloud 1.0
 import SailfishUiSet 1.0
 import Nemo.Notifications 1.0
-import "qrc:/qml/pages/browser/controls"
-import "qrc:/qml/navigation"
+import "qrc:/qml/sfos/pages/browser/controls"
+import "qrc:/qml/sfos/navigation"
 import "qrc:/sailfish-ui-set"
 
 Page {

@@ -2,7 +2,7 @@ import QtQuick 2.0
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import harbour.owncloud 1.0
-import "qrc:/qml/ghostcloud"
+import "qrc:/qml/qqc"
 
 Item {
     id: accountsSelectionRoot

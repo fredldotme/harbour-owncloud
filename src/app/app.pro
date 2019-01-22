@@ -3,17 +3,27 @@ TARGET = harbour-owncloud
 !contains(CONFIG, quickcontrols) {
     CONFIG += sailfishapp
     include($$PWD/../../3rdparty/sailfish-ui-set/sailfish-ui-set.pri)
+    
     RESOURCES += \
         qml-sfos.qrc
 }
 contains(CONFIG, quickcontrols) {
+    TEMPLATE = app
+    
     QMAKE_RPATHDIR += $$OUT_PWD/../../3rdparty/qwebdav
     QMAKE_RPATHDIR += $$OUT_PWD/../common
     DEFINES *= QHOSTCLOUD_UI_QUICKCONTROLS
     include($$PWD/../../3rdparty/qml-ui-set/qml-ui-set.pri)
 
-    TEMPLATE = app
-    TARGET = qhostcloud
+    unix {
+        desktop.files += harbour-owncloud.desktop
+        desktop.path = /usr/share/applications
+        target.path = /usr/bin
+        INSTALLS += desktop
+    }
+    
+    RESOURCES += \
+        qml.qrc
 }
 
 include($$PWD/../common/common.pri)
@@ -40,7 +50,6 @@ HEADERS += \
     $$PWD/src/accountworkergenerator.h
 
 RESOURCES += \
-    qml.qrc \
     icons.qrc
 
 OTHER_FILES += \

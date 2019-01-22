@@ -3,18 +3,20 @@ version: 0.9.0
 grade: stable
 confinement: strict
 base: core18
-summary: A modern cross-platform client for Nextcloud, ownCloud, WebDav & more.
+summary: A modern cross-platform client for Nextcloud, ownCloud, WebDav.
 description: |
   Alpha
 
 apps:
-  ghostcloud:
-    command: desktop-launch qhostcloud
+  qhostcloud:
+    command: desktop-launch harbour-owncloud
     plugs: [ x11, wayland, desktop, opengl, home, removable-media ]
+    desktop: usr/share/applications/harbour-owncloud.desktop
 
 parts:
   qhostcloud:
     plugin: qmake
+    source: .
     options:
       - CONFIG+=noadditionals
       - CONFIG+=quickcontrols
@@ -42,13 +44,17 @@ parts:
       - qml-module-qtquick-controls
       - qml-module-qt-labs-settings
       - qml-module-qtquick-localstorage
-    prime:
+    stage:
       - usr/bin/*
+      - usr/share/*
+    prime:
+      - usr/bin/qhoshcloud
       - usr/share/*
     after: [ desktop-qt5 ]
   env:
     plugin: nil
     stage-packages:
+      - gstreamer1.0-plugins-good
       - gstreamer1.0-plugins-bad
       - libqt5gui5
       - libqt5qml5

@@ -1,18 +1,18 @@
 <RCC>
     <qresource prefix="/">
-        <file>qml/ghostcloud/main.qml</file>
-        <file>qml/ghostcloud/pages/AccountSelection.qml</file>
-        <file>qml/ghostcloud/BrowserCommandPageFlow.qml</file>
-        <file>qml/ghostcloud/CommandPageFlow.qml</file>
-        <file>qml/ghostcloud/pages/browser/FileBrowser.qml</file>
-        <file>qml/ghostcloud/pages/browser/FileDetails.qml</file>
-        <file>qml/ghostcloud/dialogs/WebDavAccountDialog.qml</file>
-        <file>qml/ghostcloud/controls/DetailItem.qml</file>
-        <file>qml/ghostcloud/pages/TransferPage.qml</file>
-        <file>qml/ghostcloud/dialogs/RemoteDirSelectDialog.qml</file>
-        <file>qml/ghostcloud/dialogs/TextEntryDialog.qml</file>
-        <file>qml/ghostcloud/dialogs/SSLErrorDialog.qml</file>
-        <file>qml/ghostcloud/pages/SettingsPage.qml</file>
-        <file>qml/ghostcloud/pages/About.qml</file>
+        <file>qml/qqc/main.qml</file>
+        <file>qml/qqc/pages/AccountSelection.qml</file>
+        <file>qml/qqc/BrowserCommandPageFlow.qml</file>
+        <file>qml/qqc/CommandPageFlow.qml</file>
+        <file>qml/qqc/pages/browser/FileBrowser.qml</file>
+        <file>qml/qqc/pages/browser/FileDetails.qml</file>
+        <file>qml/qqc/dialogs/WebDavAccountDialog.qml</file>
+        <file>qml/qqc/controls/DetailItem.qml</file>
+        <file>qml/qqc/pages/TransferPage.qml</file>
+        <file>qml/qqc/dialogs/RemoteDirSelectDialog.qml</file>
+        <file>qml/qqc/dialogs/TextEntryDialog.qml</file>
+        <file>qml/qqc/dialogs/SSLErrorDialog.qml</file>
+        <file>qml/qqc/pages/SettingsPage.qml</file>
+        <file>qml/qqc/pages/About.qml</file>
     </qresource>
 </RCC>

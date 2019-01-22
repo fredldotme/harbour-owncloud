@@ -7,12 +7,10 @@ import QmlUiSet 1.0
 import "qrc:/qml/qqc"
 import "qrc:/qml/ghostcloud/controls"
 
-Flickable {
+Item {
     id: pageRoot
-    width: parent.width
-    contentHeight: mainColumn.height + paddingLarge
-
-    FileDetailsHelper { id: fileDetailsHelper }
+    
+    FileDetailsHelper { id: fileDetailsHelper}
 
     property var entry : null;
     property AccountWorkers accountWorkers : null
@@ -42,151 +40,156 @@ Flickable {
         thumbnailFetcher.fetch();
         console.log("Fetching thumbnail: " + thumbnailFetcher.remoteFile + " @ " + entry.path)
     }
-
-    ColumnLayout {
-        id: mainColumn
+    
+    Flickable {
+        //width: parent.width
+        contentHeight: mainColumn.height + paddingLarge
         anchors.fill: parent
-        anchors.topMargin: paddingLarge
-        spacing: paddingMedium
 
-        // Icon & Progress spinner
-        Item {
-            // Wider side margins when only showing
-            // a default icon from the system theme
-            property int margins : (thumbnailFetcher.source === "" && !isAudioVideo)
-                                   ? (parent.width/4)
-                                   : (parent.width/8)
-            id: filePreview
-            width: {
-                if (parent.width > 200)
-                    return 200
-                return (parent.width / 2)
-            }
-            height: width
-            Layout.alignment: Qt.AlignHCenter
-
-            // Image thumbnail
-            Button {
-                id: thumbnailView
+        ColumnLayout {
+            id: mainColumn
+            anchors.fill: parent
+            anchors.topMargin: paddingLarge
+            spacing: paddingMedium
+            
+            Item {
                 anchors.fill: parent
-                background: Rectangle { color: "transparent" }
-                icon.color: "transparent"
-                icon.name: (entry.isDirectory ? "folder" : imgSrc)
-                visible: !isAudioVideo
-            }
+                //TODO: Layout max width and height
+                
+                // Icon & Progress spinner
+                Item {
+                    // Wider side margins when only showing
+                    // a default icon from the system theme
+                    property int margins : (thumbnailFetcher.source === "" && !isAudioVideo)
+                                           ? (parent.width/4)
+                                           : (parent.width/8)
+                    id: filePreview
+                    width: {
+                        if (parent.width > 200)
+                            return 200
+                        return (parent.width / 2)
+                    }
+                    height: width
+                    anchors.centerIn: parent
 
-            Image {
-                id: thumbnail
-                anchors.fill: parent
-                source: imgSrc
-                visible: !isAudioVideo
-            }
+                    // Image thumbnail
+                    Button {
+                        id: thumbnailView
+                        anchors.fill: parent
+                        background: Rectangle { color: "transparent" }
+                        icon.color: "transparent"
+                        icon.name: (entry.isDirectory ? "folder" : imgSrc)
+                        visible: !isAudioVideo
+                    }
 
-            // Media player for video and audio preview
-            WebDavMediaFeeder {
-                id: mediaFeeder
-                mediaPlayer: previewPlayer
-                settings: accountWorkers.account
-                url: isAudioVideo ?
-                            (FilePathUtil.getWebDavFileUrl(entry.path, accountWorkers.account)) :
-                            ""
-            }
-            MediaPlayer {
-                id: previewPlayer
-                autoPlay: false
-                onSourceChanged: {
-                    console.log("AV preview " + source)
-                }
-                onPlaybackStateChanged: {
-                    console.log("playback state " + playbackState)
-                }
-            }
-            VideoOutput {
-                id: mediaView
-                source: previewPlayer
-                visible: isAudioVideo
-                anchors.fill: parent
-            }
-            Button {
-                anchors.centerIn: parent
-                background: Rectangle { color: "transparent" }
-                icon.color: "transparent"
-                icon.name:
-                    (previewPlayer.playbackState == MediaPlayer.PlayingState) ?
-                        "media-playback-pause" :
-                        "media-playback-start"
-                visible: mediaView.visible
-                onClicked: {
-                    console.log("clicked @ " + previewPlayer.playbackState)
-                    if (previewPlayer.playbackState == MediaPlayer.PlayingState) {
-                        mediaFeeder.pause()
-                    } else {
-                        mediaFeeder.play()
+                    Image {
+                        id: thumbnail
+                        anchors.fill: parent
+                        source: imgSrc
+                        visible: !isAudioVideo
+                    }
+
+                    // Media player for video and audio preview
+                    WebDavMediaFeeder {
+                        id: mediaFeeder
+                        mediaPlayer: previewPlayer
+                        settings: accountWorkers.account
+                        url: isAudioVideo ?
+                                    (FilePathUtil.getWebDavFileUrl(entry.path, accountWorkers.account)) :
+                                    ""
+                    }
+                    MediaPlayer {
+                        id: previewPlayer
+                        autoPlay: false
+                        onSourceChanged: {
+                            console.log("AV preview " + source)
+                        }
+                        onPlaybackStateChanged: {
+                            console.log("playback state " + playbackState)
+                        }
+                    }
+                    VideoOutput {
+                        id: mediaView
+                        source: previewPlayer
+                        visible: isAudioVideo
+                        anchors.fill: parent
+                    }
+                    Button {
+                        anchors.centerIn: parent
+                        background: Rectangle { color: "transparent" }
+                        icon.color: "transparent"
+                        icon.name:
+                            (previewPlayer.playbackState == MediaPlayer.PlayingState) ?
+                                "media-playback-pause" :
+                                "media-playback-start"
+                        visible: mediaView.visible
+                        onClicked: {
+                            console.log("clicked @ " + previewPlayer.playbackState)
+                            if (previewPlayer.playbackState == MediaPlayer.PlayingState) {
+                                mediaFeeder.pause()
+                            } else {
+                                mediaFeeder.play()
+                            }
+                        }
+                    }
+                    
+                    // Loading indicator
+                    BusyIndicator {
+                        id: progressSpinner
+                        anchors.centerIn: parent
+                        running: (thumbnailFetcher.fetching ||
+                                  previewPlayer.status === MediaPlayer.Loading)
                     }
                 }
             }
 
-            // Loading indicator
-            BusyIndicator {
-                id: progressSpinner
-                anchors.centerIn: parent
-                running: (thumbnailFetcher.fetching ||
-                          previewPlayer.status === MediaPlayer.Loading)
-            }
-        }
+            // Keep file details centered
+            ColumnLayout {
+                //anchors.horizontalCenter: parent.horizontalCenter
+                Layout.alignment: Qt.AlignHCenter
+                width: parent.width
+                spacing: fontSizeLarge
 
-        // Keep file details centered
-        ColumnLayout {
-            //anchors.horizontalCenter: parent.horizontalCenter
-            Layout.alignment: Qt.AlignHCenter
-            spacing: fontSizeLarge
-
-            DetailItem {
-                label: qsTr("File name:")
-                value: entry.name
-                //Layout.alignment: Qt.AlignCenter
-                Layout.preferredWidth: parent.width
-            }
-            DetailItem {
-                label: qsTr("Size:")
-                value: fileDetailsHelper.getHRSize(entry.size)
-                //Layout.alignment: Qt.AlignCenter
-                Layout.preferredWidth: parent.width
-            }
-            DetailItem {
-                label: qsTr("Last modified:")
-                value: Qt.formatDateTime(entry.lastModified, Qt.SystemLocaleShortDate);
-                visible: value.length > 0
-                //Layout.alignment: Qt.AlignCenter
-                Layout.preferredWidth: parent.width
-            }
-            DetailItem {
-                label: qsTr("Type:")
-                value: !entry.isDirectory ? entry.mimeType : qsTr("Directory")
-                visible: value.length > 0
-                //Layout.alignment: Qt.AlignCenter
-                Layout.preferredWidth: parent.width
-            }
-            DetailItem {
-                label: qsTr("Created at:")
-                value: entry.createdAt
-                visible: value.length > 0
-                //Layout.alignment: Qt.AlignCenter
-                Layout.preferredWidth: parent.width
-            }
-            DetailItem {
-                label: qsTr("Entity tag:")
-                value: entry.entityTag
-                visible: value.length > 0
-                Layout.alignment: Qt.AlignCenter
-                Layout.preferredWidth: parent.width
-            }
-            DetailItem {
-                label: qsTr("File ID:")
-                value: entry.fileId
-                visible: value.length > 0
-                //Layout.alignment: Qt.AlignCenter
-                Layout.preferredWidth: parent.width
+                DetailItem {
+                    label: qsTr("File name:")
+                    value: entry.name
+                    Layout.alignment: Qt.AlignHCenter
+                }
+                DetailItem {
+                    label: qsTr("Size:")
+                    value: fileDetailsHelper.getHRSize(entry.size)
+                    Layout.alignment: Qt.AlignCenter
+                }
+                DetailItem {
+                    label: qsTr("Last modified:")
+                    value: Qt.formatDateTime(entry.lastModified, Qt.SystemLocaleShortDate);
+                    visible: value.length > 0
+                    Layout.alignment: Qt.AlignCenter
+                }
+                DetailItem {
+                    label: qsTr("Type:")
+                    value: !entry.isDirectory ? entry.mimeType : qsTr("Directory")
+                    visible: value.length > 0
+                    Layout.alignment: Qt.AlignCenter
+                }
+                DetailItem {
+                    label: qsTr("Created at:")
+                    value: entry.createdAt
+                    visible: value.length > 0
+                    Layout.alignment: Qt.AlignHCenter
+                }
+                DetailItem {
+                    label: qsTr("Entity tag:")
+                    value: entry.entityTag
+                    visible: value.length > 0
+                    Layout.alignment: Qt.AlignHCenter
+                }
+                DetailItem {
+                    label: qsTr("File ID:")
+                    value: entry.fileId
+                    visible: value.length > 0
+                    Layout.alignment: Qt.AlignHCenter
+                }
             }
         }
     }

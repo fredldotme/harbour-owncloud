@@ -48,7 +48,7 @@ parts:
       - usr/bin/*
       - usr/share/*
     prime:
-      - usr/bin/qhoshcloud
+      - usr/bin/qhostcloud
       - usr/share/*
     after: [ desktop-qt5 ]
   env:

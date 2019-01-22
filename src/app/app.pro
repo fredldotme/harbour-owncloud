@@ -8,14 +8,19 @@ TARGET = harbour-owncloud
         qml-sfos.qrc
 }
 contains(CONFIG, quickcontrols) {
+    TEMPLATE = app
+    
     QMAKE_RPATHDIR += $$OUT_PWD/../../3rdparty/qwebdav
     QMAKE_RPATHDIR += $$OUT_PWD/../common
     DEFINES *= QHOSTCLOUD_UI_QUICKCONTROLS
     include($$PWD/../../3rdparty/qml-ui-set/qml-ui-set.pri)
 
-    TEMPLATE = app
-    target.path = /usr/bin
-    INSTALLS += target
+    unix {
+        desktop.files += harbour-owncloud.desktop
+        desktop.path = /usr/share/applications
+        target.path = /usr/bin
+        INSTALLS += desktop
+    }
     
     RESOURCES += \
         qml.qrc

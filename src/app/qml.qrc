@@ -10,7 +10,6 @@
         <file>qml/qqc/controls/DetailItem.qml</file>
         <file>qml/qqc/pages/TransferPage.qml</file>
         <file>qml/qqc/dialogs/RemoteDirSelectDialog.qml</file>
-        <file>qml/qqc/dialogs/TextEntryDialog.qml</file>
         <file>qml/qqc/dialogs/SSLErrorDialog.qml</file>
         <file>qml/qqc/pages/SettingsPage.qml</file>
         <file>qml/qqc/pages/About.qml</file>

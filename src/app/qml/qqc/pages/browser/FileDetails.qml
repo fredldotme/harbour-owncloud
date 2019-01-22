@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.2
 import QtMultimedia 5.6
 import harbour.owncloud 1.0
 import QmlUiSet 1.0
-import "qrc:/qml/ghostcloud"
+import "qrc:/qml/qqc"
 import "qrc:/qml/ghostcloud/controls"
 
 Flickable {

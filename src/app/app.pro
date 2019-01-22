@@ -3,6 +3,7 @@ TARGET = harbour-owncloud
 !contains(CONFIG, quickcontrols) {
     CONFIG += sailfishapp
     include($$PWD/../../3rdparty/sailfish-ui-set/sailfish-ui-set.pri)
+    
     RESOURCES += \
         qml-sfos.qrc
 }
@@ -13,9 +14,11 @@ contains(CONFIG, quickcontrols) {
     include($$PWD/../../3rdparty/qml-ui-set/qml-ui-set.pri)
 
     TEMPLATE = app
-    TARGET = qhostcloud
     target.path = /usr/bin
     INSTALLS += target
+    
+    RESOURCES += \
+        qml.qrc
 }
 
 include($$PWD/../common/common.pri)
@@ -42,7 +45,6 @@ HEADERS += \
     $$PWD/src/accountworkergenerator.h
 
 RESOURCES += \
-    qml.qrc \
     icons.qrc
 
 OTHER_FILES += \

@@ -6,9 +6,9 @@ import QtGraphicalEffects 1.0
 import harbour.owncloud 1.0
 import QmlUiSet 1.0
 import "qrc:/qml-ui-set"
-import "qrc:/qml/ghostcloud"
-import "qrc:/qml/ghostcloud/controls"
-import "qrc:/qml/ghostcloud/dialogs"
+import "qrc:/qml/qqc"
+import "qrc:/qml/qqc/controls"
+import "qrc:/qml/qqc/dialogs"
 
 Page {
     id: pageRoot

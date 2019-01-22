@@ -8,9 +8,10 @@ description: |
   Alpha
 
 apps:
-  ghostcloud:
-    command: desktop-launch qhostcloud
+  qhostcloud:
+    command: desktop-launch harbour-owncloud
     plugs: [ x11, wayland, desktop, opengl, home, removable-media ]
+    desktop: usr/share/applications/harbour-owncloud.desktop
 
 parts:
   qhostcloud:
@@ -44,7 +45,7 @@ parts:
       - qml-module-qt-labs-settings
       - qml-module-qtquick-localstorage
     stage:
-      - usr/bin/qhostcloud
+      - usr/bin/*
       - usr/share/*
     prime:
       - usr/bin/qhoshcloud

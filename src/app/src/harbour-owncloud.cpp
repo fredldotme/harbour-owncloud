@@ -141,11 +141,11 @@ int main(int argc, char *argv[])
     QQmlEngine* newEngine = new QQmlEngine;
     QQuickView *view = new QQuickView(newEngine, Q_NULLPTR); //SailfishApp::createView();
 
-    view->setSource(QUrl("qrc:/qml/harbour-owncloud.qml"));
+    view->setSource(QUrl("qrc:/qml/sfos/harbour-owncloud.qml"));
     view->showFullScreen();
 #else
     QQmlApplicationEngine* newEngine = new QQmlApplicationEngine(app);
-    newEngine->load(QUrl("qrc:/qml/ghostcloud/main.qml"));
+    newEngine->load(QUrl("qrc:/qml/qqc/main.qml"));
 #endif
 
     return app->exec();

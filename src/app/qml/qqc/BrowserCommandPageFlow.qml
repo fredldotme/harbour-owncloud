@@ -9,10 +9,10 @@ CommandPageFlow {
 
     // Pages
     readonly property Component browserComponent :
-        Qt.createComponent("qrc:/qml/ghostcloud/pages/browser/FileBrowser.qml",
+        Qt.createComponent("qrc:/qml/qqc/pages/browser/FileBrowser.qml",
                            Component.PreferSynchronous);
     readonly property Component fileDetailsComponent :
-        Qt.createComponent("qrc:/qml/ghostcloud/pages/browser/FileDetails.qml",
+        Qt.createComponent("qrc:/qml/qqc/pages/browser/FileDetails.qml",
                            Component.PreferSynchronous);
 
     RemoteDirSelectDialog {

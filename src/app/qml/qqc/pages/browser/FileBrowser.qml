@@ -375,10 +375,7 @@ Page {
 
     ListView {
         id: listView
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
+        anchors.fill: parent
         clip: true
         model: directoryContents.value(remotePath)
 

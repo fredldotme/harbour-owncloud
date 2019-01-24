@@ -282,8 +282,7 @@ ApplicationWindow {
             }
         }
 
-        Rectangle {
-            color: "black"
+        Item {
             StackView {
                 id: sideStack
                 visible: sideStackIsActive

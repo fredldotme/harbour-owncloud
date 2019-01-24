@@ -135,8 +135,7 @@ Page {
             // Keep file details centered
             Column {
                 width: parent.width
-                //height: 500
-                spacing: paddingSmall
+                spacing: paddingTiny
 
                 DetailItem {
                     width: parent.width

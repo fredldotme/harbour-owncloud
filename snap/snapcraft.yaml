@@ -50,7 +50,7 @@ parts:
       - usr/bin/*
       - usr/share/*
     prime:
-      - usr/bin/qhostcloud
+      - usr/bin/harbour-owncloud
       - usr/share/*
     after: [ desktop-qt5 ]
   env:

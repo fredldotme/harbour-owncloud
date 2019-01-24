@@ -107,12 +107,21 @@ DEPENDPATH += $$PWD/src
 INCLUDEPATH += $$PWD/../../3rdparty/qwebdavlib/qwebdavlib
 DEPENDPATH += $$PWD/../../3rdparty/qwebdavlib/qwebdavlib
 
+# SailfishOS configuration
+!contains(CONFIG, quickcontrols) {
+    QMAKE_RPATHDIR += /usr/share/harbour-owncloud/lib
+    target.path = /usr/share/harbour-owncloud/lib
+    qwebdavlib.path = /usr/share/harbour-owncloud/lib
+}
+
+# QtQuick.Controls-based implementations
+contains(CONFIG, quickcontrols) {
+    QMAKE_RPATHDIR += /usr/lib
+    target.path = /usr/lib
+    qwebdavlib.path = /usr/lib
+}
+
 LIBS += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.so.1
-QMAKE_RPATHDIR += /usr/share/harbour-owncloud/lib
-
-target.path = /usr/share/harbour-owncloud/lib
-
-qwebdavlib.path = /usr/share/harbour-owncloud/lib
 qwebdavlib.files += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.so.1
 
 INSTALLS += qwebdavlib target

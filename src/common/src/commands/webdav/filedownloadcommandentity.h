@@ -15,6 +15,8 @@ public:
                                        QString remotePath = QStringLiteral(""),
                                        QString localPath = QStringLiteral(""),
                                        QWebdav* client = Q_NULLPTR);
+    ~FileDownloadCommandEntity();
+
 protected:
     bool startWork() Q_DECL_OVERRIDE;
     bool abortWork() Q_DECL_OVERRIDE;

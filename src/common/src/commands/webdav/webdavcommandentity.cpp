@@ -37,7 +37,10 @@ bool WebDavCommandEntity::startWork()
                          static_cast<void(QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), this,
                          [=](QNetworkReply::NetworkError error) {
             qWarning() << "Aborting due to network error:" << error;
-            abortWork();
+            // TODO: stale files when aborting?
+            // Aborting due to network error: QNetworkReply::ContentNotFoundError
+            // abortWork();
+            Q_EMIT aborted();
         });
 
         QObject::connect(this->m_reply, &QNetworkReply::finished, this, [=]() {

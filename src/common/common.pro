@@ -52,8 +52,8 @@ SOURCES += \
     $$PWD/src/settings/db/syncdb.cpp \
     $$PWD/src/settings/db/accountdb.cpp \
     $$PWD/src/provider/settingsbackedcommandqueue.cpp \
-    src/provider/accountinfo/accountinfoprovider.cpp \
-    src/util/providerutils.cpp
+    $$PWD/src/provider/accountinfo/accountinfoprovider.cpp \
+    $$PWD/src/util/providerutils.cpp
 
 HEADERS += \
     $$PWD/src/net/abstractfetcher.h \
@@ -99,8 +99,8 @@ HEADERS += \
     $$PWD/src/settings/db/syncdb.h \
     $$PWD/src/settings/db/accountdb.h \
     $$PWD/src/provider/settingsbackedcommandqueue.h \
-    src/provider/accountinfo/accountinfoprovider.h \
-    src/util/providerutils.h
+    $$PWD/src/provider/accountinfo/accountinfoprovider.h \
+    $$PWD/src/util/providerutils.h
 
 INCLUDEPATH += $$PWD/src
 DEPENDPATH += $$PWD/src

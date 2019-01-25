@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import QtQuick.Dialogs 1.2
 import harbour.owncloud 1.0
 import "qrc:/qml/qqc/dialogs"
 
@@ -27,6 +28,61 @@ CommandPageFlow {
         browserCommandQueue: accountWorkers.browserCommandQueue
         directoryContents: pageFlow.directoryContents
         height: 400
+    }
+
+    Dialog {
+        id: fileExistsDialog
+        standardButtons: Dialog.Yes | Dialog.No | Dialog.Cancel
+
+        property string fileName : ""
+        property string path : ""
+        property string mimeType : ""
+        property bool openFile : false
+        property var lastModified : null
+        property var transferCommandQueue : null
+
+        Text {
+            text: qsTr("Would you like to remove the " +
+                       "existing file '%1' before " +
+                       "starting the download?").arg(fileExistsDialog.fileName)
+        }
+
+        onYes: {
+            console.debug("Yes")
+            FilePathUtil.removeFile(path)
+            transferCommandQueue.fileDownloadRequest(path, mimeType, openFile, lastModified)
+            transferCommandQueue.run()
+        }
+        onNo: {
+            console.debug("No")
+            transferCommandQueue.fileDownloadRequest(path, mimeType, openFile, lastModified)
+            transferCommandQueue.run()
+        }
+        onDiscard: {
+            console.debug("Discard")
+        }
+    }
+
+    function startDownload(path, mimeType, open, overwriteExistingFile, lastModified, transferCommandQueue) {
+        var destinationDir = FilePathUtil.destinationFromMIME(mimeType)
+        var fileName = path.substring(path.lastIndexOf("/") + 1)
+        var localFilePath = destinationDir + "/" + fileName
+        console.log("remote path: " + path)
+        console.log("fileExists: " + localFilePath + "?")
+
+        if (!overwriteExistingFile && FilePathUtil.fileExists(localFilePath)) {
+            fileExistsDialog.fileName = fileName
+            fileExistsDialog.path = path
+            fileExistsDialog.mimeType = mimeType
+            fileExistsDialog.openFile = open
+            fileExistsDialog.lastModified = lastModified
+            fileExistsDialog.transferCommandQueue = transferCommandQueue
+            fileExistsDialog.open()
+            return
+        }
+
+        transferCommandQueue.fileDownloadRequest(path, mimeType, open, lastModified)
+        transferCommandQueue.run()
     }
 
     Connections {

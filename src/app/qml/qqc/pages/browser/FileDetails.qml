@@ -42,7 +42,7 @@ Page {
     }
     
     Flickable {
-        contentHeight: mainColumn.height + paddingLarge
+        contentHeight: mainColumn.height + (paddingLarge*8)
         anchors.fill: parent
 
         Column {
@@ -129,6 +129,34 @@ Page {
                     anchors.centerIn: parent
                     running: (thumbnailFetcher.fetching ||
                               previewPlayer.status === MediaPlayer.Loading)
+                }
+            }
+
+            Row {
+                anchors.horizontalCenter: parent.horizontalCenter
+                spacing: paddingMedium
+
+                Button {
+                    text: qsTr("Download")
+                    onClicked: {
+                        startDownload(entry.path,
+                                      entry.mimeType,
+                                      false,
+                                      false,
+                                      entry.lastModified,
+                                      accountWorkers.transferCommandQueue)
+                    }
+                }
+                Button {
+                    text: qsTr("Open")
+                    onClicked: {
+                        startDownload(entry.path,
+                                      entry.mimeType,
+                                      true,
+                                      false,
+                                      entry.lastModified,
+                                      accountWorkers.transferCommandQueue)
+                    }
                 }
             }
 

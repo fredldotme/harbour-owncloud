@@ -70,27 +70,6 @@ Page {
         detailsStack.push(fileDetails);
     }
 
-    function startDownload(path, mimeType, open, overwriteExistingFile, lastModified) {
-        var destinationDir = FilePathUtil.destinationFromMIME(mimeType)
-        var fileName = path.substring(path.lastIndexOf("/") + 1)
-        var localFilePath = destinationDir + "/" + fileName
-        console.log("remote path: " + path)
-        console.log("fileExists: " + localFilePath + "?")
-
-        if (!overwriteExistingFile && FilePathUtil.fileExists(localFilePath)) {
-            /*fileExistsDialog.fileName = fileName
-            fileExistsDialog.path = path
-            fileExistsDialog.mimeType = mimeType
-            fileExistsDialog.openFile = open
-            fileExistsDialog.hintLabel.text = fileExistsHintText.arg(fileName)
-            pageStack.push(fileExistsDialog)*/
-            return
-        }
-
-        transferCommandQueue.fileDownloadRequest(path, mimeType, open, lastModified)
-        transferCommandQueue.run()
-    }
-
     signal transientNotification(string summary)
     signal notification(string summary, string body)
 
@@ -309,7 +288,8 @@ Page {
                               rightClickMenu.selectedDavInfo.mimeType,
                               true,
                               false,
-                              rightClickMenu.selectedDavInfo.lastModified)
+                              rightClickMenu.selectedDavInfo.lastModified,
+                              transferCommandQueue)
             }
         }
         MenuItem {
@@ -321,7 +301,8 @@ Page {
                               rightClickMenu.selectedDavInfo.mimeType,
                               false,
                               false,
-                              rightClickMenu.selectedDavInfo.lastModified)
+                              rightClickMenu.selectedDavInfo.lastModified,
+                              transferCommandQueue)
             }
         }
 

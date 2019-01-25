@@ -48,9 +48,11 @@ parts:
       - qml-module-qtquick-localstorage
     stage:
       - usr/bin/*
+      - usr/lib/*
       - usr/share/*
     prime:
       - usr/bin/harbour-owncloud
+      - usr/lib/*
       - usr/share/*
     after: [ desktop-qt5 ]
   env:

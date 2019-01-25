@@ -42,7 +42,7 @@ Page {
     }
     
     Flickable {
-        contentHeight: mainColumn.height + (paddingLarge*8)
+        contentHeight: mainColumn.height + (paddingLarge*7)
         anchors.fill: parent
 
         Column {

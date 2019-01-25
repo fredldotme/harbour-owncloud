@@ -12,10 +12,10 @@ contains(CONFIG, quickcontrols) {
     
     QMAKE_RPATHDIR += $$OUT_PWD/../../3rdparty/qwebdav
     QMAKE_RPATHDIR += $$OUT_PWD/../common
-    DEFINES *= QHOSTCLOUD_UI_QUICKCONTROLS
+    DEFINES += QHOSTCLOUD_UI_QUICKCONTROLS
     include($$PWD/../../3rdparty/qml-ui-set/qml-ui-set.pri)
 
-    unix {
+    unix:!macx {
         desktop.files += harbour-owncloud.desktop
         desktop.path = /usr/share/applications
         target.path = /usr/bin

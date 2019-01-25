@@ -5,7 +5,8 @@ confinement: strict
 base: core18
 summary: A modern cross-platform client for Nextcloud, ownCloud, WebDav.
 description: |
-  Alpha
+  Allows you to easily access your NextCloud, ownCloud and WebDav 
+  instances with a cross-platform, native Free Software application.
 
 apps:
   qhostcloud:

@@ -43,7 +43,7 @@ parts:
       - qml-module-qtquick-layouts
       - qml-module-qtquick-extras
       - qml-module-qt-labs-folderlistmodel
-      - qml-module-qtquick-controls
+      - qml-module-qtquick-controls2
       - qml-module-qt-labs-settings
       - qml-module-qtquick-localstorage
     stage:
@@ -77,7 +77,7 @@ parts:
       - qml-module-qtquick-window2
       - qml-module-qtquick-layouts
       - qml-module-qt-labs-folderlistmodel
-      - qml-module-qtquick-controls
+      - qml-module-qtquick-controls2
       - qml-module-qtquick-extras
       - qml-module-qt-labs-settings
       - qml-module-qtquick-localstorage

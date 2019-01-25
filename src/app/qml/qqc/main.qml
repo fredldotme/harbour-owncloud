@@ -243,6 +243,10 @@ ApplicationWindow {
         return true
     }
 
+    readonly property bool sideStackHasContents : {
+        return sideStack.currentItem !== null
+    }
+
     readonly property alias pageStack : rootStack
     readonly property bool detailStackVisibleRequired :
         (detailsStack.currentItem !== detailsStack.initialItem)

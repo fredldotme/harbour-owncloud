@@ -116,7 +116,6 @@ DEPENDPATH += $$PWD/../../3rdparty/qwebdavlib/qwebdavlib
 
 # QtQuick.Controls-based implementations
 contains(CONFIG, quickcontrols) {
-    QMAKE_RPATHDIR += /usr/lib
     target.path = /usr/lib
     qwebdavlib.path = /usr/lib
 }

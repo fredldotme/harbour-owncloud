@@ -54,7 +54,7 @@ Page {
 
     function openDetails(davEntryInfo) {
         var fileDetails =
-                fileDetailsComponent.createObject(detailsStack,
+                fileDetailsComponent.createObject(rootWindow.detailsStack,
                                                   {
                                                       entry: davEntryInfo,
                                                       accountWorkers: accountWorkers
@@ -64,10 +64,10 @@ Page {
             return;
         }
 
-        if (detailsStack !== rootStack)
-            detailsStack.pop()
+        if (rootWindow.detailsStack!== rootStack)
+            rootWindow.detailsStack.pop()
 
-        detailsStack.push(fileDetails);
+        rootWindow.detailsStack.push(fileDetails);
     }
 
     signal transientNotification(string summary)

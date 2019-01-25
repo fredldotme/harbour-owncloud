@@ -234,22 +234,17 @@ ApplicationWindow {
     }
 
     readonly property bool sideStackIsActive : {
-        /*if (isDesktop || isTablet) {
+        if (width > height) {
             return true;
         } else {
             return false;
-        }*/
-
-        return true
-    }
-
-    readonly property bool sideStackHasContents : {
-        return sideStack.currentItem !== null
+        }
     }
 
     readonly property alias pageStack : rootStack
     readonly property bool detailStackVisibleRequired :
-        (detailsStack.currentItem !== detailsStack.initialItem)
+        (sideStack.currentItem !== sideStack.initialItem)
+
     readonly property var detailsStack : {
         if (sideStackIsActive) {
             return sideStack
@@ -270,6 +265,17 @@ ApplicationWindow {
                 ParentChange {
                     target: sideStack
                     parent: sideStackContainer
+                }
+            },
+            State {
+                when: !sideStackIsActive
+                ParentChange {
+                    target: rootStack
+                    parent: rootStackContainer
+                }
+                ParentChange {
+                    target: rootStack
+                    parent: rootStackContainer
                 }
             }
         ]
@@ -337,6 +343,7 @@ ApplicationWindow {
                 width: sideStackIsActive ? ((parent.width / 3) * 2)
                                          : parent.width
                 height: parent.height
+                visible: sideStackIsActive || detailStackVisibleRequired
                 clip: true
             }
         }

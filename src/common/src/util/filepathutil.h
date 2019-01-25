@@ -16,6 +16,7 @@ public:
     Q_INVOKABLE static QString getWebDavFileUrl(const QString &path,
                                                 NextcloudSettingsBase* settings);
     Q_INVOKABLE static bool fileExists(const QString& filePath);
+    Q_INVOKABLE static bool removeFile(const QString& filePath);
 };
 
 #endif // FILEPATHUTIL_H

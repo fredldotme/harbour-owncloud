@@ -64,3 +64,8 @@ bool FilePathUtil::fileExists(const QString &filePath)
     QFileInfo fileInfo(filePath);
     return !fileInfo.isDir() && fileInfo.exists();
 }
+
+bool FilePathUtil::removeFile(const QString &filePath)
+{
+    return QFile::remove(filePath);
+}

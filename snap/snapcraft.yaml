@@ -42,9 +42,8 @@ parts:
       - qml-module-qtquick-window2
       - qml-module-qtquick-layouts
       - qml-module-qtquick-extras
-      - qml-module-qt-labs-folderlistmodel
       - qml-module-qtquick-controls2
-      - qml-module-qt-labs-settings
+      - qml-module-qtquick-dialogs
       - qml-module-qtquick-localstorage
     stage:
       - usr/bin/*
@@ -76,10 +75,9 @@ parts:
       - qml-module-qtgraphicaleffects
       - qml-module-qtquick-window2
       - qml-module-qtquick-layouts
-      - qml-module-qt-labs-folderlistmodel
       - qml-module-qtquick-controls2
+      - qml-module-qtquick-dialogs
       - qml-module-qtquick-extras
-      - qml-module-qt-labs-settings
       - qml-module-qtquick-localstorage
       - qtwayland5
     after: [ harbour-owncloud ]

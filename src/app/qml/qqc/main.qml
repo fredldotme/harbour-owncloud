@@ -242,19 +242,15 @@ ApplicationWindow {
     }
 
     readonly property alias pageStack : rootStack
-    readonly property bool detailStackVisibleRequired :
-        (sideStack.currentItem !== sideStack.initialItem)
+    readonly property var detailsStack : sideStack
 
-    readonly property var detailsStack : {
-        if (sideStackIsActive) {
-            return sideStack
-        } else {
-            return rootStack
-        }
-    }
+    readonly property bool detailStackVisibleRequired :
+        (sideStack.currentItem !== sideStack.initialItem) &&
+        (sideStack.currentItem !== null)
 
     SwipeView {
         anchors.fill: parent
+        currentIndex: detailStackVisibleRequired && sideStackIsActive ? 1 : 0
         states: [
             State {
                 when: sideStackIsActive
@@ -274,7 +270,7 @@ ApplicationWindow {
                     parent: rootStackContainer
                 }
                 ParentChange {
-                    target: rootStack
+                    target: sideStack
                     parent: rootStackContainer
                 }
             }
@@ -295,14 +291,13 @@ ApplicationWindow {
         Item {
             StackView {
                 id: sideStack
-                visible: sideStackIsActive
-                enabled: visible
                 anchors.fill: parent
                 initialItem: Rectangle {
                     color: "transparent"
                     Image {
                         id: icon
                         source: "qrc:/icons/icon_gray.svg"
+                        visible: sideStackIsActive
                         anchors.centerIn: parent
                         width: parent.width / 2
                         height: width

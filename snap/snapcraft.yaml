@@ -214,9 +214,13 @@ parts:
       - libdouble-conversion1v5
       - libpulse0
     stage:
-      - usr/bin/*
-      - usr/lib/*
-      - usr/share/*
+      - usr/*
     prime:
       - usr/lib/*
       - usr/share/*
+      - usr/libexec/*
+      - usr/phrasebooks/*
+      - usr/plugins/*
+      - usr/qml/*
+      - usr/resources/*
+      - usr/translations/*

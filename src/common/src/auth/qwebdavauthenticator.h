@@ -18,6 +18,7 @@ public:
 
 public slots:
     void authenticate() Q_DECL_OVERRIDE;
+    void abort() Q_DECL_OVERRIDE;
 
 protected:
     void updateClientSettings() Q_DECL_OVERRIDE;

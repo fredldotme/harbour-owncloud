@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import harbour.owncloud 1.0
 import "qrc:/qml/qqc"
+import "qrc:/qml-ui-set"
 
 Item {
     id: accountsSelectionRoot
@@ -14,6 +15,8 @@ Item {
     onDirContentsChanged: {
         console.log("AccountSelection.dirContents: " + dirContents)
     }
+
+    readonly property var providerTypeNames : ["Nextcloud/ownCloud", "WebDav"]
 
     property CommandEntity __listCommand : null
 
@@ -49,42 +52,34 @@ Item {
         id: accountsList
         anchors.fill: parent
         model: accountGenerator.accountWorkers
+        spacing: paddingSmall
 
         delegate: Item {
             width: parent.width
 
             readonly property var delegateAccountWorkers : accountGenerator.accountWorkers[index]
 
-            Row {
+            Column {
                 id: listEntry
                 width: parent.width
-                spacing: 16
 
                 Column {
                     Label {
-                        text: qsTr("Username:")
+                        text: providerTypeNames[delegateAccountWorkers.account.providerType]
                         font.bold: true
                         font.pixelSize: fontSizeSmall
                         enabled: __listCommand == null
                     }
-                    Label {
-                        text: qsTr("Host:")
-                        font.bold: true
-                        font.pixelSize: fontSizeSmall
-                        enabled: __listCommand == null
-                    }
-                }
-                Column {
                     Label {
                         text: delegateAccountWorkers.account.username
+                              + " on "
+                              + delegateAccountWorkers.account.hoststring
                         font.pixelSize: fontSizeSmall
                         enabled: __listCommand == null
+                        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                        width: accountsList.width
                     }
-                    Label {
-                        text: delegateAccountWorkers.account.hoststring
-                        font.pixelSize: fontSizeSmall
-                        enabled: __listCommand == null
-                    }
+                    MenuSeparator { width: accountsList.width }
                 }
             }
             MouseArea {
@@ -112,8 +107,14 @@ Item {
         }
     }
 
-    BusyIndicator {
+    AbortableBusyIndicator {
         anchors.centerIn: parent
         running: __listCommand != null
+        buttonVisibiltyDelay: 5000
+        onAbort: {
+            if (!__listCommand)
+                return
+            __listCommand.abort(true)
+        }
     }
 }

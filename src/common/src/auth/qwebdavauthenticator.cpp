@@ -38,6 +38,12 @@ void QWebDavAuthenticator::authenticate()
     setRunning(true);
 }
 
+void QWebDavAuthenticator::abort()
+{
+    this->m_dirParser.abort();
+    setRunning(false);
+}
+
 void QWebDavAuthenticator::updateClientSettings()
 {
     if (!this->settings()) {

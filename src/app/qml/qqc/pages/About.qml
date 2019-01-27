@@ -1,7 +1,11 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.2
 
-Item {
+Rectangle {
+    color: "white"
+
+    signal closeRequest()
+
     Flickable {
         anchors.topMargin: fontSizeMedium
         anchors.fill: parent

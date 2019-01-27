@@ -33,8 +33,13 @@
 #include <nextcloudendpointconsts.h>
 #include <cacheprovider.h>
 
-// Application-specific functionality
-#include "daemoncontrol.h"
+// Platform-specific functionality
+#if defined(Q_OS_ANDROID)
+#include "daemonctrl/dummydaemonctrl.h"
+#elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+#include "daemonctrl/daemoncontrol.h"
+#endif
+
 #include "directorycontentmodel.h"
 #include "ocsnetaccessfactory.h"
 #include "webdavmediafeeder.h"
@@ -78,6 +83,8 @@ static void createNecessaryDir(const QString& path) {
 
 int main(int argc, char *argv[])
 {
+    qputenv("QT_AUTO_SCREEN_SCALE_FACTOR", "1");
+
 #ifndef QHOSTCLOUD_UI_QUICKCONTROLS
     SailfishUiSet::registerQmlTypes();
     const QString QHOSTCLOUD_APP_NAME = QStringLiteral("harbour-owncloud");
@@ -109,6 +116,7 @@ int main(int argc, char *argv[])
     qmlRegisterUncreatableType<AccountWorkers>("harbour.owncloud", 1, 0, "AccountWorkers",
                                                "AccountWorkers are provided through the AccountDbWorkers type");
     qmlRegisterSingletonType("harbour.owncloud", 1, 0, "FilePathUtil", filePathUtilProvider);
+
 
     QGuiApplication* app = SailfishApp::application(argc, argv);
     app->setOrganizationName(QHOSTCLOUD_APP_NAME);

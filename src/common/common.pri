@@ -1,5 +1,9 @@
 CONFIG += qt c++11
-QT += dbus network xml sql
+QT += network xml sql
+
+linux:!android {
+    QT += dbus
+}
 
 DEFINES += QWEBDAVITEM_EXTENDED_PROPERTIES
 
@@ -16,7 +20,14 @@ DEPENDPATH += $$PWD/src
 INCLUDEPATH += $$PWD/../../3rdparty/qwebdavlib/qwebdavlib
 DEPENDPATH += $$PWD/../../3rdparty/qwebdavlib/qwebdavlib
 
-LIBS += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.so.1
-LIBS += $$OUT_PWD/../../src/common/libharbourowncloudcommon.so.1
+android {
+    LIBS += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.so
+    LIBS += $$OUT_PWD/../../src/common/libharbourowncloudcommon.so
+}
+
+linux:!android {
+    LIBS += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.so.1
+    LIBS += $$OUT_PWD/../../src/common/libharbourowncloudcommon.so.1
+}
 
 QMAKE_RPATHDIR += /usr/share/harbour-owncloud/lib

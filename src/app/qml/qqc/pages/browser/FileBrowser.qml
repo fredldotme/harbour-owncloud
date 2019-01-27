@@ -222,6 +222,7 @@ Page {
         // for the CircularImageButton to adapt automatically
         height: userInformation.height
         //onHeightChanged: console.log(height)
+        property bool active: true
 
         Menu {
             id: userInformation

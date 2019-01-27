@@ -18,6 +18,7 @@ public:
 
 public slots:
     virtual void authenticate() = 0;
+    virtual void abort() = 0;
 
 protected:
     virtual void updateClientSettings() = 0;

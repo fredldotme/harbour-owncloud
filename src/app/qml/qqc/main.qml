@@ -9,12 +9,29 @@ import "qrc:/qml/qqc/pages"
 
 ApplicationWindow {
     id: rootWindow
+    objectName: "rootWindow"
     title: "QhostCloud"
     visible: true
     width: 600
     minimumWidth: 260
     height: 400
     minimumHeight: 360
+
+    Keys.onBackPressed: {
+        popPage()
+    }
+
+    function popPage()  {
+        if (sideStack.currentItem !== sideStack.initialItem) {
+            sideStack.pop()
+            return;
+        }
+
+        if (rootStack.currentItem !== rootStack.initialItem) {
+            rootStack.pop()
+            return;
+        }
+    }
 
     // TODO: save window geometry before closing
 
@@ -40,6 +57,7 @@ ApplicationWindow {
     QmlMap {
         id: directoryContents
     }
+
     readonly property alias dirContents : directoryContents
 
     property int currentAccountIndex : 0
@@ -50,7 +68,10 @@ ApplicationWindow {
         : null
 
     readonly property bool showBackButton :
-        (rootStack.initialItem !== rootStack.currentItem)
+        (rootStack.initialItem !== rootStack.currentItem) &&
+        (rootStack.currentItem !== null) ||
+        (sideStack.initialItem !== sideStack.currentItem) &&
+        (sideStack.currentItem !== null)
 
     function refreshUserInfo() {
         // Skip in case there's already a userInfo command in the queue
@@ -65,11 +86,22 @@ ApplicationWindow {
         //            selectedAccount.accountInfoCommandQueue.run()
         //        }
     }
-
     function notify(summary, body) {
+//        notifier.summary = summary
+//        notifier.previewSummary = summary
+//        notifier.body = body
+//        notifier.previewBody = body
+//        notifier.transient = false
+//        notifier.publish();
     }
 
     function notifyTransient(summary) {
+//        notifier.summary = summary
+//        notifier.previewSummary = summary
+//        notifier.body = ""
+//        notifier.previewBody = ""
+//        notifier.transient = true
+//        notifier.publish();
     }
 
     function addAccount() {
@@ -85,14 +117,14 @@ ApplicationWindow {
             id: hamburgerMenu
 
             MenuItem {
-                text: qsTr("Transfers...")
+                text: qsTr("Transfers")
                 font.pixelSize: fontSizeSmall
                 onClicked: {
-                    transfersTab.open()
+                    detailsStack.push(transfersTab)
                 }
             }
             MenuItem {
-                text: qsTr("Add account...")
+                text: qsTr("Add account")
                 font.pixelSize: fontSizeSmall
                 visible: (accountWorkerGenerator.accountWorkers.length > 0)
                 onClicked: addAccount()
@@ -119,14 +151,7 @@ ApplicationWindow {
                 text: qsTr("‹")
                 font.pixelSize: fontSizeSmall
                 enabled: showBackButton
-                onClicked: {
-                    if (sideStack.currentItem !== sideStack.initialItem) {
-                        sideStack.pop()
-                        return;
-                    }
-
-                    rootStack.pop()
-                }
+                onClicked: popPage()
             }
 
             Label {
@@ -168,7 +193,11 @@ ApplicationWindow {
                 text: qsTr("⋮")
                 font.pixelSize: fontSizeSmall
                 onClicked: {
-                    hamburgerMenu.open()
+                    if (hamburgerMenu.opened) {
+                        hamburgerMenu.close()
+                    } else {
+                        hamburgerMenu.open()
+                    }
                 }
             }
         }
@@ -180,6 +209,7 @@ ApplicationWindow {
 
         Rectangle {
             id: homeTab
+            objectName: "entrancePage"
             Layout.alignment: Qt.AlignCenter
 
             AccountSelection {
@@ -207,7 +237,7 @@ ApplicationWindow {
 
                 Button {
                     anchors.horizontalCenter: parent.horizontalCenter
-                    text: qsTr("Add account...")
+                    text: qsTr("Add account")
                     onClicked: addAccount()
                 }
             }
@@ -223,21 +253,13 @@ ApplicationWindow {
 
         About {
             id: infoPage
+            onCloseRequest: detailsStack.pop()
         }
-    }
 
-    TransferPage {
-        id: transfersTab
-        accountGenerator: accountWorkerGenerator
-        width: 400
-        height: 250
-    }
-
-    readonly property bool sideStackIsActive : {
-        if (width > height) {
-            return true;
-        } else {
-            return false;
+        TransferPage {
+            id: transfersTab
+            accountGenerator: accountWorkerGenerator
+            onCloseRequest: detailsStack.pop()
         }
     }
 
@@ -248,9 +270,17 @@ ApplicationWindow {
         (sideStack.currentItem !== sideStack.initialItem) &&
         (sideStack.currentItem !== null)
 
+    readonly property bool sideStackIsActive : {
+        if (width > height) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     SwipeView {
         anchors.fill: parent
-        currentIndex: detailStackVisibleRequired && sideStackIsActive ? 1 : 0
+        //currentIndex: detailStackVisibleRequired && sideStackIsActive ? 1 : 0
         states: [
             State {
                 when: sideStackIsActive

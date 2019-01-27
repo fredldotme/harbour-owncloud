@@ -5,7 +5,6 @@
 #define HARBOUR_OWNCLOUD_PERMD_IFACE  "com.github.beidl.HarbourOwncloud.Daemon.Permission"
 
 #include <QString>
-#include <QDBusArgument>
 
 namespace HarbourOwncloud {
 namespace DBusConsts {

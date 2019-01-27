@@ -13,8 +13,16 @@ FlowLoginAuthenticator::FlowLoginAuthenticator(QObject *parent,
 
 void FlowLoginAuthenticator::authenticate()
 {
+    // TODO: implement
+
     setRunning(true);
 }
+
+void FlowLoginAuthenticator::abort()
+{
+    setRunning(false);
+}
+
 
 void FlowLoginAuthenticator::validateFlowResponse(QString responseUrl)
 {

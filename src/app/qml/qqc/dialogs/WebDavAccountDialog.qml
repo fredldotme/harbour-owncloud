@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.2
 import harbour.owncloud 1.0
+import "qrc:/qml-ui-set"
 
 Rectangle {
     id: dialogRoot
@@ -182,9 +183,11 @@ Rectangle {
             }
         }
 
-        BusyIndicator {
+        AbortableBusyIndicator {
             anchors.centerIn: parent
             running: loginInProgress
+            onAbort: authenticator.abort()
+            buttonVisibiltyDelay: 1
         }
     }
 }

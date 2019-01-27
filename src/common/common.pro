@@ -2,7 +2,12 @@ TEMPLATE = lib
 TARGET = $$qtLibraryTarget(harbourowncloudcommon)
 
 CONFIG += qt c++11
-QT += dbus network xml sql
+QT += network xml sql
+
+linux:!android {
+    QT += dbus
+}
+
 DEFINES += QWEBDAVITEM_EXTENDED_PROPERTIES
 
 OTHER_FILES += $$PWD/common.pri
@@ -17,7 +22,6 @@ SOURCES += \
     $$PWD/src/net/thumbnailfetcher.cpp \
     $$PWD/src/settings/nextcloudsettingsbase.cpp \
     $$PWD/src/settings/inifilesettings.cpp \
-    $$PWD/src/settings/permittedsettings.cpp \
     $$PWD/src/util/filepathutil.cpp \
     $$PWD/src/util/shellcommand.cpp \
     $$PWD/src/util/webdav_utils.cpp \
@@ -60,7 +64,6 @@ HEADERS += \
     $$PWD/src/net/thumbnailfetcher.h \
     $$PWD/src/settings/nextcloudsettingsbase.h \
     $$PWD/src/settings/inifilesettings.h \
-    $$PWD/src/settings/permittedsettings.h \
     $$PWD/src/util/filepathutil.h \
     $$PWD/src/util/shellcommand.h \
     $$PWD/src/util/webdav_utils.h \
@@ -102,6 +105,14 @@ HEADERS += \
     $$PWD/src/provider/accountinfo/accountinfoprovider.h \
     $$PWD/src/util/providerutils.h
 
+contains(QT, dbus) {
+    SOURCES += \
+        $$PWD/src/settings/permittedsettings.cpp
+
+    HEADERS += \
+        $$PWD/src/settings/permittedsettings.h
+}
+
 INCLUDEPATH += $$PWD/src
 DEPENDPATH += $$PWD/src
 INCLUDEPATH += $$PWD/../../3rdparty/qwebdavlib/qwebdavlib
@@ -120,7 +131,14 @@ contains(CONFIG, quickcontrols) {
     qwebdavlib.path = /usr/lib
 }
 
-LIBS += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.so.1
-qwebdavlib.files += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.so.1
+# QWebDav
+android {
+    LIBS += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.so
+    qwebdavlib.files += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.so
+}
+linux:!android {
+    LIBS += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.so.1
+    qwebdavlib.files += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.so.1
+}
 
 INSTALLS += qwebdavlib target

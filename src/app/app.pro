@@ -21,7 +21,14 @@ contains(CONFIG, quickcontrols) {
         target.path = /usr/bin
         INSTALLS += desktop target
     }
-    
+
+    # OpenSSL for Android
+    android {
+        # LIBS += -L $$OUT_PWD/../../3rdparty/openssl -lcrypto -lssl
+        ANDROID_EXTRA_LIBS += $$OUT_PWD/../../3rdparty/openssl/libcrypto.so
+        ANDROID_EXTRA_LIBS += $$OUT_PWD/../../3rdparty/openssl/libssl.so
+    }
+
     RESOURCES += \
         qml.qrc
 }
@@ -30,11 +37,14 @@ include($$PWD/../common/common.pri)
 include($$PWD/../qmlcommon/qmlcommon.pri)
 
 CONFIG += qt
-QT += xml dbus quick qml multimedia
+QT += quick qml multimedia svg
+
+linux:!android {
+    QT += dbus
+}
 
 SOURCES += \
-    $$PWD/src/harbour-owncloud.cpp \
-    $$PWD/src/daemoncontrol.cpp \
+    $$PWD/src/main.cpp \
     $$PWD/src/directorycontentmodel.cpp \
     $$PWD/src/ocsnetaccessfactory.cpp \
     $$PWD/src/webdavmediafeeder.cpp \
@@ -42,12 +52,29 @@ SOURCES += \
     $$PWD/src/accountworkergenerator.cpp
 
 HEADERS += \
-    $$PWD/src/daemoncontrol.h \
     $$PWD/src/directorycontentmodel.h \
     $$PWD/src/ocsnetaccessfactory.h \
     $$PWD/src/webdavmediafeeder.h \
     $$PWD/src/accountworkers.h \
     $$PWD/src/accountworkergenerator.h
+
+# Daemon control classes
+!contains(QT, dbus) {
+    HEADERS += \
+        $$PWD/src/daemonctrl/dummydaemonctrl.h
+
+    SOURCES += \
+        $$PWD/src/daemonctrl/dummydaemonctrl.cpp
+}
+contains(QT, dbus) {
+    HEADERS += \
+        $$PWD/src/daemonctrl/daemoncontrol.h
+
+    SOURCES += \
+        $$PWD/src/daemonctrl/daemoncontrol.cpp
+}
+
+# Consider whether to use native notification mechanisms on target OSes or not
 
 RESOURCES += \
     icons.qrc
@@ -86,4 +113,18 @@ icon128.path = /usr/share/icons/hicolor/128x128/apps
 INSTALLS += icon86 icon128
 
 DEFINES += QWEBDAVITEM_EXTENDED_PROPERTIES
+
+DISTFILES += \
+    android/AndroidManifest.xml \
+    android/gradle/wrapper/gradle-wrapper.jar \
+    android/gradlew \
+    android/res/values/libs.xml \
+    android/build.gradle \
+    android/gradle/wrapper/gradle-wrapper.properties \
+    android/gradlew.bat
+
+contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
+    ANDROID_PACKAGE_SOURCE_DIR = \
+        $$PWD/android
+}
 

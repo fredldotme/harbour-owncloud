@@ -25,6 +25,7 @@ protected:
 
 public slots:
     void authenticate() Q_DECL_OVERRIDE;
+    void abort() Q_DECL_OVERRIDE;
     void validateFlowResponse(QString responseUrl);
 
 signals:

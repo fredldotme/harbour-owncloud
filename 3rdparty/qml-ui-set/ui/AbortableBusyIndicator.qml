@@ -33,7 +33,7 @@ BusyIndicator {
                 NumberAnimation {
                     target: buttonContainer
                     property: "opacity"
-                    duration: 100
+                    duration:   100
                     from: 1.0
                     to: 0.0
                     easing.type: Easing.InOutQuad
@@ -56,6 +56,7 @@ BusyIndicator {
         Button {
             id: abortButtonImage
             icon.name: "view-close"
+            background: Rectangle { color: "transparent" }
             anchors.fill: parent
             enabled: false
             visible: (!abortButtonHideTimer.running && !abortButtonMouseArea.pressed)

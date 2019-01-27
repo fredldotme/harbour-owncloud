@@ -32,7 +32,7 @@ CommandPageFlow {
 
     Dialog {
         id: fileExistsDialog
-        standardButtons: Dialog.Yes | Dialog.No | Dialog.Cancel
+        standardButtons: Dialog.Ok | Dialog.Cancel
 
         property string fileName : ""
         property string path : ""
@@ -47,14 +47,9 @@ CommandPageFlow {
                        "starting the download?").arg(fileExistsDialog.fileName)
         }
 
-        onYes: {
+        onAccepted: {
             console.debug("Yes")
             FilePathUtil.removeFile(path)
-            transferCommandQueue.fileDownloadRequest(path, mimeType, openFile, lastModified)
-            transferCommandQueue.run()
-        }
-        onNo: {
-            console.debug("No")
             transferCommandQueue.fileDownloadRequest(path, mimeType, openFile, lastModified)
             transferCommandQueue.run()
         }
@@ -136,6 +131,14 @@ CommandPageFlow {
             // a new page into the PageStack in case a refresh was not requested
             if (isDavListCommand) {
                 console.log("list command")
+
+                // TODO
+                if (!receipt.result.success) {
+                    notificationRequest(
+                                qsTr("Error occured"),
+                                qsTr("Please check your credentials or try again later."))
+                    return
+                }
 
                 var remotePath = receipt.info.property("remotePath")
                 var dirContent = receipt.result.dirContent;

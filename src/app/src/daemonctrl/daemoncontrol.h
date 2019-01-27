@@ -3,13 +3,16 @@
 
 #include <QObject>
 #include <QFile>
+
+#ifndef QT_NO_DBUS
 #include <QtDBus>
+#endif
 
 class DaemonControl : public QObject
 {
     Q_OBJECT
 public:
-    explicit DaemonControl(QObject *parent = 0);
+    explicit DaemonControl(QObject *parent = Q_NULLPTR);
 
     Q_PROPERTY(bool daemonInstalled READ daemonInstalled NOTIFY daemonInstalledChanged)
     Q_PROPERTY(bool uploading READ uploading NOTIFY uploadingChanged)
@@ -27,8 +30,11 @@ private:
     bool isCurrentlyUploading();
 
     bool m_uploading;
+
+#ifndef QT_NO_DBUS
     QDBusInterface* m_daemonInterface = Q_NULLPTR;
     QDBusServiceWatcher* m_daemonWatcher = Q_NULLPTR;
+#endif
 
 signals:
     void daemonInstalledChanged();

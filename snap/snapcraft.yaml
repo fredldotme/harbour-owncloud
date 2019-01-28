@@ -107,6 +107,7 @@ parts:
       - xvfb
       - zlib1g-dev
     configflags:
+      - --prefix=/usr
       - -release
       - -confirm-license
       - -opensource

@@ -46,6 +46,7 @@ parts:
     after: [ qt ]
   qt:
     plugin: autotools
+    install-via: prefix
     source-type: git
     source: https://code.qt.io/qt/qt5.git
     source-tag: "v5.12.0"
@@ -107,7 +108,6 @@ parts:
       - xvfb
       - zlib1g-dev
     configflags:
-      - --prefix=/usr
       - -release
       - -confirm-license
       - -opensource

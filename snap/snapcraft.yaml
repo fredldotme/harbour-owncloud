@@ -211,7 +211,7 @@ parts:
       - libxrender1
       - perl
       - zlib1g
-      - libdouble-conversion1v5
+      - libdouble-conversion1
       - libpulse0
     stage:
       - usr/*

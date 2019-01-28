@@ -10,15 +10,13 @@ Dialog {
 
     property alias text : textEntryField.text
 
-    Column {
+    TextField {
         anchors.fill: parent
-        anchors.margins: fontSizeSmall
-        TextField {
-            id: textEntryField
-            width: parent.width
-            text: ""
-            focus: true
-        }
+        anchors.margins: 32
+        id: textEntryField
+        width: parent.width
+        text: ""
+        focus: true
     }
 
     onVisibleChanged: {

@@ -48,7 +48,7 @@ parts:
     plugin: autotools
     source-type: git
     source: https://code.qt.io/qt/qt5.git
-    source-branch: "5.12.0"
+    source-tag: "v5.12.0"
     build-packages:
       - g++
       - freetds-dev

@@ -105,6 +105,7 @@ parts:
       - libxrender-dev
       - pkg-kde-tools
       - publicsuffix
+      - python2.7
       - unixodbc-dev
       - xvfb
       - zlib1g-dev

@@ -17,9 +17,9 @@ ApplicationWindow {
     height: 400
     minimumHeight: 360
 
-    Keys.onBackPressed: {
+    /*Keys.onBackPressed: {
         popPage()
-    }
+    }*/
 
     function popPage()  {
         if (sideStack.currentItem !== sideStack.initialItem) {

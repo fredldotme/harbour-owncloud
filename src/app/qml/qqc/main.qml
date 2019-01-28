@@ -87,21 +87,21 @@ ApplicationWindow {
         //        }
     }
     function notify(summary, body) {
-//        notifier.summary = summary
-//        notifier.previewSummary = summary
-//        notifier.body = body
-//        notifier.previewBody = body
-//        notifier.transient = false
-//        notifier.publish();
+        //        notifier.summary = summary
+        //        notifier.previewSummary = summary
+        //        notifier.body = body
+        //        notifier.previewBody = body
+        //        notifier.transient = false
+        //        notifier.publish();
     }
 
     function notifyTransient(summary) {
-//        notifier.summary = summary
-//        notifier.previewSummary = summary
-//        notifier.body = ""
-//        notifier.previewBody = ""
-//        notifier.transient = true
-//        notifier.publish();
+        //        notifier.summary = summary
+        //        notifier.previewSummary = summary
+        //        notifier.body = ""
+        //        notifier.previewBody = ""
+        //        notifier.transient = true
+        //        notifier.publish();
     }
 
     function addAccount() {
@@ -161,7 +161,9 @@ ApplicationWindow {
                 verticalAlignment: Qt.AlignVCenter
                 Layout.fillWidth: true
                 text: {
-                    if (sideStack.currentItem !== sideStack.initialItem) {
+                    if (!showBackButton) {
+                        return ""
+                    } else if (sideStack.currentItem !== sideStack.initialItem) {
                         return sideStack.currentItem.title
                     } else {
                         return rootStack.currentItem.title

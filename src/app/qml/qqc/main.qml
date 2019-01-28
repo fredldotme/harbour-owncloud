@@ -160,9 +160,17 @@ ApplicationWindow {
                 horizontalAlignment: Qt.AlignHCenter
                 verticalAlignment: Qt.AlignVCenter
                 Layout.fillWidth: true
+                text: {
+                    if (sideStack.currentItem !== sideStack.initialItem) {
+                        return sideStack.currentItem.title
+                    } else {
+                        return rootStack.currentItem.title
+                    }
+                }
             }
 
             ToolButton {
+                icon.color: "transparent"
                 icon.name: "folder-new"
                 visible: rootStack.currentItem.objectName === "FileBrowser"
                 font.pixelSize: fontSizeSmall
@@ -172,7 +180,8 @@ ApplicationWindow {
                 }
             }
             ToolButton {
-                icon.name: "upload-media"
+                icon.color: "transparent"
+                icon.name: "document-new"
                 visible: rootStack.currentItem.objectName === "FileBrowser"
                 font.pixelSize: fontSizeSmall
                 enabled: !rootStack.currentItem.isBusy
@@ -181,6 +190,7 @@ ApplicationWindow {
                 }
             }
             ToolButton {
+                icon.color: "transparent"
                 icon.name: "view-refresh"
                 visible: rootStack.currentItem.objectName === "FileBrowser"
                 font.pixelSize: fontSizeSmall

@@ -148,8 +148,6 @@ parts:
       - -nomake
       - tests
       - -skip
-      - qtwayland
-      - -skip
       - qtwebengine
       - -skip
       - qtwebview

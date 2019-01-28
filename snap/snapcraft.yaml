@@ -152,9 +152,7 @@ parts:
       - -skip
       - qtwebview
       - -skip
-      - qtwebkit
-      - -skip
-      - qtwebkit-examples
+      - qt3d
     stage-packages:
       - etc1tool # minimal package for depending on libpng regardless of Ubuntu version
       - fontconfig

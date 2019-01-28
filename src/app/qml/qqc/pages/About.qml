@@ -167,18 +167,6 @@ Rectangle {
                 }
             }
             Label {
-                text: qsTr("QWebDAV library (qwebdavlib) version 1.0 (LGPL v2.1)")
-                font.pixelSize: fontSizeTiny
-                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                horizontalAlignment: Text.AlignHCenter
-                anchors {
-                    left: parent.left
-                    right: parent.right
-                    leftMargin: fontSizeLarge
-                    rightMargin: fontSizeLarge
-                }
-            }
-            Label {
                 text: qsTr("Icon based on \"Cute clouds for CSS sprites\" by Yug (CC BY-SA 3.0)")
                 font.pixelSize: fontSizeTiny
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere

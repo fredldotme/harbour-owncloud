@@ -281,7 +281,7 @@ Page {
         property var selectedDavInfo : null
 
         MenuItem {
-            enabled: true
+            enabled: !rightClickMenu.selectedDavInfo.isDirectory
             text: qsTr("Open")
             font.pixelSize: fontSizeSmall
             onClicked: {
@@ -294,7 +294,7 @@ Page {
             }
         }
         MenuItem {
-            enabled: true
+            enabled: !rightClickMenu.selectedDavInfo.isDirectory
             text: qsTr("Download")
             font.pixelSize: fontSizeSmall
             onClicked: {
@@ -378,10 +378,14 @@ Page {
             }
         }
 
-        delegate: Column {
+        delegate: MouseArea {
             id: delegate
-            width: parent.width
+            width: listView.width
+            height: childrenRect.height
             enabled: (__listCommand === null)
+            acceptedButtons: Qt.LeftButton | Qt.RightButton
+
+            onClicked: entryClickHandler(mouse)
 
             property var davInfo : listView.model[index]
 
@@ -405,40 +409,35 @@ Page {
                     openDetails(davInfo);
                 }
             }
-            Button {
-                id: icon
-                icon.color: "transparent"
-                icon.name: davInfo.isDirectory ? "folder" :
-                                                 fileDetailsHelper.getIconFromMime(davInfo.mimeType)
+
+            Column {
                 enabled: parent.enabled
-                text: davInfo.name
-                font.pixelSize: fontSizeSmall
-                background: Rectangle { color: "transparent" }
-
-                MouseArea {
-                    id: labelMouseArea
-                    anchors.fill: parent
-                    acceptedButtons: Qt.LeftButton | Qt.RightButton
-                    onClicked: entryClickHandler(mouse)
+                width: listView.width
+                Button {
+                    id: icon
+                    icon.color: "transparent"
+                    icon.name: davInfo.isDirectory
+                               ? "folder"
+                               : fileDetailsHelper.getIconFromMime(davInfo.mimeType)
+                    text: davInfo.name
+                    font.pixelSize: fontSizeSmall
+                    background: Rectangle { color: "transparent" }
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: entryClickHandler(mouse)
+                    }
                 }
-            }
-            Label {
-                text: fileDetailsHelper.getHRSize(davInfo.size)
-                      + (!davInfo.isDirectory ?
-                             (", " +
-                              Qt.formatDateTime(davInfo.lastModified, Qt.SystemLocaleShortDate)) : "")
-                font.pixelSize: fontSizeTiny
-                anchors.left: parent.left
-                anchors.leftMargin: icon.icon.width
-
-                MouseArea {
-                    id: detailMouseArea
-                    anchors.fill: parent
-                    acceptedButtons: Qt.LeftButton | Qt.RightButton
-                    onClicked: entryClickHandler(mouse)
+                Label {
+                    text: fileDetailsHelper.getHRSize(davInfo.size)
+                          + (!davInfo.isDirectory ?
+                                 (", " +
+                                  Qt.formatDateTime(davInfo.lastModified, Qt.SystemLocaleShortDate)) : "")
+                    font.pixelSize: fontSizeTiny
+                    anchors.left: parent.left
+                    anchors.leftMargin: icon.icon.width
                 }
+                MenuSeparator { width: delegate.width }
             }
-            MenuSeparator { width: parent.width }
         }
 
         AbortableBusyIndicator {

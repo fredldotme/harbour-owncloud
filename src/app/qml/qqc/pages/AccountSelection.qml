@@ -37,10 +37,10 @@ Item {
         id: rightClickMenu
 
         MenuItem {
-            text: qsTr("Delete")
+            text: qsTr("Remove account")
             font.pixelSize: fontSizeSmall
             onClicked: {
-                console.log("Deleting " + selectedAccountWorkers.account)
+                console.log("Removing " + selectedAccountWorkers.account)
                 var deleteSuccess =
                         accountGenerator.database.removeAccount(selectedAccountWorkers.account)
                 console.log("deleteSuccess: " + deleteSuccess)
@@ -52,57 +52,52 @@ Item {
         id: accountsList
         anchors.fill: parent
         model: accountGenerator.accountWorkers
-        spacing: paddingSmall
+        //spacing: paddingSmall
 
-        delegate: Item {
-            width: parent.width
+        delegate: MouseArea {
+            width: childrenRect.width
+            height: childrenRect.height
+            enabled: (__listCommand == null)
+            acceptedButtons: Qt.LeftButton | Qt.RightButton
 
             readonly property var delegateAccountWorkers : accountGenerator.accountWorkers[index]
 
-            Column {
-                id: listEntry
-                width: parent.width
+            onClicked: {
+                selectedAccountWorkers = delegateAccountWorkers
 
-                Column {
-                    Label {
-                        text: providerTypeNames[delegateAccountWorkers.account.providerType]
-                        font.bold: true
-                        font.pixelSize: fontSizeSmall
-                        enabled: __listCommand == null
-                    }
-                    Label {
-                        text: delegateAccountWorkers.account.username
-                              + " on "
-                              + delegateAccountWorkers.account.hoststring
-                        font.pixelSize: fontSizeSmall
-                        enabled: __listCommand == null
-                        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                        width: accountsList.width
-                    }
-                    MenuSeparator { width: accountsList.width }
+                if (mouse.button === Qt.RightButton) {
+                    rightClickMenu.popup(accountsList, mouseX, mouseY)
+                    return;
                 }
+
+                var nextPath = "/";
+                pageFlow.targetRemotePath = nextPath
+                __listCommand = selectedAccountWorkers.browserCommandQueue.directoryListingRequest(nextPath, false)
+
+                console.debug("onClicked: __listCommand " + __listCommand)
             }
-            MouseArea {
-                anchors.fill: listEntry
-                enabled: __listCommand == null
-                acceptedButtons: Qt.LeftButton | Qt.RightButton
 
-                onClicked: {
-                    selectedAccountWorkers = delegateAccountWorkers
-
-                    if (mouse.button === Qt.RightButton) {
-                        //settingsPage.accountWorkers = selectedAccountWorkers
-                        //settingsPage.accountDb = accountGenerator.database
-                        rightClickMenu.popup(accountsList, mouseX, mouseY)
-                        return;
-                    }
-
-                    var nextPath = "/";
-                    pageFlow.targetRemotePath = nextPath
-                    __listCommand = selectedAccountWorkers.browserCommandQueue.directoryListingRequest(nextPath, false)
-
-                    console.debug("onClicked: __listCommand " + __listCommand)
+            Column {
+                id: mainColumn
+                Label {
+                    id: providerLabel
+                    text: providerTypeNames[delegateAccountWorkers.account.providerType]
+                    font.bold: true
+                    font.pixelSize: fontSizeSmall
+                    enabled: __listCommand == null
                 }
+
+                Label {
+                    id: userLabel
+                    text: delegateAccountWorkers.account.username
+                          + " on "
+                          + delegateAccountWorkers.account.hoststring
+                    font.pixelSize: fontSizeSmall
+                    enabled: __listCommand == null
+                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                    width: accountsList.width
+                }
+                MenuSeparator { width: accountsList.width }
             }
         }
     }

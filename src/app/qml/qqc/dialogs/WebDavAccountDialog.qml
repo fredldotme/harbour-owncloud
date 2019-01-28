@@ -86,7 +86,7 @@ Rectangle {
 
     Flickable {
         anchors.fill: parent
-        contentHeight: topIcon.height + mainColumn.height
+        contentHeight: topIcon.height + mainColumn.height + (paddingLarge*5)
 
         Image {
             id: topIcon

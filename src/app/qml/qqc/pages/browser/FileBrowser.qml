@@ -13,7 +13,7 @@ import "qrc:/qml/qqc/dialogs"
 Page {
     id: pageRoot
     objectName: "FileBrowser"
-    title: qsTr("Files")
+    title: remotePath
 
     property string remotePath : "/"
     property string pageHeaderText : "/"
@@ -420,13 +420,33 @@ Page {
             }
         }
 */
-        delegate: Row {
+        delegate: Column {
             id: delegate
             width: parent.width
             enabled: (__listCommand === null)
 
             property var davInfo : listView.model[index]
 
+            function entryContextMenu() {
+                rightClickMenu.selectedDavInfo = davInfo
+                rightClickMenu.popup(delegate,
+                                    labelMouseArea.mouseX,
+                                    labelMouseArea.Y)
+            }
+
+            function entryClickHandler(mouse) {
+                if (mouse.button === Qt.RightButton) {
+                    entryContextMenu()
+                    return;
+                }
+
+                if (davInfo.isDirectory) {
+                    var nextPath = remotePath + davInfo.name + "/";
+                    changeDirectory(nextPath)
+                } else {
+                    openDetails(davInfo);
+                }
+            }
             Button {
                 id: icon
                 icon.color: "transparent"
@@ -438,56 +458,25 @@ Page {
                 background: Rectangle { color: "transparent" }
 
                 MouseArea {
-                    id: labelMouseArea
                     anchors.fill: parent
                     acceptedButtons: Qt.LeftButton | Qt.RightButton
-
-                    function entryContextMenu() {
-                        rightClickMenu.selectedDavInfo = davInfo
-                        rightClickMenu.popup(delegate,
-                                            labelMouseArea.mouseX,
-                                            labelMouseArea.Y)
-                    }
-
-                    onClicked: {
-                        if (mouse.button === Qt.RightButton) {
-                            entryContextMenu()
-                            return;
-                        }
-
-                        if (davInfo.isDirectory) {
-                            var nextPath = remotePath + davInfo.name + "/";
-                            changeDirectory(nextPath)
-                        } else {
-                            openDetails(davInfo);
-                        }
-                    }
+                    onClicked: entryClickHandler(mouse)
                 }
             }
+            Label {
+                text: fileDetailsHelper.getHRSize(davInfo.size) + (!davInfo.isDirectory ? (", " +
+                      Qt.formatDateTime(davInfo.lastModified, Qt.SystemLocaleShortDate)) : "")
+                font.pixelSize: fontSizeTiny
+                anchors.left: parent.left
+                anchors.leftMargin: icon.icon.width
 
-            // Delete menu resources after completion,
-            // which MUST be indicated by the context menu component
-            /*onPressAndHold: {
-                if (!menu) {
-                    menu = contextMenuComponent.createObject(listView, {
-                                                                 selectedEntry : davInfo,
-                                                                 selectedItem : delegate,
-                                                                 dialogObj: dialogObj,
-                                                                 remoteDirDialogComponent : remoteDirDialogComponent,
-                                                                 textEntryDialogComponent : textEntryDialogComponent,
-                                                                 fileDetailsComponent : fileDetailsComponent,
-                                                                 transferQueue : transferQueue,
-                                                                 browserCommandQueue : browserCommandQueue
-                                                             })
-                    menu.requestListReload.connect(refreshListView)
-                    menu.contextMenuDone.connect(function() {
-                        menu.destroy()
-                        menu = null
-                    });
+                MouseArea {
+                    anchors.fill: parent
+                    acceptedButtons: Qt.LeftButton | Qt.RightButton
+                    onClicked: entryClickHandler(mouse)
                 }
-
-                openMenu()
-            }*/
+            }
+            MenuSeparator { width: parent.width }
         }
         //VerticalScrollDecorator {}
 

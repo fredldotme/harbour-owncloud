@@ -377,49 +377,7 @@ Page {
                 duration: 200
             }
         }
-/*
-        header: ToolBar {
-            id: pageHeader
-            width: listView.width
 
-            CircularImageButton {
-                property bool __showAvatar :
-                    (accountWorkers.account.providerType === NextcloudSettings.Nextcloud)
-                source: __showAvatar ? accountWorkers.avatarFetcher.source : ""
-                enabled: __showAvatar
-                visible: accountWorkers.accountInfoCommandQueue.userInfoEnabled
-                highlightColor:
-                    Qt.rgba(200,
-                            0,
-                            0,
-                            0.5)
-
-                readonly property bool visibility :
-                    (!userInformation.active)
-
-                // Keep smaller padding on the root
-                readonly property int __leftMargin :
-                    (remotePath === "/") ?
-                        (Theme.horizontalPageMargin) :
-                        (Theme.horizontalPageMargin*2.5)
-
-                // onVisibilityChanged: console.log("visibility: " + visibility)
-                state: visibility ? "visible" : "invisible"
-
-                anchors {
-                    top: parent.top
-                    topMargin: (Theme.paddingMedium * 1.2)
-                    left: parent.left
-                    leftMargin: __leftMargin
-                    bottom: parent.bottom
-                    bottomMargin: (Theme.paddingMedium * 1.2)
-                }
-
-                width: height
-                onClicked: { userInformation.open(userInformationAnchor) }
-            }
-        }
-*/
         delegate: Column {
             id: delegate
             width: parent.width
@@ -427,16 +385,16 @@ Page {
 
             property var davInfo : listView.model[index]
 
-            function entryContextMenu() {
+            function entryContextMenu(area) {
                 rightClickMenu.selectedDavInfo = davInfo
                 rightClickMenu.popup(delegate,
-                                    labelMouseArea.mouseX,
-                                    labelMouseArea.Y)
+                                     area.mouseX,
+                                     area.mouseY)
             }
 
             function entryClickHandler(mouse) {
                 if (mouse.button === Qt.RightButton) {
-                    entryContextMenu()
+                    entryContextMenu(mouse)
                     return;
                 }
 
@@ -451,26 +409,30 @@ Page {
                 id: icon
                 icon.color: "transparent"
                 icon.name: davInfo.isDirectory ? "folder" :
-                            fileDetailsHelper.getIconFromMime(davInfo.mimeType)
+                                                 fileDetailsHelper.getIconFromMime(davInfo.mimeType)
                 enabled: parent.enabled
                 text: davInfo.name
                 font.pixelSize: fontSizeSmall
                 background: Rectangle { color: "transparent" }
 
                 MouseArea {
+                    id: labelMouseArea
                     anchors.fill: parent
                     acceptedButtons: Qt.LeftButton | Qt.RightButton
                     onClicked: entryClickHandler(mouse)
                 }
             }
             Label {
-                text: fileDetailsHelper.getHRSize(davInfo.size) + (!davInfo.isDirectory ? (", " +
-                      Qt.formatDateTime(davInfo.lastModified, Qt.SystemLocaleShortDate)) : "")
+                text: fileDetailsHelper.getHRSize(davInfo.size)
+                      + (!davInfo.isDirectory ?
+                             (", " +
+                              Qt.formatDateTime(davInfo.lastModified, Qt.SystemLocaleShortDate)) : "")
                 font.pixelSize: fontSizeTiny
                 anchors.left: parent.left
                 anchors.leftMargin: icon.icon.width
 
                 MouseArea {
+                    id: detailMouseArea
                     anchors.fill: parent
                     acceptedButtons: Qt.LeftButton | Qt.RightButton
                     onClicked: entryClickHandler(mouse)
@@ -478,7 +440,6 @@ Page {
             }
             MenuSeparator { width: parent.width }
         }
-        //VerticalScrollDecorator {}
 
         AbortableBusyIndicator {
             running: (__listCommand !== null)

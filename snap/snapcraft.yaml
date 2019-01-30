@@ -19,13 +19,13 @@ apps:
 
 parts:
   harbour-owncloud:
-    plugin: qmake
-    options:
-      - CONFIG+=noadditionals
-      - CONFIG+=quickcontrols
-    qt-version: qt5
+    plugin: make
     source: .
-    project-files: [ 'harbour-owncloud.pro' ]
+    override-build: |
+        mkdir build
+        cd build
+        qmake ../harbour-owncloud.pro CONFIG+=noadditionals CONFIG+=quickcontrols
+        snapcraftctl build
     build-packages:
       - make
       - build-essential

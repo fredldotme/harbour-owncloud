@@ -36,7 +36,8 @@ public:
 
         qDebug() << m_inTag << value;
         if (this->m_inTag == Enabled)
-            this->m_enabled = (value == QStringLiteral("true"));
+            this->m_enabled = (value == QStringLiteral("true") ||
+                               value == QStringLiteral("1"));
         else if (this->m_inTag == DisplayName)
             this->m_displayName = value;
         else if (this->m_inTag == EMail)

@@ -15,6 +15,7 @@ public:
 
 public slots:
     virtual CommandEntity* userInfoRequest() Q_DECL_OVERRIDE;
+    virtual QString providerSettingsUrl() Q_DECL_OVERRIDE;
 
 };
 

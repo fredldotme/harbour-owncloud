@@ -13,9 +13,12 @@ NextcloudSettingsBase::NextcloudSettingsBase(QObject *parent) : QObject(parent)
 
     m_hoststring = "https://";
     m_isHttps = true;
+    m_port = 443;
     m_autoLogin = false;
     m_notifications = true;
     m_providerType = ProviderType::Nextcloud;
+    m_uploadAutomatically = false;
+    m_mobileUpload = false;
 
     connect(this, &NextcloudSettingsBase::hoststringChanged, this, &NextcloudSettingsBase::settingsChanged);
     connect(this, &NextcloudSettingsBase::usernameChanged, this, &NextcloudSettingsBase::settingsChanged);

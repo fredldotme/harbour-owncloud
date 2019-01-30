@@ -2,6 +2,8 @@
 
 #include <QCoreApplication>
 #include <QDebug>
+#include <QDir>
+#include <QFileInfo>
 #include <QStandardPaths>
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlError>
@@ -20,11 +22,20 @@ AccountDb::AccountDb(QObject *parent) : QObject(parent)
             + QStringLiteral("/%1/accounts.db").arg(qApp->applicationName());
     const QString dbName = QStringLiteral("accountdb");
 
+    const QFileInfo dbFileInfo(dbFilePath);
+    const QDir dbDir = dbFileInfo.absoluteDir();
+
+    if (!(dbDir.exists() || dbDir.mkpath(dbDir.absolutePath()))) {
+        qWarning() << "Failed to create necessary directory" << dbDir.absolutePath();
+        return;
+    }
+
     if (QSqlDatabase::contains(dbName))
         this->m_database = QSqlDatabase::database(dbName);
     else
         this->m_database = QSqlDatabase::addDatabase("QSQLITE", dbName);
 
+    qDebug() << "Database location: " << dbFilePath;
     this->m_database.setDatabaseName(dbFilePath);
     createDatabase();
     accounts();

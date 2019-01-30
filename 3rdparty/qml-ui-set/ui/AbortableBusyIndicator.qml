@@ -55,7 +55,7 @@ BusyIndicator {
 
         Button {
             id: abortButtonImage
-            icon.name: "view-close"
+            icon.name: "dialog-cancel"
             background: Rectangle { color: "transparent" }
             anchors.fill: parent
             enabled: false

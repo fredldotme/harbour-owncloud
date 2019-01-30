@@ -150,7 +150,8 @@ ApplicationWindow {
         RowLayout {
             anchors.fill: parent
             ToolButton {
-                text: qsTr("‹")
+                icon.color: "transparent"
+                icon.name: "back"
                 font.pixelSize: fontSizeSmall
                 enabled: showBackButton
                 onClicked: popPage()
@@ -230,8 +231,8 @@ ApplicationWindow {
                 }
             }
             ToolButton {
-                text: qsTr("⋮")
-                font.pixelSize: fontSizeSmall
+                icon.color: "transparent"
+                icon.name: "application-menu"
                 onClicked: {
                     if (hamburgerMenu.opened) {
                         hamburgerMenu.close()
@@ -320,7 +321,6 @@ ApplicationWindow {
 
     SwipeView {
         anchors.fill: parent
-        //currentIndex: detailStackVisibleRequired && sideStackIsActive ? 1 : 0
         states: [
             State {
                 when: sideStackIsActive
@@ -355,6 +355,11 @@ ApplicationWindow {
                 onPopExitChanged: {
                     gc()
                 }
+
+                onPushExitChanged: {
+                    mainContainer.forceActiveFocus()
+                    mainContainer.focus = true
+                }
             }
         }
 
@@ -382,6 +387,10 @@ ApplicationWindow {
                     }
                 }
 
+                onPushExitChanged: {
+                    mainContainer.forceActiveFocus()
+                    mainContainer.focus = true
+                }
                 onPopExitChanged: {
                     gc()
                 }
@@ -390,6 +399,7 @@ ApplicationWindow {
     }
 
     Rectangle {
+        id: mainContainer
         color: "lightgray"
         anchors.fill: parent
         focus: true

@@ -30,7 +30,8 @@ contains(CONFIG, quickcontrols) {
     }
 
     RESOURCES += \
-        qml.qrc
+        qml.qrc \
+        theme.qrc
 }
 
 include($$PWD/../common/common.pri)
@@ -38,10 +39,6 @@ include($$PWD/../qmlcommon/qmlcommon.pri)
 
 CONFIG += qt
 QT += quick qml multimedia svg
-
-linux:!android {
-    QT += dbus
-}
 
 SOURCES += \
     $$PWD/src/main.cpp \

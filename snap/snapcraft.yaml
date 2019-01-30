@@ -53,6 +53,8 @@ parts:
     build-packages:
       - gcc-multilib
       - g++-multilib
+      - python-minimal
+      - python
       - freetds-dev
       - gdb
       - libasound2-dev

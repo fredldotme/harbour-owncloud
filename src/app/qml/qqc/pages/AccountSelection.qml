@@ -30,7 +30,10 @@ Item {
         onNotificationRequest: notify(summary, body)
         onTransientNotificationRequest: notifyTransient(summary)
         onAvatarFetchRequest: selectedAccountWorkers.avatarFetcher.fetch()
-        onUserInfoUpdateRequest: selectedAccountWorkers.accountInfoCommandQueue.userInfoRequest()
+        onUserInfoUpdateRequest: {
+            selectedAccountWorkers.accountInfoCommandQueue.userInfoRequest()
+            selectedAccountWorkers.accountInfoCommandQueue.run()
+        }
     }
 
     Menu {

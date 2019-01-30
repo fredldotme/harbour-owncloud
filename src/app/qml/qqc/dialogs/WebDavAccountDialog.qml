@@ -13,7 +13,7 @@ Rectangle {
     property AccountDb accountDatabase : null
     property var viewStack : null
 
-    readonly property OcsCommandQueue ocsCommandQueue :
+    readonly property CommandQueue ocsCommandQueue :
         accountWorkers.accountInfoCommandQueue
     readonly property CloudStorageProvider browserCommandQueue :
         accountWorkers.browserCommandQueue

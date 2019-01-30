@@ -85,7 +85,7 @@ Rectangle {
             model: activeAccountWorkers
             anchors.fill: parent
 
-            Column {
+            delegate: Column {
                 width: parent.width
 
                 property AccountWorkers accountWorker : activeAccountWorkers[index]
@@ -102,7 +102,7 @@ Rectangle {
                         height: 64
                         model: transferQueue.queue
 
-                        Column {
+                        delegate: Column {
                             id: delegate
                             width: parent.width
                             height: 64

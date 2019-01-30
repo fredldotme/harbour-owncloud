@@ -5,10 +5,10 @@ import QtQuick.Dialogs 1.2
 import QtGraphicalEffects 1.0
 import harbour.owncloud 1.0
 import QmlUiSet 1.0
-import "qrc:/qml-ui-set"
 import "qrc:/qml/qqc"
 import "qrc:/qml/qqc/controls"
 import "qrc:/qml/qqc/dialogs"
+import "qrc:/qml-ui-set"
 
 Page {
     id: pageRoot
@@ -26,9 +26,11 @@ Page {
 
     property var browserCommandQueue : accountWorkers.browserCommandQueue
     property var transferCommandQueue : accountWorkers.transferCommandQueue
+    property var userInfoCommandQueue : accountWorkers.accountInfoCommandQueue
 
     property alias fileUploadDialog : openFileDialog
     property alias newDirectoryDialog : dirCreationDialog
+    property alias avatarMenu : avatarMenu
 
     property var copyEntryDialog : null
     property var moveEntryDialog : null
@@ -160,8 +162,52 @@ Page {
         }
     }
 
+    Menu {
+        id: avatarMenu
+        DetailItem {
+            width: parent.width
+            label: qsTr("User:")
+            value: pageFlow.userInfo.displayName
+        }
+        /*DetailItem {
+            width: parent.width
+            label: qsTr("Mail:")
+            value: pageFlow.userInfo.email
+        }*/
+        DetailItem {
+            width: parent.width
+            label: qsTr("Usage:")
+            value: pageFlow.userInfo.usedBytes
+        }
+        DetailItem {
+            width: parent.width
+            label: qsTr("Free:")
+            value: pageFlow.userInfo.totalBytes
+        }
+        DetailItem {
+            width: parent.width
+            label: qsTr("Total:")
+            value: pageFlow.userInfo.totalBytes
+        }
+        /*MouseArea {
+            width: parent.width - paddingSmall*2
+            height: settingsButton.height
+            anchors.horizontalCenter: parent.horizontalCenter
+            Label {
+                id: settingsButton
+                text: qsTr("Settings")
+                anchors.horizontalCenter: parent.horizontalCenter
+                font.underline: true
+                color: "blue"
+            }
+            onClicked: {
+                Qt.openUrlExternally(accountWorkers.providerSettingsUrl)
+            }
+        }*/
+    }
+
     Connections {
-        target: pageRoot.accountWorkers.browserCommandQueue
+        target: browserCommandQueue
         onCommandStarted: {
             // Get the handle to davList commands when remotePaths match
             var isDavListCommand = (command.info.property("type") === "davList")
@@ -214,74 +260,13 @@ Page {
         }
     }
 
-    Item {
-        id: userInformationAnchor
-        width: parent.width
-
-        // Rely on height of the userInformation column
-        // for the CircularImageButton to adapt automatically
-        height: userInformation.height
-        //onHeightChanged: console.log(height)
-        property bool active: true
-
-        Menu {
-            id: userInformation
-            width: userInformationAnchor.width
-
-            RowLayout {
-                width: parent.width
-
-                Column {
-                    id: detailsColumn
-                    width: (parent.width / 3) * 2
-                    DetailItem {
-                        width: parent.width
-                        label: qsTr("User:")
-                        //value: ocsUserInfo.displayName
-                        visible: value.length > 0
-                    }
-                    DetailItem {
-                        width: parent.width
-                        label: qsTr("Mail:")
-                        //value: ocsUserInfo.emailAddress
-                        visible: value.length > 0
-                    }
-                    DetailItem {
-                        width: parent.width
-                        label: qsTr("Usage:")
-                        //value: ocsUserInfo.hrUsedBytes
-                        visible: value.length > 0
-                    }
-                    DetailItem {
-                        width: parent.width
-                        label: qsTr("Total:")
-                        //value: ocsUserInfo.hrTotalBytes
-                        visible: value.length > 0
-                    }
-                }
-
-                Item {
-                    width: (parent.width / 3)
-                    height: width
-                    CircularImageButton {
-                        source: accountWorkers.avatarFetcher.source
-                        Layout.fillWidth: true
-                        anchors.fill: parent
-                        anchors.margins: 24
-                        state: userInformation.active ? "visible" : "invisible"
-                        enabled: false
-                    }
-                }
-            }
-        }
-    }
-
     Menu {
         id: rightClickMenu
         property var selectedDavInfo : null
 
         MenuItem {
-            enabled: !rightClickMenu.selectedDavInfo.isDirectory
+            enabled: rightClickMenu.selectedDavInfo &&
+                     (!rightClickMenu.selectedDavInfo.isDirectory)
             text: qsTr("Open")
             font.pixelSize: fontSizeSmall
             onClicked: {
@@ -294,7 +279,8 @@ Page {
             }
         }
         MenuItem {
-            enabled: !rightClickMenu.selectedDavInfo.isDirectory
+            enabled: rightClickMenu.selectedDavInfo &&
+                     (!rightClickMenu.selectedDavInfo.isDirectory)
             text: qsTr("Download")
             font.pixelSize: fontSizeSmall
             onClicked: {

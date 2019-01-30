@@ -193,18 +193,6 @@ Page {
                     value: entry.createdAt
                     visible: value.length > 0
                 }
-                DetailItem {
-                    width: parent.width
-                    label: qsTr("Entity tag:")
-                    value: entry.entityTag
-                    visible: value.length > 0
-                }
-                DetailItem {
-                    width: parent.width
-                    label: qsTr("File ID:")
-                    value: entry.fileId
-                    visible: value.length > 0
-                }
             }
         }
     }

@@ -6,6 +6,7 @@ import QtQuick.Layouts 1.3
 import harbour.owncloud 1.0
 import "qrc:/qml/qqc/dialogs"
 import "qrc:/qml/qqc/pages"
+import "qrc:/qml-ui-set"
 
 ApplicationWindow {
     id: rootWindow
@@ -87,21 +88,22 @@ ApplicationWindow {
         //        }
     }
     function notify(summary, body) {
-        //        notifier.summary = summary
-        //        notifier.previewSummary = summary
-        //        notifier.body = body
-        //        notifier.previewBody = body
-        //        notifier.transient = false
-        //        notifier.publish();
+        msgDialog.showMessage(summary, body)
     }
 
     function notifyTransient(summary) {
-        //        notifier.summary = summary
-        //        notifier.previewSummary = summary
-        //        notifier.body = ""
-        //        notifier.previewBody = ""
-        //        notifier.transient = true
-        //        notifier.publish();
+        msgDialog.showMessage(summary, "")
+    }
+
+    MessageDialog {
+        function showMessage(summary, body) {
+            msgDialog.text = summary
+            msgDialog.informativeText = body
+            msgDialog.open()
+        }
+
+        id: msgDialog
+        text: ""
     }
 
     function addAccount() {
@@ -152,6 +154,32 @@ ApplicationWindow {
                 font.pixelSize: fontSizeSmall
                 enabled: showBackButton
                 onClicked: popPage()
+            }
+
+            CircularImageButton {
+                id: avatarButton
+                visible: rootStack.currentItem.objectName == "FileBrowser"
+                height: parent.height
+                width: height
+                shadowColor: "black"
+                imageBackgroundColor: "black"
+                imageBackgroundEnabled: true
+                source: {
+                    if (rootStack.currentItem.objectName == "FileBrowser") {
+                        return rootStack.currentItem.accountWorkers.avatarFetcher.source
+                    } else {
+                        return ""
+                    }
+                }
+
+                onClicked: {
+                    if (rootStack.currentItem === undefined)
+                        return
+                    if (rootStack.currentItem === null)
+                        return
+
+                    rootStack.currentItem.avatarMenu.open()
+                }
             }
 
             Label {

@@ -392,6 +392,17 @@ ApplicationWindow {
     Rectangle {
         color: "lightgray"
         anchors.fill: parent
+        focus: true
+        Keys.onReleased: {
+            if (event.key === Qt.Key_Back) {
+                if (rootStack.currentItem !== rootStack.initialItem) {
+                    event.accepted = true
+                    popPage()
+                    return
+                }
+            }
+        }
+
         Row {
             id: splitView
             anchors.fill: parent

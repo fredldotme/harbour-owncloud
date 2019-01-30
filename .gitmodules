@@ -10,3 +10,6 @@
 [submodule "3rdparty/qtdropbox2"]
 	path = 3rdparty/qtdropbox2
 	url = https://github.com/beidl/QtDropbox2
+[submodule "src/app/icons/theme"]
+	path = src/app/icons/theme
+	url = https://github.com/Magog64/suru-plus

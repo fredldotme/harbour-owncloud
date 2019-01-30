@@ -155,7 +155,19 @@ Rectangle {
                 }
             }
             Label {
-                text: qsTr("SailfishUiSet UI components (GPL v2)")
+                text: qsTr("Suru-Plus Icon Theme (LGPL v3)")
+                font.pixelSize: fontSizeTiny
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                horizontalAlignment: Text.AlignHCenter
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                    leftMargin: fontSizeLarge
+                    rightMargin: fontSizeLarge
+                }
+            }
+            Label {
+                text: qsTr("Breeze Icon Theme (LGPL v3)")
                 font.pixelSize: fontSizeTiny
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 horizontalAlignment: Text.AlignHCenter

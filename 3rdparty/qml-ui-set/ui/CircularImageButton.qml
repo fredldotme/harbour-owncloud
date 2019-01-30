@@ -9,7 +9,10 @@ Item {
     property alias source : avatarImage.source
     property color highlightColor : "#88FFFFFF"
     property color shadowColor : "#88FFFFFF"
+    property alias imageBackgroundEnabled : avatarImageBackground.enabled
+    property alias imageBackgroundColor: avatarImageBackground.color
     property int radius : 16
+
     signal clicked()
 
     states: [
@@ -56,6 +59,7 @@ Item {
                 radius: Math.min(width, height)
                 visible: false
             }
+
             DropShadow {
                 id: blurShadow
                 source: circleCut
@@ -65,6 +69,12 @@ Item {
                 color: shadowColor
             }
         }
+    }
+
+    Rectangle {
+        id: avatarImageBackground
+        anchors.fill: parent
+        enabled: false
     }
 
     Image {

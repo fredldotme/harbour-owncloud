@@ -107,6 +107,7 @@ parts:
       - libxrender-dev
       - pkg-kde-tools
       - publicsuffix
+      - python2.7
       - unixodbc-dev
       - xvfb
       - zlib1g-dev
@@ -157,6 +158,14 @@ parts:
       - qtwebview
       - -skip
       - qt3d
+      - -skip
+      - serialbus
+      - -skip
+      - speech
+      - -skip
+      - qtserialport
+      - -skip
+      - script
     stage-packages:
       - etc1tool # minimal package for depending on libpng regardless of Ubuntu version
       - fontconfig

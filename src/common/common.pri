@@ -4,6 +4,9 @@ QT += network xml sql
 linux:!android {
     QT += dbus
 }
+android {
+    QT += androidextras
+}
 
 DEFINES += QWEBDAVITEM_EXTENDED_PROPERTIES
 

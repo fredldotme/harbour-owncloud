@@ -3,6 +3,7 @@
 #include <QtQuick>
 #include <QDebug>
 #include <QFile>
+#include <QIcon>
 #include <QStandardPaths>
 
 // Contained in both Sailfish- and QML-UI-Set
@@ -84,6 +85,7 @@ static void createNecessaryDir(const QString& path) {
 int main(int argc, char *argv[])
 {
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QIcon::setThemeName("theme");
 
 #ifndef QHOSTCLOUD_UI_QUICKCONTROLS
     SailfishUiSet::registerQmlTypes();

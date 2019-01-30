@@ -6,5 +6,6 @@ rpm/harbour-owncloud.spec.*
 parts/
 stage/
 prime/
-*.tar.gz{,.*}
-openssl-*.*.{*,-}*
+*.tar.gz
+*.tar.gz.*
+openssl-*.*.*

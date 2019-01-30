@@ -22,6 +22,11 @@
 #include <sys/types.h>
 #include <utime.h>
 
+#include <QDesktopServices>
+#ifdef Q_OS_ANDROID
+#include <QtAndroid>
+#endif
+
 WebDavCommandQueue::WebDavCommandQueue(QObject* parent, NextcloudSettingsBase* settings) :
     CloudStorageProvider(parent, settings)
 {
@@ -108,14 +113,27 @@ CommandEntity* WebDavCommandQueue::fileDownloadRequest(QString remotePath,
                                                        bool open,
                                                        QDateTime lastModified)
 {
+#ifdef Q_OS_ANDROID
+    const QStringList requiredPermissions =
+            QStringList("android.permission.WRITE_EXTERNAL_STORAGE");
+
+    QtAndroid::PermissionResultMap permissionResult =
+            QtAndroid::requestPermissionsSync(requiredPermissions);
+
+    for (QtAndroid::PermissionResult result : permissionResult) {
+        if (result == QtAndroid::PermissionResult::Denied) {
+            return Q_NULLPTR;
+        }
+    }
+#endif
+
     FileDownloadCommandEntity* downloadCommand = Q_NULLPTR;
     CommandEntity* lastModifiedCommand = Q_NULLPTR;
     CommandEntity* openFileCommand = Q_NULLPTR;
 
-
-    QString name = remotePath.mid(remotePath.lastIndexOf("/") + 1);
-    QString destination = FilePathUtil::destinationFromMIME(mimeType) + "/" + name;
-
+    QString name =
+            remotePath.mid(remotePath.lastIndexOf("/") + 1);
+    QString destination = FilePathUtil::destinationFromMIME(mimeType) + remotePath;
     downloadCommand = new FileDownloadCommandEntity(this, remotePath,
                                                     destination, this->getWebdav());
 
@@ -151,6 +169,20 @@ CommandEntity* WebDavCommandQueue::fileUploadRequest(QString localPath,
                                                      QString remotePath,
                                                      QDateTime lastModified)
 {
+#ifdef Q_OS_ANDROID
+    const QStringList requiredPermissions =
+            QStringList("android.permission.READ_EXTERNAL_STORAGE");
+
+    QtAndroid::PermissionResultMap permissionResult =
+            QtAndroid::requestPermissionsSync(requiredPermissions);
+
+    for (QtAndroid::PermissionResult result : permissionResult) {
+        if (result == QtAndroid::PermissionResult::Denied) {
+            return Q_NULLPTR;
+        }
+    }
+#endif
+
     if (localPath.startsWith("file://")) {
         localPath = localPath.mid(7);
     }
@@ -222,7 +254,12 @@ CommandEntity* WebDavCommandQueue::openFileRequest(const QString &destination)
         qDebug() << destination << fileExists;
         if (!fileExists)
             return;
+
+#ifdef QT_GUI_LIB
+        QDesktopServices::openUrl("file://" + destination);
+#else
         ShellCommand::runCommand(QStringLiteral("xdg-open"), QStringList() << destination);
+#endif
     }, commandInfo);
 
     return executeCommand;
@@ -237,7 +274,6 @@ CommandEntity* WebDavCommandQueue::remoteLastModifiedRequest(const QString &dest
     // Last modified in seconds
     propMap["lastmodified"] = (QVariant)(lastModified.toMSecsSinceEpoch() / 1000);
     props["DAV:"] = propMap;
-
 
     DavPropPatchCommandEntity* propPatchCommand =
             new DavPropPatchCommandEntity(this, destination,

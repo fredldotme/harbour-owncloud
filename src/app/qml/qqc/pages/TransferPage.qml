@@ -165,7 +165,7 @@ Rectangle {
 
                                 Button {
                                     id: transferCancelButton
-                                    icon.name: "view-close"
+                                    icon.name: "dialog-cancel"
                                     icon.color: "transparent"
                                     background: Rectangle { color: "transparent" }
                                     onClicked: {

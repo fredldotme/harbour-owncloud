@@ -18,22 +18,6 @@ ApplicationWindow {
     height: 400
     minimumHeight: 360
 
-    /*Keys.onBackPressed: {
-        popPage()
-    }*/
-
-    function popPage()  {
-        if (sideStack.currentItem !== sideStack.initialItem) {
-            sideStack.pop()
-            return;
-        }
-
-        if (rootStack.currentItem !== rootStack.initialItem) {
-            rootStack.pop()
-            return;
-        }
-    }
-
     // TODO: save window geometry before closing
 
     readonly property int fontSizeTiny : 10
@@ -46,17 +30,19 @@ ApplicationWindow {
     readonly property int paddingMedium : 20
     readonly property int paddingLarge : 32
 
-    AccountWorkerGenerator {
-        id: accountWorkerGenerator
-        database: AccountDb { }
-    }
+    readonly property alias pageStack : rootStack
+    readonly property alias detailsStack : sideStack
 
-    DaemonControl {
-        id: daemonCtrl
-    }
+    readonly property bool detailStackVisibleRequired :
+        (sideStack.currentItem !== sideStack.initialItem) &&
+        (sideStack.currentItem !== null)
 
-    QmlMap {
-        id: directoryContents
+    readonly property bool sideStackIsActive : {
+        if (width > height) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     readonly property alias dirContents : directoryContents
@@ -95,15 +81,18 @@ ApplicationWindow {
         msgDialog.showMessage(summary, "")
     }
 
-    MessageDialog {
-        function showMessage(summary, body) {
-            msgDialog.text = summary
-            msgDialog.informativeText = body
-            msgDialog.open()
+    function popPage()  {
+        if (sideStack.currentItem !== sideStack.initialItem) {
+            sideStack.pop()
+            return true;
         }
 
-        id: msgDialog
-        text: ""
+        if (rootStack.currentItem !== rootStack.initialItem) {
+            rootStack.pop()
+            return true;
+        }
+
+        return false
     }
 
     function addAccount() {
@@ -111,42 +100,10 @@ ApplicationWindow {
         detailsStack.push(webDavAccountDialog)
     }
 
-    Item {
-        anchors.right: parent.right
-        anchors.top: parent.top
-
-        Menu {
-            id: hamburgerMenu
-
-            MenuItem {
-                text: qsTr("Transfers")
-                font.pixelSize: fontSizeSmall
-                onClicked: {
-                    detailsStack.push(transfersTab)
-                }
-            }
-            MenuItem {
-                text: qsTr("Add account")
-                font.pixelSize: fontSizeSmall
-                visible: (accountWorkerGenerator.accountWorkers.length > 0)
-                onClicked: addAccount()
-            }
-
-            MenuSeparator {}
-
-            MenuItem {
-                text: qsTr("About QhostCloud")
-                font.pixelSize: fontSizeSmall
-                visible: true
-                onClicked: {
-                    detailsStack.push(infoPage)
-                }
-            }
-        }
-    }
-
     header: ToolBar {
         id: headerBar
+        height: 64
+        width: rootWindow.width
         RowLayout {
             anchors.fill: parent
             ToolButton {
@@ -159,10 +116,11 @@ ApplicationWindow {
 
             CircularImageButton {
                 id: avatarButton
-                visible: rootStack.currentItem.objectName == "FileBrowser"
+                visible: rootStack.currentItem.objectName === "FileBrowser" &&
+                         sideStack.currentItem === sideStack.initialItem
                 height: parent.height
                 width: height
-                shadowColor: "black"
+                shadowEnabled: false
                 imageBackgroundColor: "black"
                 imageBackgroundEnabled: true
                 source: {
@@ -190,12 +148,14 @@ ApplicationWindow {
                 verticalAlignment: Qt.AlignVCenter
                 Layout.fillWidth: true
                 text: {
-                    if (!showBackButton) {
-                        return ""
-                    } else if (sideStack.currentItem !== sideStack.initialItem) {
+                    if (sideStack.currentItem !== sideStack.initialItem &&
+                               sideStack.currentItem.title !== undefined) {
                         return sideStack.currentItem.title
-                    } else {
+                    } else if (rootStack.currentItem !== sideStack.initialItem &&
+                               rootStack.currentItem.title !== undefined) {
                         return rootStack.currentItem.title
+                    } else {
+                        return ""
                     }
                 }
             }
@@ -203,7 +163,8 @@ ApplicationWindow {
             ToolButton {
                 icon.color: "transparent"
                 icon.name: "folder-new"
-                visible: rootStack.currentItem.objectName === "FileBrowser"
+                visible: rootStack.currentItem.objectName === "FileBrowser" &&
+                         sideStack.currentItem === sideStack.initialItem
                 font.pixelSize: fontSizeSmall
                 enabled: !rootStack.currentItem.isBusy
                 onClicked: {
@@ -213,7 +174,8 @@ ApplicationWindow {
             ToolButton {
                 icon.color: "transparent"
                 icon.name: "document-new"
-                visible: rootStack.currentItem.objectName === "FileBrowser"
+                visible: rootStack.currentItem.objectName === "FileBrowser" &&
+                         sideStack.currentItem === sideStack.initialItem
                 font.pixelSize: fontSizeSmall
                 enabled: !rootStack.currentItem.isBusy
                 onClicked: {
@@ -223,7 +185,8 @@ ApplicationWindow {
             ToolButton {
                 icon.color: "transparent"
                 icon.name: "view-refresh"
-                visible: rootStack.currentItem.objectName === "FileBrowser"
+                visible: rootStack.currentItem.objectName === "FileBrowser" &&
+                         sideStack.currentItem === sideStack.initialItem
                 font.pixelSize: fontSizeSmall
                 enabled: !rootStack.currentItem.isBusy
                 onClicked: {
@@ -244,194 +207,229 @@ ApplicationWindow {
         }
     }
 
-    StackLayout {
-        id: tabLayout
-        currentIndex: 0
-
-        Rectangle {
-            id: homeTab
-            objectName: "entrancePage"
-            Layout.alignment: Qt.AlignCenter
-
-            AccountSelection {
-                id: accountSelection
-                anchors.fill: parent
-                accountGenerator: accountWorkerGenerator
-                visible: accountWorkerGenerator.accountWorkers.length > 0
-                dirContents : rootWindow.dirContents
-                detailStack: detailsStack
-            }
-
-            Column {
-                anchors.centerIn: parent
-                width: parent.width
-                visible: accountWorkerGenerator.accountWorkers.length < 1
-
-                Label {
-                    font.pixelSize: 32
-                    width: parent.width
-                    wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    text: qsTr("No account available yet. " +
-                               "Please add an account to contiune.")
-                }
-
-                Button {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    text: qsTr("Add account")
-                    onClicked: addAccount()
-                }
-            }
-        }
-
-        WebDavAccountDialog {
-            id: webDavAccountDialog
-            accountWorkers: accountWorkerGenerator.newAccount();
-            daemonCtrl: daemonCtrl
-            accountDatabase: accountWorkerGenerator.database
-            viewStack: detailsStack
-        }
-
-        About {
-            id: infoPage
-            onCloseRequest: detailsStack.pop()
-        }
-
-        TransferPage {
-            id: transfersTab
-            accountGenerator: accountWorkerGenerator
-            onCloseRequest: detailsStack.pop()
-        }
-    }
-
-    readonly property alias pageStack : rootStack
-    readonly property var detailsStack : sideStack
-
-    readonly property bool detailStackVisibleRequired :
-        (sideStack.currentItem !== sideStack.initialItem) &&
-        (sideStack.currentItem !== null)
-
-    readonly property bool sideStackIsActive : {
-        if (width > height) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    SwipeView {
-        anchors.fill: parent
-        states: [
-            State {
-                when: sideStackIsActive
-                ParentChange {
-                    target: rootStack
-                    parent: rootStackContainer
-                }
-                ParentChange {
-                    target: sideStack
-                    parent: sideStackContainer
-                }
-            },
-            State {
-                when: !sideStackIsActive
-                ParentChange {
-                    target: rootStack
-                    parent: rootStackContainer
-                }
-                ParentChange {
-                    target: sideStack
-                    parent: rootStackContainer
-                }
-            }
-        ]
-
-        Item {
-            StackView {
-                id: rootStack
-                initialItem: tabLayout
-                anchors.fill: parent
-
-                onPopExitChanged: {
-                    gc()
-                }
-
-                onPushExitChanged: {
-                    mainContainer.forceActiveFocus()
-                    mainContainer.focus = true
-                }
-            }
-        }
-
-        Item {
-            StackView {
-                id: sideStack
-                anchors.fill: parent
-                initialItem: Rectangle {
-                    color: "transparent"
-                    Image {
-                        id: icon
-                        source: "qrc:/icons/icon_gray.svg"
-                        visible: sideStackIsActive
-                        anchors.centerIn: parent
-                        width: parent.width / 2
-                        height: width
-                        scale: 1.5
-                        sourceSize.width: width
-                        sourceSize.height: height
-                    }
-                }
-                onPushEnterChanged: {
-                    if (detailStackVisibleRequired) {
-                        sideStack.pop()
-                    }
-                }
-
-                onPushExitChanged: {
-                    mainContainer.forceActiveFocus()
-                    mainContainer.focus = true
-                }
-                onPopExitChanged: {
-                    gc()
-                }
-            }
-        }
-    }
-
-    Rectangle {
-        id: mainContainer
-        color: "lightgray"
+    Item {
         anchors.fill: parent
         focus: true
-        Keys.onReleased: {
-            if (event.key === Qt.Key_Back) {
-                if (rootStack.currentItem !== rootStack.initialItem) {
-                    event.accepted = true
-                    popPage()
-                    return
+
+        AccountWorkerGenerator {
+            id: accountWorkerGenerator
+            database: AccountDb { }
+        }
+
+        DaemonControl {
+            id: daemonCtrl
+        }
+
+        QmlMap {
+            id: directoryContents
+        }
+
+        MessageDialog {
+            function showMessage(summary, body) {
+                msgDialog.text = summary
+                msgDialog.informativeText = body
+                msgDialog.open()
+            }
+
+            id: msgDialog
+            text: ""
+        }
+
+        Item {
+            anchors.right: parent.right
+            anchors.top: parent.top
+
+            Menu {
+                id: hamburgerMenu
+
+                MenuItem {
+                    text: qsTr("Transfers")
+                    font.pixelSize: fontSizeSmall
+                    onClicked: {
+                        detailsStack.push(transfersTab)
+                    }
+                }
+                MenuItem {
+                    text: qsTr("Add account")
+                    font.pixelSize: fontSizeSmall
+                    visible: (accountWorkerGenerator.accountWorkers.length > 0)
+                    onClicked: addAccount()
+                }
+
+                MenuSeparator {}
+
+                MenuItem {
+                    text: qsTr("About QhostCloud")
+                    font.pixelSize: fontSizeSmall
+                    visible: true
+                    onClicked: {
+                        detailsStack.push(infoPage)
+                    }
                 }
             }
         }
 
-        Row {
-            id: splitView
+        StackLayout {
+            id: tabLayout
+            currentIndex: 0
+
+            Rectangle {
+                id: homeTab
+                objectName: "entrancePage"
+                Layout.alignment: Qt.AlignCenter
+
+                AccountSelection {
+                    id: accountSelection
+                    anchors.fill: parent
+                    accountGenerator: accountWorkerGenerator
+                    visible: accountWorkerGenerator.accountWorkers.length > 0
+                    dirContents : rootWindow.dirContents
+                    detailStack: detailsStack
+                }
+
+                Column {
+                    anchors.centerIn: parent
+                    width: parent.width
+                    visible: accountWorkerGenerator.accountWorkers.length < 1
+
+                    Label {
+                        font.pixelSize: 32
+                        width: parent.width
+                        wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        text: qsTr("No account available yet. " +
+                                   "Please add an account to contiune.")
+                    }
+
+                    Button {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        text: qsTr("Add account")
+                        onClicked: addAccount()
+                    }
+                }
+            }
+
+            WebDavAccountDialog {
+                id: webDavAccountDialog
+                accountWorkers: accountWorkerGenerator.newAccount();
+                daemonCtrl: daemonCtrl
+                accountDatabase: accountWorkerGenerator.database
+                viewStack: detailsStack
+            }
+
+            About {
+                id: infoPage
+                onCloseRequest: detailsStack.pop()
+            }
+
+            TransferPage {
+                id: transfersTab
+                accountGenerator: accountWorkerGenerator
+                onCloseRequest: detailsStack.pop()
+            }
+        }
+
+        SwipeView {
             anchors.fill: parent
-            spacing: 2
-            Rectangle {
-                id: rootStackContainer
-                width: sideStackIsActive ? (parent.width / 3)
-                                         : parent.width
-                height: parent.height
-                clip: true
+            states: [
+                State {
+                    when: sideStackIsActive
+                    ParentChange {
+                        target: rootStack
+                        parent: rootStackContainer
+                    }
+                    ParentChange {
+                        target: sideStack
+                        parent: sideStackContainer
+                    }
+                },
+                State {
+                    when: !sideStackIsActive
+                    ParentChange {
+                        target: rootStack
+                        parent: rootStackContainer
+                    }
+                    ParentChange {
+                        target: sideStack
+                        parent: rootStackContainer
+                    }
+                }
+            ]
+
+            Item {
+                StackView {
+                    id: rootStack
+                    initialItem: tabLayout
+                    anchors.fill: parent
+
+                    onPopExitChanged: {
+                        gc()
+                    }
+                }
             }
-            Rectangle {
-                id: sideStackContainer
-                width: sideStackIsActive ? ((parent.width / 3) * 2)
-                                         : parent.width
-                height: parent.height
-                visible: sideStackIsActive || detailStackVisibleRequired
-                clip: true
+
+            Item {
+                StackView {
+                    id: sideStack
+                    anchors.fill: parent
+                    initialItem: Rectangle {
+                        color: "transparent"
+                        Image {
+                            id: icon
+                            source: "qrc:/icons/icon_gray.svg"
+                            visible: sideStackIsActive
+                            anchors.centerIn: parent
+                            width: parent.width / 2
+                            height: width
+                            scale: 1.5
+                            sourceSize.width: width
+                            sourceSize.height: height
+                        }
+                    }
+                    onPushEnterChanged: {
+                        if (detailStackVisibleRequired) {
+                            sideStack.pop()
+                        }
+                    }
+                }
             }
+        }
+
+        Rectangle {
+            id: mainContainer
+            color: "lightgray"
+            anchors.fill: parent
+
+            Row {
+                id: splitView
+                anchors.fill: parent
+                spacing: 2
+                Rectangle {
+                    id: rootStackContainer
+                    width: sideStackIsActive ? (parent.width / 3)
+                                             : parent.width
+                    height: parent.height
+                    clip: true
+                }
+                Rectangle {
+                    id: sideStackContainer
+                    width: sideStackIsActive ? ((parent.width / 3) * 2)
+                                             : parent.width
+                    height: parent.height
+                    visible: sideStackIsActive || detailStackVisibleRequired
+                    clip: true
+                }
+            }
+        }
+    }
+
+    Shortcut {
+        sequence: StandardKey.Back
+        onActivated: {
+            if (popPage()) {
+                return
+            }
+            Qt.quit()
         }
     }
 }

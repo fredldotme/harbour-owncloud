@@ -8,6 +8,7 @@ Item {
 
     property alias source : avatarImage.source
     property color highlightColor : "#88FFFFFF"
+    property bool shadowEnabled : true
     property color shadowColor : "#88FFFFFF"
     property alias imageBackgroundEnabled : avatarImageBackground.enabled
     property alias imageBackgroundColor: avatarImageBackground.color
@@ -57,7 +58,7 @@ Item {
                 height: parent.height-(buttonRoot.radius*2)
                 anchors.centerIn: parent
                 radius: Math.min(width, height)
-                visible: false
+                visible: !shadowEnabled
             }
 
             DropShadow {
@@ -67,6 +68,7 @@ Item {
                 samples: 32
                 anchors.fill: circleCut
                 color: shadowColor
+                visible: shadowEnabled
             }
         }
     }

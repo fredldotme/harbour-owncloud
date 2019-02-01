@@ -9,6 +9,7 @@ import "qrc:/qml/qqc/controls"
 
 Page {
     id: pageRoot
+    title: entry.name
     
     FileDetailsHelper { id: fileDetailsHelper}
 

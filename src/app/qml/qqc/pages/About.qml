@@ -1,8 +1,8 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.2
 
-Rectangle {
-    color: "white"
+Page {
+    title: qsTr("About QhostCloud")
 
     signal closeRequest()
 

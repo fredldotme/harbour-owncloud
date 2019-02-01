@@ -143,7 +143,7 @@ Page {
                 }
             }
             Label {
-                text: qsTr("QmlUiSet UI components (GPL v2)")
+                text: qsTr("QmlUiSet UI components (LGPL v2.1)")
                 font.pixelSize: fontSizeTiny
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 horizontalAlignment: Text.AlignHCenter
@@ -155,19 +155,7 @@ Page {
                 }
             }
             Label {
-                text: qsTr("Suru-Plus Icon Theme (LGPL v3)")
-                font.pixelSize: fontSizeTiny
-                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                horizontalAlignment: Text.AlignHCenter
-                anchors {
-                    left: parent.left
-                    right: parent.right
-                    leftMargin: fontSizeLarge
-                    rightMargin: fontSizeLarge
-                }
-            }
-            Label {
-                text: qsTr("Breeze Icon Theme (LGPL v3)")
+                text: qsTr("KDE Breeze Icon Theme (LGPL v2.1)")
                 font.pixelSize: fontSizeTiny
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 horizontalAlignment: Text.AlignHCenter

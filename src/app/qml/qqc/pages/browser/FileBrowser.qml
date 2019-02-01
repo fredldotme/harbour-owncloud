@@ -371,7 +371,12 @@ Page {
             enabled: (__listCommand === null)
             acceptedButtons: Qt.LeftButton | Qt.RightButton
 
-            onClicked: entryClickHandler(mouse)
+            onPressAndHold: {
+                entryContextMenu(mouse)
+            }
+            onClicked: {
+                entryClickHandler(mouse)
+            }
 
             property var davInfo : listView.model[index]
 

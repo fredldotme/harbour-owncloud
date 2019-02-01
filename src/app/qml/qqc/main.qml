@@ -102,13 +102,13 @@ ApplicationWindow {
 
     header: ToolBar {
         id: headerBar
-        height: 64
+        height: 48
         width: rootWindow.width
         RowLayout {
             anchors.fill: parent
             ToolButton {
                 icon.color: "transparent"
-                icon.name: "back"
+                icon.name: "arrow-left-double"
                 font.pixelSize: fontSizeSmall
                 enabled: showBackButton
                 onClicked: popPage()

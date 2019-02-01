@@ -55,7 +55,7 @@ Item {
         id: accountsList
         anchors.fill: parent
         model: accountGenerator.accountWorkers
-        spacing: paddingLarge
+        //spacing: paddingLarge
 
         delegate: MouseArea {
             width: childrenRect.width

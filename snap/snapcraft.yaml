@@ -19,19 +19,38 @@ apps:
 
 parts:
   harbour-owncloud:
-    plugin: make
+    plugin: qmake
     source: .
-    override-build: |
-        mkdir build
-        cd build
-        qmake ../harbour-owncloud.pro CONFIG+=noadditionals CONFIG+=quickcontrols
-        snapcraftctl build
+    options:
+      - CONFIG+=noadditionals
+      - CONFIG+=quickcontrols
+    project-files:
+      - harbour-owncloud.pro
     build-packages:
       - make
       - build-essential
+      - qt5-qmake
+      - qttools5-dev
+      - build-essential
+      - qtdeclarative5-dev
+      - libqt5svg5-dev
+      - qttools5-dev-tools
+      - libqt5xmlpatterns5-dev
+      - qtmultimedia5-dev
+      - libqt5webkit5-dev
+      - qtbase5-dev
       - libevdev-dev
       - libudev-dev
       - qml-module-qtquick2
+      - qml-module-qtgraphicaleffects
+      - qml-module-qtquick-window2
+      - qml-module-qtquick-controls2
+      - qml-module-qtquick-layouts
+      - qml-module-qtquick-extras
+      - qml-module-qt-labs-folderlistmodel
+      - qml-module-qtquick-controls
+      - qml-module-qt-labs-settings
+      - qml-module-qtquick-localstorage
     stage:
       - usr/bin/*
       - usr/lib/*
@@ -43,191 +62,27 @@ parts:
     stage-packages:
       - gstreamer1.0-plugins-good
       - gstreamer1.0-plugins-bad
-    after: [ qt ]
-  qt:
-    plugin: autotools
-    install-via: prefix
-    source-type: git
-    source: https://code.qt.io/qt/qt5.git
-    source-tag: "v5.12.0"
+    after: [ desktop-qt5 ]
+  desktop-qt5:
     build-packages:
-      - gcc-multilib
-      - g++-multilib
-      - python-minimal
-      - python
-      - freetds-dev
-      - gdb
-      - libasound2-dev
-      - libatspi2.0-dev
-      - libcups2-dev
-      - libdbus-1-dev
-      - libfontconfig1-dev
-      - libfreetype6-dev
-      - libgbm-dev
-      - libgl1-mesa-dev
-      - libgles2-mesa-dev
-      - libglib2.0-dev
-      - libglu1-mesa-dev
-      - libgstreamer-plugins-base1.0-dev
-      - libgstreamer1.0-dev
-      - libgtk2.0-dev
-      - libharfbuzz-dev
-      - libicu-dev
-      - libinput-dev
-      - libjpeg-dev
-      - libmtdev-dev
-      - libmysqlclient-dev
-      - libpcre3-dev
-      - libpng-dev
-      - libpq-dev
-      - libproxy-dev
-      - libpulse-dev
-      - libsqlite3-dev
-      - libssl-dev
-      - libudev-dev
-      - libx11-dev
-      - libx11-xcb-dev
-      - libxcb-icccm4-dev
-      - libxcb-image0-dev
-      - libxcb-keysyms1-dev
-      - libxcb-randr0-dev
-      - libxcb-render-util0-dev
-      - libxcb-render0-dev
-      - libxcb-shape0-dev
-      - libxcb-shm0-dev
-      - libxcb-sync-dev
-      - libxcb-xfixes0-dev
-      - libxcb-xinerama0-dev
-      - libxcb-xkb-dev
-      - libxcb1-dev
-      - libxext-dev
-      - libxi-dev
-      - libxkbcommon-dev
-      - libxkbcommon-x11-dev
-      - libxrender-dev
-      - pkg-kde-tools
-      - publicsuffix
-      - python2.7
-      - unixodbc-dev
-      - xvfb
-      - zlib1g-dev
-    configflags:
-      - -release
-      - -confirm-license
-      - -opensource
-      - -plugin-sql-mysql
-      - -plugin-sql-odbc
-      - -plugin-sql-psql
-      - -plugin-sql-sqlite
-      - -no-sql-sqlite2
-      - -plugin-sql-tds
-      - -system-sqlite
-      - -platform
-      - linux-g++-64
-      - -system-harfbuzz
-      - -system-zlib
-      - -system-libpng
-      - -system-libjpeg
-      - -openssl
-      - -no-rpath
-      - -verbose
-      - -optimized-qmake
-      - -dbus-linked
-      #- -no-strip
-      - -strip
-      #- -no-separate-debug-info
-      - -qpa
-      - xcb
-      - -xcb
-      - -glib
-      - -icu
-      - -accessibility
-      - -no-compile-examples
-      - -no-directfb
-      - -gstreamer
-      - "1.0"
-      - -opengl
-      - desktop
-      - -nomake
-      - examples
-      - -nomake
-      - tests
-      - -skip
-      - qtwebengine
-      - -skip
-      - qtwebview
-      - -skip
-      - qt3d
-      - -skip
-      - serialbus
-      - -skip
-      - speech
-      - -skip
-      - qtserialport
-      - -skip
-      - script
+      - qtbase5-dev
+      - dpkg-dev
+    make-parameters:
+      - FLAVOR=qt5
+    plugin: make
+    source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
+    source-subdir: qt
     stage-packages:
-      - etc1tool # minimal package for depending on libpng regardless of Ubuntu version
-      - fontconfig
-      - icu-devtools
-      - libc6
-      - libcups2
-      - libdbus-1-3
-      - libdrm2
-      - libegl1-mesa
-      - libfontconfig1
-      - libpng16-16
-      - libfreetype6
-      - libgbm1
-      - libgcc1
-      - libgl1-mesa-dev
-      - libgl1-mesa-glx
-      - libgles2-mesa-dev
-      - libglib2.0-0
-      - libglu1-mesa-dev
-      - libharfbuzz0b
-      - libice6
-      - libinput10
-      - libjpeg8
-      - libmtdev1
-      - libpcre16-3
-      - libproxy1v5
-      - libsm6
-      - libsqlite3-0
-      - libstdc++6
-      - libudev1
-      - libx11-6
-      - libx11-xcb1
-      - libxcb1
-      - libxcb-glx0
-      - libxcb-icccm4
-      - libxcb-image0
-      - libxcb-keysyms1
-      - libxcb-randr0
-      - libxcb-render0
-      - libxcb-render-util0
-      - libxcb-shape0
-      - libxcb-shm0
-      - libxcb-sync1
-      - libxcb-xfixes0
-      - libxcb-xkb1
-      - libxext-dev
-      - libxi6
       - libxkbcommon0
-      - libxkbcommon-x11-0
-      - libxrender1
-      - perl
-      - zlib1g
-      - libdouble-conversion1
-      - libpulse0
-    stage:
-      - usr/*
-    prime:
-      - usr/lib/*
-      - usr/share/*
-      - usr/libexec/*
-      - usr/phrasebooks/*
-      - usr/plugins/*
-      - usr/qml/*
-      - usr/resources/*
-      - usr/translations/*
+      - ttf-ubuntu-font-family
+      - dmz-cursor-theme
+      - light-themes
+      - adwaita-icon-theme
+      - gnome-themes-standard
+      - shared-mime-info
+      - libqt5gui5
+      - libgdk-pixbuf2.0-0
+      - libqt5svg5
+      - appmenu-qt5
+      - locales-all
+      - xdg-user-dirs

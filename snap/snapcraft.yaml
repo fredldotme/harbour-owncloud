@@ -83,6 +83,5 @@ parts:
       - libqt5gui5
       - libgdk-pixbuf2.0-0
       - libqt5svg5
-      - appmenu-qt5
       - locales-all
       - xdg-user-dirs

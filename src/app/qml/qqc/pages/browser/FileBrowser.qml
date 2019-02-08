@@ -409,30 +409,24 @@ Page {
             Column {
                 enabled: parent.enabled
                 width: listView.width
-                Button {
+                height: 48
+                GCButton {
                     id: icon
-                    icon.color: "transparent"
-                    icon.name: davInfo.isDirectory
-                               ? "folder"
+                    source: davInfo.isDirectory
+                               ? "qrc:/icons/theme/places/64/folder.svg"
                                : fileDetailsHelper.getIconFromMime(davInfo.mimeType)
                     text: davInfo.name
+                    detailText: fileDetailsHelper.getHRSize(davInfo.size)
+                                + (!davInfo.isDirectory ?
+                                       (", " +
+                                        Qt.formatDateTime(davInfo.lastModified, Qt.SystemLocaleShortDate)) : "")
+                    height: parent.height
                     font.pixelSize: fontSizeSmall
-                    background: Rectangle { color: "transparent" }
                     MouseArea {
                         anchors.fill: parent
                         onClicked: entryClickHandler(mouse)
                     }
                 }
-                Label {
-                    text: fileDetailsHelper.getHRSize(davInfo.size)
-                          + (!davInfo.isDirectory ?
-                                 (", " +
-                                  Qt.formatDateTime(davInfo.lastModified, Qt.SystemLocaleShortDate)) : "")
-                    font.pixelSize: fontSizeTiny
-                    anchors.left: parent.left
-                    anchors.leftMargin: icon.icon.width
-                }
-                MenuSeparator { width: delegate.width }
             }
         }
 

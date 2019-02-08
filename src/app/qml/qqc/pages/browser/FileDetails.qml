@@ -65,19 +65,12 @@ Page {
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 // Image thumbnail
-                Button {
-                    id: thumbnailView
-                    anchors.fill: parent
-                    background: Rectangle { color: "transparent" }
-                    icon.color: "transparent"
-                    icon.name: (entry.isDirectory ? "folder" : imgSrc)
-                    visible: !isAudioVideo
-                }
-
                 Image {
                     id: thumbnail
                     anchors.fill: parent
-                    source: imgSrc
+                    source: (entry.isDirectory
+                                ? "qrc:/icons/theme/places/64/folder.svg"
+                                : imgSrc)
                     visible: !isAudioVideo
                 }
 
@@ -106,14 +99,13 @@ Page {
                     visible: isAudioVideo
                     anchors.fill: parent
                 }
-                Button {
+                GCButton {
                     anchors.centerIn: parent
-                    background: Rectangle { color: "transparent" }
-                    icon.color: "transparent"
-                    icon.name:
+                    source:
                         (previewPlayer.playbackState == MediaPlayer.PlayingState) ?
-                            "media-playback-pause" :
-                            "media-playback-start"
+                            "qrc:/icons/theme/actions/32/media-playback-pause.svg" :
+                            "qrc:/icons/theme/actions/32/media-playback-start.svg"
+                    height: 32
                     visible: mediaView.visible
                     onClicked: {
                         console.log("clicked @ " + previewPlayer.playbackState)

@@ -4,6 +4,8 @@ import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.3
 import harbour.owncloud 1.0
+import "qrc:/qml/qqc"
+import "qrc:/qml/qqc/controls"
 import "qrc:/qml/qqc/dialogs"
 import "qrc:/qml/qqc/pages"
 import "qrc:/qml-ui-set"
@@ -11,7 +13,7 @@ import "qrc:/qml-ui-set"
 ApplicationWindow {
     id: rootWindow
     objectName: "rootWindow"
-    title: "QhostCloud"
+    title: "GhostCloud"
     visible: true
     width: 600
     minimumWidth: 260
@@ -106,12 +108,15 @@ ApplicationWindow {
         width: rootWindow.width
         RowLayout {
             anchors.fill: parent
-            ToolButton {
-                icon.color: "transparent"
-                icon.name: "arrow-left-double"
-                font.pixelSize: fontSizeSmall
+            GCButton {
+                source: "qrc:/icons/theme/actions/16/arrow-left-double.svg"
                 visible: showBackButton
                 onClicked: popPage()
+                height: parent.height
+                width: height
+                anchors.margins: paddingSmall
+                sourceSize.width: width
+                sourceSize.height: height
             }
 
             CircularImageButton {
@@ -160,42 +165,46 @@ ApplicationWindow {
                 }
             }
 
-            ToolButton {
-                icon.color: "transparent"
-                icon.name: "folder-new"
+            GCButton {
+                source: "qrc:/icons/theme/actions/32/folder-new.svg"
                 visible: rootStack.currentItem.objectName === "FileBrowser" &&
                          sideStack.currentItem === sideStack.initialItem
-                font.pixelSize: fontSizeSmall
                 enabled: !rootStack.currentItem.isBusy
+                height: parent.height
+                width: height
+                anchors.margins: paddingSmall
                 onClicked: {
                     rootStack.currentItem.newDirectoryDialog.open()
                 }
             }
-            ToolButton {
-                icon.color: "transparent"
-                icon.name: "document-new"
+            GCButton {
+                source: "qrc:/icons/theme/actions/32/document-new.svg"
                 visible: rootStack.currentItem.objectName === "FileBrowser" &&
                          sideStack.currentItem === sideStack.initialItem
-                font.pixelSize: fontSizeSmall
                 enabled: !rootStack.currentItem.isBusy
+                height: parent.height
+                width: height
                 onClicked: {
                     rootStack.currentItem.fileUploadDialog.open()
                 }
             }
-            ToolButton {
-                icon.color: "transparent"
-                icon.name: "view-refresh"
+            GCButton {
+                source: "qrc:/icons/theme/actions/32/view-refresh.svg"
                 visible: rootStack.currentItem.objectName === "FileBrowser" &&
                          sideStack.currentItem === sideStack.initialItem
-                font.pixelSize: fontSizeSmall
                 enabled: !rootStack.currentItem.isBusy
+                height: parent.height
+                anchors.margins: paddingSmall
+                width: height
                 onClicked: {
                     rootStack.currentItem.refreshListView(true)
                 }
             }
-            ToolButton {
-                icon.color: "transparent"
-                icon.name: "application-menu"
+            GCButton {
+                source: "qrc:/icons/theme/actions/32/application-menu.svg"
+                height: parent.height
+                width: height
+                anchors.margins: paddingSmall
                 onClicked: {
                     if (hamburgerMenu.opened) {
                         hamburgerMenu.close()
@@ -258,7 +267,7 @@ ApplicationWindow {
                 MenuSeparator {}
 
                 MenuItem {
-                    text: qsTr("About QhostCloud")
+                    text: qsTr("About GhostCloud")
                     font.pixelSize: fontSizeSmall
                     visible: true
                     onClicked: {
@@ -300,7 +309,7 @@ ApplicationWindow {
                                    "Please add an account to contiune.")
                     }
 
-                    Button {
+                    GCButton {
                         anchors.horizontalCenter: parent.horizontalCenter
                         text: qsTr("Add account")
                         onClicked: addAccount()

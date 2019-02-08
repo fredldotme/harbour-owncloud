@@ -2,7 +2,7 @@ import QtQuick 2.0
 import QtQuick.Controls 2.2
 
 Page {
-    title: qsTr("About QhostCloud")
+    title: qsTr("About GhostCloud")
     focus: true
 
     signal closeRequest()
@@ -31,7 +31,7 @@ Page {
 
             Label {
                 width: parent.width
-                text: qsTr("QhostCloud")
+                text: qsTr("GhostCloud")
                 font.pixelSize: fontSizeLarge
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 horizontalAlignment: Text.AlignHCenter

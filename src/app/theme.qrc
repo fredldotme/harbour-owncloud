@@ -14,5 +14,7 @@
         <file>icons/theme/actions/16/arrow-left-double.svg</file>
         <file>icons/theme/actions/32/media-playback-pause.svg</file>
         <file>icons/theme/actions/32/media-playback-start.svg</file>
+        <file>icons/theme/actions/22/escape-direction-down.svg</file>
+        <file>icons/theme/actions/22/escape-direction-up.svg</file>
     </qresource>
 </RCC>

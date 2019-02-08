@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
     const QString QHOSTCLOUD_APP_NAME = QStringLiteral("harbour-owncloud");
 #else
     QmlUiSet::registerQmlTypes();
-    const QString QHOSTCLOUD_APP_NAME = QStringLiteral("QhostCloud");
+    const QString QHOSTCLOUD_APP_NAME = QStringLiteral("GhostCloud");
 #endif
 
     qmlRegisterType<QmlMap>("harbour.owncloud", 1, 0, "QmlMap");

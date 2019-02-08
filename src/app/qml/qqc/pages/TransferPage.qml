@@ -2,6 +2,7 @@ import QtQuick 2.0
 import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.2
 import harbour.owncloud 1.0
+import "qrc:/qml/qqc/controls"
 import "qrc:/qml-ui-set"
 
 Page {
@@ -120,11 +121,11 @@ Page {
 
                             function getIconForCommandType() {
                                 if (commandType == "fileDownload")
-                                    return "escape-direction-down"
+                                    return "qrc:/icons/theme/actions/22/escape-direction-down.svg"
                                 if (commandType == "fileUpload")
-                                    return "escape-direction-up"
+                                    return "qrc:/icons/theme/actions/22/escape-direction-up.svg"
                                 if (commandType == "fileOpen")
-                                    return "folder-open"
+                                    return "qrc:/icons/theme/places/64/folder.svg"
                                 return ""
                             }
 
@@ -150,25 +151,28 @@ Page {
                             }
                             visible: isAllowedVisible
 
-                            Button {
+                            GCButton {
                                 id: transferDescription
                                 width: parent.width
-                                icon.name: delegate.getIconForCommandType()
-                                icon.color: "transparent"
+                                height: 48
+                                source: delegate.getIconForCommandType()
+                                enabled: false
                                 background: Rectangle { color: "transparent" }
-                                text: !delegate.isFileOpen ? delegate.fileName +
-                                                             " (" + accountWorker.account.hoststring + ")"
+                                text: !delegate.isFileOpen ? delegate.fileName
                                                            : delegate.openFileHint
+                                detailText: delegate.isFileOpen
+                                            ? accountWorker.account.hoststring
+                                            : ""
                             }
 
                             Row {
                                 width: parent.width
 
-                                Button {
+                                GCButton {
                                     id: transferCancelButton
-                                    icon.name: "dialog-cancel"
-                                    icon.color: "transparent"
-                                    background: Rectangle { color: "transparent" }
+                                    source: "qrc:/icons/theme/actions/symbolic/window-close-symbolic.svg"
+                                    height: 32
+                                    width: 32
                                     onClicked: {
                                         delegate.commandEntity.abort(true)
                                     }

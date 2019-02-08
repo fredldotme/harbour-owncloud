@@ -13,5 +13,6 @@
         <file>qml/qqc/dialogs/SSLErrorDialog.qml</file>
         <file>qml/qqc/pages/SettingsPage.qml</file>
         <file>qml/qqc/pages/About.qml</file>
+        <file>qml/qqc/controls/GCButton.qml</file>
     </qresource>
 </RCC>

@@ -2,6 +2,7 @@ import QtQuick 2.0
 import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.2
 import harbour.owncloud 1.0
+import "qrc:/qml/qqc/controls"
 
 Dialog {
     id: dialogRoot
@@ -53,14 +54,13 @@ Dialog {
         anchors.fill: parent
         enabled: !isLoadingDirectory
 
-        delegate: Button {
+        delegate: GCButton {
             id: icon
             visible: davInfo.isDirectory
-            background: Rectangle { color: "transparent" }
-            icon.color: "transparent"
-            icon.name: "folder"
+            source: "qrc:/icons/theme/places/64/folder.svg"
             text: davInfo.name
-            //anchors.verticalCenter: parent.verticalCenter
+            width: listView.width
+            height: 32
 
             property var davInfo : listView.model[index]
 

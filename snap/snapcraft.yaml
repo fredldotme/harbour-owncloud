@@ -28,7 +28,6 @@ parts:
       - harbour-owncloud.pro
     build-packages:
       - make
-      - build-essential
       - qt5-qmake
       - qttools5-dev
       - build-essential
@@ -39,8 +38,6 @@ parts:
       - qtmultimedia5-dev
       - libqt5webkit5-dev
       - qtbase5-dev
-      - libevdev-dev
-      - libudev-dev
       - qml-module-qtquick2
       - qml-module-qtgraphicaleffects
       - qml-module-qtquick-window2

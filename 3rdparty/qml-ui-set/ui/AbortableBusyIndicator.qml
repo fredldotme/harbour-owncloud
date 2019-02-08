@@ -53,10 +53,9 @@ BusyIndicator {
             }
         ]
 
-        Button {
+        Image {
             id: abortButtonImage
-            icon.name: "dialog-cancel"
-            background: Rectangle { color: "transparent" }
+            source: "qrc:/icons/theme/actions/symbolic/window-close-symbolic.svg"
             anchors.fill: parent
             enabled: false
             visible: (!abortButtonHideTimer.running && !abortButtonMouseArea.pressed)

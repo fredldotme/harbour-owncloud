@@ -7,13 +7,13 @@ FileDetailsHelper::FileDetailsHelper(QObject *parent) : QObject(parent)
 
 QString FileDetailsHelper::getIconFromMime(const QString& mimeType) {
     if (mimeType.indexOf("image") == 0) {
-        return QStringLiteral("image-x-generic");
+        return QStringLiteral("qrc:/icons/theme/mimetypes/64/image-x-generic.svg");
     } else if(mimeType.indexOf("audio") == 0) {
-        return QStringLiteral("audio-x-generic");
+        return QStringLiteral("qrc:/icons/theme/mimetypes/64/audio-x-generic.svg");
     } else if(mimeType.indexOf("video") == 0) {
-        return QStringLiteral("video-x-generic");
+        return QStringLiteral("qrc:/icons/theme/mimetypes/64/video-x-generic.svg");
     } else {
-        return QStringLiteral("text-x-plain");
+        return QStringLiteral("qrc:/icons/theme/mimetypes/64/text-x-plain.svg");
     }
 }
 

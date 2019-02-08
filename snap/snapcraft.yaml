@@ -1,4 +1,4 @@
-name: qhostcloud
+name: ghostcloud
 version: 0.9.0
 grade: stable
 confinement: strict
@@ -9,7 +9,7 @@ description: |
   instances with a cross-platform, native Free Software application.
 
 apps:
-  qhostcloud:
+  ghostcloud:
     environment:
       QT_PLUGIN_PATH: ${SNAP}/usr/lib/qt5/plugins
       QML2_IMPORT_PATH: ${SNAP}/usr/lib/qt5/qml

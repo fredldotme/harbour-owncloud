@@ -1,6 +1,7 @@
 #include "commandentity.h"
 
 #include <QDebug>
+#include <QTimer>
 
 CommandEntity::CommandEntity(QObject *parent, CommandEntityInfo info) :
     QObject(parent), m_commandInfo(info)
@@ -58,7 +59,9 @@ void CommandEntity::run()
 void CommandEntity::abort(bool intended)
 {
     qDebug() << Q_FUNC_INFO;
-    this->m_abortIntended = intended;
-    abortWork();
-    Q_EMIT aborted();
+    QTimer::singleShot(0, this, [=](){
+        this->m_abortIntended = intended;
+        abortWork();
+        Q_EMIT aborted();
+    });
 }

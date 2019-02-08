@@ -10,6 +10,7 @@ import "qrc:/qml/qqc/controls"
 Page {
     id: pageRoot
     title: entry.name
+    focus: true
     
     FileDetailsHelper { id: fileDetailsHelper}
 

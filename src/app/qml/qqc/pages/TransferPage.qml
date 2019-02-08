@@ -4,8 +4,9 @@ import QtQuick.Dialogs 1.2
 import harbour.owncloud 1.0
 import "qrc:/qml-ui-set"
 
-Rectangle {
+Page {
     id: pageRoot
+    focus: true
 
     signal closeRequest()
 

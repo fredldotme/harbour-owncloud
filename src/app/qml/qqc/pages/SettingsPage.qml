@@ -2,8 +2,9 @@ import QtQuick 2.0
 import QtQuick.Controls 2.2
 import harbour.owncloud 1.0
 
-Item {
+Page {
     id: pageRoot
+    focus: true
 
     property AccountWorkers accountWorkers : null
     property AccountDb accountDb : null

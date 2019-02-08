@@ -68,10 +68,10 @@ ApplicationWindow {
                 return;
         }
 
-        //        if (transferQueue.queue.length < 1) {
-        //            selectedAccount.accountInfoCommandQueue.userInfoRequest();
-        //            selectedAccount.accountInfoCommandQueue.run()
-        //        }
+        if (transferQueue.queue.length < 1) {
+            accountInfoCommandQueue.userInfoRequest();
+            accountInfoCommandQueue.run()
+        }
     }
     function notify(summary, body) {
         msgDialog.showMessage(summary, body)
@@ -110,7 +110,7 @@ ApplicationWindow {
                 icon.color: "transparent"
                 icon.name: "arrow-left-double"
                 font.pixelSize: fontSizeSmall
-                enabled: showBackButton
+                visible: showBackButton
                 onClicked: popPage()
             }
 
@@ -149,7 +149,7 @@ ApplicationWindow {
                 Layout.fillWidth: true
                 text: {
                     if (sideStack.currentItem !== sideStack.initialItem &&
-                               sideStack.currentItem.title !== undefined) {
+                            sideStack.currentItem.title !== undefined) {
                         return sideStack.currentItem.title
                     } else if (rootStack.currentItem !== sideStack.initialItem &&
                                rootStack.currentItem.title !== undefined) {
@@ -209,7 +209,6 @@ ApplicationWindow {
 
     Item {
         anchors.fill: parent
-        focus: true
 
         AccountWorkerGenerator {
             id: accountWorkerGenerator
@@ -404,6 +403,15 @@ ApplicationWindow {
                 id: splitView
                 anchors.fill: parent
                 spacing: 2
+                focus: true
+                Keys.onReleased: {
+                    if (event.key === Qt.Key_Back) {
+                        popPage()
+                        event.accepted = true
+                        return
+                    }
+                    Qt.quit()
+                }
                 Rectangle {
                     id: rootStackContainer
                     width: sideStackIsActive ? (parent.width / 3)
@@ -420,16 +428,6 @@ ApplicationWindow {
                     clip: true
                 }
             }
-        }
-    }
-
-    Shortcut {
-        sequence: StandardKey.Back
-        onActivated: {
-            if (popPage()) {
-                return
-            }
-            Qt.quit()
         }
     }
 }

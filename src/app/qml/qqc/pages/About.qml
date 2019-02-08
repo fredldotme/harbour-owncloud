@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 
 Page {
     title: qsTr("About QhostCloud")
+    focus: true
 
     signal closeRequest()
 

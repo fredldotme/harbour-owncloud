@@ -13,9 +13,14 @@ import "qrc:/qml-ui-set"
 Page {
     id: pageRoot
     objectName: "FileBrowser"
-    title: remotePath
+    title: directoryName
+    focus: true
 
     property string remotePath : "/"
+    property string directoryName : {
+        var crumbs = remotePath.split('/')
+        return crumbs[crumbs.length-1]
+    }
     property string pageHeaderText : "/"
     property var accountWorkers : null
 

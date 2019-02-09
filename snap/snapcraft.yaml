@@ -9,13 +9,13 @@ description: |
   instances with a cross-platform, native Free Software application.
 
 apps:
-  ghostcloud:
+  harbour-ghostcloud:
     environment:
-      QT_PLUGIN_PATH: ${SNAP}/usr/lib/qt5/plugins
-      QML2_IMPORT_PATH: ${SNAP}/usr/lib/qt5/qml
+      QT_PLUGIN_PATH: ${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/qt5/plugins
+      QML2_IMPORT_PATH: ${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/qt5/qml
     command: desktop-launch harbour-owncloud
     plugs: [ x11, wayland, desktop, opengl, pulseaudio, home, removable-media ]
-    desktop: usr/share/applications/harbour-owncloud.desktop
+    desktop: usr/share/applications/harbour-ghostcloud.desktop
 
 parts:
   harbour-owncloud:

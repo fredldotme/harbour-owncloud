@@ -41,6 +41,7 @@ parts:
       - qml-module-qtquick2
       - qml-module-qtgraphicaleffects
       - qml-module-qtquick-window2
+      - qml-module-qtquick-dialogs
       - qml-module-qtquick-controls2
       - qml-module-qtquick-layouts
       - qml-module-qtquick-extras
@@ -54,6 +55,7 @@ parts:
       - qml-module-qtquick2
       - qml-module-qtgraphicaleffects
       - qml-module-qtquick-window2
+      - qml-module-qtquick-dialogs
       - qml-module-qtquick-controls2
       - qml-module-qtquick-layouts
       - qml-module-qtquick-extras

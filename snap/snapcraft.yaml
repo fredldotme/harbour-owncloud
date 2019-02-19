@@ -61,7 +61,6 @@ parts:
       - qml-module-qtquick-controls
       - qml-module-qt-labs-settings
       - qml-module-qtquick-localstorage
-    stage-packages:
       - gstreamer1.0-plugins-good
       - gstreamer1.0-plugins-bad
     after: [ desktop-qt5 ]

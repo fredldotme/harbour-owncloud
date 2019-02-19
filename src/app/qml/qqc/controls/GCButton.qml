@@ -30,8 +30,6 @@ AbstractButton {
             id: img
             height: parent.height
             width: height
-            //sourceSize.width: width - paddingTiny*2
-            //sourceSize.height: height - paddingTiny*2
         }
         Column {
             height: parent.height

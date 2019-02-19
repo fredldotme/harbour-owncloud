@@ -16,7 +16,7 @@ ApplicationWindow {
     title: "GhostCloud"
     visible: true
     width: 600
-    minimumWidth: 260
+    minimumWidth: 320
     height: 400
     minimumHeight: 360
 
@@ -106,6 +106,7 @@ ApplicationWindow {
         id: headerBar
         height: 48
         width: rootWindow.width
+        background: Rectangle { color: "white" }
         RowLayout {
             anchors.fill: parent
             GCButton {
@@ -119,15 +120,12 @@ ApplicationWindow {
                 sourceSize.height: height
             }
 
-            CircularImageButton {
+            GCButton {
                 id: avatarButton
                 visible: rootStack.currentItem.objectName === "FileBrowser" &&
                          sideStack.currentItem === sideStack.initialItem
                 height: parent.height
                 width: height
-                shadowEnabled: false
-                imageBackgroundColor: "black"
-                imageBackgroundEnabled: true
                 source: {
                     if (rootStack.currentItem.objectName == "FileBrowser") {
                         return rootStack.currentItem.accountWorkers.avatarFetcher.source
@@ -300,16 +298,18 @@ ApplicationWindow {
                     width: parent.width
                     visible: accountWorkerGenerator.accountWorkers.length < 1
 
-                    Label {
+                    Text {
                         font.pixelSize: 32
                         width: parent.width
                         wrapMode: Label.WrapAtWordBoundaryOrAnywhere
                         anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.margins: paddingSmall
                         text: qsTr("No account available yet. " +
-                                   "Please add an account to contiune.")
+                                   "Please add an account to continue.")
+                        horizontalAlignment: Text.AlignHCenter
                     }
 
-                    GCButton {
+                    Button {
                         anchors.horizontalCenter: parent.horizontalCenter
                         text: qsTr("Add account")
                         onClicked: addAccount()
@@ -411,15 +411,19 @@ ApplicationWindow {
             Row {
                 id: splitView
                 anchors.fill: parent
+                anchors.topMargin: 2
                 spacing: 2
                 focus: true
                 Keys.onReleased: {
                     if (event.key === Qt.Key_Back) {
-                        popPage()
-                        event.accepted = true
+                        if (showBackButton) {
+                            popPage()
+                            event.accepted = true
+                        } else {
+                            Qt.quit()
+                        }
                         return
                     }
-                    Qt.quit()
                 }
                 Rectangle {
                     id: rootStackContainer

@@ -1,6 +1,6 @@
 TEMPLATE = lib
 TARGET = $$qtLibraryTarget(owncloudshareplugin)
-CONFIG += plugin
+CONFIG += plugin sailfish_build
 DEPENDPATH += .
 
 CONFIG += link_pkgconfig

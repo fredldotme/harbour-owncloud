@@ -15,7 +15,9 @@ CONFIG(release, debug|release) {
     DEFINES += QT_NO_DEBUG_OUTPUT
 }
 
-contains(CONFIG, quickcontrols): DEFINES += GHOSTCLOUD_UI_QUICKCONTROLS
+contains(CONFIG, quickcontrols) {
+    DEFINES += GHOSTCLOUD_UI_QUICKCONTROLS
+}
 
 INCLUDEPATH += $$PWD/src
 DEPENDPATH += $$PWD/src
@@ -29,6 +31,12 @@ android {
 }
 
 linux:!android {
+    LIBS += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.so.1
+    LIBS += $$OUT_PWD/../../src/common/libharbourowncloudcommon.so.1
+}
+
+# Sailfish additionals
+contains(CONFIG, sailfish_build) {
     LIBS += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.so.1
     LIBS += $$OUT_PWD/../../src/common/libharbourowncloudcommon.so.1
 }

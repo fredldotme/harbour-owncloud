@@ -46,6 +46,7 @@ Page {
     Flickable {
         contentHeight: mainColumn.height + (paddingLarge*7)
         anchors.fill: parent
+        ScrollBar.vertical: ScrollBar {}
 
         Column {
             id: mainColumn
@@ -55,12 +56,12 @@ Page {
 
             Item {
                 // Wider side margins when only showing
-                // a default icon from the system theme
+                // a default icon from the icon set
                 property int margins : (thumbnailFetcher.source === "" && !isAudioVideo)
                                        ? (parent.width/4)
                                        : (parent.width/8)
                 id: filePreview
-                width: parent.width / 3
+                width: parent.width / 2
                 height: width
                 anchors.horizontalCenter: parent.horizontalCenter
 
@@ -105,7 +106,8 @@ Page {
                         (previewPlayer.playbackState == MediaPlayer.PlayingState) ?
                             "qrc:/icons/theme/actions/32/media-playback-pause.svg" :
                             "qrc:/icons/theme/actions/32/media-playback-start.svg"
-                    height: 32
+                    height: 48
+                    width: height
                     visible: mediaView.visible
                     onClicked: {
                         console.log("clicked @ " + previewPlayer.playbackState)
@@ -121,6 +123,7 @@ Page {
                 BusyIndicator {
                     id: progressSpinner
                     anchors.centerIn: parent
+                    visible: running
                     running: (thumbnailFetcher.fetching ||
                               previewPlayer.status === MediaPlayer.Loading)
                 }

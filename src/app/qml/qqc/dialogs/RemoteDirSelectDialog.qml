@@ -53,6 +53,7 @@ Dialog {
         id: listView
         anchors.fill: parent
         enabled: !isLoadingDirectory
+        ScrollBar.vertical: ScrollBar {}
 
         delegate: GCButton {
             id: icon

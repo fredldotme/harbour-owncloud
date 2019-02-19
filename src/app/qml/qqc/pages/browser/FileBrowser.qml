@@ -351,6 +351,7 @@ Page {
         anchors.fill: parent
         clip: true
         model: directoryContents.value(remotePath)
+        ScrollBar.vertical: ScrollBar {}
 
         add: Transition {
             NumberAnimation {

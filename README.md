@@ -7,6 +7,12 @@ Allows you to easily access your ownCloud, NextCloud and WebDav instances with a
 
 For automatic camera photo backup and upload from within other apps (i.e. Gallery) take a look at the "Nextcloud/ownCloud additionals" over at OpenRepos.
 
+Current qmake build configurations:
+- SailfishOS
+- GNU/Linux desktop: CONFIG+=noadditionals CONFIG+=quickcontrols
+- macOS/iOS: CONFIG+=noadditionals CONFIG+=quickcontrols
+
+
 You can donate to the project through:
 
 PayPal: dev.beidl@gmail.com

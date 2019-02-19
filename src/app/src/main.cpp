@@ -10,7 +10,7 @@
 #include <localfilebrowser.h>
 
 // Platform specific headers
-#ifndef QHOSTCLOUD_UI_QUICKCONTROLS
+#ifndef GHOSTCLOUD_UI_QUICKCONTROLS
 #include <sailfishapp.h>
 #include <sailfish-ui-set.h>
 #else
@@ -35,9 +35,9 @@
 #include <cacheprovider.h>
 
 // Platform-specific functionality
-#if defined(Q_OS_ANDROID)
+#if defined(Q_OS_ANDROID) || defined(Q_OS_MAC) || defined(Q_OS_IOS)
 #include "daemonctrl/dummydaemonctrl.h"
-#elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+#elif defined(Q_OS_UNIX) && !defined(Q_OS_ANDROID)
 #include "daemonctrl/daemoncontrol.h"
 #endif
 
@@ -49,7 +49,7 @@
 
 // Provide a fake SailfishOS namespace
 // on QtQuick.Controls-based environments
-#ifdef QHOSTCLOUD_UI_QUICKCONTROLS
+#ifdef GHOSTCLOUD_UI_QUICKCONTROLS
 namespace SailfishApp {
 static QGuiApplication* application(int& argc, char** argv) {
     if (qApp)
@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QIcon::setThemeName("theme");
 
-#ifndef QHOSTCLOUD_UI_QUICKCONTROLS
+#ifndef GHOSTCLOUD_UI_QUICKCONTROLS
     SailfishUiSet::registerQmlTypes();
     const QString QHOSTCLOUD_APP_NAME = QStringLiteral("harbour-owncloud");
 #else
@@ -147,7 +147,7 @@ int main(int argc, char *argv[])
         }
     }
 
-#ifndef QHOSTCLOUD_UI_QUICKCONTROLS
+#ifndef GHOSTCLOUD_UI_QUICKCONTROLS
     QQmlEngine* newEngine = new QQmlEngine;
     QQuickView *view = new QQuickView(newEngine, Q_NULLPTR); //SailfishApp::createView();
 

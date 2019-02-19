@@ -445,6 +445,9 @@ Page {
 
         Label {
             text: qsTr("Folder is empty")
+            width: parent.width
+            horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.Wrap
             visible: (__listCommand === null &&
                       listView.model.length < 1)
             font.pixelSize: fontSizeLarge

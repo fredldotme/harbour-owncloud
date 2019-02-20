@@ -6,9 +6,12 @@ import QtGraphicalEffects 1.0
 AbstractButton {
     id: buttonRoot
 
+    property alias textFont : label.font
     property alias detailText : detailLabel.text
+    property alias detailTextFont : detailLabel.font
     property alias source : img.source
     property alias sourceSize : img.sourceSize
+
     signal clicked()
 
     Layout.minimumWidth: width
@@ -39,11 +42,15 @@ AbstractButton {
                 text: buttonRoot.text
                 font.pixelSize: fontSizeSmall
                 enabled: buttonRoot.enabled
+                color: enabled ? "black"
+                               : "lightgray"
             }
             Label {
                 id: detailLabel
                 font.pixelSize: fontSizeTiny
                 enabled: buttonRoot.enabled
+                color: enabled ? "black"
+                               : "lightgray"
             }
         }
     }

@@ -104,7 +104,7 @@ ApplicationWindow {
 
     header: ToolBar {
         id: headerBar
-        height: 48
+        height: 38
         width: rootWindow.width
         background: Rectangle { color: "white" }
         RowLayout {
@@ -204,11 +204,7 @@ ApplicationWindow {
                 width: height
                 anchors.margins: paddingSmall
                 onClicked: {
-                    if (hamburgerMenu.opened) {
-                        hamburgerMenu.close()
-                    } else {
-                        hamburgerMenu.open()
-                    }
+                    hamburgerMenu.open(rootWindow)
                 }
             }
         }
@@ -241,36 +237,33 @@ ApplicationWindow {
             text: ""
         }
 
-        Item {
-            anchors.right: parent.right
-            anchors.top: parent.top
 
-            Menu {
-                id: hamburgerMenu
+        Menu {
+            id: hamburgerMenu
+            x: rootWindow.width - width
 
-                MenuItem {
-                    text: qsTr("Transfers")
-                    font.pixelSize: fontSizeSmall
-                    onClicked: {
-                        detailsStack.push(transfersTab)
-                    }
+            MenuItem {
+                text: qsTr("Transfers")
+                font.pixelSize: fontSizeSmall
+                onClicked: {
+                    detailsStack.push(transfersTab)
                 }
-                MenuItem {
-                    text: qsTr("Add account")
-                    font.pixelSize: fontSizeSmall
-                    visible: (accountWorkerGenerator.accountWorkers.length > 0)
-                    onClicked: addAccount()
-                }
+            }
+            MenuItem {
+                text: qsTr("Add account")
+                font.pixelSize: fontSizeSmall
+                visible: (accountWorkerGenerator.accountWorkers.length > 0)
+                onClicked: addAccount()
+            }
 
-                MenuSeparator {}
+            MenuSeparator {}
 
-                MenuItem {
-                    text: qsTr("About GhostCloud")
-                    font.pixelSize: fontSizeSmall
-                    visible: true
-                    onClicked: {
-                        detailsStack.push(infoPage)
-                    }
+            MenuItem {
+                text: qsTr("About GhostCloud")
+                font.pixelSize: fontSizeSmall
+                visible: true
+                onClicked: {
+                    detailsStack.push(infoPage)
                 }
             }
         }

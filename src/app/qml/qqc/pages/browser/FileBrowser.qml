@@ -378,7 +378,7 @@ Page {
             acceptedButtons: Qt.LeftButton | Qt.RightButton
 
             onPressAndHold: {
-                entryContextMenu(mouse)
+                entryContextMenu(delegate, mouseX, mouseY)
             }
             onClicked: {
                 entryClickHandler(mouse)
@@ -386,16 +386,17 @@ Page {
 
             property var davInfo : listView.model[index]
 
-            function entryContextMenu(area) {
+            function entryContextMenu(newParent, mouseX, mouseY) {
                 rightClickMenu.selectedDavInfo = davInfo
-                rightClickMenu.popup(delegate,
-                                     area.mouseX,
-                                     area.mouseY)
+                rightClickMenu.parent = newParent
+                rightClickMenu.x = mouseX
+                rightClickMenu.y = mouseY
+                rightClickMenu.open()
             }
 
             function entryClickHandler(mouse) {
                 if (mouse.button === Qt.RightButton) {
-                    entryContextMenu(mouse)
+                    entryContextMenu(delegate, mouseX, mouseY)
                     return;
                 }
 

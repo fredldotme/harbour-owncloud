@@ -6,5 +6,5 @@ Exec=harbour-owncloud
 Name=GhostCloud
 # translation example:
 # your app name in German locale (de)
-Name[de]=QhostCloud
-Name[sl]=QhostCloud
+Name[de]=GhostCloud
+Name[sl]=GhostCloud

@@ -87,6 +87,7 @@ Rectangle {
     Flickable {
         anchors.fill: parent
         contentHeight: topIcon.height + mainColumn.height + (paddingLarge*5)
+        ScrollBar.vertical: ScrollBar {}
 
         Image {
             id: topIcon

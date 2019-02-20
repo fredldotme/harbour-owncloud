@@ -15,6 +15,7 @@ apps:
       QML2_IMPORT_PATH: ${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/qt5/qml
     command: desktop-launch harbour-owncloud
     plugs: [ x11, wayland, desktop, desktop-legacy, opengl, pulseaudio, home, removable-media, network ]
+    desktop: ${SNAP}/snap/gui/harbour-owncloud.desktop
 
 parts:
   harbour-owncloud:
@@ -62,6 +63,7 @@ parts:
       - qml-module-qtquick-controls
       - qml-module-qt-labs-settings
       - qml-module-qtquick-localstorage
+      - qml-module-qtmultimedia
       - gstreamer1.0-plugins-good
       - gstreamer1.0-plugins-bad
     after: [ desktop-qt5 ]

@@ -7,6 +7,13 @@ summary: A modern cross-platform client for Nextcloud, ownCloud, WebDav.
 description: |
   Allows you to easily access your NextCloud, ownCloud and WebDav 
   instances with a cross-platform, native Free Software application.
+  
+  Features:
+    - Support for NextCloud, ownCloud & WebDav
+    - File management
+    - Document previews
+    - Video & audio previews
+    - Storage usage information
 
 apps:
   harbour-owncloud:
@@ -65,6 +72,11 @@ parts:
       - qml-module-qtquick-localstorage
       - gstreamer1.0-plugins-good
       - gstreamer1.0-plugins-bad
+      - gstreamer1.0-plugins-ugly
+      - libva2
+      - libva-x11-2
+      - mesa-va-drivers
+      - i965-va-driver
     after: [ desktop-qt5 ]
   desktop-qt5:
     build-packages:

@@ -10,6 +10,7 @@ For automatic camera photo backup and upload from within other apps (i.e. Galler
 Current qmake build configurations:
 - SailfishOS
 - GNU/Linux desktop: CONFIG+=noadditionals CONFIG+=quickcontrols
+- Android: CONFIG+=noadditionals CONFIG+=quickcontrols
 - macOS/iOS: CONFIG+=noadditionals CONFIG+=quickcontrols
 
 

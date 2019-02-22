@@ -58,6 +58,8 @@ BusyIndicator {
             source: "qrc:/icons/theme/actions/symbolic/window-close-symbolic.svg"
             anchors.fill: parent
             enabled: false
+            sourceSize.width = width
+            sourceSize.height = height
             visible: (!abortButtonHideTimer.running && !abortButtonMouseArea.pressed)
         }
         ColorOverlay {

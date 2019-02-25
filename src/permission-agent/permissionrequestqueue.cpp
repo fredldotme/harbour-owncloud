@@ -22,10 +22,10 @@ void PermissionRequestQueue::permitFirstInQueue()
     QDBusMessage request = m_requestQueue.dequeue();
 
     // Refresh settings values
-    IniFileSettings::instance()->readSettings();
+    //IniFileSettings::instance()->readSettings();
 
     QMap<QString, QVariant> values;
-    values.insert(NEXTCLOUD_SETTINGS_KEY_CERTMD5, IniFileSettings::instance()->md5Hex());
+    /*values.insert(NEXTCLOUD_SETTINGS_KEY_CERTMD5, IniFileSettings::instance()->md5Hex());
     values.insert(NEXTCLOUD_SETTINGS_KEY_CERTSHA1, IniFileSettings::instance()->sha1Hex());
     values.insert(NEXTCLOUD_SETTINGS_KEY_ISHTTPS, IniFileSettings::instance()->isHttps());
     values.insert(NEXTCLOUD_SETTINGS_KEY_HOSTNAME, IniFileSettings::instance()->hostname());
@@ -38,7 +38,7 @@ void PermissionRequestQueue::permitFirstInQueue()
     values.insert(NEXTCLOUD_SETTINGS_KEY_MOBILEUPLOAD, IniFileSettings::instance()->mobileUpload());
     values.insert(NEXTCLOUD_SETTINGS_KEY_NOTIFICATIONS, IniFileSettings::instance()->notifications());
     values.insert(NEXTCLOUD_SETTINGS_KEY_UPLOADAUTOMATICALLY, IniFileSettings::instance()->uploadAutomatically());
-    values.insert(NEXTCLOUD_PERMD_REQUESTDENIED, false);
+    values.insert(NEXTCLOUD_PERMD_REQUESTDENIED, false);*/
 
     QDBusMessage reply = request.createReply(values);
     QDBusConnection::sessionBus().send(reply);

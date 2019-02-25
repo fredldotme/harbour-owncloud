@@ -1,7 +1,5 @@
 import QtQuick 2.6
-import QtQuick.Controls 2.2
-import QtQuick.Dialogs 1.2
-
+import QtQuick.Controls 2.4
 
 Dialog {
     id: textEntryDialog
@@ -12,7 +10,7 @@ Dialog {
 
     TextField {
         anchors.fill: parent
-        anchors.margins: 32
+        anchors.margins: 16
         id: textEntryField
         width: parent.width
         text: ""

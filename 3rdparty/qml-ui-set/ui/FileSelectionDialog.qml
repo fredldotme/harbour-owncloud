@@ -1,6 +1,5 @@
 import QtQuick 2.0
-import QtQuick.Controls 2.2
-import QtQuick.Dialogs 2.2
+import QtQuick.Controls 2.4
 import QmlUiSet 1.0
 
 Dialog {

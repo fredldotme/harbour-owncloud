@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import harbour.owncloud 1.0
+import "qrc:/sailfish-ui-set"
 
 Page {
     id: pageRoot
@@ -8,6 +9,7 @@ Page {
     readonly property bool loginInProgress : (authenticator.running ||
                                               browserCommandQueue.running);
 
+    property AccountWorkerGenerator workerGenerator : null
     property NextcloudSettings clientSettings : null
     property OcsCommandQueue ocsCommandQueue : null
     property WebDavCommandQueue browserCommandQueue : null
@@ -187,10 +189,9 @@ Page {
             anchors.centerIn: parent
             running: loginInProgress
             size: BusyIndicatorSize.Large
-            // TODO: cancelable authentication
-            /*onClicked: {
-                authenticator.abortAuthentication();
-            }*/
+            onAbort: {
+                authenticator.abort();
+            }
         }
     }
 }

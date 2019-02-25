@@ -51,6 +51,33 @@
         <source>Icon based on &quot;Cute clouds for CSS sprites&quot; by Yug (CC BY-SA 3.0)</source>
         <translation>Icon basierend auf &quot;Cute clouds for CSS sprites&quot; von Yug (CC BY-SA 3.0)</translation>
     </message>
+    <message>
+        <source>Easily access your Nextcloud, ownCloud and WebDav instances with a native, multi-platform Free Software application</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>QmlUiSet UI components (LGPL v2.1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>KDE Breeze Icon Theme (LGPL v2.1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>AccountSelection</name>
+    <message>
+        <source>Remove account</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add account...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About GhostCloud...</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BasicAuthentication</name>
@@ -124,6 +151,18 @@
     <message>
         <source>Operation failed</source>
         <translation>Operation fehlgeschlagen</translation>
+    </message>
+    <message>
+        <source>Would you like to remove the existing file &apos;%1&apos; before starting the download?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error occured</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please check your credentials or try again later.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -210,6 +249,46 @@
         <source>Folder is empty</source>
         <translation>Ordner ist leer</translation>
     </message>
+    <message>
+        <source>Enter directory name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter new name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Free:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Download</source>
+        <translation type="unfinished">Herunterladen</translation>
+    </message>
+    <message>
+        <source>Rename</source>
+        <translation type="unfinished">Umbenennen</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished">Kopieren</translation>
+    </message>
+    <message>
+        <source>Move</source>
+        <translation type="unfinished">Verschieben</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation type="unfinished">Löschen</translation>
+    </message>
+    <message>
+        <source>Details</source>
+        <translation type="unfinished">Details</translation>
+    </message>
 </context>
 <context>
     <name>FileDetails</name>
@@ -261,6 +340,10 @@
         <source>The file &apos;%1&apos; already exists. Would you like to overwrite it?</source>
         <translation>Die Datei &apos;%1&apos; existiert bereits. Möchten Sie diese überschreiben?</translation>
     </message>
+    <message>
+        <source>Open</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FileOperationsContextMenu</name>
@@ -307,6 +390,18 @@
     <message>
         <source>SHA1 fingerprint:</source>
         <translation>SHA1 Fingerprint:</translation>
+    </message>
+    <message>
+        <source>Would you like to accept the certificate?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MD5: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SHA1: %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -359,6 +454,10 @@
         <source>Clear cache</source>
         <translation>Zwischenspeicher leeren</translation>
     </message>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>TransferPage</name>
@@ -381,6 +480,57 @@
     <message>
         <source>Open: &apos;%1&apos;</source>
         <translation>Öffne: &apos;%1&apos;</translation>
+    </message>
+</context>
+<context>
+    <name>WebDavAccountDialog</name>
+    <message>
+        <source>Login failed</source>
+        <translation type="unfinished">Login fehlgeschlagen</translation>
+    </message>
+    <message>
+        <source>Please check your connection or try again later.</source>
+        <translation type="unfinished">Bitte überprüfen Sie die Verbindung oder versuchen Sie es später noch einmal.</translation>
+    </message>
+    <message>
+        <source>Host address</source>
+        <translation type="unfinished">Serveradresse</translation>
+    </message>
+    <message>
+        <source>User name</source>
+        <translation type="unfinished">Benutzername</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation type="unfinished">Passwort</translation>
+    </message>
+    <message>
+        <source>Provider:</source>
+        <translation type="unfinished">Anbieter:</translation>
+    </message>
+    <message>
+        <source>Nextcloud/ownCloud</source>
+        <translation type="unfinished">Nextcloud/ownCloud</translation>
+    </message>
+    <message>
+        <source>WebDav</source>
+        <translation type="unfinished">WebDav</translation>
+    </message>
+    <message>
+        <source>Accept certificate</source>
+        <translation type="unfinished">Zertifikat akzeptieren</translation>
+    </message>
+    <message>
+        <source>Continue</source>
+        <translation type="unfinished">Weiter</translation>
+    </message>
+    <message>
+        <source>Invalid URL</source>
+        <translation type="unfinished">Falsche URL</translation>
+    </message>
+    <message>
+        <source>Please check your host address</source>
+        <translation type="unfinished">Bitte überprüfe deine Serveradresse</translation>
     </message>
 </context>
 <context>
@@ -416,6 +566,25 @@
     <message>
         <source>%1 couldn&apos;t be downloaded</source>
         <translation>%1 konnte nicht heruntergeladen werden</translation>
+    </message>
+</context>
+<context>
+    <name>main</name>
+    <message>
+        <source>Transfers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add account</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About GhostCloud</source>
+        <translation type="unfinished">Über GhostCloud</translation>
+    </message>
+    <message>
+        <source>No account available yet. Please add an account to continue.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

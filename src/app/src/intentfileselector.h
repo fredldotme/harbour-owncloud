@@ -9,9 +9,11 @@ class IntentFileSelector : public QObject
 public:
     explicit IntentFileSelector(QObject *parent = nullptr);
 
+public slots:
+    void fileSelectIntent();
+
 signals:
 
-public slots:
 };
 
 #endif // INTENTFILESELECTOR_H

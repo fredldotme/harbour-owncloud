@@ -14,6 +14,21 @@ Page {
         anchors.fill: parent
         model: accountGenerator.accountWorkers
 
+        PullDownMenu {
+            MenuItem {
+                text: qsTr("Add account...")
+                onClicked: {
+                    pageStack.push(authenticationEntranceComponent)
+                }
+            }
+        }
+
+        PushUpMenu {
+            MenuItem {
+                text: qsTr("About")
+            }
+        }
+
         delegate: BackgroundItem {
             width: parent.width
 

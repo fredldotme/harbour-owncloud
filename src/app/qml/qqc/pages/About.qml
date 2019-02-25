@@ -12,6 +12,7 @@ Page {
         anchors.fill: parent
         clip: true
         contentHeight: mainColumn.height + fontSizeLarge
+        ScrollBar.vertical: ScrollBar {}
 
         Column {
             id: mainColumn

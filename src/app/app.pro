@@ -24,9 +24,16 @@ contains(CONFIG, quickcontrols) {
 
     # OpenSSL for Android
     android {
-        # LIBS += -L $$OUT_PWD/../../3rdparty/openssl -lcrypto -lssl
+        LIBS += -L $$OUT_PWD/../../3rdparty/openssl -lcrypto -lssl
         ANDROID_EXTRA_LIBS += $$OUT_PWD/../../3rdparty/openssl/libcrypto.so
         ANDROID_EXTRA_LIBS += $$OUT_PWD/../../3rdparty/openssl/libssl.so
+
+        QT += androidextras
+        SOURCES += \
+            $$PWD/src/intentfileselector.cpp
+
+        HEADERS += \
+            $$PWD/src/intentfileselector.h
     }
 
     RESOURCES += \
@@ -112,16 +119,13 @@ INSTALLS += icon86 icon128
 DEFINES += QWEBDAVITEM_EXTENDED_PROPERTIES
 
 DISTFILES += \
-    android/AndroidManifest.xml \
-    android/gradle/wrapper/gradle-wrapper.jar \
-    android/gradlew \
-    android/res/values/libs.xml \
-    android/build.gradle \
-    android/gradle/wrapper/gradle-wrapper.properties \
-    android/gradlew.bat
+    $$PWD/android/AndroidManifest.xml \
+    $$PWD/android/gradle/wrapper/gradle-wrapper.jar \
+    $$PWD/android/gradlew \
+    $$PWD/android/res/values/libs.xml \
+    $$PWD/android/build.gradle \
+    $$PWD/android/gradle/wrapper/gradle-wrapper.properties \
+    $$PWD/android/gradlew.bat
 
-contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
-    ANDROID_PACKAGE_SOURCE_DIR = \
-        $$PWD/android
-}
-
+ANDROID_PACKAGE_SOURCE_DIR = \
+    $$PWD/android

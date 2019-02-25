@@ -2,13 +2,24 @@ import QtQuick 2.0
 import QtQuick.Dialogs 1.2
 import harbour.owncloud 1.0
 import QmlUiSet 1.0
+import "qrc:/qml/qqc"
+import "qrc:/qml/qqc/controls"
 import "qrc:/qml/qqc/dialogs"
+import "qrc:/qml-ui-set"
 
 CommandPageFlow {
     id: pageFlowItemRoot
     property string targetRemotePath : "/"
     property var detailsStack : null
     property alias userInfo : userInfo
+
+    property alias copyEntryDialog : copyEntryDialog
+    property alias moveEntryDialog : moveEntryDialog
+    property alias fileExistsDialog : fileExistsDialog
+    property alias openFileDialog: openFileDialog
+    property alias dirCreationDialog: dirCreationDialog
+    property alias renameDialog : renameDialog
+
 
     // Pages
     readonly property Component browserComponent :
@@ -21,15 +32,17 @@ CommandPageFlow {
     RemoteDirSelectDialog {
         id: copyEntryDialog
         browserCommandQueue: accountWorkers.browserCommandQueue
-        directoryContents: pageFlow.directoryContents
+        directoryContents: pageFlowItemRoot.directoryContents
         height: 400
+        anchors.centerIn: parent
     }
 
     RemoteDirSelectDialog {
         id: moveEntryDialog
         browserCommandQueue: accountWorkers.browserCommandQueue
-        directoryContents: pageFlow.directoryContents
+        directoryContents: pageFlowItemRoot.directoryContents
         height: 400
+        anchors.centerIn: parent
     }
 
     Dialog {
@@ -60,6 +73,34 @@ CommandPageFlow {
         }
     }
 
+
+    FileDialog {
+        id: openFileDialog
+        selectMultiple: true
+
+        onAccepted: {
+            for (var i = 0; i < fileUrls.length; i++) {
+                console.log("Enqueueing upload " + fileUrls[i] + " to " + pageRoot.remotePath)
+                transferCommandQueue.fileUploadRequest(fileUrls[i],
+                                                       pageRoot.remotePath)
+            }
+            transferCommandQueue.run()
+        }
+    }
+
+    TextEntryDialog {
+        id: dirCreationDialog
+        title: qsTr("Enter directory name:")
+        height: 220
+        anchors.centerIn: parent
+    }
+
+    TextEntryDialog {
+        id: renameDialog
+        title: qsTr("Enter new name:")
+        height: 220
+        anchors.centerIn: parent
+    }
 
     FileDetailsHelper { id: fileDetailsHelper }
 
@@ -202,8 +243,6 @@ CommandPageFlow {
                                                                       remotePath : remotePath,
                                                                       accountWorkers: accountWorkers,
                                                                       pageFlow: pageFlowItemRoot,
-                                                                      copyEntryDialog: copyEntryDialog,
-                                                                      moveEntryDialog: moveEntryDialog,
                                                                       detailsStack: detailsStack
                                                                   });
 

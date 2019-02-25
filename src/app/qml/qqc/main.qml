@@ -104,7 +104,7 @@ ApplicationWindow {
 
     header: ToolBar {
         id: headerBar
-        height: 38
+        height: headerBarSize
         width: rootWindow.width
         background: Rectangle { color: "white" }
         RowLayout {
@@ -154,8 +154,7 @@ ApplicationWindow {
                     if (sideStack.currentItem !== sideStack.initialItem &&
                             sideStack.currentItem.title !== undefined) {
                         return sideStack.currentItem.title
-                    } else if (rootStack.currentItem !== sideStack.initialItem &&
-                               rootStack.currentItem.title !== undefined) {
+                    } else if (rootStack.currentItem.title !== undefined) {
                         return rootStack.currentItem.title
                     } else {
                         return ""
@@ -172,7 +171,7 @@ ApplicationWindow {
                 width: height
                 anchors.margins: paddingSmall
                 onClicked: {
-                    rootStack.currentItem.newDirectoryDialog.open()
+                    rootStack.currentItem.dirCreationDialog.open()
                 }
             }
             GCButton {
@@ -183,7 +182,11 @@ ApplicationWindow {
                 height: parent.height
                 width: height
                 onClicked: {
-                    rootStack.currentItem.fileUploadDialog.open()
+                    if (!osIsAndroid) {
+                        rootStack.currentItem.fileUploadDialog.open()
+                    } else {
+                        rootStack.currentItem.fileSelectIntent()
+                    }
                 }
             }
             GCButton {

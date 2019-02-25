@@ -147,6 +147,14 @@ int main(int argc, char *argv[])
         }
     }
 
+#ifdef Q_OS_ANDROID
+    const int headerBarSize = 48;
+    const bool osIsAndroid = true;
+#else
+    const int headerBarSize = 38;
+    const bool osIsAndroid = false;
+#endif
+
 #ifndef GHOSTCLOUD_UI_QUICKCONTROLS
     QQmlEngine* newEngine = new QQmlEngine;
     QQuickView *view = new QQuickView(newEngine, Q_NULLPTR); //SailfishApp::createView();
@@ -155,6 +163,8 @@ int main(int argc, char *argv[])
     view->showFullScreen();
 #else
     QQmlApplicationEngine* newEngine = new QQmlApplicationEngine(app);
+    newEngine->rootContext()->setContextProperty("headerBarSize", headerBarSize);
+    newEngine->rootContext()->setContextProperty("osIsAndroid", osIsAndroid);
     newEngine->load(QUrl("qrc:/qml/qqc/main.qml"));
 #endif
 

@@ -18,8 +18,14 @@ Page {
 
     property string remotePath : "/"
     property string directoryName : {
-        var crumbs = remotePath.split('/')
-        return crumbs[crumbs.length-1]
+        var crumbs = remotePath.split("/").filter(function (element) {
+            return element !== null && element !== "";
+        });
+
+        if (crumbs.length < 1)
+            return "/"
+
+        return crumbs[(crumbs.length - 1) % crumbs.length]
     }
     property string pageHeaderText : "/"
     property var accountWorkers : null
@@ -34,11 +40,12 @@ Page {
     property var userInfoCommandQueue : accountWorkers.accountInfoCommandQueue
 
     property alias fileUploadDialog : openFileDialog
-    property alias newDirectoryDialog : dirCreationDialog
     property alias avatarMenu : avatarMenu
 
-    property var copyEntryDialog : null
-    property var moveEntryDialog : null
+    property var copyEntryDialog : pageFlow.copyEntryDialog
+    property var moveEntryDialog : pageFlow.moveEntryDialog
+    property var renameDialog : pageFlow.renameDialog
+    property var dirCreationDialog : pageFlow.dirCreationDialog
 
     // Keep track of directory listing requests
     property var __listCommand : null
@@ -59,6 +66,10 @@ Page {
         __listCommand = browserCommandQueue.directoryListingRequest(newPath, false)
     }
 
+    function fileSelectIntent() {
+
+    }
+
     function openDetails(davEntryInfo) {
         var fileDetails =
                 fileDetailsComponent.createObject(rootWindow.detailsStack,
@@ -75,6 +86,10 @@ Page {
             rootWindow.detailsStack.pop()
 
         rootWindow.detailsStack.push(fileDetails);
+    }
+
+    function newDirectoryDialogOpen() {
+        pageFlow.dirCreationDialog.open()
     }
 
     signal transientNotification(string summary)
@@ -94,10 +109,8 @@ Page {
         }
     }
 
-    TextEntryDialog {
-        id: dirCreationDialog
-        title: qsTr("Enter directory name:")
-
+    Connections {
+        target: dirCreationDialog
         onAccepted: {
             browserCommandQueue.makeDirectoryRequest(
                         pageRoot.remotePath + dirCreationDialog.text)
@@ -106,10 +119,8 @@ Page {
         }
     }
 
-    TextEntryDialog {
-        id: renameDialog
-        title: qsTr("Enter new name:")
-
+    Connections {
+        target: renameDialog
         onAccepted: {
             browserCommandQueue.moveRequest(
                         rightClickMenu.selectedDavInfo.path,

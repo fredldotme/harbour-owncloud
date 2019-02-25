@@ -24,6 +24,8 @@ Item {
 
     BrowserCommandPageFlow {
         id: pageFlow
+        parent: splitView
+        anchors.centerIn: parent
         accountWorkers: selectedAccountWorkers
         directoryContents: accountsSelectionRoot.dirContents
         detailsStack: detailStack

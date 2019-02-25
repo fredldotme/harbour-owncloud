@@ -41,18 +41,18 @@ ApplicationWindow
 
     // Main application cover
     readonly property Component coverPage :
-        Qt.createComponent("qrc:/qml/cover/CoverPage.qml",
+        Qt.createComponent("qrc:/qml/sfos/cover/CoverPage.qml",
                            Component.PreferSynchronous)
 
     // Application pages
     readonly property Component remoteDirDialogComponent :
-        Qt.createComponent("qrc:/qml/pages/browser/RemoteDirSelectDialog.qml",
+        Qt.createComponent("qrc:/qml/sfos/pages/browser/RemoteDirSelectDialog.qml",
                            Component.PreferSynchronous);
     readonly property Component browserComponent :
-        Qt.createComponent("qrc:/qml/pages/browser/FileBrowser.qml",
+        Qt.createComponent("qrc:/qml/sfos/pages/browser/FileBrowser.qml",
                            Component.PreferSynchronous);
     readonly property Component fileDetailsComponent :
-        Qt.createComponent("qrc:/qml/pages/browser/FileDetails.qml",
+        Qt.createComponent("qrc:/qml/sfos/pages/browser/FileDetails.qml",
                            Component.PreferSynchronous);
     readonly property Component selectionDialogComponent :
         Qt.createComponent("qrc:/sailfish-ui-set/FileSelectionDialog.qml",
@@ -61,22 +61,25 @@ ApplicationWindow
         Qt.createComponent("qrc:/sailfish-ui-set/TextEntryDialog.qml",
                            Component.PreferSynchronous);
     readonly property Component authenticationEntranceComponent :
-        Qt.createComponent("qrc:/qml/pages/login/Entrance.qml",
+        Qt.createComponent("qrc:/qml/sfos/pages/login/Entrance.qml",
                            Component.PreferSynchronous);
     readonly property Component flowAuthenticationComponent :
-        Qt.createComponent("qrc:/qml/pages/login/FlowAuthentication.qml",
+        Qt.createComponent("qrc:/qml/sfos/pages/login/FlowAuthentication.qml",
+                           Component.PreferSynchronous);
+    readonly property Component basicAuthenticationComponent :
+        Qt.createComponent("qrc:/qml/sfos/pages/login/BasicAuthentication.qml",
                            Component.PreferSynchronous);
     readonly property Component sslErrorDialogComponent :
-        Qt.createComponent("qrc:/qml/pages/login/SSLErrorDialog.qml",
+        Qt.createComponent("qrc:/qml/sfos/pages/login/SSLErrorDialog.qml",
                            Component.PreferSynchronous)
     readonly property Component settingsPageComponent :
-        Qt.createComponent("qrc:/qml/pages/SettingsPage.qml",
+        Qt.createComponent("qrc:/qml/sfos/pages/SettingsPage.qml",
                            Component.PreferSynchronous)
     readonly property Component transferPageComponent :
-        Qt.createComponent("qrc:/qml/pages/TransferPage.qml",
+        Qt.createComponent("qrc:/qml/sfos/pages/TransferPage.qml",
                            Component.PreferSynchronous)
     readonly property Component aboutPageComponent :
-        Qt.createComponent("qrc:/qml/pages/About.qml",
+        Qt.createComponent("qrc:/qml/sfos/pages/About.qml",
                            Component.PreferSynchronous)
 
 

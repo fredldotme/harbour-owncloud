@@ -71,6 +71,11 @@ if [ ! -f "libssl.so" ]; then
 fi
 
 cd ..
-mv ${OPENSSL_DIR} ${OPENSSL_DIR}-${ANDROID_TARGET_ARCH}
+
+if [ -d openssl ]; then
+    rm -r openssl
+fi
+
+mv ${OPENSSL_DIR} openssl
 
 echo "Build successful!"

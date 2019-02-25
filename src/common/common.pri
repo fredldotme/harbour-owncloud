@@ -26,6 +26,8 @@ INCLUDEPATH += $$PWD/../../3rdparty/qwebdavlib/qwebdavlib
 DEPENDPATH += $$PWD/../../3rdparty/qwebdavlib/qwebdavlib
 
 android {
+    LIBS += $$OUT_PWD/../../3rdparty/openssl/libcrypto.so
+    LIBS += $$OUT_PWD/../../3rdparty/openssl/libssl.so
     LIBS += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.so
     LIBS += $$OUT_PWD/../../src/common/libharbourowncloudcommon.so
 }

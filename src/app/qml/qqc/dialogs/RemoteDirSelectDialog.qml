@@ -5,6 +5,8 @@ import "qrc:/qml/qqc/controls"
 
 Dialog {
     id: dialogRoot
+    standardButtons: Dialog.Ok | Dialog.Cancel
+    height: 100
 
     property string remotePath : "/"
     property bool isLoadingDirectory : true

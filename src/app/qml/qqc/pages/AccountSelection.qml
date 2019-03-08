@@ -68,16 +68,23 @@ Item {
 
             readonly property var delegateAccountWorkers : accountGenerator.accountWorkers[index]
 
+            function openContextMenu(x, y, newParent) {
+                rightClickMenu.parent = newParent
+                rightClickMenu.x = x
+                rightClickMenu.y = y
+                rightClickMenu.open()
+            }
+
             onPressAndHold: {
                 selectedAccountWorkers = delegateAccountWorkers
-                rightClickMenu.popup(accountsList, mouseX, mouseY)
+                openContextMenu(mouseX, mouseY, accountsList)
             }
 
             onClicked: {
                 selectedAccountWorkers = delegateAccountWorkers
 
                 if (mouse.button === Qt.RightButton) {
-                    rightClickMenu.popup(accountsList, mouseX, mouseY)
+                    openContextMenu(mouseX, mouseY, accountsList)
                     return;
                 }
 

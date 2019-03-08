@@ -51,6 +51,34 @@ CommandPageFlow {
         property string totalBytes : ""
     }
 
+    Dialog {
+        id: fileExistsDialog
+        standardButtons: Dialog.Ok | Dialog.Cancel
+
+        property string fileName : ""
+        property string path : ""
+        property string mimeType : ""
+        property bool openFile : false
+        property var lastModified : null
+        property var transferCommandQueue : null
+
+        Text {
+            text: qsTr("Would you like to remove the " +
+                       "existing file '%1' before " +
+                       "starting the download?").arg(fileExistsDialog.fileName)
+        }
+
+        onAccepted: {
+            console.debug("Yes")
+            FilePathUtil.removeFile(path)
+            transferCommandQueue.fileDownloadRequest(path, mimeType, openFile, lastModified)
+            transferCommandQueue.run()
+        }
+        onDiscard: {
+            console.debug("Discard")
+        }
+    }
+
     function startDownload(path, mimeType, open, overwriteExistingFile, lastModified, transferCommandQueue) {
         var destinationDir = FilePathUtil.destinationFromMIME(mimeType)
         var fileName = path.substring(path.lastIndexOf("/") + 1)

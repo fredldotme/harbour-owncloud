@@ -91,35 +91,6 @@ Page {
     signal transientNotification(string summary)
     signal notification(string summary, string body)
 
-
-    Dialog {
-        id: fileExistsDialog
-        standardButtons: Dialog.Ok | Dialog.Cancel
-
-        property string fileName : ""
-        property string path : ""
-        property string mimeType : ""
-        property bool openFile : false
-        property var lastModified : null
-        property var transferCommandQueue : null
-
-        Text {
-            text: qsTr("Would you like to remove the " +
-                       "existing file '%1' before " +
-                       "starting the download?").arg(fileExistsDialog.fileName)
-        }
-
-        onAccepted: {
-            console.debug("Yes")
-            FilePathUtil.removeFile(path)
-            transferCommandQueue.fileDownloadRequest(path, mimeType, openFile, lastModified)
-            transferCommandQueue.run()
-        }
-        onDiscard: {
-            console.debug("Discard")
-        }
-    }
-
     TextEntryDialog {
         id: dirCreationDialog
         parent: pageFlow
@@ -426,20 +397,11 @@ Page {
             }
         }
 
-        delegate: MouseArea {
+        delegate: Item {
             id: delegate
             width: listView.width
             height: childrenRect.height
             enabled: (__listCommand === null)
-            acceptedButtons: Qt.LeftButton | Qt.RightButton
-
-            onPressAndHold: {
-                entryContextMenu(delegate, mouseX, mouseY)
-            }
-            onClicked: {
-                entryClickHandler(mouse)
-            }
-
             property var davInfo : listView.model[index]
 
             function entryContextMenu(newParent, mouseX, mouseY) {
@@ -483,7 +445,14 @@ Page {
                 MouseArea {
                     id: clickArea
                     anchors.fill: parent
-                    onClicked: entryClickHandler(mouse)
+                    acceptedButtons: Qt.LeftButton | Qt.RightButton
+
+                    onPressAndHold: {
+                        entryContextMenu(delegate, mouseX, mouseY)
+                    }
+                    onClicked: {
+                        entryClickHandler(mouse)
+                    }
                 }
             }
         }

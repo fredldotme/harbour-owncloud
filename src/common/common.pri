@@ -37,6 +37,27 @@ linux:!android {
     LIBS += $$OUT_PWD/../../src/common/libharbourowncloudcommon.so.1
 }
 
+macx {
+    LIBS += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.1.dylib
+    CONFIG(release, debug|release) {
+        LIBS += $$OUT_PWD/../../src/common/libharbourowncloudcommon.1.dylib
+    }
+    CONFIG(debug, debug|release) {
+        LIBS += $$OUT_PWD/../../src/common/libharbourowncloudcommon_debug.1.dylib
+    }
+}
+
+ios {
+    LIBS += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.a
+    CONFIG(release, debug|release) {
+        LIBS += $$OUT_PWD/../../src/common/libharbourowncloudcommon.a
+    }
+    CONFIG(debug, debug|release) {
+        LIBS += $$OUT_PWD/../../src/common/libharbourowncloudcommon_debug.a
+    }
+}
+
+
 # Sailfish additionals
 contains(CONFIG, sailfish_build) {
     LIBS += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.so.1

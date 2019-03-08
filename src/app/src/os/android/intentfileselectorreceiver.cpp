@@ -15,7 +15,7 @@ QString IntentFileSelectorReceiver::resolveUri(const QString& uri)
             QAndroidJniObject::callStaticObjectMethod(
                 "me/fredl/ghostcloud/ShareUtil",
                 "getFilePathForContent",
-                "(Ljava/lang/String;)V",
+                "(Ljava/lang/String;)Ljava/lang/String;",
                 jUrl.object<jstring>());
 
     const QString resolvedUriString = resolvedUri.toString();

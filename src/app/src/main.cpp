@@ -145,9 +145,9 @@ int main(int argc, char *argv[])
     qmlRegisterType<DaemonControl>("harbour.owncloud", 1, 0, "DaemonControl");
     qmlRegisterType<AccountWorkerGenerator>("harbour.owncloud", 1, 0, "AccountWorkerGenerator");
 #if defined (Q_OS_ANDROID)
-    qmlRegisterType<IntentFileSelector>("harbour.owncloud", 1, 0, "IntentFileSelector");
+    qmlRegisterType<IntentFileSelector>("harbour.owncloud", 1, 0, "NativeFileSelector");
 #else
-    qmlRegisterType<DummyIntentFileSelector>("harbour.owncloud", 1, 0, "IntentFileSelector");
+    qmlRegisterType<DummyIntentFileSelector>("harbour.owncloud", 1, 0, "NativeFileSelector");
 #endif
     qmlRegisterUncreatableType<AccountWorkers>("harbour.owncloud", 1, 0, "AccountWorkers",
                                                "AccountWorkers are provided through the AccountDbWorkers type");

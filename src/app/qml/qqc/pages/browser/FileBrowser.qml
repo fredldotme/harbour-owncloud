@@ -63,7 +63,7 @@ Page {
     }
 
     function fileSelectIntent() {
-        intentFileSelector.fileSelectIntent();
+        nativeFileSelector.fileSelectIntent();
     }
 
     function openDetails(davEntryInfo) {
@@ -90,6 +90,15 @@ Page {
 
     signal transientNotification(string summary)
     signal notification(string summary, string body)
+
+    NativeFileSelector {
+        id: nativeFileSelector
+        onFileSelected: {
+            transferCommandQueue.fileUploadRequest(filePath,
+                                                   pageRoot.remotePath)
+            transferCommandQueue.run()
+        }
+    }
 
     TextEntryDialog {
         id: dirCreationDialog

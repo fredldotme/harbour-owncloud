@@ -2,6 +2,7 @@
 #define INTENTFILESELECTOR_H
 
 #include <QObject>
+#include "intentfileselectorreceiver.h"
 
 class IntentFileSelector : public QObject
 {
@@ -12,7 +13,11 @@ public:
 public slots:
     void fileSelectIntent();
 
+private:
+    IntentFileSelectorReceiver m_resultReceiver;
+
 signals:
+    void fileSelected(const QString& filePath);
 
 };
 

@@ -29,11 +29,6 @@ contains(CONFIG, quickcontrols) {
         ANDROID_EXTRA_LIBS += $$OUT_PWD/../../3rdparty/openssl/libssl.so
 
         QT += androidextras
-        SOURCES += \
-            $$PWD/src/intentfileselector.cpp
-
-        HEADERS += \
-            $$PWD/src/intentfileselector.h
     }
 
     RESOURCES += \
@@ -76,6 +71,24 @@ contains(QT, dbus) {
 
     SOURCES += \
         $$PWD/src/daemonctrl/daemoncontrol.cpp
+}
+
+# Intent-based file selection types
+!contains(QT, androidextras) {
+    SOURCES += \
+        $$PWD/src/os/dummy/dummyintentfileselector.cpp
+
+    HEADERS += \
+        $$PWD/src/os/dummy/dummyintentfileselector.h
+}
+contains(QT, androidextras) {
+    SOURCES += \
+        $$PWD/src/os/android/intentfileselector.cpp \
+        $$PWD/src/os/android/intentfileselectorreceiver.cpp
+
+    HEADERS += \
+        $$PWD/src/os/android/intentfileselector.h \
+        $$PWD/src/os/android/intentfileselectorreceiver.h
 }
 
 # Consider whether to use native notification mechanisms on target OSes or not
@@ -125,7 +138,8 @@ DISTFILES += \
     $$PWD/android/res/values/libs.xml \
     $$PWD/android/build.gradle \
     $$PWD/android/gradle/wrapper/gradle-wrapper.properties \
-    $$PWD/android/gradlew.bat
+    $$PWD/android/gradlew.bat \
+    android/src/me/fredl/ghostcloud/ShareUtil.java
 
 ANDROID_PACKAGE_SOURCE_DIR = \
     $$PWD/android

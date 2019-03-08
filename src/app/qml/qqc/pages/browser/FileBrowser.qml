@@ -46,6 +46,7 @@ Page {
     property var moveEntryDialog : pageFlow.moveEntryDialog
     property var renameDialog : pageFlow.renameDialog
     property var dirCreationDialog : pageFlow.dirCreationDialog
+    property var intentFileSelector : pageFlow.intentFileSelector
 
     // Keep track of directory listing requests
     property var __listCommand : null
@@ -67,7 +68,7 @@ Page {
     }
 
     function fileSelectIntent() {
-
+        intentFileSelector.fileSelectIntent();
     }
 
     function openDetails(davEntryInfo) {
@@ -88,10 +89,6 @@ Page {
         rootWindow.detailsStack.push(fileDetails);
     }
 
-    function newDirectoryDialogOpen() {
-        pageFlow.dirCreationDialog.open()
-    }
-
     signal transientNotification(string summary)
     signal notification(string summary, string body)
 
@@ -105,6 +102,15 @@ Page {
                 transferCommandQueue.fileUploadRequest(fileUrls[i],
                                                        pageRoot.remotePath)
             }
+            transferCommandQueue.run()
+        }
+    }
+
+    Connections {
+        target: intentFileSelector
+        onFileSelected: {
+            transferCommandQueue.fileUploadRequest(filePath,
+                                                   pageRoot.remotePath)
             transferCommandQueue.run()
         }
     }

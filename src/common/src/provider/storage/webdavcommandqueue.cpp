@@ -40,7 +40,7 @@ void WebDavCommandQueue::updateConnectionSettings()
     if (!this->settings())
         return;
 
-    QObject::disconnect(this->settings(), 0, 0, 0);
+    QObject::disconnect(this->settings(), nullptr, nullptr, nullptr);
 
     // Apply new settings to existing QWebdav object
     if (!this->m_client) {
@@ -224,7 +224,7 @@ CommandEntity* WebDavCommandQueue::localLastModifiedRequest(const QString &desti
         struct utimbuf newLocalLastModified;
         int utimesuccess;
 
-        newLocalLastModified.actime = time(NULL);
+        newLocalLastModified.actime = time(nullptr);
         newLocalLastModified.modtime = lastModified.toMSecsSinceEpoch() / 1000; // seconds
 
         utimesuccess = utime(destination.toStdString().c_str(), &newLocalLastModified);
@@ -255,8 +255,10 @@ CommandEntity* WebDavCommandQueue::openFileRequest(const QString &destination)
         if (!fileExists)
             return;
 
-#ifdef QT_GUI_LIB
+#if defined(QT_GUI_LIB) && !defined(Q_OS_ANDROID)
         QDesktopServices::openUrl("file://" + destination);
+#elif defined(QT_GUI_LIB) && defined(Q_OS_ANDROID)
+        QDesktopServices::openUrl("content://" + destination);
 #else
         ShellCommand::runCommand(QStringLiteral("xdg-open"), QStringList() << destination);
 #endif
@@ -272,7 +274,7 @@ CommandEntity* WebDavCommandQueue::remoteLastModifiedRequest(const QString &dest
     QMap<QString, QVariant> propMap;
 
     // Last modified in seconds
-    propMap["lastmodified"] = (QVariant)(lastModified.toMSecsSinceEpoch() / 1000);
+    propMap["lastmodified"] = static_cast<QVariant>(lastModified.toMSecsSinceEpoch() / 1000);
     props["DAV:"] = propMap;
 
     DavPropPatchCommandEntity* propPatchCommand =

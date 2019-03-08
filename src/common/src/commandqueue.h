@@ -77,7 +77,7 @@ private:
     void deleteCommand(CommandEntity* command = Q_NULLPTR);
     void setRunning(bool v);
 
-    bool m_immediate = false;
+    bool m_immediate = true;
     QQueue<CommandEntity*> m_queue;
     bool m_running = false;
     QMutex m_queueMutex;

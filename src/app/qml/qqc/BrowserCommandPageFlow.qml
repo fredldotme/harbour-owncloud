@@ -19,7 +19,7 @@ CommandPageFlow {
     property alias openFileDialog: openFileDialog
     property alias dirCreationDialog: dirCreationDialog
     property alias renameDialog : renameDialog
-
+    property alias intentFileSelector: intentFileSelector
 
     // Pages
     readonly property Component browserComponent :
@@ -100,6 +100,10 @@ CommandPageFlow {
         title: qsTr("Enter new name:")
         height: 220
         anchors.centerIn: parent
+    }
+
+    IntentFileSelector {
+        id: intentFileSelector
     }
 
     FileDetailsHelper { id: fileDetailsHelper }

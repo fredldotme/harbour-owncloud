@@ -80,9 +80,16 @@ Page {
                     id: mediaFeeder
                     mediaPlayer: previewPlayer
                     settings: accountWorkers.account
-                    url: isAudioVideo ?
-                             (FilePathUtil.getWebDavFileUrl(entry.path, accountWorkers.account)) :
-                             ""
+                    url: {
+                        if (!isAudioVideo)
+                            return "";
+
+                        return FilePathUtil.getWebDavFileUrl(entry.path,
+                                                             accountWorkers.account)
+                    }
+                    onUrlChanged: {
+                        console.log("URL: " + url)
+                    }
                 }
                 MediaPlayer {
                     id: previewPlayer

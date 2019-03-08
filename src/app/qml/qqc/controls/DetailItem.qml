@@ -14,5 +14,6 @@ Row {
     Text {
         id: detailValue
         width: parent.width / 2
+        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
     }
 }

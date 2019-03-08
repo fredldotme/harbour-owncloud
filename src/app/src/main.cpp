@@ -41,6 +41,14 @@
 #include "daemonctrl/daemoncontrol.h"
 #endif
 
+// Android intent file browsing capability
+#if defined(Q_OS_ANDROID)
+#include <QtAndroid>
+#include "os/android/intentfileselector.h"
+#else
+#include "os/dummy/dummyintentfileselector.h"
+#endif
+
 #include "directorycontentmodel.h"
 #include "ocsnetaccessfactory.h"
 #include "webdavmediafeeder.h"
@@ -82,6 +90,28 @@ static void createNecessaryDir(const QString& path) {
 }
 }
 
+#ifdef Q_OS_ANDROID
+bool checkAndroidStoragePermissions() {
+    const auto permissionsRequest = QStringList(
+    { QString("android.permission.READ_EXTERNAL_STORAGE"),
+      QString("android.permission.WRITE_EXTERNAL_STORAGE")});
+
+    if (QtAndroid::checkPermission(permissionsRequest[0])
+            == QtAndroid::PermissionResult::Denied
+            || (QtAndroid::checkPermission(permissionsRequest[1]))
+            == QtAndroid::PermissionResult::Denied) {
+        auto permissionResults
+                = QtAndroid::requestPermissionsSync(permissionsRequest);
+        if ((permissionResults[permissionsRequest[0]]
+             == QtAndroid::PermissionResult::Denied)
+                || (permissionResults[permissionsRequest[1]]
+                    == QtAndroid::PermissionResult::Denied))
+            return false;
+    }
+    return true;
+}
+#endif
+
 int main(int argc, char *argv[])
 {
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
@@ -115,6 +145,11 @@ int main(int argc, char *argv[])
     qmlRegisterType<OscNetAccess>("harbour.owncloud", 1, 0, "OscNetAccess");
     qmlRegisterType<DaemonControl>("harbour.owncloud", 1, 0, "DaemonControl");
     qmlRegisterType<AccountWorkerGenerator>("harbour.owncloud", 1, 0, "AccountWorkerGenerator");
+#if defined (Q_OS_ANDROID)
+    qmlRegisterType<IntentFileSelector>("harbour.owncloud", 1, 0, "IntentFileSelector");
+#else
+    qmlRegisterType<DummyIntentFileSelector>("harbour.owncloud", 1, 0, "IntentFileSelector");
+#endif
     qmlRegisterUncreatableType<AccountWorkers>("harbour.owncloud", 1, 0, "AccountWorkers",
                                                "AccountWorkers are provided through the AccountDbWorkers type");
     qmlRegisterSingletonType("harbour.owncloud", 1, 0, "FilePathUtil", filePathUtilProvider);
@@ -148,6 +183,9 @@ int main(int argc, char *argv[])
     }
 
 #ifdef Q_OS_ANDROID
+    // Keep asking for file access permissions
+    while(!checkAndroidStoragePermissions());
+
     const int headerBarSize = 48;
     const bool osIsAndroid = true;
 #else

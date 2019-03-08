@@ -18,35 +18,12 @@ description: |
 apps:
   harbour-owncloud:
     environment:
-      ALSA_CONFIG_PATH: ${SNAP}/usr/share/alsa
       QT_PLUGIN_PATH: ${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/qt5/plugins
       QML2_IMPORT_PATH: ${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/qt5/qml
     command: desktop-launch harbour-owncloud
     plugs: [ x11, wayland, desktop, desktop-legacy, opengl, alsa, pulseaudio, home, removable-media, network ]
 
 parts:
-  alsa-lib:
-    plugin: autotools
-    source: ftp://ftp.alsa-project.org/pub/lib/alsa-lib-1.1.5.tar.bz2
-    configflags:
-      - --prefix=/usr
-      - --sysconfdir=/etc
-      - --libexec=/usr/lib
-      - --libdir=/usr/lib
-      - --localstatedir=/var
-      - --with-configdir=/snap/$SNAPCRAFT_PROJECT_NAME/current/usr/share/alsa
-      - --with-plugindir=/snap/$SNAPCRAFT_PROJECT_NAME/current/usr/lib/alsa-lib
-      - --disable-static
-    stage:
-      - usr/include
-      - usr/lib
-    prime:
-      - -usr/bin
-      - -usr/include
-      - -usr/lib/pkgconfig
-      - -usr/share/alsa/alsa.conf
-      - -usr/share/alsa/pcm
-      - -usr/share/alsa/topology/broadwell
   harbour-owncloud:
     plugin: qmake
     source: .
@@ -106,7 +83,7 @@ parts:
       - libva-x11-2
       - mesa-va-drivers
       - i965-va-driver
-    after: [ desktop-qt5, alsa-lib ]
+    after: [ desktop-qt5 ]
   desktop-qt5:
     build-packages:
       - qtbase5-dev

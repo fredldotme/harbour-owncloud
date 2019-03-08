@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.0
 import QtQuick.Dialogs 1.2
@@ -40,12 +40,8 @@ Page {
     property var userInfoCommandQueue : accountWorkers.accountInfoCommandQueue
 
     property alias fileUploadDialog : openFileDialog
+    property alias dirCreationDialog : dirCreationDialog
     property alias avatarMenu : avatarMenu
-
-    property var copyEntryDialog : pageFlow.copyEntryDialog
-    property var moveEntryDialog : pageFlow.moveEntryDialog
-    property var renameDialog : pageFlow.renameDialog
-    property var dirCreationDialog : pageFlow.dirCreationDialog
 
     // Keep track of directory listing requests
     property var __listCommand : null
@@ -89,11 +85,69 @@ Page {
     }
 
     function newDirectoryDialogOpen() {
-        pageFlow.dirCreationDialog.open()
+        dirCreationDialog.open()
     }
 
     signal transientNotification(string summary)
     signal notification(string summary, string body)
+
+
+    Dialog {
+        id: fileExistsDialog
+        standardButtons: Dialog.Ok | Dialog.Cancel
+
+        property string fileName : ""
+        property string path : ""
+        property string mimeType : ""
+        property bool openFile : false
+        property var lastModified : null
+        property var transferCommandQueue : null
+
+        Text {
+            text: qsTr("Would you like to remove the " +
+                       "existing file '%1' before " +
+                       "starting the download?").arg(fileExistsDialog.fileName)
+        }
+
+        onAccepted: {
+            console.debug("Yes")
+            FilePathUtil.removeFile(path)
+            transferCommandQueue.fileDownloadRequest(path, mimeType, openFile, lastModified)
+            transferCommandQueue.run()
+        }
+        onDiscard: {
+            console.debug("Discard")
+        }
+    }
+
+    TextEntryDialog {
+        id: dirCreationDialog
+        parent: pageFlow
+        title: qsTr("Enter directory name:")
+        height: 220
+        anchors.centerIn: parent
+        onAccepted: {
+            browserCommandQueue.makeDirectoryRequest(
+                        pageRoot.remotePath + dirCreationDialog.text)
+            refreshListView(true)
+            dirCreationDialog.text = ""
+        }
+    }
+
+    TextEntryDialog {
+        id: renameDialog
+        parent: pageFlow
+        title: qsTr("Enter new name:")
+        height: 220
+        anchors.centerIn: parent
+        onAccepted: {
+            browserCommandQueue.moveRequest(
+                        rightClickMenu.selectedDavInfo.path,
+                        pageRoot.remotePath + renameDialog.text)
+            refreshListView(true)
+            renameDialog.text = ""
+        }
+    }
 
     FileDialog {
         id: openFileDialog
@@ -109,45 +163,36 @@ Page {
         }
     }
 
-    Connections {
-        target: dirCreationDialog
-        onAccepted: {
-            browserCommandQueue.makeDirectoryRequest(
-                        pageRoot.remotePath + dirCreationDialog.text)
-            refreshListView(true)
-            dirCreationDialog.text = ""
-        }
-    }
-
-    Connections {
-        target: renameDialog
-        onAccepted: {
-            browserCommandQueue.moveRequest(
-                        rightClickMenu.selectedDavInfo.path,
-                        pageRoot.remotePath + renameDialog.text)
-            refreshListView(true)
-            renameDialog.text = ""
-        }
-    }
-
-    Connections {
-        target: moveEntryDialog
-
+    RemoteDirSelectDialog {
+        id: copyEntryDialog
+        parent: pageFlow
+        browserCommandQueue: accountWorkers.browserCommandQueue
+        directoryContents: pageFlowItemRoot.directoryContents
+        height: 400
+        anchors.centerIn: parent
         onAccepted: {
             console.debug("accepted")
-            browserCommandQueue.moveRequest(rightClickMenu.selectedDavInfo.path,
-                                            moveEntryDialog.remotePath + rightClickMenu.selectedDavInfo.name)
-            refreshListView(true)
-        }
-    }
-
-    Connections {
-        target: copyEntryDialog
-
-        onAccepted: {
-            console.debug("accepted")
+            console.debug("copy " + rightClickMenu.selectedDavInfo.path + " to " +
+                          moveEntryDialog.remotePath + rightClickMenu.selectedDavInfo.name)
             browserCommandQueue.copyRequest(rightClickMenu.selectedDavInfo.path,
                                             copyEntryDialog.remotePath + rightClickMenu.selectedDavInfo.name)
+            refreshListView(true)
+        }
+    }
+
+    RemoteDirSelectDialog {
+        id: moveEntryDialog
+        parent: pageFlow
+        browserCommandQueue: accountWorkers.browserCommandQueue
+        directoryContents: pageFlowItemRoot.directoryContents
+        height: 400
+        anchors.centerIn: parent
+        onAccepted: {
+            console.debug("accepted")
+            console.debug("moving " + rightClickMenu.selectedDavInfo.path + " to " +
+                          moveEntryDialog.remotePath + rightClickMenu.selectedDavInfo.name)
+            browserCommandQueue.moveRequest(rightClickMenu.selectedDavInfo.path,
+                                            moveEntryDialog.remotePath + rightClickMenu.selectedDavInfo.name)
             refreshListView(true)
         }
     }
@@ -398,6 +443,7 @@ Page {
             property var davInfo : listView.model[index]
 
             function entryContextMenu(newParent, mouseX, mouseY) {
+                console.debug("entryContextMenu")
                 rightClickMenu.selectedDavInfo = davInfo
                 rightClickMenu.parent = newParent
                 rightClickMenu.x = mouseX
@@ -419,26 +465,25 @@ Page {
                 }
             }
 
-            Column {
+            GCButton {
+                id: icon
+                source: davInfo.isDirectory
+                        ? "qrc:/icons/theme/places/64/folder.svg"
+                        : fileDetailsHelper.getIconFromMime(davInfo.mimeType)
+                text: davInfo.name
+                detailText: fileDetailsHelper.getHRSize(davInfo.size)
+                            + (!davInfo.isDirectory ?
+                                   (", " +
+                                    Qt.formatDateTime(davInfo.lastModified, Qt.SystemLocaleShortDate)) : "")
                 enabled: parent.enabled
                 width: listView.width
                 height: 48
-                GCButton {
-                    id: icon
-                    source: davInfo.isDirectory
-                               ? "qrc:/icons/theme/places/64/folder.svg"
-                               : fileDetailsHelper.getIconFromMime(davInfo.mimeType)
-                    text: davInfo.name
-                    detailText: fileDetailsHelper.getHRSize(davInfo.size)
-                                + (!davInfo.isDirectory ?
-                                       (", " +
-                                        Qt.formatDateTime(davInfo.lastModified, Qt.SystemLocaleShortDate)) : "")
-                    height: parent.height
-                    font.pixelSize: fontSizeSmall
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: entryClickHandler(mouse)
-                    }
+                font.pixelSize: fontSizeSmall
+                forcePressed: clickArea.pressed
+                MouseArea {
+                    id: clickArea
+                    anchors.fill: parent
+                    onClicked: entryClickHandler(mouse)
                 }
             }
         }

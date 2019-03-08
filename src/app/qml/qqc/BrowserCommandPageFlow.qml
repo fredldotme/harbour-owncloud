@@ -13,14 +13,6 @@ CommandPageFlow {
     property var detailsStack : null
     property alias userInfo : userInfo
 
-    property alias copyEntryDialog : copyEntryDialog
-    property alias moveEntryDialog : moveEntryDialog
-    property alias fileExistsDialog : fileExistsDialog
-    property alias openFileDialog: openFileDialog
-    property alias dirCreationDialog: dirCreationDialog
-    property alias renameDialog : renameDialog
-
-
     // Pages
     readonly property Component browserComponent :
         Qt.createComponent("qrc:/qml/qqc/pages/browser/FileBrowser.qml",
@@ -28,79 +20,6 @@ CommandPageFlow {
     readonly property Component fileDetailsComponent :
         Qt.createComponent("qrc:/qml/qqc/pages/browser/FileDetails.qml",
                            Component.PreferSynchronous);
-
-    RemoteDirSelectDialog {
-        id: copyEntryDialog
-        browserCommandQueue: accountWorkers.browserCommandQueue
-        directoryContents: pageFlowItemRoot.directoryContents
-        height: 400
-        anchors.centerIn: parent
-    }
-
-    RemoteDirSelectDialog {
-        id: moveEntryDialog
-        browserCommandQueue: accountWorkers.browserCommandQueue
-        directoryContents: pageFlowItemRoot.directoryContents
-        height: 400
-        anchors.centerIn: parent
-    }
-
-    Dialog {
-        id: fileExistsDialog
-        standardButtons: Dialog.Ok | Dialog.Cancel
-
-        property string fileName : ""
-        property string path : ""
-        property string mimeType : ""
-        property bool openFile : false
-        property var lastModified : null
-        property var transferCommandQueue : null
-
-        Text {
-            text: qsTr("Would you like to remove the " +
-                       "existing file '%1' before " +
-                       "starting the download?").arg(fileExistsDialog.fileName)
-        }
-
-        onAccepted: {
-            console.debug("Yes")
-            FilePathUtil.removeFile(path)
-            transferCommandQueue.fileDownloadRequest(path, mimeType, openFile, lastModified)
-            transferCommandQueue.run()
-        }
-        onDiscard: {
-            console.debug("Discard")
-        }
-    }
-
-
-    FileDialog {
-        id: openFileDialog
-        selectMultiple: true
-
-        onAccepted: {
-            for (var i = 0; i < fileUrls.length; i++) {
-                console.log("Enqueueing upload " + fileUrls[i] + " to " + pageRoot.remotePath)
-                transferCommandQueue.fileUploadRequest(fileUrls[i],
-                                                       pageRoot.remotePath)
-            }
-            transferCommandQueue.run()
-        }
-    }
-
-    TextEntryDialog {
-        id: dirCreationDialog
-        title: qsTr("Enter directory name:")
-        height: 220
-        anchors.centerIn: parent
-    }
-
-    TextEntryDialog {
-        id: renameDialog
-        title: qsTr("Enter new name:")
-        height: 220
-        anchors.centerIn: parent
-    }
 
     FileDetailsHelper { id: fileDetailsHelper }
 

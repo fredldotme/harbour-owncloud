@@ -199,7 +199,11 @@ Page {
     Label {
         visible: noTransfersHint
         text: qsTr("No pending file transfers")
-        font.pixelSize: fontSizeMedium
-        anchors.centerIn: parent
+        font.pixelSize: fontSizeLarge
+        width: parent.width
+        height: parent.height
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
     }
 }

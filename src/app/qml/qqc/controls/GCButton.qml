@@ -11,6 +11,7 @@ AbstractButton {
     property alias detailTextFont : detailLabel.font
     property alias source : img.source
     property alias sourceSize : img.sourceSize
+    property bool forcePressed : false
 
     signal clicked()
 
@@ -20,7 +21,7 @@ AbstractButton {
     Rectangle {
         color: "lightgray"
         anchors.fill: parent
-        visible: mouseArea.pressed
+        visible: mouseArea.pressed || forcePressed
         enabled: buttonRoot.enabled
     }
 

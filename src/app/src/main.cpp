@@ -115,7 +115,6 @@ bool checkAndroidStoragePermissions() {
 int main(int argc, char *argv[])
 {
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    QIcon::setThemeName("theme");
 
 #ifndef GHOSTCLOUD_UI_QUICKCONTROLS
     SailfishUiSet::registerQmlTypes();
@@ -154,11 +153,11 @@ int main(int argc, char *argv[])
                                                "AccountWorkers are provided through the AccountDbWorkers type");
     qmlRegisterSingletonType("harbour.owncloud", 1, 0, "FilePathUtil", filePathUtilProvider);
 
-
     QGuiApplication* app = SailfishApp::application(argc, argv);
     app->setOrganizationName(QHOSTCLOUD_APP_NAME);
     app->setOrganizationDomain(QHOSTCLOUD_APP_NAME);
     app->setApplicationName(QHOSTCLOUD_APP_NAME);
+    QIcon::setThemeName("theme");
 
     {
         createNecessaryDir(QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation));
@@ -182,12 +181,17 @@ int main(int argc, char *argv[])
         }
     }
 
-#ifdef Q_OS_ANDROID
+
+#if defined(Q_OS_ANDROID)
+    const int headerBarSize = 48;
+    const bool osIsAndroid = true;
+    
     // Keep asking for file access permissions
     while(!checkAndroidStoragePermissions());
 
+#elif defined(Q_OS_IOS)
     const int headerBarSize = 48;
-    const bool osIsAndroid = true;
+    const bool osIsAndroid = false;
 #else
     const int headerBarSize = 38;
     const bool osIsAndroid = false;

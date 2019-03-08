@@ -13,14 +13,6 @@ CommandPageFlow {
     property var detailsStack : null
     property alias userInfo : userInfo
 
-    property alias copyEntryDialog : copyEntryDialog
-    property alias moveEntryDialog : moveEntryDialog
-    property alias fileExistsDialog : fileExistsDialog
-    property alias openFileDialog: openFileDialog
-    property alias dirCreationDialog: dirCreationDialog
-    property alias renameDialog : renameDialog
-    property alias intentFileSelector: intentFileSelector
-
     // Pages
     readonly property Component browserComponent :
         Qt.createComponent("qrc:/qml/qqc/pages/browser/FileBrowser.qml",
@@ -29,20 +21,34 @@ CommandPageFlow {
         Qt.createComponent("qrc:/qml/qqc/pages/browser/FileDetails.qml",
                            Component.PreferSynchronous);
 
-    RemoteDirSelectDialog {
-        id: copyEntryDialog
-        browserCommandQueue: accountWorkers.browserCommandQueue
-        directoryContents: pageFlowItemRoot.directoryContents
-        height: 400
-        anchors.centerIn: parent
+    FileDetailsHelper { id: fileDetailsHelper }
+
+    Connections {
+        target: accountWorkers.accountInfoCommandQueue
+        onCommandFinished: {
+            console.debug("finished, " + receipt.result.enabled)
+
+            if (!receipt.result.enabled) {
+                console.log("Not enabled")
+                return
+            }
+
+            userInfo.enabled = receipt.result.enabled
+            userInfo.displayName = receipt.result.displayName
+            userInfo.email = receipt.result.email
+            userInfo.freeBytes = fileDetailsHelper.getHRSize(receipt.result.freeBytes)
+            userInfo.usedBytes = fileDetailsHelper.getHRSize(receipt.result.usedBytes)
+            userInfo.totalBytes = fileDetailsHelper.getHRSize(receipt.result.totalBytes)
+        }
     }
 
-    RemoteDirSelectDialog {
-        id: moveEntryDialog
-        browserCommandQueue: accountWorkers.browserCommandQueue
-        directoryContents: pageFlowItemRoot.directoryContents
-        height: 400
-        anchors.centerIn: parent
+    Item {
+        id: userInfo
+        property string displayName : ""
+        property string email : ""
+        property string freeBytes : ""
+        property string usedBytes : ""
+        property string totalBytes : ""
     }
 
     Dialog {
@@ -73,41 +79,6 @@ CommandPageFlow {
         }
     }
 
-
-    FileDialog {
-        id: openFileDialog
-        selectMultiple: true
-
-        onAccepted: {
-            for (var i = 0; i < fileUrls.length; i++) {
-                console.log("Enqueueing upload " + fileUrls[i] + " to " + pageRoot.remotePath)
-                transferCommandQueue.fileUploadRequest(fileUrls[i],
-                                                       pageRoot.remotePath)
-            }
-            transferCommandQueue.run()
-        }
-    }
-
-    TextEntryDialog {
-        id: dirCreationDialog
-        title: qsTr("Enter directory name:")
-        height: 220
-        anchors.centerIn: parent
-    }
-
-    TextEntryDialog {
-        id: renameDialog
-        title: qsTr("Enter new name:")
-        height: 220
-        anchors.centerIn: parent
-    }
-
-    IntentFileSelector {
-        id: intentFileSelector
-    }
-
-    FileDetailsHelper { id: fileDetailsHelper }
-
     Connections {
         target: accountWorkers.accountInfoCommandQueue
         onCommandFinished: {
@@ -125,15 +96,6 @@ CommandPageFlow {
             userInfo.usedBytes = fileDetailsHelper.getHRSize(receipt.result.usedBytes)
             userInfo.totalBytes = fileDetailsHelper.getHRSize(receipt.result.totalBytes)
         }
-    }
-
-    Item {
-        id: userInfo
-        property string displayName : ""
-        property string email : ""
-        property string freeBytes : ""
-        property string usedBytes : ""
-        property string totalBytes : ""
     }
 
     function startDownload(path, mimeType, open, overwriteExistingFile, lastModified, transferCommandQueue) {

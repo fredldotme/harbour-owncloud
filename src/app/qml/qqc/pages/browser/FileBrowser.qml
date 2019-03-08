@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.0
 import QtQuick.Dialogs 1.2
@@ -40,13 +40,8 @@ Page {
     property var userInfoCommandQueue : accountWorkers.accountInfoCommandQueue
 
     property alias fileUploadDialog : openFileDialog
+    property alias dirCreationDialog : dirCreationDialog
     property alias avatarMenu : avatarMenu
-
-    property var copyEntryDialog : pageFlow.copyEntryDialog
-    property var moveEntryDialog : pageFlow.moveEntryDialog
-    property var renameDialog : pageFlow.renameDialog
-    property var dirCreationDialog : pageFlow.dirCreationDialog
-    property var intentFileSelector : pageFlow.intentFileSelector
 
     // Keep track of directory listing requests
     property var __listCommand : null
@@ -89,8 +84,41 @@ Page {
         rootWindow.detailsStack.push(fileDetails);
     }
 
+    function newDirectoryDialogOpen() {
+        dirCreationDialog.open()
+    }
+
     signal transientNotification(string summary)
     signal notification(string summary, string body)
+
+    TextEntryDialog {
+        id: dirCreationDialog
+        parent: pageFlow
+        title: qsTr("Enter directory name:")
+        height: 220
+        anchors.centerIn: parent
+        onAccepted: {
+            browserCommandQueue.makeDirectoryRequest(
+                        pageRoot.remotePath + dirCreationDialog.text)
+            refreshListView(true)
+            dirCreationDialog.text = ""
+        }
+    }
+
+    TextEntryDialog {
+        id: renameDialog
+        parent: pageFlow
+        title: qsTr("Enter new name:")
+        height: 220
+        anchors.centerIn: parent
+        onAccepted: {
+            browserCommandQueue.moveRequest(
+                        rightClickMenu.selectedDavInfo.path,
+                        pageRoot.remotePath + renameDialog.text)
+            refreshListView(true)
+            renameDialog.text = ""
+        }
+    }
 
     FileDialog {
         id: openFileDialog
@@ -106,54 +134,36 @@ Page {
         }
     }
 
-    Connections {
-        target: intentFileSelector
-        onFileSelected: {
-            transferCommandQueue.fileUploadRequest(filePath,
-                                                   pageRoot.remotePath)
-            transferCommandQueue.run()
-        }
-    }
-
-    Connections {
-        target: dirCreationDialog
-        onAccepted: {
-            browserCommandQueue.makeDirectoryRequest(
-                        pageRoot.remotePath + dirCreationDialog.text)
-            refreshListView(true)
-            dirCreationDialog.text = ""
-        }
-    }
-
-    Connections {
-        target: renameDialog
-        onAccepted: {
-            browserCommandQueue.moveRequest(
-                        rightClickMenu.selectedDavInfo.path,
-                        pageRoot.remotePath + renameDialog.text)
-            refreshListView(true)
-            renameDialog.text = ""
-        }
-    }
-
-    Connections {
-        target: moveEntryDialog
-
+    RemoteDirSelectDialog {
+        id: copyEntryDialog
+        parent: pageFlow
+        browserCommandQueue: accountWorkers.browserCommandQueue
+        directoryContents: pageFlowItemRoot.directoryContents
+        height: 400
+        anchors.centerIn: parent
         onAccepted: {
             console.debug("accepted")
-            browserCommandQueue.moveRequest(rightClickMenu.selectedDavInfo.path,
-                                            moveEntryDialog.remotePath + rightClickMenu.selectedDavInfo.name)
-            refreshListView(true)
-        }
-    }
-
-    Connections {
-        target: copyEntryDialog
-
-        onAccepted: {
-            console.debug("accepted")
+            console.debug("copy " + rightClickMenu.selectedDavInfo.path + " to " +
+                          moveEntryDialog.remotePath + rightClickMenu.selectedDavInfo.name)
             browserCommandQueue.copyRequest(rightClickMenu.selectedDavInfo.path,
                                             copyEntryDialog.remotePath + rightClickMenu.selectedDavInfo.name)
+            refreshListView(true)
+        }
+    }
+
+    RemoteDirSelectDialog {
+        id: moveEntryDialog
+        parent: pageFlow
+        browserCommandQueue: accountWorkers.browserCommandQueue
+        directoryContents: pageFlowItemRoot.directoryContents
+        height: 400
+        anchors.centerIn: parent
+        onAccepted: {
+            console.debug("accepted")
+            console.debug("moving " + rightClickMenu.selectedDavInfo.path + " to " +
+                          moveEntryDialog.remotePath + rightClickMenu.selectedDavInfo.name)
+            browserCommandQueue.moveRequest(rightClickMenu.selectedDavInfo.path,
+                                            moveEntryDialog.remotePath + rightClickMenu.selectedDavInfo.name)
             refreshListView(true)
         }
     }
@@ -387,23 +397,15 @@ Page {
             }
         }
 
-        delegate: MouseArea {
+        delegate: Item {
             id: delegate
             width: listView.width
             height: childrenRect.height
             enabled: (__listCommand === null)
-            acceptedButtons: Qt.LeftButton | Qt.RightButton
-
-            onPressAndHold: {
-                entryContextMenu(delegate, mouseX, mouseY)
-            }
-            onClicked: {
-                entryClickHandler(mouse)
-            }
-
             property var davInfo : listView.model[index]
 
             function entryContextMenu(newParent, mouseX, mouseY) {
+                console.debug("entryContextMenu")
                 rightClickMenu.selectedDavInfo = davInfo
                 rightClickMenu.parent = newParent
                 rightClickMenu.x = mouseX
@@ -411,7 +413,7 @@ Page {
                 rightClickMenu.open()
             }
 
-            function entryClickHandler(mouse) {
+            function entryClickHandler(mouse, mouseX, mouseY) {
                 if (mouse.button === Qt.RightButton) {
                     entryContextMenu(delegate, mouseX, mouseY)
                     return;
@@ -425,25 +427,31 @@ Page {
                 }
             }
 
-            Column {
+            GCButton {
+                id: icon
+                source: davInfo.isDirectory
+                        ? "qrc:/icons/theme/places/64/folder.svg"
+                        : fileDetailsHelper.getIconFromMime(davInfo.mimeType)
+                text: davInfo.name
+                detailText: fileDetailsHelper.getHRSize(davInfo.size)
+                            + (!davInfo.isDirectory ?
+                                   (", " +
+                                    Qt.formatDateTime(davInfo.lastModified, Qt.SystemLocaleShortDate)) : "")
                 enabled: parent.enabled
                 width: listView.width
                 height: 48
-                GCButton {
-                    id: icon
-                    source: davInfo.isDirectory
-                               ? "qrc:/icons/theme/places/64/folder.svg"
-                               : fileDetailsHelper.getIconFromMime(davInfo.mimeType)
-                    text: davInfo.name
-                    detailText: fileDetailsHelper.getHRSize(davInfo.size)
-                                + (!davInfo.isDirectory ?
-                                       (", " +
-                                        Qt.formatDateTime(davInfo.lastModified, Qt.SystemLocaleShortDate)) : "")
-                    height: parent.height
-                    font.pixelSize: fontSizeSmall
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: entryClickHandler(mouse)
+                font.pixelSize: fontSizeSmall
+                forcePressed: clickArea.pressed
+                MouseArea {
+                    id: clickArea
+                    anchors.fill: parent
+                    acceptedButtons: Qt.LeftButton | Qt.RightButton
+
+                    onPressAndHold: {
+                        entryContextMenu(delegate, mouseX, mouseY)
+                    }
+                    onClicked: {
+                        entryClickHandler(mouse, mouseX, mouseY)
                     }
                 }
             }

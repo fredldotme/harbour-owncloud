@@ -9,3 +9,4 @@ prime/
 *.tar.gz
 *.tar.gz.*
 openssl-*.*.*
+.DS_Store

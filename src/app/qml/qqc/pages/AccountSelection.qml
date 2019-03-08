@@ -60,6 +60,7 @@ Item {
         ScrollBar.vertical: ScrollBar {}
 
         delegate: MouseArea {
+            id: accountMouseArea
             width: childrenRect.width
             height: childrenRect.height
             enabled: (__listCommand == null)
@@ -87,6 +88,16 @@ Item {
                 console.debug("onClicked: __listCommand " + __listCommand)
             }
 
+            Rectangle {
+                anchors.fill: mainColumn
+                color: {
+                    if (accountMouseArea.pressed)
+                        return "lightgray"
+                    else
+                        return "transparent"
+                }
+            }
+
             Column {
                 id: mainColumn
                 Label {
@@ -107,7 +118,6 @@ Item {
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                     width: accountsList.width
                 }
-                MenuSeparator { width: accountsList.width }
             }
         }
     }

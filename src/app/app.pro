@@ -22,6 +22,10 @@ contains(CONFIG, quickcontrols) {
         INSTALLS += desktop target
     }
 
+    ios {
+        QMAKE_INFO_PLIST = $$PWD/ios/Info.plist
+    }
+
     # OpenSSL for Android
     android {
         LIBS += -L $$OUT_PWD/../../3rdparty/openssl -lcrypto -lssl

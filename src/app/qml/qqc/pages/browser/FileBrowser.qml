@@ -62,7 +62,7 @@ Page {
         __listCommand = browserCommandQueue.directoryListingRequest(newPath, false)
     }
 
-    function fileSelectIntent() {
+    function openNativeFileSelector() {
         nativeFileSelector.fileSelectIntent();
     }
 

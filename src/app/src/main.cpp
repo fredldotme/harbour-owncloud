@@ -183,18 +183,20 @@ int main(int argc, char *argv[])
 
 
 #if defined(Q_OS_ANDROID)
-    const int headerBarSize = 48;
-    const bool osIsAndroid = true;
-    
     // Keep asking for file access permissions
     while(!checkAndroidStoragePermissions());
 
+    const int headerBarSize = 48;
+    const bool osIsAndroid = true;
+    const bool osIsIOS = false;
 #elif defined(Q_OS_IOS)
     const int headerBarSize = 48;
     const bool osIsAndroid = false;
+    const bool osIsIOS = true;
 #else
     const int headerBarSize = 38;
     const bool osIsAndroid = false;
+    const bool osIsIOS = false;
 #endif
 
 #ifndef GHOSTCLOUD_UI_QUICKCONTROLS
@@ -207,6 +209,7 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine* newEngine = new QQmlApplicationEngine(app);
     newEngine->rootContext()->setContextProperty("headerBarSize", headerBarSize);
     newEngine->rootContext()->setContextProperty("osIsAndroid", osIsAndroid);
+    newEngine->rootContext()->setContextProperty("osIsIOS", osIsIOS);
     newEngine->load(QUrl("qrc:/qml/qqc/main.qml"));
 #endif
 

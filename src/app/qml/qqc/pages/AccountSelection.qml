@@ -111,7 +111,7 @@ Item {
                     id: providerLabel
                     text: providerTypeNames[delegateAccountWorkers.account.providerType]
                     font.bold: true
-                    font.pixelSize: fontSizeŚmall
+                    font.pixelSize: fontSizeSmall
                     enabled: __listCommand == null
                 }
 
@@ -120,7 +120,7 @@ Item {
                     text: delegateAccountWorkers.account.username
                           + " on "
                           + delegateAccountWorkers.account.hoststring
-                    font.pixelSize: fontSizeŚmall
+                    font.pixelSize: fontSizeSmall
                     enabled: __listCommand == null
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                     width: accountsList.width

@@ -182,10 +182,10 @@ ApplicationWindow {
                 height: parent.height
                 width: height
                 onClicked: {
-                    if (!osIsAndroid) {
-                        rootStack.currentItem.fileUploadDialog.open()
+                    if (osIsAndroid || osIsIOS) {
+                        rootStack.currentItem.openNativeFileSelector()
                     } else {
-                        rootStack.currentItem.fileSelectIntent()
+                        rootStack.currentItem.fileUploadDialog.open()
                     }
                 }
             }

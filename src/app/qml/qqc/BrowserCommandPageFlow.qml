@@ -79,25 +79,6 @@ CommandPageFlow {
         }
     }
 
-    Connections {
-        target: accountWorkers.accountInfoCommandQueue
-        onCommandFinished: {
-            console.debug("finished, " + receipt.result.enabled)
-
-            if (!receipt.result.enabled) {
-                console.log("Not enabled")
-                return
-            }
-
-            userInfo.enabled = receipt.result.enabled
-            userInfo.displayName = receipt.result.displayName
-            userInfo.email = receipt.result.email
-            userInfo.freeBytes = fileDetailsHelper.getHRSize(receipt.result.freeBytes)
-            userInfo.usedBytes = fileDetailsHelper.getHRSize(receipt.result.usedBytes)
-            userInfo.totalBytes = fileDetailsHelper.getHRSize(receipt.result.totalBytes)
-        }
-    }
-
     function startDownload(path, mimeType, open, overwriteExistingFile, lastModified, transferCommandQueue) {
         var destinationDir = FilePathUtil.destinationFromMIME(mimeType)
         var fileName = path.substring(path.lastIndexOf("/") + 1)
@@ -122,7 +103,6 @@ CommandPageFlow {
 
     Connections {
         target: pageFlowItemRoot.accountWorkers.browserCommandQueue
-
         onCommandFinished: {
             console.log("onCommandFinished")
 

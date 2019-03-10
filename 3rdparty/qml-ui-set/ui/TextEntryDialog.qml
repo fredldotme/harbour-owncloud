@@ -4,7 +4,6 @@ import QtQuick.Controls 2.2
 Dialog {
     id: textEntryDialog
     standardButtons: Dialog.Ok | Dialog.Cancel
-    height: 100
 
     property alias text : textEntryField.text
 
@@ -14,11 +13,14 @@ Dialog {
         id: textEntryField
         width: parent.width
         text: ""
-        focus: true
+        Keys.onReturnPressed: {
+            accept()
+        }
     }
 
     onVisibleChanged: {
+        console.log("TextEntryDialog visible " + visible)
         if (visible)
-            textEntryField.focus = true
+            textEntryField.forceActiveFocus()
     }
 }

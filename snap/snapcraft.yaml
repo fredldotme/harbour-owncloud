@@ -82,7 +82,6 @@ parts:
       - libva2
       - libva-x11-2
       - mesa-va-drivers
-      - i965-va-driver
     after: [ desktop-qt5 ]
   desktop-qt5:
     build-packages:

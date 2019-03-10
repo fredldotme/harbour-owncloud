@@ -79,9 +79,12 @@ parts:
       - gstreamer1.0-plugins-good
       - gstreamer1.0-plugins-bad
       - gstreamer1.0-plugins-ugly
+      - gstreamer1.0-libav
       - libva2
       - libva-x11-2
       - mesa-va-drivers
+      - libslang2
+      - libslang2-modules
     after: [ desktop-qt5 ]
   desktop-qt5:
     build-packages:

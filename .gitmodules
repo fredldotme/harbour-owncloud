@@ -13,3 +13,6 @@
 [submodule "src/app/icons/breeze-icons"]
 	path = src/app/icons/breeze-icons
 	url = https://github.com/KDE/breeze-icons
+[submodule "3rdparty/qml-ui-set"]
+	path = 3rdparty/qml-ui-set
+	url = https://github.com/fredldotme/qml-ui-set

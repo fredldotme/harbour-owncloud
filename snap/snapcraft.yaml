@@ -20,7 +20,7 @@ apps:
     environment:
       QT_PLUGIN_PATH: ${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/qt5/plugins
       QML2_IMPORT_PATH: ${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/qt5/qml
-    command: desktop-launch harbour-owncloud
+    command: desktop-launch harbour-owncloud -platform xcb
     plugs: [ x11, wayland, desktop, desktop-legacy, opengl, alsa, pulseaudio, home, removable-media, network ]
 
 parts:

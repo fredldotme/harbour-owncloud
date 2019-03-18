@@ -1,5 +1,5 @@
 import QtQuick 2.0
-import QtQuick.Controls 2.4
+import QtQuick.Controls 2.2
 import harbour.owncloud 1.0
 import "qrc:/qml/qqc/controls"
 
@@ -50,37 +50,41 @@ Dialog {
         }
     }
 
-    ListView {
-        id: listView
+    Item {
         anchors.fill: parent
-        enabled: !isLoadingDirectory
-        ScrollBar.vertical: ScrollBar {}
 
-        delegate: GCButton {
-            id: icon
-            visible: davInfo.isDirectory
-            source: "qrc:/icons/theme/places/64/folder.svg"
-            text: davInfo.name
-            width: listView.width
-            height: 32
+        ListView {
+            id: listView
+            anchors.fill: parent
+            enabled: !isLoadingDirectory
+            ScrollBar.vertical: ScrollBar {}
 
-            property var davInfo : listView.model[index]
+            delegate: GCButton {
+                id: icon
+                visible: davInfo.isDirectory
+                source: "qrc:/icons/theme/places/64/folder.svg"
+                text: davInfo.name
+                width: listView.width
+                height: 32
 
-            onClicked: {
-                if(!davInfo.isDirectory)
-                    return;
+                property var davInfo : listView.model[index]
 
-                var newTargetDir = FilePathUtil.getCanonicalPath(remotePath + "/" +
-                                                                 davInfo.name + "/")
-                console.log(newTargetDir)
-                isLoadingDirectory = true;
-                getDirectoryContent(newTargetDir)
+                onClicked: {
+                    if(!davInfo.isDirectory)
+                        return;
+
+                    var newTargetDir = FilePathUtil.getCanonicalPath(remotePath + "/" +
+                                                                     davInfo.name + "/")
+                    console.log(newTargetDir)
+                    isLoadingDirectory = true;
+                    getDirectoryContent(newTargetDir)
+                }
             }
-        }
 
-        BusyIndicator {
-            anchors.centerIn: parent
-            running: isLoadingDirectory
+            BusyIndicator {
+                anchors.centerIn: parent
+                running: isLoadingDirectory
+            }
         }
     }
 }

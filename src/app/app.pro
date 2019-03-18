@@ -9,7 +9,8 @@ TARGET = harbour-owncloud
 }
 contains(CONFIG, quickcontrols) {
     TEMPLATE = app
-    
+    QT += quickcontrols2
+
     QMAKE_RPATHDIR += $$OUT_PWD/../../3rdparty/qwebdav
     QMAKE_RPATHDIR += $$OUT_PWD/../common
     DEFINES += GHOSTCLOUD_UI_QUICKCONTROLS

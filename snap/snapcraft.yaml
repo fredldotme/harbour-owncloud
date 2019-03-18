@@ -20,7 +20,7 @@ apps:
     environment:
       QT_PLUGIN_PATH: ${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/qt5/plugins
       QML2_IMPORT_PATH: ${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/qt5/qml
-    command: desktop-launch harbour-owncloud
+    command: desktop-launch harbour-owncloud -platform xcb
     plugs: [ x11, wayland, desktop, desktop-legacy, opengl, alsa, pulseaudio, home, removable-media, network ]
 
 parts:
@@ -44,6 +44,7 @@ parts:
       - qtmultimedia5-dev
       - libqt5webkit5-dev
       - qtbase5-dev
+      - qtquickcontrols2-5-dev
       - qml-module-qtquick2
       - qml-module-qtgraphicaleffects
       - qml-module-qtquick-window2
@@ -64,6 +65,7 @@ parts:
       - libqt5webkit5
       - libqt5xml5
       - libqt5xmlpatterns5
+      - libqt5quickcontrols2-5
       - qml-module-qtquick2
       - qml-module-qtgraphicaleffects
       - qml-module-qtquick-window2
@@ -79,10 +81,12 @@ parts:
       - gstreamer1.0-plugins-good
       - gstreamer1.0-plugins-bad
       - gstreamer1.0-plugins-ugly
+      - gstreamer1.0-libav
       - libva2
       - libva-x11-2
       - mesa-va-drivers
-      - i965-va-driver
+      - libslang2
+      - libslang2-modules
     after: [ desktop-qt5 ]
   desktop-qt5:
     build-packages:

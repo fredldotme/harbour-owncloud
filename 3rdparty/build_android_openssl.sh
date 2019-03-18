@@ -1,5 +1,17 @@
 #!/bin/bash
 
+if [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
+    echo "Usage: $0 <openssl-version> <android-target-arch>"
+    echo ""
+    echo "Make sure to have the ANDROID_NDK_HOME environment variable pointing"
+    echo "to your Android NDK installation."
+    echo ""
+    echo "Examples:"
+    echo "For arm: $0 1.0.2q arm"
+    echo "For arm64: $0 1.0.2q arm64"
+    exit 0
+fi
+
 if [ "$1" == "" ]; then
     echo "OpenSSL version not specified. Bailing..."
     exit 1

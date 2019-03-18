@@ -102,10 +102,11 @@ Page {
 
     TextEntryDialog {
         id: dirCreationDialog
-        parent: pageFlow
+        parent: splitView
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
         title: qsTr("Enter directory name:")
         height: 220
-        anchors.centerIn: parent
         onAccepted: {
             browserCommandQueue.makeDirectoryRequest(
                         pageRoot.remotePath + dirCreationDialog.text)
@@ -119,7 +120,8 @@ Page {
         parent: pageFlow
         title: qsTr("Enter new name:")
         height: 220
-        anchors.centerIn: parent
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
         onAccepted: {
             browserCommandQueue.moveRequest(
                         rightClickMenu.selectedDavInfo.path,
@@ -151,8 +153,10 @@ Page {
         parent: pageFlow
         browserCommandQueue: accountWorkers.browserCommandQueue
         directoryContents: pageFlowItemRoot.directoryContents
-        height: 400
-        anchors.centerIn: parent
+        height: Math.max(parent.height, 300)
+        width: Math.max(parent.width, 300)
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
         onAccepted: {
             console.debug("accepted")
             console.debug("copy " + rightClickMenu.selectedDavInfo.path + " to " +
@@ -168,8 +172,10 @@ Page {
         parent: pageFlow
         browserCommandQueue: accountWorkers.browserCommandQueue
         directoryContents: pageFlowItemRoot.directoryContents
-        height: 400
-        anchors.centerIn: parent
+        height: Math.max(parent.height, 300)
+        width: Math.max(parent.width, 300)
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
         onAccepted: {
             console.debug("accepted")
             console.debug("moving " + rightClickMenu.selectedDavInfo.path + " to " +

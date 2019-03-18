@@ -7,7 +7,6 @@
         <file>qml/qqc/pages/browser/FileBrowser.qml</file>
         <file>qml/qqc/pages/browser/FileDetails.qml</file>
         <file>qml/qqc/dialogs/WebDavAccountDialog.qml</file>
-        <file>qml/qqc/controls/DetailItem.qml</file>
         <file>qml/qqc/pages/TransferPage.qml</file>
         <file>qml/qqc/dialogs/RemoteDirSelectDialog.qml</file>
         <file>qml/qqc/dialogs/SSLErrorDialog.qml</file>

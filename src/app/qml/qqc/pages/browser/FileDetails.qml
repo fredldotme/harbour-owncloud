@@ -6,6 +6,7 @@ import harbour.owncloud 1.0
 import QmlUiSet 1.0
 import "qrc:/qml/qqc"
 import "qrc:/qml/qqc/controls"
+import "qrc:/qml-ui-set"
 
 Page {
     id: pageRoot

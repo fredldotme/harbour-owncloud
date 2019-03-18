@@ -6,6 +6,13 @@ FileUploadCommandEntity::FileUploadCommandEntity(QObject* parent,
                                                  QWebdav* client) :
     WebDavCommandEntity(parent, client)
 {
+#ifdef Q_OS_IOS
+    // On iOS we need to resolve the URL before use
+    {
+        QUrl localUrl(localPath);
+        localPath = localUrl.toLocalFile();
+    }
+#endif
     this->m_localFile = new QFile(localPath, this);
     const QString fileName = QFileInfo(*this->m_localFile).fileName();
     this->m_remotePath = remotePath + fileName;

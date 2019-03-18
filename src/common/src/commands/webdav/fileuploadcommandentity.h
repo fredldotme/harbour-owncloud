@@ -17,7 +17,7 @@ public:
                                      QWebdav* client = Q_NULLPTR);
 
 protected:
-    bool startWork();
+    bool startWork() Q_DECL_OVERRIDE;
     bool staticProgress() const Q_DECL_OVERRIDE { return false; }
 
 private:

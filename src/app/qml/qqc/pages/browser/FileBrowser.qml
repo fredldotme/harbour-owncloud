@@ -132,6 +132,9 @@ Page {
     FileDialog {
         id: openFileDialog
         selectMultiple: true
+        folder: !osIsIOS ?
+                    shortcuts.home :
+                    shortcuts.pictures
 
         onAccepted: {
             for (var i = 0; i < fileUrls.length; i++) {

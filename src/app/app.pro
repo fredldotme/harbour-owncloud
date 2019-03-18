@@ -11,12 +11,12 @@ contains(CONFIG, quickcontrols) {
     TEMPLATE = app
     QT += quickcontrols2
 
-    QMAKE_RPATHDIR += $$OUT_PWD/../../3rdparty/qwebdav
-    QMAKE_RPATHDIR += $$OUT_PWD/../common
     DEFINES += GHOSTCLOUD_UI_QUICKCONTROLS
     include($$PWD/../../3rdparty/qml-ui-set/qml-ui-set.pri)
 
     unix:!macx {
+        QMAKE_RPATHDIR += $$OUT_PWD/../../3rdparty/qwebdav
+        QMAKE_RPATHDIR += $$OUT_PWD/../common
         desktop.files += harbour-owncloud.desktop
         desktop.path = /usr/share/applications
         target.path = /usr/bin

@@ -85,12 +85,12 @@ ApplicationWindow {
 
     function popPage()  {
         if (sideStack.currentItem !== sideStack.initialItem) {
-            sideStack.pop()
+            sideStack.pop().destroy()
             return true;
         }
 
         if (rootStack.currentItem !== rootStack.initialItem) {
-            rootStack.pop()
+            rootStack.pop().destroy()
             return true;
         }
 

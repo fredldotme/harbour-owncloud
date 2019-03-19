@@ -51,7 +51,7 @@ Page {
     }
     
     Flickable {
-        contentHeight: mainColumn.height + (paddingLarge*7)
+        contentHeight: mainColumn.height + (paddingLarge*8)
         anchors.fill: parent
         ScrollBar.vertical: ScrollBar {}
 

@@ -43,6 +43,12 @@ Page {
         thumbnailFetcher.fetch();
         console.log("Fetching thumbnail: " + thumbnailFetcher.remoteFile + " @ " + entry.path)
     }
+    Component.onDestruction: {
+        if (!isAudioVideo)
+            return;
+
+        mediaFeeder.stop()
+    }
     
     Flickable {
         contentHeight: mainColumn.height + (paddingLarge*7)

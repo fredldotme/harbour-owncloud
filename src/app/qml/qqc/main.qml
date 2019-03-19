@@ -182,11 +182,12 @@ ApplicationWindow {
                 height: parent.height
                 width: height
                 onClicked: {
-                    if (osIsAndroid || osIsIOS) {
+                    if (osIsAndroid) {
                         rootStack.currentItem.openNativeFileSelector()
-                    } else {
-                        rootStack.currentItem.fileUploadDialog.open()
+                        return
                     }
+
+                    rootStack.currentItem.fileUploadDialog.open()
                 }
             }
             GCButton {

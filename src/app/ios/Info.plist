@@ -24,6 +24,8 @@
 	<string>${QMAKE_FULL_VERSION}</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+        <key>NSPhotoLibraryUsageDescription</key>
+        <string>Access to the Photo Library</string>
 	<key>MinimumOSVersion</key>
 	<string>${IPHONEOS_DEPLOYMENT_TARGET}</string>
 	<key>NOTE</key>

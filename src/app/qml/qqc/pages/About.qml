@@ -5,6 +5,8 @@ Page {
     title: qsTr("About GhostCloud")
     focus: true
 
+    readonly property bool destroyable : false
+
     signal closeRequest()
 
     Flickable {

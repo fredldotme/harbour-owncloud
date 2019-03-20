@@ -12,6 +12,8 @@ Page {
     id: pageRoot
     title: entry.name
     focus: true
+
+    readonly property bool destroyable : true
     
     FileDetailsHelper { id: fileDetailsHelper}
 

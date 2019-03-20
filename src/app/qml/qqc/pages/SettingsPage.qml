@@ -6,6 +6,8 @@ Page {
     id: pageRoot
     focus: true
 
+    readonly property bool destroyable : false
+
     property AccountWorkers accountWorkers : null
     property AccountDb accountDb : null
 

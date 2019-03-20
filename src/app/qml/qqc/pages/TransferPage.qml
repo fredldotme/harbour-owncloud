@@ -11,6 +11,8 @@ Page {
 
     signal closeRequest()
 
+    readonly property bool destroyable : false
+
     property AccountWorkerGenerator accountGenerator : null
     property var activeAccountWorkers : accountGenerator.accountWorkers
     property bool noTransfersHint : true

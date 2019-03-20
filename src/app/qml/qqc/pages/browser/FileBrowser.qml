@@ -16,6 +16,8 @@ Page {
     title: directoryName
     focus: true
 
+    readonly property bool destroyable : true
+
     property string remotePath : "/"
     property string directoryName : {
         var crumbs = remotePath.split("/").filter(function (element) {

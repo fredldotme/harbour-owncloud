@@ -85,12 +85,20 @@ ApplicationWindow {
 
     function popPage()  {
         if (sideStack.currentItem !== sideStack.initialItem) {
-            sideStack.pop().destroy()
+            var page = sideStack.pop()
+            if (sideStack.currentItem.destroyable !== undefined &&
+                    sideStack.currentItem.destroyable) {
+                page.destroy()
+            }
             return true;
         }
 
         if (rootStack.currentItem !== rootStack.initialItem) {
-            rootStack.pop().destroy()
+            var page = rootStack.pop()
+            if (rootStack.currentItem.destroyable !== undefined &&
+                    rootStack.currentItem.destroyable) {
+                page.destroy()
+            }
             return true;
         }
 

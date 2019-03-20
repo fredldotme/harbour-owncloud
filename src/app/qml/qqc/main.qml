@@ -18,7 +18,7 @@ ApplicationWindow {
     width: 600
     minimumWidth: 320
     height: 400
-    minimumHeight: 360
+    minimumHeight: 380
 
     // TODO: save window geometry before closing
 
@@ -57,9 +57,9 @@ ApplicationWindow {
         : null
 
     readonly property bool showBackButton :
-        (rootStack.initialItem !== rootStack.currentItem) &&
+        (rootStack.depth > 1) &&
         (rootStack.currentItem !== null) ||
-        (sideStack.initialItem !== sideStack.currentItem) &&
+        (sideStack.depth > 1) &&
         (sideStack.currentItem !== null)
 
     function refreshUserInfo() {
@@ -129,7 +129,7 @@ ApplicationWindow {
             GCButton {
                 id: avatarButton
                 visible: rootStack.currentItem.objectName === "FileBrowser" &&
-                         sideStack.currentItem === sideStack.initialItem
+                         sideStack.depth == 1
                 height: parent.height
                 width: height
                 source: {
@@ -157,7 +157,7 @@ ApplicationWindow {
                 verticalAlignment: Qt.AlignVCenter
                 Layout.fillWidth: true
                 text: {
-                    if (sideStack.currentItem !== sideStack.initialItem &&
+                    if (sideStack.depth > 1 &&
                             sideStack.currentItem.title !== undefined) {
                         return sideStack.currentItem.title
                     } else if (rootStack.currentItem.title !== undefined) {
@@ -171,7 +171,7 @@ ApplicationWindow {
             GCButton {
                 source: "qrc:/icons/theme/actions/32/folder-new.svg"
                 visible: rootStack.currentItem.objectName === "FileBrowser" &&
-                         sideStack.currentItem === sideStack.initialItem
+                         sideStack.depth == 1
                 enabled: !rootStack.currentItem.isBusy
                 height: parent.height
                 width: height
@@ -183,7 +183,7 @@ ApplicationWindow {
             GCButton {
                 source: "qrc:/icons/theme/actions/32/document-new.svg"
                 visible: rootStack.currentItem.objectName === "FileBrowser" &&
-                         sideStack.currentItem === sideStack.initialItem
+                         sideStack.depth == 1
                 enabled: !rootStack.currentItem.isBusy
                 height: parent.height
                 width: height
@@ -199,7 +199,7 @@ ApplicationWindow {
             GCButton {
                 source: "qrc:/icons/theme/actions/32/view-refresh.svg"
                 visible: rootStack.currentItem.objectName === "FileBrowser" &&
-                         sideStack.currentItem === sideStack.initialItem
+                         sideStack.depth == 1
                 enabled: !rootStack.currentItem.isBusy
                 height: parent.height
                 anchors.margins: paddingSmall

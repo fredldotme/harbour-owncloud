@@ -86,8 +86,7 @@ ApplicationWindow {
     function popPage()  {
         if (sideStack.currentItem !== sideStack.initialItem) {
             var page = sideStack.pop()
-            if (sideStack.currentItem.destroyable !== undefined &&
-                    sideStack.currentItem.destroyable) {
+            if (page.destroyable !== undefined && page.destroyable) {
                 page.destroy()
             }
             return true;
@@ -95,8 +94,7 @@ ApplicationWindow {
 
         if (rootStack.currentItem !== rootStack.initialItem) {
             var page = rootStack.pop()
-            if (rootStack.currentItem.destroyable !== undefined &&
-                    rootStack.currentItem.destroyable) {
+            if (page.destroyable !== undefined && page.destroyable) {
                 page.destroy()
             }
             return true;

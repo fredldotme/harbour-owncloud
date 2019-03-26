@@ -33,4 +33,8 @@ apparmor.path = /
 desktop.files += $$PWD/harbour-owncloud.desktop
 desktop.path = /
 
-INSTALLS += mfile apparmor desktop
+# Run script
+runscript.files += $$PWD/run.sh
+runscript.path = /
+
+INSTALLS += mfile apparmor desktop runscript

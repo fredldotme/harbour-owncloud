@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
 Icon=usr/share/icons/hicolor/128x128/apps/harbour-owncloud.png
-Exec=env LD_LIBRARY_PATH=usr/lib usr/bin/harbour-owncloud
+Exec=run.sh
 Name=GhostCloud
 X-Ubuntu-Touch=true

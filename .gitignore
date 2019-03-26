@@ -1,5 +1,6 @@
 *.pro.user*
 build-*
+build/
 moc*
 *.o
 rpm/harbour-owncloud.spec.*

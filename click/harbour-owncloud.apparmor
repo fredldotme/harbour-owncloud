@@ -1,0 +1,10 @@
+{
+    "policy_groups": [
+        "networking",
+        "audio",
+        "connectivity",
+        "video"
+    ],
+    "policy_version": 1.3,
+    "template": "unconfined"
+}

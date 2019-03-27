@@ -1,0 +1,10 @@
+{
+    "policy_groups": [
+        "networking",
+        "audio",
+        "connectivity",
+        "video",
+        "content_exchange"
+    ],
+    "policy_version": 16.04
+}

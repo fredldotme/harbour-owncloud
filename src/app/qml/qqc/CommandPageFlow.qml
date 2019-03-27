@@ -1,7 +1,7 @@
 import QtQuick 2.0
 
 Item {
-    // Inhereting items are supposed to manually connect
+    // Inheriting items are supposed to manually connect
     // a handler to the commandFinished signal provided by
     // the accountWorker's CommandQueues
     property var accountWorkers : null

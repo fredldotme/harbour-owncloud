@@ -255,10 +255,8 @@ CommandEntity* WebDavCommandQueue::openFileRequest(const QString &destination)
         if (!fileExists)
             return;
 
-#if defined(QT_GUI_LIB) && !defined(Q_OS_ANDROID)
+#if defined(QT_GUI_LIB)
         QDesktopServices::openUrl("file://" + destination);
-#elif defined(QT_GUI_LIB) && defined(Q_OS_ANDROID)
-        QDesktopServices::openUrl("content://" + destination);
 #else
         ShellCommand::runCommand(QStringLiteral("xdg-open"), QStringList() << destination);
 #endif

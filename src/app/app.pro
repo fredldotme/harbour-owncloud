@@ -9,7 +9,6 @@ TARGET = harbour-owncloud
 }
 contains(CONFIG, quickcontrols) {
     TEMPLATE = app
-    QT += quickcontrols2
 
     DEFINES += GHOSTCLOUD_UI_QUICKCONTROLS
     include($$PWD/../../3rdparty/qml-ui-set/qml-ui-set.pri)

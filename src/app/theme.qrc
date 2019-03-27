@@ -16,5 +16,6 @@
         <file>icons/theme/actions/32/media-playback-start.svg</file>
         <file>icons/theme/actions/22/escape-direction-down.svg</file>
         <file>icons/theme/actions/22/escape-direction-up.svg</file>
+        <file>qtquickcontrols2.conf</file>
     </qresource>
 </RCC>

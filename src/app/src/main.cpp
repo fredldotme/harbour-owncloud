@@ -3,9 +3,6 @@
 #include <QtQuick>
 #include <QDebug>
 #include <QFile>
-#include <QIcon>
-#include <QStandardPaths>
-#include <QQuickStyle>
 
 // Contained in both Sailfish- and QML-UI-Set
 #include <localfilebrowser.h>
@@ -211,7 +208,6 @@ int main(int argc, char *argv[])
     newEngine->rootContext()->setContextProperty("headerBarSize", headerBarSize);
     newEngine->rootContext()->setContextProperty("osIsAndroid", osIsAndroid);
     newEngine->rootContext()->setContextProperty("osIsIOS", osIsIOS);
-    QQuickStyle::setStyle("Material");
     newEngine->load(QUrl("qrc:/qml/qqc/main.qml"));
 #endif
 

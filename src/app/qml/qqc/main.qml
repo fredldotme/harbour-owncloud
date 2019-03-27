@@ -36,8 +36,7 @@ ApplicationWindow {
     readonly property alias detailsStack : sideStack
 
     readonly property bool detailStackVisibleRequired :
-        (sideStack.currentItem !== sideStack.initialItem) &&
-        (sideStack.currentItem !== null)
+        (sideStack.depth > 1)
 
     readonly property bool sideStackIsActive : {
         if (width > height) {

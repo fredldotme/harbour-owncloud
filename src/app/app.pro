@@ -3,7 +3,9 @@ TARGET = harbour-owncloud
 !contains(CONFIG, quickcontrols) {
     CONFIG += sailfishapp
     include($$PWD/../../3rdparty/sailfish-ui-set/sailfish-ui-set.pri)
-    
+
+    QMAKE_RPATHDIR += /usr/share/harbour-owncloud/lib
+
     RESOURCES += \
         qml-sfos.qrc
 }

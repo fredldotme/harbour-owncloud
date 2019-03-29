@@ -75,7 +75,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>About GhostCloud...</source>
+        <source>About</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -17,8 +17,14 @@ AccountDb::AccountDb(QObject *parent) : QObject(parent)
         return;
     }
 
+#ifdef GHOSTCLOUD_UBUNTU_TOUCH
+    const QStandardPaths::StandardLocation location = QStandardPaths::AppConfigLocation;
+#else
+    const QStandardPaths::StandardLocation location = QStandardPaths::ConfigLocation;
+#endif
+
     const QString dbFilePath =
-            QStandardPaths::writableLocation(QStandardPaths::ConfigLocation)
+            QStandardPaths::writableLocation(location)
             + QStringLiteral("/%1/accounts.db").arg(qApp->applicationName());
     const QString dbName = QStringLiteral("accountdb");
 

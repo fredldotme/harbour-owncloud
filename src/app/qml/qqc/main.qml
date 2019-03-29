@@ -1,7 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Window 2.3
 import QtQuick.Controls 2.2
-import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.3
 import harbour.owncloud 1.0
 import "qrc:/qml/qqc"
@@ -31,6 +30,10 @@ ApplicationWindow {
     readonly property int paddingSmall : 16
     readonly property int paddingMedium : 20
     readonly property int paddingLarge : 32
+
+    readonly property bool osIsAndroid : targetOs === 1
+    readonly property bool osIsIOS : targetOs === 2
+    readonly property bool osIsUbuntuTouch : targetOs === 3
 
     readonly property alias pageStack : rootStack
     readonly property alias detailsStack : sideStack
@@ -235,15 +238,21 @@ ApplicationWindow {
             id: directoryContents
         }
 
-        MessageDialog {
+        Dialog {
             function showMessage(summary, body) {
-                msgDialog.text = summary
-                msgDialog.informativeText = body
+                msgDialog.title = summary
+                msgDialogText.text = body
                 msgDialog.open()
             }
 
             id: msgDialog
-            text: ""
+            standardButtons: Dialog.Ok
+            x: (parent.width - width) / 2
+            y: (parent.height - height) / 2
+            Label {
+                id: msgDialogText
+                anchors.fill: parent
+            }
         }
 
 

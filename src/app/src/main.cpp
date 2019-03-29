@@ -56,6 +56,14 @@
 // Provide a fake SailfishOS namespace
 // on QtQuick.Controls-based environments
 #ifdef GHOSTCLOUD_UI_QUICKCONTROLS
+
+enum GCTargetOs {
+    GENERIC = 0,
+    ANDROID,
+    IOS,
+    UBUNTU_TOUCH
+};
+
 namespace SailfishApp {
 static QGuiApplication* application(int& argc, char** argv) {
     if (qApp)
@@ -75,7 +83,7 @@ static QJSValue filePathUtilProvider(QQmlEngine *engine, QJSEngine *scriptEngine
     return filePathUtilObj;
 }
 
-static void createNecessaryDir(const QString& path) {
+inline static void createNecessaryDir(const QString& path) {
     const QDir configDir = QDir(path);
     if (!configDir.exists()) {
         const auto success = configDir.mkpath(configDir.absolutePath());
@@ -152,9 +160,15 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonType("harbour.owncloud", 1, 0, "FilePathUtil", filePathUtilProvider);
 
     QGuiApplication* app = SailfishApp::application(argc, argv);
+
+#ifdef GHOSTCLOUD_UBUNTU_TOUCH
+    app->setApplicationName(QStringLiteral("me.fredl.ghostcloud"));
+#else
     app->setOrganizationName(QHOSTCLOUD_APP_NAME);
     app->setOrganizationDomain(QHOSTCLOUD_APP_NAME);
     app->setApplicationName(QHOSTCLOUD_APP_NAME);
+#endif
+
     QIcon::setThemeName("theme");
 
     {
@@ -185,16 +199,16 @@ int main(int argc, char *argv[])
     while(!checkAndroidStoragePermissions());
 
     const int headerBarSize = 48;
-    const bool osIsAndroid = true;
-    const bool osIsIOS = false;
+    const GCTargetOs targetOs = GCTargetOs::ANDROID;
 #elif defined(Q_OS_IOS)
     const int headerBarSize = 48;
-    const bool osIsAndroid = false;
-    const bool osIsIOS = true;
+    const GCTargetOs targetOs = GCTargetOs::IOS;
+#elif defined(GHOSTCLOUD_UBUNTU_TOUCH)
+    const int headerBarSize = 48;
+    const GCTargetOs targetOs = GCTargetOs::UBUNTU_TOUCH;
 #else
     const int headerBarSize = 38;
-    const bool osIsAndroid = false;
-    const bool osIsIOS = false;
+    const GCTargetOs targetOs = GCTargetOs::GENERIC;
 #endif
 
 #ifndef GHOSTCLOUD_UI_QUICKCONTROLS
@@ -206,8 +220,7 @@ int main(int argc, char *argv[])
 #else
     QQmlApplicationEngine* newEngine = new QQmlApplicationEngine(app);
     newEngine->rootContext()->setContextProperty("headerBarSize", headerBarSize);
-    newEngine->rootContext()->setContextProperty("osIsAndroid", osIsAndroid);
-    newEngine->rootContext()->setContextProperty("osIsIOS", osIsIOS);
+    newEngine->rootContext()->setContextProperty("targetOs", targetOs);
     newEngine->load(QUrl("qrc:/qml/qqc/main.qml"));
 #endif
 

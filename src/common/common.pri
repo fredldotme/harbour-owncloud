@@ -57,11 +57,15 @@ ios {
     }
 }
 
-
 # Sailfish additionals
 contains(CONFIG, sailfish_build) {
     LIBS += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.so.1
     LIBS += $$OUT_PWD/../../src/common/libharbourowncloudcommon.so.1
+}
+
+# Ubuntu Touch configuration
+contains(CONFIG, click) {
+    DEFINES += GHOSTCLOUD_UBUNTU_TOUCH
 }
 
 QMAKE_RPATHDIR += /usr/share/harbour-owncloud/lib

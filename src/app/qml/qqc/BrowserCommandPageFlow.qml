@@ -1,5 +1,5 @@
 import QtQuick 2.0
-import QtQuick.Dialogs 1.2
+import QtQuick.Controls 2.2
 import harbour.owncloud 1.0
 import QmlUiSet 1.0
 import "qrc:/qml/qqc"
@@ -74,9 +74,9 @@ CommandPageFlow {
             transferCommandQueue.fileDownloadRequest(path, mimeType, openFile, lastModified)
             transferCommandQueue.run()
         }
-        onDiscard: {
+        /*onDiscard: {
             console.debug("Discard")
-        }
+        }*/
     }
 
     function startDownload(path, mimeType, open, overwriteExistingFile, lastModified, transferCommandQueue) {

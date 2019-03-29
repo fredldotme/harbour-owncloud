@@ -13,5 +13,7 @@
         <file>qml/qqc/pages/SettingsPage.qml</file>
         <file>qml/qqc/pages/About.qml</file>
         <file>qml/qqc/controls/GCButton.qml</file>
+        <file>qml/qqc/dialogs/fileselect/UbuntuContentPicker.qml</file>
+        <file>qml/qqc/dialogs/fileselect/QQDFilePicker.qml</file>
     </qresource>
 </RCC>

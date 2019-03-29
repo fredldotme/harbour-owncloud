@@ -1,5 +1,5 @@
 import QtQuick 2.0
-import QtQuick.Dialogs 1.2
+import QtQuick.Controls 2.2
 
 Dialog {
     id: textEntryDialog
@@ -12,14 +12,14 @@ Dialog {
     Column {
         anchors.fill: parent
         anchors.margins: fontSizeSmall
-        Text {
+        Label {
             text: qsTr("Would you like to accept the certificate?")
             font.pixelSize: fontSizeLarge
         }
-        Text {
+        Label {
             text: qsTr("MD5: %1").arg(md5Fingerprint)
         }
-        Text {
+        Label {
             text: qsTr("SHA1: %1").arg(sha1Fingerprint)
         }
     }

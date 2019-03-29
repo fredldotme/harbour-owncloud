@@ -41,7 +41,48 @@ Page {
     property var transferCommandQueue : accountWorkers.transferCommandQueue
     property var userInfoCommandQueue : accountWorkers.accountInfoCommandQueue
 
-    property alias fileUploadDialog : openFileDialog
+    property var fileUploadDialog : null
+    readonly property Component qqdFilePicker :
+        Qt.createComponent("qrc:/qml/qqc/dialogs/fileselect/QQDFilePicker.qml",
+                           Component.PreferSynchronous);
+    readonly property Component ubuntuContentPicker :
+        Qt.createComponent("qrc:/qml/qqc/dialogs/fileselect/UbuntuContentPicker.qml",
+                           Component.PreferSynchronous);
+
+    Component.onCompleted: {
+        // Ubuntu Touch
+        if (osIsUbuntuTouch) {
+            fileUploadDialog = ubuntuContentPicker.createObject(pageRoot)
+            fileUploadDialog.accepted.connect(function (){
+                for (var i = 0; i < fileUploadDialog.importItems.length; i++) {
+                    console.log("Enqueueing upload " +
+                                fileUploadDialog.importItems[i].url +
+                                " to " + pageRoot.remotePath)
+
+                    transferCommandQueue.fileUploadRequest(fileUploadDialog.importItems[i].url,
+                                                           pageRoot.remotePath)
+                }
+                transferCommandQueue.run()
+            })
+        }
+        // Generic incl. Android and iOS
+        else {
+            fileUploadDialog = qqdFilePicker.createObject(pageRoot)
+            fileUploadDialog.accepted.connect(function (){
+                for (var i = 0; i < fileUploadDialog.fileUrls.length; i++) {
+                    console.log("Enqueueing upload " +
+                                openFileDialog.fileUrls[i] +
+                                " to " + pageRoot.remotePath)
+
+                    transferCommandQueue.fileUploadRequest(fileUploadDialog.fileUrls[i],
+                                                           pageRoot.remotePath)
+                }
+                transferCommandQueue.run()
+            })
+        }
+    }
+
+
     property alias dirCreationDialog : dirCreationDialog
     property alias avatarMenu : avatarMenu
 
@@ -130,23 +171,6 @@ Page {
                         pageRoot.remotePath + renameDialog.text)
             refreshListView(true)
             renameDialog.text = ""
-        }
-    }
-
-    FileDialog {
-        id: openFileDialog
-        selectMultiple: true
-        folder: !osIsIOS ?
-                    shortcuts.home :
-                    shortcuts.pictures
-
-        onAccepted: {
-            for (var i = 0; i < fileUrls.length; i++) {
-                console.log("Enqueueing upload " + fileUrls[i] + " to " + pageRoot.remotePath)
-                transferCommandQueue.fileUploadRequest(fileUrls[i],
-                                                       pageRoot.remotePath)
-            }
-            transferCommandQueue.run()
         }
     }
 

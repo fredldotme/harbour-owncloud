@@ -60,7 +60,9 @@ SOURCES += \
     $$PWD/src/settings/db/accountdb.cpp \
     $$PWD/src/provider/settingsbackedcommandqueue.cpp \
     $$PWD/src/provider/accountinfo/accountinfoprovider.cpp \
-    $$PWD/src/util/providerutils.cpp
+    $$PWD/src/util/providerutils.cpp \
+    $$PWD/src/accountworkers.cpp \
+    $$PWD/src/accountworkergenerator.cpp
 
 HEADERS += \
     $$PWD/src/net/abstractfetcher.h \
@@ -106,7 +108,9 @@ HEADERS += \
     $$PWD/src/settings/db/accountdb.h \
     $$PWD/src/provider/settingsbackedcommandqueue.h \
     $$PWD/src/provider/accountinfo/accountinfoprovider.h \
-    $$PWD/src/util/providerutils.h
+    $$PWD/src/util/providerutils.h \
+    $$PWD/src/accountworkers.h \
+    $$PWD/src/accountworkergenerator.h
 
 contains(QT, dbus) {
     SOURCES += \

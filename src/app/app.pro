@@ -52,16 +52,12 @@ SOURCES += \
     $$PWD/src/main.cpp \
     $$PWD/src/directorycontentmodel.cpp \
     $$PWD/src/ocsnetaccessfactory.cpp \
-    $$PWD/src/webdavmediafeeder.cpp \
-    $$PWD/src/accountworkers.cpp \
-    $$PWD/src/accountworkergenerator.cpp
+    $$PWD/src/webdavmediafeeder.cpp
 
 HEADERS += \
     $$PWD/src/directorycontentmodel.h \
     $$PWD/src/ocsnetaccessfactory.h \
-    $$PWD/src/webdavmediafeeder.h \
-    $$PWD/src/accountworkers.h \
-    $$PWD/src/accountworkergenerator.h
+    $$PWD/src/webdavmediafeeder.h
 
 # Daemon control classes
 !contains(QT, dbus) {

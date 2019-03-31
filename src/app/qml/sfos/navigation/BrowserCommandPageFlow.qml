@@ -1,8 +1,41 @@
 import QtQuick 2.0
 import harbour.owncloud 1.0
+import SailfishUiSet 1.0
 
 CommandPageFlow {
+    id: pageFlowItemRoot
     property string targetRemotePath : "/"
+    property alias userInfo : userInfo
+
+    FileDetailsHelper { id: fileDetailsHelper }
+
+    Connections {
+        target: accountWorkers.accountInfoCommandQueue
+        onCommandFinished: {
+            console.debug("finished, " + receipt.result.enabled)
+
+            if (!receipt.result.enabled) {
+                console.log("Not enabled")
+                return
+            }
+
+            userInfo.enabled = receipt.result.enabled
+            userInfo.displayName = receipt.result.displayName
+            userInfo.email = receipt.result.email
+            userInfo.freeBytes = fileDetailsHelper.getHRSize(receipt.result.freeBytes)
+            userInfo.usedBytes = fileDetailsHelper.getHRSize(receipt.result.usedBytes)
+            userInfo.totalBytes = fileDetailsHelper.getHRSize(receipt.result.totalBytes)
+        }
+    }
+
+    Item {
+        id: userInfo
+        property string displayName : ""
+        property string email : ""
+        property string freeBytes : ""
+        property string usedBytes : ""
+        property string totalBytes : ""
+    }
 
     Connections {
         target: accountWorkers.browserCommandQueue
@@ -55,6 +88,14 @@ CommandPageFlow {
                 if (isRefresh)
                     return;
 
+                // TODO: investigate
+                if (!receipt.result.success) {
+                    notificationRequest(
+                                qsTr("Error occured"),
+                                qsTr("Please check your credentials or try again later."))
+                    return
+                }
+
                 // Complete pending PageStack animation
                 if (pageStack.busy)
                     pageStack.completeAnimation()
@@ -62,7 +103,8 @@ CommandPageFlow {
                 var nextDirectory = browserComponent.createObject(pageStack,
                                                                   {
                                                                       remotePath : remotePath,
-                                                                      accountWorkers: accountWorkers
+                                                                      accountWorkers: accountWorkers,
+                                                                      pageFlow: pageFlowItemRoot
                                                                   });
 
                 if (!nextDirectory) {

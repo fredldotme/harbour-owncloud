@@ -21,8 +21,7 @@ Item {
 
     ContentPeer {
         id: picSourceMulti
-        contentType: ContentType.Pictures |
-                     ContentType.Documents
+        contentType: ContentType.Pictures
         handler: ContentHandler.Source
         selectionType: ContentTransfer.Multiple
     }

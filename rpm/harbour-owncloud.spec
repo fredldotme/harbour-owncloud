@@ -53,7 +53,7 @@ Nextcloud/ownCloud background task for automatic camera backups
 
 %qtc_qmake5
 
-%qtc_make %{?_smp_mflags}
+%qtc_make %{?_smp_mflags} CONFIG+=sailfish_build
 
 # >> build post
 # << build post

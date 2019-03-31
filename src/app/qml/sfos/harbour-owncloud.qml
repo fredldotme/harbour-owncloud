@@ -29,11 +29,13 @@ ApplicationWindow
     QmlMap {
         id: directoryContents
     }
+    property alias dirContents : directoryContents
 
     AccountSelection {
         id: accountSelection
         accountGenerator: accountWorkerGenerator
         browserPage: browserComponent
+        dirContents: directoryContents
     }
 
     readonly property bool isTransfering :
@@ -98,9 +100,6 @@ ApplicationWindow
     }
 
     function notify(summary, body) {
-        if (!persistentSettings.notifications)
-            return;
-
         notifier.previewSummary = summary
         notifier.previewBody = body
         notifier.isTransient = false

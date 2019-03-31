@@ -78,6 +78,10 @@
         <source>About</source>
         <translation type="unfinished">Über</translation>
     </message>
+    <message>
+        <source>No accounts available. Please add an account to continue.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BasicAuthentication</name>

@@ -59,6 +59,7 @@ ios {
 
 # Sailfish additionals
 contains(CONFIG, sailfish_build) {
+    DEFINES += GHOSTCLOUD_COMPAT_PATHS
     LIBS += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.so.1
     LIBS += $$OUT_PWD/../../src/common/libharbourowncloudcommon.so.1
 }

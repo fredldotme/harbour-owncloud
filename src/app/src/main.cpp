@@ -56,14 +56,6 @@
 // Provide a fake SailfishOS namespace
 // on QtQuick.Controls-based environments
 #ifdef GHOSTCLOUD_UI_QUICKCONTROLS
-
-enum GCTargetOs {
-    GENERIC = 0,
-    ANDROID,
-    IOS,
-    UBUNTU_TOUCH
-};
-
 namespace SailfishApp {
 static QGuiApplication* application(int& argc, char** argv) {
     if (qApp)
@@ -117,6 +109,13 @@ bool checkAndroidStoragePermissions() {
     return true;
 }
 #endif
+
+enum GCTargetOs {
+    GENERIC = 0,
+    ANDROID,
+    IOS,
+    UBUNTU_TOUCH
+};
 
 int main(int argc, char *argv[])
 {

@@ -8,8 +8,11 @@ Page {
     id: pageRoot
     anchors.fill: parent
 
-    property CommandEntity downloadCommand : null
     property var entry : null;
+    property var accountWorkers : null
+    property ThumbnailFetcher thumbnailFetcher : accountWorkers.thumbnailFetcher
+
+    property CommandEntity downloadCommand : null
 
     readonly property bool isDownloading :
         (downloadCommand !== null ||
@@ -69,16 +72,6 @@ Page {
     }
 
     FileDetailsHelper { id: fileDetailsHelper }
-
-    ThumbnailFetcher {
-        id: thumbnailFetcher
-        remoteFile: entry.path
-        settings: persistentSettings
-        commandQueue: browserCommandQueue
-        cacheProvider: thumbnailCache
-        width: fileImage.width
-        height: fileImage.height
-    }
 
     Dialog {
         id: fileExistsDialog
@@ -198,7 +191,7 @@ Page {
                 WebDavMediaFeeder {
                     id: mediaFeeder
                     mediaPlayer: previewPlayer
-                    settings: persistentSettings
+                    settings: accountWorkers.account
                     url: isAudioVideo ?
                                 (FilePathUtil.getWebDavFileUrl(entry.path, persistentSettings)) :
                                 ""

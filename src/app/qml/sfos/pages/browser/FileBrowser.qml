@@ -15,12 +15,14 @@ Page {
 
     property Component contextMenuComponent :
         Qt.createComponent(
-            "qrc:/qml/pages/browser/controls/FileOperationsContextMenu.qml",
+            "qrc:/qml/sfos/pages/browser/controls/FileOperationsContextMenu.qml",
             Component.PreferSynchronous);
 
     property string remotePath : "/"
     property string pageHeaderText : "/"
+
     property var accountWorkers : null
+    property BrowserCommandPageFlow pageFlow : null
 
     property var browserCommandQueue : accountWorkers.browserCommandQueue
     property var transferCommandQueue : accountWorkers.transferCommandQueue
@@ -78,14 +80,6 @@ Page {
                 pageHeaderText = ""
             }
         }
-    }
-
-    BrowserCommandPageFlow {
-        id: pageFlow
-        targetRemotePath: remotePath
-        accountWorkers: pageRoot.accountWorkers
-        onNotificationRequest: notification(summary, body)
-        onTransientNotificationRequest: transientNotification(summary)
     }
 
     Connections {
@@ -393,7 +387,10 @@ Page {
                     var nextPath = remotePath + davInfo.name + "/";
                     changeDirectory(nextPath)
                 } else {
-                    var fileDetails = fileDetailsComponent.createObject(pageRoot, { entry: davInfo });
+                    var fileDetails = fileDetailsComponent.createObject(pageRoot, {
+                                                                            entry: davInfo,
+                                                                            accountWorkers: accountWorkers
+                                                                        });
                     if (!fileDetails) {
                         console.warn(fileDetailsComponent.errorString())
                         return;

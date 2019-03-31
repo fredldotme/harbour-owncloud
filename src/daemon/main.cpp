@@ -24,16 +24,17 @@ QString remoteDirectoryFromHwRelease()
         hwRelease.close();
         QStringList lineArray = allLines.split("\n");
         for (QString& line : lineArray) {
-            if (line.startsWith("NAME=")) {
+            if (!line.startsWith("NAME="))
+                continue;
 
-                // Replace characters which would be invalid
-                // within a WebDav directory name
-                return NODE_PATH_SEPARATOR +
-                        line.replace("NAME=", "")
-                        .replace("\"", "")
-                        .replace("/", "_")
-                        .trimmed() + "/";
-            }
+            // Replace characters which would be invalid
+            // within a WebDav directory name
+            return NODE_PATH_SEPARATOR +
+                    line.replace("NAME=", "")
+                    .replace("\"", "")
+                    .replace("/", "_")
+                    .trimmed() + "/";
+
         }
     }
     return QStringLiteral("/Jolla/");
@@ -71,7 +72,7 @@ int main(int argc, char *argv[])
     localPathCheck.setInterval(60000 * 10);
     localPathCheck.setSingleShot(false);
     QObject::connect(&localPathCheck, &QTimer::timeout, &localPathCheck,
-                     [&localPath, &localPathCheck, fsHandler]() {
+                     [&localPath, fsHandler]() {
         if (!localPath.exists())
             return;
 

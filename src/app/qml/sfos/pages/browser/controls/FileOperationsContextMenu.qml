@@ -9,8 +9,8 @@ ContextMenu {
     property var selectedEntry : null;
     property var selectedItem : null
     property var dialogObj : null;
-    property WebDavCommandQueue transferQueue : null
-    property WebDavCommandQueue browserCommandQueue : null
+    property CloudStorageProvider transferQueue : null
+    property CloudStorageProvider browserCommandQueue : null
     property Component remoteDirDialogComponent : null
     property Component textEntryDialogComponent: null
     property Component fileDetailsComponent : null
@@ -146,6 +146,7 @@ ContextMenu {
         enabled : __enableDestructiveMenus
         onClicked: {
             dialogObj = remoteDirDialogComponent.createObject(pageRoot, {entry: selectedEntry});
+            dialogObj.browserCommandQueue = browserCommandQueue
             dialogObj.accepted.connect(_moveEntry);
             dialogObj.rejected.connect(_cleanup);
             pageStack.push(dialogObj);
@@ -155,6 +156,7 @@ ContextMenu {
         text: qsTr("Copy")
         onClicked: {
             dialogObj = remoteDirDialogComponent.createObject(pageRoot, {entry: selectedEntry});
+            dialogObj.browserCommandQueue = browserCommandQueue
             dialogObj.accepted.connect(_copyEntry);
             dialogObj.rejected.connect(_cleanup);
             pageStack.push(dialogObj);

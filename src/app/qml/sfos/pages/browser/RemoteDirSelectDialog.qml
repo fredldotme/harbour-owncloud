@@ -8,6 +8,9 @@ Dialog {
 
     property string remotePath : "/"
     property bool isLoadingDirectory : true
+    property QmlMap directoryContents : applicationWindow.dirContents
+
+    property CloudStorageProvider browserCommandQueue : null
 
     // Prepend ".." in case remotePath !== "/"
     function mangledDirectoryList(dirs) {
@@ -24,7 +27,7 @@ Dialog {
             isLoadingDirectory = false;
             return;
         }
-        browserCommandQueue.directoryListingRequest(remotePath, true)
+        dialogRoot.browserCommandQueue.directoryListingRequest(remotePath, true)
     }
 
     Component.onCompleted: {

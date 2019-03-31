@@ -9,12 +9,14 @@ Page {
     readonly property bool loginInProgress : (authenticator.running ||
                                               browserCommandQueue.running);
 
-    property AccountWorkerGenerator workerGenerator : null
-    property NextcloudSettings clientSettings : null
-    property OcsCommandQueue ocsCommandQueue : null
-    property WebDavCommandQueue browserCommandQueue : null
+    property var accountWorkers : null
+    property var clientSettings: accountWorkers.account
     property DaemonControl daemonCtrl : null
     property AccountDb accountDatabase : null
+    readonly property CommandQueue ocsCommandQueue :
+        accountWorkers.accountInfoCommandQueue
+    readonly property CloudStorageProvider browserCommandQueue :
+        accountWorkers.browserCommandQueue
 
     signal resetOcsInfo()
     signal notificationRequest(string summary, string body)
@@ -162,10 +164,9 @@ Page {
 
                 onClicked: {
                     resetOcsInfo()
-                    if (clientSettings.setHostname(hostaddress.text)) {
+                    if (clientSettings.setHoststring(hostaddress.text)) {
                         clientSettings.username = username.text;
                         clientSettings.password = password.text;
-                        clientSettings.autoLogin = autoLoginSwitch.checked;
                         clientSettings.isCustomCert = certSwitch.checked;
 
                         authenticator.authenticate(true)

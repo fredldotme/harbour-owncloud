@@ -6,23 +6,38 @@
 
 #include <nextcloudendpointconsts.h>
 
-QString FilePathUtil::destinationFromMIME(QString mime)
+QString FilePathUtil::destinationFromMIME(const QString& mime)
 {
-    QStandardPaths::StandardLocation location;
+    QStandardPaths::StandardLocation rootLocation;
 
     if (mime.startsWith("image")) {
-        location = QStandardPaths::PicturesLocation;
+        rootLocation = QStandardPaths::PicturesLocation;
     } else if (mime.startsWith("video")) {
-        location = QStandardPaths::MoviesLocation;
+        rootLocation = QStandardPaths::MoviesLocation;
     } else if (mime.startsWith("audio")) {
-        location = QStandardPaths::MusicLocation;
+        rootLocation = QStandardPaths::MusicLocation;
     } else if (mime.startsWith("application")) {
-        location = QStandardPaths::DocumentsLocation;
+        rootLocation = QStandardPaths::DocumentsLocation;
     } else {
-        location = QStandardPaths::DownloadLocation;
+        rootLocation = QStandardPaths::DownloadLocation;
     }
 
-    return QStandardPaths::writableLocation(location);
+    return QStandardPaths::writableLocation(rootLocation);
+}
+
+
+QString FilePathUtil::destination(const NextcloudSettingsBase* account)
+{
+    if (!account) {
+        qWarning() << "account is NULL, bailing out.";
+        return QStringLiteral("/");
+    }
+
+    const QString pattern = QStringLiteral("%1/%2/%3/%4/");
+    return pattern.arg(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation),
+                       account->hostname(),
+                       QString::number(account->port()),
+                       account->username());
 }
 
 QString FilePathUtil::getCanonicalPath(const QString &path)

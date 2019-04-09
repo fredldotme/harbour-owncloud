@@ -8,7 +8,7 @@ Page {
     objectName: "TransferPage"
 
     property CommandEntity selectedEntry : null;
-    property AccountWorkers accountWorkers : null
+    property var accountWorkers : null
 
     PageHeader {
         id: header
@@ -66,14 +66,14 @@ Page {
             id: noTransfersHint
             anchors.centerIn: parent
             text: qsTr("No pending file transfers")
-            enabled: (transferQueue.queue.length < 1) && !daemonCtrl.uploading
+            enabled: (accountWorkers.transferCommandQueue.queue.length < 1) && !daemonCtrl.uploading
         }
 
         SilicaListView {
             id: listView
             anchors.fill: parent
             spacing: Theme.paddingMedium
-            model: transferQueue.queue
+            model: accountWorkers.transferCommandQueue.queue
 
             delegate: ListItem {
                 id: delegate

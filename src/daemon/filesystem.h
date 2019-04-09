@@ -6,6 +6,7 @@
 #include <QMutex>
 #include <QSet>
 #include <QTimer>
+#include <settings/nextcloudsettingsbase.h>
 
 class Filesystem : public QObject
 {
@@ -17,8 +18,7 @@ class Filesystem : public QObject
     };
 
 public:
-    Filesystem();
-    static Filesystem* instance();
+    Filesystem(NextcloudSettingsBase* account = Q_NULLPTR);
 
 signals:
     void fileFound(QString fullPath);
@@ -34,6 +34,7 @@ private slots:
 private:
     void rescan();
 
+    NextcloudSettingsBase* m_account;
     QFileSystemWatcher m_watcher;
     QString m_localPath;
     QSet<QString> m_existingFiles;

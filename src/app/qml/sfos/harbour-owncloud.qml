@@ -18,7 +18,7 @@ ApplicationWindow
 
     OcsUserInfo {
         id: ocsUserInfo
-        //commandQueue: ocsCommandQueue
+        //commandQueue: null // Set when switching accounts
     }
     DaemonControl {
         id: daemonCtrl
@@ -39,7 +39,7 @@ ApplicationWindow
     }
 
     readonly property bool isTransfering :
-        (transferQueue.running || daemonCtrl.uploading)
+        (daemonCtrl.uploading)
 
     // Main application cover
     readonly property Component coverPage :
@@ -111,40 +111,6 @@ ApplicationWindow
         notifier.previewSummary = summary
         notifier.isTransient = true
         notifier.publish();
-    }
-
-    WebDavCommandQueue {
-        id: transferQueue
-        //settings: persistentSettings
-        onCommandFinished: {
-            // Ignore invalid CommandReceipts
-            if (!receipt.valid)
-                return;
-
-            // Ignore if the command was intentionally aborted by the user
-            if (receipt.abortIntended)
-                return
-
-            var transferType = receipt.info.property("type")
-            console.log("transferType " + transferType)
-            var fileName = receipt.info.property("fileName")
-
-            // Notify the user of successful or erroneous file transfers.
-            // Also refresh the userInfo in case an upload was successful.
-            if (transferType === "fileUpload") {
-                if (receipt.finished) {
-                    notify(qsTr("Upload complete"), qsTr("%1 uploaded successfully").arg(fileName))
-                    refreshUserInfo()
-                } else {
-                    notify(qsTr("Upload failed!"), qsTr("%1 couldn't be uploaded").arg(fileName))
-                }
-            } else if (transferType === "fileDownload") {
-                if (receipt.finished)
-                    notify(qsTr("Download complete"), qsTr("%1 downloaded successfully").arg(fileName))
-                else
-                    notify(qsTr("Download failed!"), qsTr("%1 couldn't be downloaded").arg(fileName))
-            }
-        }
     }
 
     function isTransferEnqueued(remoteFilePath) {

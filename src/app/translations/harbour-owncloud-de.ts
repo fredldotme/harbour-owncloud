@@ -82,6 +82,42 @@
         <source>No accounts available. Please add an account to continue.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Removing account</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Upload complete</source>
+        <translation type="unfinished">Hochladen vollständig</translation>
+    </message>
+    <message>
+        <source>%1 uploaded successfully</source>
+        <translation type="unfinished">%1 wurde erfolgreich hochgeladen</translation>
+    </message>
+    <message>
+        <source>Upload failed!</source>
+        <translation type="unfinished">Hochladen fehlgeschlagen!</translation>
+    </message>
+    <message>
+        <source>%1 couldn&apos;t be uploaded</source>
+        <translation type="unfinished">%1 konnte nicht hochgeladen werden</translation>
+    </message>
+    <message>
+        <source>Download complete</source>
+        <translation type="unfinished">Herunterladen vollständig</translation>
+    </message>
+    <message>
+        <source>%1 downloaded successfully</source>
+        <translation type="unfinished">%1 wurde erfolgreich heruntergeladen</translation>
+    </message>
+    <message>
+        <source>Download failed!</source>
+        <translation type="unfinished">Herunterladen fehlgeschlagen!</translation>
+    </message>
+    <message>
+        <source>%1 couldn&apos;t be downloaded</source>
+        <translation type="unfinished">%1 konnte nicht heruntergeladen werden</translation>
+    </message>
 </context>
 <context>
     <name>BasicAuthentication</name>
@@ -535,41 +571,6 @@
     <message>
         <source>Please check your host address</source>
         <translation type="unfinished">Bitte überprüfe deine Serveradresse</translation>
-    </message>
-</context>
-<context>
-    <name>harbour-owncloud</name>
-    <message>
-        <source>Upload complete</source>
-        <translation>Hochladen vollständig</translation>
-    </message>
-    <message>
-        <source>%1 uploaded successfully</source>
-        <translation>%1 wurde erfolgreich hochgeladen</translation>
-    </message>
-    <message>
-        <source>Download complete</source>
-        <translation>Herunterladen vollständig</translation>
-    </message>
-    <message>
-        <source>%1 downloaded successfully</source>
-        <translation>%1 wurde erfolgreich heruntergeladen</translation>
-    </message>
-    <message>
-        <source>Upload failed!</source>
-        <translation>Hochladen fehlgeschlagen!</translation>
-    </message>
-    <message>
-        <source>%1 couldn&apos;t be uploaded</source>
-        <translation>%1 konnte nicht hochgeladen werden</translation>
-    </message>
-    <message>
-        <source>Download failed!</source>
-        <translation>Herunterladen fehlgeschlagen!</translation>
-    </message>
-    <message>
-        <source>%1 couldn&apos;t be downloaded</source>
-        <translation>%1 konnte nicht heruntergeladen werden</translation>
     </message>
 </context>
 <context>

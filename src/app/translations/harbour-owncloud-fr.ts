@@ -82,6 +82,42 @@
         <source>No accounts available. Please add an account to continue.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Removing account</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Upload complete</source>
+        <translation type="unfinished">Téléversement fini</translation>
+    </message>
+    <message>
+        <source>%1 uploaded successfully</source>
+        <translation type="unfinished">%1 envoyé correctement</translation>
+    </message>
+    <message>
+        <source>Upload failed!</source>
+        <translation type="unfinished">Échec de l’envoi</translation>
+    </message>
+    <message>
+        <source>%1 couldn&apos;t be uploaded</source>
+        <translation type="unfinished">%1 n’a pas été envoyé</translation>
+    </message>
+    <message>
+        <source>Download complete</source>
+        <translation type="unfinished">Téléchargement fini</translation>
+    </message>
+    <message>
+        <source>%1 downloaded successfully</source>
+        <translation type="unfinished">%1 téléchargé correctement</translation>
+    </message>
+    <message>
+        <source>Download failed!</source>
+        <translation type="unfinished">Échec du téléchargement</translation>
+    </message>
+    <message>
+        <source>%1 couldn&apos;t be downloaded</source>
+        <translation type="unfinished">%1 n’a pas été téléchargé</translation>
+    </message>
 </context>
 <context>
     <name>BasicAuthentication</name>
@@ -535,41 +571,6 @@
     <message>
         <source>Please check your host address</source>
         <translation type="unfinished">Vérifiez l’adresse hôte</translation>
-    </message>
-</context>
-<context>
-    <name>harbour-owncloud</name>
-    <message>
-        <source>Upload complete</source>
-        <translation>Téléversement fini</translation>
-    </message>
-    <message>
-        <source>%1 uploaded successfully</source>
-        <translation>%1 envoyé correctement</translation>
-    </message>
-    <message>
-        <source>Download complete</source>
-        <translation>Téléchargement fini</translation>
-    </message>
-    <message>
-        <source>%1 downloaded successfully</source>
-        <translation>%1 téléchargé correctement</translation>
-    </message>
-    <message>
-        <source>Upload failed!</source>
-        <translation>Échec de l’envoi</translation>
-    </message>
-    <message>
-        <source>%1 couldn&apos;t be uploaded</source>
-        <translation>%1 n’a pas été envoyé</translation>
-    </message>
-    <message>
-        <source>Download failed!</source>
-        <translation>Échec du téléchargement</translation>
-    </message>
-    <message>
-        <source>%1 couldn&apos;t be downloaded</source>
-        <translation>%1 n’a pas été téléchargé</translation>
     </message>
 </context>
 <context>

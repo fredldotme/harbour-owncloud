@@ -53,11 +53,21 @@ Page {
         if (isAudioVideo || entry.isDirectory)
             return;
 
-        console.log("Fetching thumbnail: " + thumbnailFetcher.remoteFile)
+        thumbnailFetcher.remoteFile = entry.path
+        thumbnailFetcher.width = 256
+        thumbnailFetcher.height = 256
         thumbnailFetcher.fetch();
+        console.log("Fetching thumbnail: " + thumbnailFetcher.remoteFile + " @ " + entry.path)
     }
+    Component.onDestruction: {
+        if (!isAudioVideo)
+            return;
+
+        mediaFeeder.stop()
+    }
+
     Connections {
-        target: transferQueue
+        target: accountWorkers.transferCommandQueue
         onCommandFinished: {
             // Invalidate downloadEntry after completion
             if (receipt.info.property("type") !== "fileDownload" ||
@@ -118,8 +128,9 @@ Page {
             return
         }
 
-        downloadCommand = transferQueue.fileDownloadRequest(path, mimeType,
-                                                            open, entry.lastModified)
+        downloadCommand =
+                accountWorkers.transferCommandQueue.fileDownloadRequest(path, mimeType,
+                                                                        open, entry.lastModified)
         transferQueue.run()
     }
 
@@ -192,9 +203,13 @@ Page {
                     id: mediaFeeder
                     mediaPlayer: previewPlayer
                     settings: accountWorkers.account
-                    url: isAudioVideo ?
-                                (FilePathUtil.getWebDavFileUrl(entry.path, persistentSettings)) :
-                                ""
+                    url: {
+                        if (!isAudioVideo)
+                            return "";
+
+                        return FilePathUtil.getWebDavFileUrl(entry.path,
+                                                             accountWorkers.account)
+                    }
                 }
                 MediaPlayer {
                     id: previewPlayer

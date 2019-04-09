@@ -82,6 +82,42 @@
         <source>No accounts available. Please add an account to continue.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Removing account</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Upload complete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 uploaded successfully</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Upload failed!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 couldn&apos;t be uploaded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Download complete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 downloaded successfully</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Download failed!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 couldn&apos;t be downloaded</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BasicAuthentication</name>
@@ -534,41 +570,6 @@
     </message>
     <message>
         <source>Please check your host address</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>harbour-owncloud</name>
-    <message>
-        <source>Upload complete</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%1 uploaded successfully</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Download complete</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%1 downloaded successfully</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Upload failed!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%1 couldn&apos;t be uploaded</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Download failed!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%1 couldn&apos;t be downloaded</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

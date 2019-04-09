@@ -1,22 +1,14 @@
 #include "filesystem.h"
 
-#include "settings/inifilesettings.h"
-//#include "uploader.h"
-
 #include <QDebug>
 #include <QDir>
 #include <QFileInfo>
 #include <QMutexLocker>
 
-Filesystem::Filesystem()
+Filesystem::Filesystem(NextcloudSettingsBase* account) :
+    m_account(account)
 {
     connect(&m_watcher, &QFileSystemWatcher::directoryChanged, this, &Filesystem::prepareScan);
-}
-
-Filesystem* Filesystem::instance()
-{
-    static Filesystem fs;
-    return &fs;
 }
 
 void Filesystem::prepareScan(QString dirPath)
@@ -89,7 +81,10 @@ void Filesystem::triggerRescan()
 {
     qDebug() << Q_FUNC_INFO;
 
-    QString newPath = IniFileSettings::instance()->localPicturesPath();
+    if (!this->m_account)
+        return;
+
+    QString newPath = this->m_account->localPicturesPath();
 
     if (!m_watcher.directories().isEmpty()) {
         m_watcher.removePaths(m_watcher.directories());

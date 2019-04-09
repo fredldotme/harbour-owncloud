@@ -36,6 +36,7 @@ Page {
         PullDownMenu {
             MenuItem {
                 text: qsTr("Add account...")
+                enabled: __listCommand == null
                 onClicked: {
                     // TODO: Flow authentication
                     // pageStack.push(authenticationEntranceComponent)
@@ -55,14 +56,16 @@ Page {
         PushUpMenu {
             MenuItem {
                 text: qsTr("About")
+                enabled: __listCommand == null
                 onClicked: {
                     pageStack.push(aboutPageComponent)
                 }
             }
         }
 
-        delegate: BackgroundItem {
-            width: parent.width
+        delegate: ListItem {
+            width: ListView.view.width
+            //height: mainColumn.height
 
             property var delegateAccountWorkers : accountsList.model[index]
 
@@ -90,6 +93,58 @@ Page {
                 }
             }
 
+            Connections {
+                id: transferCommandQueueNotify
+                target: delegateAccountWorkers.transferCommandQueue
+                onCommandFinished: {
+                    // Ignore invalid CommandReceipts
+                    if (!receipt.valid)
+                        return;
+
+                    // Ignore if the command was intentionally aborted by the user
+                    if (receipt.abortIntended)
+                        return
+
+                    var transferType = receipt.info.property("type")
+                    console.log("transferType " + transferType)
+                    var fileName = receipt.info.property("fileName")
+
+                    // Notify the user of successful or erroneous file transfers.
+                    // Also refresh the userInfo in case an upload was successful.
+                    if (transferType === "fileUpload") {
+                        if (receipt.finished) {
+                            notify(qsTr("Upload complete"), qsTr("%1 uploaded successfully").arg(fileName))
+                            refreshUserInfo()
+                        } else {
+                            notify(qsTr("Upload failed!"), qsTr("%1 couldn't be uploaded").arg(fileName))
+                        }
+                    } else if (transferType === "fileDownload") {
+                        if (receipt.finished)
+                            notify(qsTr("Download complete"), qsTr("%1 downloaded successfully").arg(fileName))
+                        else
+                            notify(qsTr("Download failed!"), qsTr("%1 couldn't be downloaded").arg(fileName))
+                    }
+                }
+            }
+
+            RemorseItem {
+                id: removeRemorse
+            }
+
+            menu: ContextMenu {
+                MenuItem {
+                    text: qsTr("Remove account")
+                    onClicked: {
+                        removeRemorse.execute(mainColumn,
+                                              qsTr("Removing account"),
+                                              function(){
+                                                  accountWorkerGenerator.database.removeAccount(delegateAccountWorkers.account)
+                                              },
+                                              5000);
+                    }
+                }
+            }
+
             onClicked: {
                 selectedAccountWorkers = delegateAccountWorkers
 
@@ -100,6 +155,7 @@ Page {
 
                 var nextPath = "/";
                 pageFlow.targetRemotePath = nextPath
+                ocsUserInfo.commandQueue = selectedAccountWorkers.accountInfoCommandQueue
                 __listCommand = selectedAccountWorkers.browserCommandQueue.directoryListingRequest(nextPath, false)
 
                 console.debug("onClicked: __listCommand " + __listCommand)

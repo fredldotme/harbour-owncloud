@@ -6,16 +6,15 @@
 #include <QMutex>
 #include <QMutexLocker>
 
-#include <settings/inifilesettings.h>
+#include <settings/nextcloudsettingsbase.h>
 
 class NetworkMonitor : public QObject
 {
     Q_OBJECT
 public:
     explicit NetworkMonitor(QObject *parent = Q_NULLPTR,
-                            IniFileSettings* settings = Q_NULLPTR);
+                            NextcloudSettingsBase* settings = Q_NULLPTR);
     ~NetworkMonitor();
-    static NetworkMonitor* instance(IniFileSettings* settings);
     bool shouldSync() { return m_shouldSync; }
 
 signals:
@@ -28,7 +27,7 @@ private:
     void setShouldDownload(bool value);
 
     QNetworkConfigurationManager m_configManager;
-    IniFileSettings* m_settings = Q_NULLPTR;
+    NextcloudSettingsBase* m_settings = Q_NULLPTR;
     bool m_shouldSync;
     QMutex checkerMutex;
 };

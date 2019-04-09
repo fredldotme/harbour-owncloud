@@ -180,6 +180,7 @@ Page {
         PushUpMenu {
             MenuItem {
                 text: qsTr("About")
+                enabled: !loginInProgress
                 onClicked: {
                     pageStack.push(aboutPageComponent)
                 }

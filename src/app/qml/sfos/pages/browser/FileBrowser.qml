@@ -113,7 +113,7 @@ Page {
     }
 
     Connections {
-        target: transferQueue
+        target: pageRoot.accountWorkers.transferCommandQueue
         onCommandFinished: {
             // Refresh the listView after an upload to this remote directory succeeded
             if (receipt.info.property("remotePath") === pageRoot.remotePath) {
@@ -126,7 +126,7 @@ Page {
     Connections {
         target: directoryContents
         onInserted: {
-            // console.log("key:" + key + " remotePath:" + remotePath)
+            console.log("key:" + key + " remotePath:" + remotePath)
             if (key !== remotePath)
                 return;
 
@@ -143,7 +143,6 @@ Page {
         // Rely on height of the userInformation column
         // for the CircularImageButton to adapt automatically
         height: userInformation.height
-        //onHeightChanged: console.log(height)
 
         ContextMenu {
             id: userInformation
@@ -238,11 +237,11 @@ Page {
                     var selectedFiles = dialogObj.filesToSelect
                     for (var i = 0; i < selectedFiles.length; i++) {
                         var canonicalRemotePath = FilePathUtil.getCanonicalPath(remotePath);
-                        transferQueue.fileUploadRequest(selectedFiles[i].path,
-                                                        canonicalRemotePath,
-                                                        selectedFiles[i].lastModified);
+                        pageRoot.accountWorkers.transferCommandQueue.fileUploadRequest(selectedFiles[i].path,
+                                                                                       canonicalRemotePath,
+                                                                                       selectedFiles[i].lastModified);
                     }
-                    transferQueue.run()
+                    pageRoot.accountWorkers.transferCommandQueue.run()
                     __dialogCleanup()
                 }
 
@@ -266,7 +265,13 @@ Page {
             MenuItem {
                 text: qsTr("File transfers")
                 onClicked: {
-                    pageStack.push(transferPageComponent)
+                    var transferPage =
+                            transferPageComponent.createObject(pageRoot,
+                                                               {
+                                                                   accountWorkers : accountWorkers
+                                                               }
+                                                               );
+                    pageStack.push(transferPage)
                 }
             }
 
@@ -324,11 +329,8 @@ Page {
                      (pageRoot.status === PageStatus.Active ||
                       pageRoot.status === PageStatus.Activating))
 
-                // Keep smaller padding on the root
                 readonly property int __leftMargin :
-                    (remotePath === "/") ?
-                        (Theme.horizontalPageMargin) :
-                        (Theme.horizontalPageMargin*2.5)
+                    (Theme.horizontalPageMargin*2.5)
 
                 // onVisibilityChanged: console.log("visibility: " + visibility)
                 state: visibility ? "visible" : "invisible"
@@ -411,7 +413,7 @@ Page {
                                                                  remoteDirDialogComponent : remoteDirDialogComponent,
                                                                  textEntryDialogComponent : textEntryDialogComponent,
                                                                  fileDetailsComponent : fileDetailsComponent,
-                                                                 transferQueue : transferQueue,
+                                                                 transferQueue : pageRoot.accountWorkers.transferCommandQueue,
                                                                  browserCommandQueue : browserCommandQueue
                                                              })
                     menu.requestListReload.connect(refreshListView)

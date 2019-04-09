@@ -70,6 +70,7 @@ ContextMenu {
 
         browserCommandQueue.copyRequest(fromPath, toPath)
         browserCommandQueue.directoryListingRequest(newDir, true)
+        requestListReload(true)
         contextMenuDone()
     }
 

@@ -21,6 +21,7 @@ contains(CONFIG, quickcontrols) {
 
 INCLUDEPATH += $$PWD/src
 DEPENDPATH += $$PWD/src
+INCLUDEPATH += $$PWD/../../3rdparty/libqtcommandqueue
 
 INCLUDEPATH += $$PWD/../../3rdparty/qwebdavlib/qwebdavlib
 DEPENDPATH += $$PWD/../../3rdparty/qwebdavlib/qwebdavlib

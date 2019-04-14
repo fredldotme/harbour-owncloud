@@ -16,3 +16,6 @@
 [submodule "3rdparty/qml-ui-set"]
 	path = 3rdparty/qml-ui-set
 	url = https://github.com/fredldotme/qml-ui-set
+[submodule "3rdparty/libqtcommandqueue"]
+	path = 3rdparty/libqtcommandqueue
+	url = https://github.com/fredldotme/libqtcommandqueue

@@ -28,8 +28,6 @@ SOURCES += \
     $$PWD/src/util/filepathutil.cpp \
     $$PWD/src/util/shellcommand.cpp \
     $$PWD/src/util/webdav_utils.cpp \
-    $$PWD/src/commandqueue.cpp \
-    $$PWD/src/commandentity.cpp \
     $$PWD/src/commands/webdav/fileuploadcommandentity.cpp \
     $$PWD/src/commands/webdav/filedownloadcommandentity.cpp \
     $$PWD/src/commands/webdav/webdavcommandentity.cpp \
@@ -51,7 +49,6 @@ SOURCES += \
     $$PWD/src/commands/webdav/davproppatchcommandentity.cpp \
     $$PWD/src/net/avatarfetcher.cpp \
     $$PWD/src/commands/nopcommandentity.cpp \
-    $$PWD/src/commandunit.cpp \
     $$PWD/src/commands/sync/ncdirtreecommandunit.cpp \
     $$PWD/src/commands/sync/ncsynccommandunit.cpp \
     $$PWD/src/cacheprovider.cpp \
@@ -73,9 +70,6 @@ HEADERS += \
     $$PWD/src/util/shellcommand.h \
     $$PWD/src/util/webdav_utils.h \
     $$PWD/src/ownclouddbusconsts.h \
-    $$PWD/src/commandqueue.h \
-    $$PWD/src/commandentityinfo.h \
-    $$PWD/src/commandentity.h \
     $$PWD/src/commands/webdav/fileuploadcommandentity.h \
     $$PWD/src/commands/webdav/filedownloadcommandentity.h \
     $$PWD/src/commands/webdav/webdavcommandentity.h \
@@ -99,7 +93,6 @@ HEADERS += \
     $$PWD/src/commands/webdav/davproppatchcommandentity.h \
     $$PWD/src/net/avatarfetcher.h \
     $$PWD/src/commands/nopcommandentity.h \
-    $$PWD/src/commandunit.h \
     $$PWD/src/commands/sync/ncdirtreecommandunit.h \
     $$PWD/src/commands/sync/ncsynccommandunit.h \
     $$PWD/src/cacheprovider.h \
@@ -111,6 +104,8 @@ HEADERS += \
     $$PWD/src/util/providerutils.h \
     $$PWD/src/accountworkers.h \
     $$PWD/src/accountworkergenerator.h
+
+include($$PWD/../../3rdparty/libqtcommandqueue/libqtcommandqueue.pri)
 
 contains(QT, dbus) {
     SOURCES += \

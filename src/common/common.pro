@@ -119,6 +119,8 @@ INCLUDEPATH += $$PWD/src
 DEPENDPATH += $$PWD/src
 INCLUDEPATH += $$PWD/../../3rdparty/qwebdavlib/qwebdavlib
 DEPENDPATH += $$PWD/../../3rdparty/qwebdavlib/qwebdavlib
+INCLUDEPATH += $$PWD/../../3rdparty/libqtcommandqueue
+DEPENDPATH += $$PWD/../../3rdparty/libqtcommandqueue
 
 # SailfishOS configuration
 !contains(CONFIG, quickcontrols) {

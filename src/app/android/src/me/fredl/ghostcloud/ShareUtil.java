@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.provider.DocumentsContract;
 import android.util.Log;
@@ -20,6 +21,13 @@ public class ShareUtil {
     }
 
     private static String LOG_TAG = "GhostCloud";
+
+    public static String setupVmPolicy()
+    {
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+        return "";
+    }
 
     public static String getFilePathForContent(String contentUri)
     {

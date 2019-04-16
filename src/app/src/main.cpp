@@ -112,7 +112,7 @@ bool checkAndroidStoragePermissions() {
 
 enum GCTargetOs {
     GENERIC = 0,
-    ANDROID,
+    ANDROID_OS,
     IOS,
     UBUNTU_TOUCH
 };
@@ -127,6 +127,14 @@ int main(int argc, char *argv[])
 #else
     QmlUiSet::registerQmlTypes();
     const QString QHOSTCLOUD_APP_NAME = QStringLiteral("GhostCloud");
+#endif
+
+#ifdef Q_OS_ANDROID
+    QAndroidJniObject::callStaticObjectMethod(
+        "me/fredl/ghostcloud/ShareUtil",
+        "setupVmPolicy",
+        "()Ljava/lang/String;");
+
 #endif
 
     qmlRegisterType<QmlMap>("harbour.owncloud", 1, 0, "QmlMap");
@@ -198,7 +206,7 @@ int main(int argc, char *argv[])
     while(!checkAndroidStoragePermissions());
 
     const int headerBarSize = 48;
-    const GCTargetOs targetOs = GCTargetOs::ANDROID;
+    const GCTargetOs targetOs = GCTargetOs::ANDROID_OS;
 #elif defined(Q_OS_IOS)
     const int headerBarSize = 48;
     const GCTargetOs targetOs = GCTargetOs::IOS;

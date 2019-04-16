@@ -7,8 +7,10 @@ Dialog {
     canAccept: !isLoadingDirectory
 
     property string remotePath : "/"
-    property bool isLoadingDirectory : true
+    property bool isLoadingDirectory : __listCommand !== null
     property QmlMap directoryContents : applicationWindow.dirContents
+
+    property var __listCommand : null
 
     property CloudStorageProvider browserCommandQueue : null
 
@@ -24,10 +26,9 @@ Dialog {
 
         if (directoryContents.contains(remotePath)) {
             listView.model = mangledDirectoryList(directoryContents.value(remotePath))
-            isLoadingDirectory = false;
             return;
         }
-        dialogRoot.browserCommandQueue.directoryListingRequest(remotePath, true)
+        __listCommand = dialogRoot.browserCommandQueue.directoryListingRequest(remotePath, true)
     }
 
     Component.onCompleted: {
@@ -42,7 +43,6 @@ Dialog {
                 return;
 
             listView.model = mangledDirectoryList(directoryContents.value(key))
-            isLoadingDirectory = false;
         }
     }
 
@@ -102,7 +102,6 @@ Dialog {
                     var newTargetDir = FilePathUtil.getCanonicalPath(remotePath + "/" +
                                                                      davInfo.name + "/")
                     console.log(newTargetDir)
-                    isLoadingDirectory = true;
                     getDirectoryContent(newTargetDir)
                 }
             }

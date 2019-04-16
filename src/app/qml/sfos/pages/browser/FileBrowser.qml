@@ -405,6 +405,7 @@ Page {
             // Delete menu resources after completion,
             // which MUST be indicated by the context menu component
             onPressAndHold: {
+                console.log(JSON.stringify(davInfo))
                 if (!menu) {
                     menu = contextMenuComponent.createObject(listView, {
                                                                  selectedEntry : davInfo,
@@ -414,7 +415,7 @@ Page {
                                                                  textEntryDialogComponent : textEntryDialogComponent,
                                                                  fileDetailsComponent : fileDetailsComponent,
                                                                  transferQueue : pageRoot.accountWorkers.transferCommandQueue,
-                                                                 browserCommandQueue : browserCommandQueue
+                                                                 browserCommandQueue : pageRoot.accountWorkers.browserCommandQueue
                                                              })
                     menu.requestListReload.connect(refreshListView)
                     menu.contextMenuDone.connect(function() {

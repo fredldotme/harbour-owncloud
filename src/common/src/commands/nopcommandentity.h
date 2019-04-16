@@ -2,7 +2,7 @@
 #define NOPCOMMANDENTITY_H
 
 #include <QObject>
-#include "commands/stdfunctioncommandentity.h"
+#include <stdfunctioncommandentity.h>
 
 class NopCommandEntity : public StdFunctionCommandEntity
 {

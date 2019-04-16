@@ -34,7 +34,7 @@ QString FilePathUtil::destination(const NextcloudSettingsBase* account)
     }
 
     const QString pattern = QStringLiteral("%1/%2/%3/%4/");
-    return pattern.arg(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation),
+    return pattern.arg(QStandardPaths::writableLocation(QStandardPaths::DownloadLocation),
                        account->hostname(),
                        QString::number(account->port()),
                        account->username());

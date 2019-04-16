@@ -10,7 +10,7 @@
 #include <commands/webdav/davmovecommandentity.h>
 #include <commands/webdav/davlistcommandentity.h>
 #include <commands/webdav/davproppatchcommandentity.h>
-#include <commands/stdfunctioncommandentity.h>
+#include <stdfunctioncommandentity.h>
 #include <commandunit.h>
 
 #include <util/filepathutil.h>

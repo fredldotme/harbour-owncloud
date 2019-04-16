@@ -78,7 +78,6 @@ HEADERS += \
     $$PWD/src/commands/webdav/davcopycommandentity.h \
     $$PWD/src/commands/webdav/davmovecommandentity.h \
     $$PWD/src/commands/webdav/davlistcommandentity.h \
-    $$PWD/src/commands/stdfunctioncommandentity.h \
     $$PWD/src/commands/http/httpcommandentity.h \
     $$PWD/src/commands/http/httpgetcommandentity.h \
     $$PWD/src/provider/storage/webdavcommandqueue.h \
@@ -119,8 +118,8 @@ INCLUDEPATH += $$PWD/src
 DEPENDPATH += $$PWD/src
 INCLUDEPATH += $$PWD/../../3rdparty/qwebdavlib/qwebdavlib
 DEPENDPATH += $$PWD/../../3rdparty/qwebdavlib/qwebdavlib
-INCLUDEPATH += $$PWD/../../3rdparty/libqtcommandqueue
-DEPENDPATH += $$PWD/../../3rdparty/libqtcommandqueue
+INCLUDEPATH += $$PWD/../../3rdparty/libqtcommandqueue/src
+DEPENDPATH += $$PWD/../../3rdparty/libqtcommandqueue/src
 
 # SailfishOS configuration
 !contains(CONFIG, quickcontrols) {

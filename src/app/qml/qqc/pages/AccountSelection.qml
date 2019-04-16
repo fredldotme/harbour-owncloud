@@ -58,6 +58,7 @@ Item {
         anchors.fill: parent
         model: accountGenerator.accountWorkers
         ScrollBar.vertical: ScrollBar {}
+        spacing: 8
 
         delegate: MouseArea {
             id: accountMouseArea

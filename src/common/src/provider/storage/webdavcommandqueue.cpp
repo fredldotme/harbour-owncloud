@@ -130,13 +130,8 @@ CommandEntity* WebDavCommandQueue::fileDownloadRequest(QString remotePath,
     FileDownloadCommandEntity* downloadCommand = Q_NULLPTR;
     CommandEntity* lastModifiedCommand = Q_NULLPTR;
     CommandEntity* openFileCommand = Q_NULLPTR;
-
-#ifdef GHOSTCLOUD_COMPAT_PATHS
-    QString destination = FilePathUtil::destinationFromMIME(mimeType) + remotePath;
-#else
     Q_UNUSED(mimeType);
     QString destination = FilePathUtil::destination(this->settings()) + remotePath;
-#endif
 
     downloadCommand = new FileDownloadCommandEntity(this, remotePath,
                                                     destination, this->getWebdav());

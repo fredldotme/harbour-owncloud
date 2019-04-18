@@ -21,12 +21,6 @@ Page {
     signal resetOcsInfo()
     signal notificationRequest(string summary, string body)
 
-    Component.onCompleted: {
-        if (clientSettings.autoLogin) {
-            authenticator.authenticate(false)
-        }
-    }
-
     QWebDavAuthenticator {
         id: authenticator
         settings: clientSettings
@@ -135,13 +129,6 @@ Page {
                         text: qsTr("WebDav")
                     }
                 }
-            }
-
-            TextSwitch {
-                id: autoLoginSwitch
-                enabled: !loginInProgress
-                text: qsTr("Login automatically")
-                checked: clientSettings.autoLogin
             }
 
             TextSwitch {

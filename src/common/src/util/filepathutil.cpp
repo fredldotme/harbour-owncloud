@@ -26,14 +26,14 @@ QString FilePathUtil::destinationFromMIME(const QString& mime)
 }
 
 
-QString FilePathUtil::destination(const NextcloudSettingsBase* account)
+QString FilePathUtil::destination(NextcloudSettingsBase* account)
 {
     if (!account) {
         qWarning() << "account is NULL, bailing out.";
         return QStringLiteral("/");
     }
 
-    const QString pattern = QStringLiteral("%1/%2/%3/%4/");
+    const QString pattern = QStringLiteral("%1/GhostCloud/%2/%3/%4/");
     return pattern.arg(QStandardPaths::writableLocation(QStandardPaths::DownloadLocation),
                        account->hostname(),
                        QString::number(account->port()),

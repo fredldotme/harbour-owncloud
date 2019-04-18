@@ -32,6 +32,7 @@ Page {
         id: accountsList
         anchors.fill: parent
         model: accountGenerator.accountWorkers
+        spacing: 8
 
         PullDownMenu {
             MenuItem {

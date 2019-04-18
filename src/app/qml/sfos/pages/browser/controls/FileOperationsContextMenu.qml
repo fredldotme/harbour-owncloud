@@ -9,12 +9,13 @@ ContextMenu {
     property var selectedEntry : null;
     property var selectedItem : null
     property var dialogObj : null;
-    property CloudStorageProvider transferQueue : null
+    property CloudStorageProvider transferCommandQueue : null
     property CloudStorageProvider browserCommandQueue : null
     property Component remoteDirDialogComponent : null
     property Component textEntryDialogComponent: null
     property Component fileDetailsComponent : null
 
+    signal detailsRequested()
     signal requestListReload(bool refresh)
     signal contextMenuDone()
 
@@ -22,7 +23,7 @@ ContextMenu {
         !preventResourceModification(selectedEntry)
 
     function preventResourceModification(target) {
-        var queueInfos = transferQueue.queueInformation();
+        var queueInfos = transferCommandQueue.queueInformation();
         for (var i = 0; i < queueInfos.length; i++) {
             var pendingTransfer = queueInfos[i];
 
@@ -120,7 +121,7 @@ ContextMenu {
     }
 
     Connections {
-        target: transferQueue
+        target: transferCommandQueue
         onCommandFinished: {
             __enableDestructiveMenus = !preventResourceModification(selectedEntry)
         }
@@ -183,9 +184,8 @@ ContextMenu {
         id: detailsMenuItem
         text: qsTr("Details")
         onClicked: {
-            var fileDetails = fileDetailsComponent.createObject(pageRoot, { entry: selectedEntry });
-            pageStack.push(fileDetails);
+            detailsRequested()
+            contextMenuDone()
         }
     }
-
 }

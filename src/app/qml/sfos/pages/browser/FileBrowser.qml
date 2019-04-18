@@ -384,21 +384,25 @@ Page {
                 truncationMode: TruncationMode.Fade
             }
 
+            function showDetails() {
+                var fileDetails = fileDetailsComponent.createObject(pageRoot, {
+                                                                        entry: davInfo,
+                                                                        accountWorkers: accountWorkers
+                                                                    });
+                if (!fileDetails) {
+                    console.warn(fileDetailsComponent.errorString())
+                    return;
+                }
+
+                pageStack.push(fileDetails);
+            }
+
             onClicked: {
                 if(davInfo.isDirectory) {
                     var nextPath = remotePath + davInfo.name + "/";
                     changeDirectory(nextPath)
                 } else {
-                    var fileDetails = fileDetailsComponent.createObject(pageRoot, {
-                                                                            entry: davInfo,
-                                                                            accountWorkers: accountWorkers
-                                                                        });
-                    if (!fileDetails) {
-                        console.warn(fileDetailsComponent.errorString())
-                        return;
-                    }
-
-                    pageStack.push(fileDetails);
+                    showDetails();
                 }
             }
 
@@ -414,9 +418,10 @@ Page {
                                                                  remoteDirDialogComponent : remoteDirDialogComponent,
                                                                  textEntryDialogComponent : textEntryDialogComponent,
                                                                  fileDetailsComponent : fileDetailsComponent,
-                                                                 transferQueue : pageRoot.accountWorkers.transferCommandQueue,
+                                                                 transferCommandQueue : pageRoot.accountWorkers.transferCommandQueue,
                                                                  browserCommandQueue : pageRoot.accountWorkers.browserCommandQueue
                                                              })
+                    menu.detailsRequested.connect(showDetails)
                     menu.requestListReload.connect(refreshListView)
                     menu.contextMenuDone.connect(function() {
                         menu.destroy()

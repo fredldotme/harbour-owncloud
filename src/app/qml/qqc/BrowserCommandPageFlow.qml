@@ -26,12 +26,7 @@ CommandPageFlow {
     Connections {
         target: accountWorkers.accountInfoCommandQueue
         onCommandFinished: {
-            console.debug("finished, " + receipt.result.enabled)
-
-            if (!receipt.result.enabled) {
-                console.log("Not enabled")
-                return
-            }
+            console.debug("finished, account info enabled? " + receipt.result.enabled)
 
             userInfo.enabled = receipt.result.enabled
             userInfo.displayName = receipt.result.displayName
@@ -42,8 +37,9 @@ CommandPageFlow {
         }
     }
 
-    Item {
+    QtObject {
         id: userInfo
+        property bool enabled: false
         property string displayName : ""
         property string email : ""
         property string freeBytes : ""
@@ -54,6 +50,10 @@ CommandPageFlow {
     Dialog {
         id: fileExistsDialog
         standardButtons: Dialog.Ok | Dialog.Cancel
+        parent: pageFlowItemRoot.parent
+        width: parent.width / 2
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
 
         property string fileName : ""
         property string path : ""
@@ -66,6 +66,8 @@ CommandPageFlow {
             text: qsTr("Would you like to remove the " +
                        "existing file '%1' before " +
                        "starting the download?").arg(fileExistsDialog.fileName)
+            width: parent.width
+            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
         }
 
         onAccepted: {
@@ -80,13 +82,15 @@ CommandPageFlow {
     }
 
     function startDownload(path, mimeType, open, overwriteExistingFile, lastModified, transferCommandQueue) {
-        var destinationDir = FilePathUtil.destinationFromMIME(mimeType)
+        var destinationDir = FilePathUtil.destination(accountWorkers.account)
         var fileName = path.substring(path.lastIndexOf("/") + 1)
         var localFilePath = destinationDir + "/" + fileName
         console.log("remote path: " + path)
         console.log("fileExists: " + localFilePath + "?")
 
-        if (!overwriteExistingFile && FilePathUtil.fileExists(localFilePath)) {
+        var exists = FilePathUtil.fileExists(localFilePath);
+
+        if (!overwriteExistingFile && exists) {
             fileExistsDialog.fileName = fileName
             fileExistsDialog.path = path
             fileExistsDialog.mimeType = mimeType

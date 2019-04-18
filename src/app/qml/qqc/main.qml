@@ -110,6 +110,19 @@ ApplicationWindow {
         detailsStack.push(webDavAccountDialog)
     }
 
+    // Android back button support
+    onClosing: {
+        if (!osIsAndroid)
+            return
+
+        if (showBackButton) {
+            popPage()
+            close.accepted = false
+        } else {
+            return
+        }
+    }
+
     header: ToolBar {
         id: headerBar
         height: headerBarSize
@@ -148,7 +161,7 @@ ApplicationWindow {
                     if (rootStack.currentItem === null)
                         return
 
-                    rootStack.currentItem.avatarMenu.open()
+                    rootStack.currentItem.openAvatarMenu()
                 }
             }
 
@@ -425,17 +438,7 @@ ApplicationWindow {
                 anchors.topMargin: 2
                 spacing: 2
                 focus: true
-                Keys.onReleased: {
-                    if (event.key === Qt.Key_Back) {
-                        if (showBackButton) {
-                            popPage()
-                            event.accepted = true
-                        } else {
-                            Qt.quit()
-                        }
-                        return
-                    }
-                }
+
                 Rectangle {
                     id: rootStackContainer
                     width: sideStackIsActive ? (parent.width / 3)

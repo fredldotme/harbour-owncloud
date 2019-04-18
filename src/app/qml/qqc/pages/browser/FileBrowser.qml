@@ -238,6 +238,13 @@ Page {
         }
     }
 
+    function openAvatarMenu() {
+        if (!pageFlow.userInfo.enabled)
+            return
+
+        avatarMenu.open()
+    }
+
     Menu {
         id: avatarMenu
         DetailItem {

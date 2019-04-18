@@ -122,7 +122,7 @@ Page {
         }
 
         if (rootWindow.detailsStack!== rootStack)
-            rootWindow.detailsStack.pop()
+            rootWindow.popAndTryDestroy()
 
         rootWindow.detailsStack.push(fileDetails);
     }

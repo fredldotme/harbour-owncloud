@@ -19,11 +19,9 @@ ApplicationWindow {
     height: 400
     minimumHeight: 380
 
-    // TODO: save window geometry before closing
-
     readonly property int fontSizeTiny : 10
     readonly property int fontSizeSmall : 14
-    readonly property int fontSizeMedium : 18
+    readonly property int fontSizeMedium : 16
     readonly property int fontSizeLarge : 26
 
     readonly property int paddingTiny : 8
@@ -85,13 +83,20 @@ ApplicationWindow {
         msgDialog.showMessage(summary, "")
     }
 
+    function popAndTryDestroy() {
+        var page = sideStack.pop()
+        if (!page)
+            return true
+
+        if (page.destroyable !== undefined && page.destroyable) {
+            page.destroy()
+        }
+        return true;
+    }
+
     function popPage()  {
         if (sideStack.currentItem !== sideStack.initialItem) {
-            var page = sideStack.pop()
-            if (page.destroyable !== undefined && page.destroyable) {
-                page.destroy()
-            }
-            return true;
+            return popAndTryDestroy()
         }
 
         if (rootStack.currentItem !== rootStack.initialItem) {
@@ -112,6 +117,7 @@ ApplicationWindow {
 
     // Android back button support
     onClosing: {
+        // TODO: save window geometry before closing
         if (!osIsAndroid)
             return
 
@@ -264,7 +270,7 @@ ApplicationWindow {
             y: (parent.height - height) / 2
             Label {
                 id: msgDialogText
-                anchors.fill: parent
+                width: parent.width
             }
         }
 
@@ -351,13 +357,13 @@ ApplicationWindow {
 
             About {
                 id: infoPage
-                onCloseRequest: detailsStack.pop()
+                onCloseRequest: popAndTryDestroy()
             }
 
             TransferPage {
                 id: transfersTab
                 accountGenerator: accountWorkerGenerator
-                onCloseRequest: detailsStack.pop()
+                onCloseRequest: popAndTryDestroy()
             }
         }
 
@@ -420,7 +426,7 @@ ApplicationWindow {
                     }
                     onPushEnterChanged: {
                         if (detailStackVisibleRequired) {
-                            sideStack.pop()
+                            popAndTryDestroy();
                         }
                     }
                 }

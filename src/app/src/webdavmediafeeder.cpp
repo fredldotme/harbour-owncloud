@@ -26,7 +26,7 @@ inline bool objectContainsQMediaPlayer(QObject* object) {
 WebDavMediaFeeder::WebDavMediaFeeder(
         QObject* parent,
         QObject* mediaPlayer,
-        NextcloudSettingsBase* settings) :
+        AccountBase* settings) :
     QObject(parent),
     m_mediaPlayer(mediaPlayer),
     m_settings(settings)
@@ -109,12 +109,12 @@ QUrl WebDavMediaFeeder::url()
     return this->m_url;
 }
 
-NextcloudSettingsBase* WebDavMediaFeeder::settings()
+AccountBase* WebDavMediaFeeder::settings()
 {
     return this->m_settings;
 }
 
-void WebDavMediaFeeder::setSettings(NextcloudSettingsBase *v)
+void WebDavMediaFeeder::setSettings(AccountBase *v)
 {
     if (this->m_settings == v)
         return;

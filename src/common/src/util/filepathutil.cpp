@@ -26,7 +26,7 @@ QString FilePathUtil::destinationFromMIME(const QString& mime)
 }
 
 
-QString FilePathUtil::destination(NextcloudSettingsBase* account)
+QString FilePathUtil::destination(AccountBase* account)
 {
     if (!account) {
         qWarning() << "account is NULL, bailing out.";
@@ -62,7 +62,7 @@ QString FilePathUtil::getCanonicalPath(const QString &path)
 }
 
 QString FilePathUtil::getWebDavFileUrl(const QString &path,
-                                       NextcloudSettingsBase *settings)
+                                       AccountBase *settings)
 {
     if (!settings) {
         return QStringLiteral();

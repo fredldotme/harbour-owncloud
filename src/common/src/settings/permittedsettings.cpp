@@ -7,7 +7,7 @@
 #include <ownclouddbusconsts.h>
 
 PermittedSettings::PermittedSettings(QObject *parent) :
-    NextcloudSettingsBase(parent)
+    AccountBase(parent)
 {
 }
 

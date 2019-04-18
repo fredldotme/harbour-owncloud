@@ -4,9 +4,9 @@
 #include <QStandardPaths>
 #include <QUrl>
 
-NextcloudSettingsBase::NextcloudSettingsBase(QObject *parent) : QObject(parent)
+AccountBase::AccountBase(QObject *parent) : QObject(parent)
 {
-    QObject::connect(this, &NextcloudSettingsBase::customCertChanged,
+    QObject::connect(this, &AccountBase::customCertChanged,
                      this, [=](){
         qDebug() << "customCertChanged" << this->isCustomCert();
     });
@@ -20,14 +20,14 @@ NextcloudSettingsBase::NextcloudSettingsBase(QObject *parent) : QObject(parent)
     m_uploadAutomatically = false;
     m_mobileUpload = false;
 
-    connect(this, &NextcloudSettingsBase::hoststringChanged, this, &NextcloudSettingsBase::settingsChanged);
-    connect(this, &NextcloudSettingsBase::usernameChanged, this, &NextcloudSettingsBase::settingsChanged);
-    connect(this, &NextcloudSettingsBase::passwordChanged, this, &NextcloudSettingsBase::settingsChanged);
-    connect(this, &NextcloudSettingsBase::uploadAutomaticallyChanged, this, &NextcloudSettingsBase::settingsChanged);
-    connect(this, &NextcloudSettingsBase::localPicturesPathChanged, this, &NextcloudSettingsBase::settingsChanged);
+    connect(this, &AccountBase::hoststringChanged, this, &AccountBase::settingsChanged);
+    connect(this, &AccountBase::usernameChanged, this, &AccountBase::settingsChanged);
+    connect(this, &AccountBase::passwordChanged, this, &AccountBase::settingsChanged);
+    connect(this, &AccountBase::uploadAutomaticallyChanged, this, &AccountBase::settingsChanged);
+    connect(this, &AccountBase::localPicturesPathChanged, this, &AccountBase::settingsChanged);
 }
 
-void NextcloudSettingsBase::refreshHostString()
+void AccountBase::refreshHostString()
 {
     QString hostString;
     hostString = m_isHttps ? "https://" : "http://";
@@ -39,7 +39,7 @@ void NextcloudSettingsBase::refreshHostString()
     }
 }
 
-bool NextcloudSettingsBase::setHoststring(QString value)
+bool AccountBase::setHoststring(QString value)
 {
     if(!value.startsWith("https://") && !value.startsWith("http://")) {
         return false;
@@ -67,7 +67,7 @@ bool NextcloudSettingsBase::setHoststring(QString value)
     return url.isValid() && !url.host().isEmpty();
 }
 
-void NextcloudSettingsBase::resetSettings()
+void AccountBase::resetSettings()
 {
     setHostname("");
     setPath("/");
@@ -88,12 +88,12 @@ void NextcloudSettingsBase::resetSettings()
     emit settingsChanged();
 }
 
-bool NextcloudSettingsBase::autoLogin() const
+bool AccountBase::autoLogin() const
 {
     return this->m_autoLogin;
 }
 
-void NextcloudSettingsBase::setAutoLogin(bool value)
+void AccountBase::setAutoLogin(bool value)
 {
     if (this->m_autoLogin == value)
         return;
@@ -102,12 +102,12 @@ void NextcloudSettingsBase::setAutoLogin(bool value)
     emit autoLoginChanged();
 }
 
-bool NextcloudSettingsBase::notifications() const
+bool AccountBase::notifications() const
 {
     return m_notifications;
 }
 
-void NextcloudSettingsBase::setNotifications(bool value)
+void AccountBase::setNotifications(bool value)
 {
     if (this->m_notifications == value)
         return;
@@ -116,12 +116,12 @@ void NextcloudSettingsBase::setNotifications(bool value)
     emit notificationSettingsChanged();
 }
 
-QString NextcloudSettingsBase::hostname() const
+QString AccountBase::hostname() const
 {
     return this->m_hostname;
 }
 
-void NextcloudSettingsBase::setHostname(const QString &value)
+void AccountBase::setHostname(const QString &value)
 {
     if (this->m_hostname == value)
         return;
@@ -130,12 +130,12 @@ void NextcloudSettingsBase::setHostname(const QString &value)
     Q_EMIT hostnameChanged();
 }
 
-QString NextcloudSettingsBase::path() const
+QString AccountBase::path() const
 {
     return this->m_path.isEmpty() ? "/" : this->m_path;
 }
 
-void NextcloudSettingsBase::setPath(const QString &value)
+void AccountBase::setPath(const QString &value)
 {
     if (this->m_path == value)
         return;
@@ -144,12 +144,12 @@ void NextcloudSettingsBase::setPath(const QString &value)
     Q_EMIT pathChanged();
 }
 
-int NextcloudSettingsBase::port() const
+int AccountBase::port() const
 {
     return m_port;
 }
 
-void NextcloudSettingsBase::setPort(int value)
+void AccountBase::setPort(int value)
 {
     if (this->m_port == value)
         return;
@@ -158,12 +158,12 @@ void NextcloudSettingsBase::setPort(int value)
     Q_EMIT portChanged();
 }
 
-bool NextcloudSettingsBase::isHttps() const
+bool AccountBase::isHttps() const
 {
     return m_isHttps;
 }
 
-void NextcloudSettingsBase::setIsHttps(bool value)
+void AccountBase::setIsHttps(bool value)
 {
     if (this->m_isHttps == value)
         return;
@@ -172,17 +172,17 @@ void NextcloudSettingsBase::setIsHttps(bool value)
     Q_EMIT isHttpsChanged();
 }
 
-QString NextcloudSettingsBase::hoststring() const
+QString AccountBase::hoststring() const
 {
     return m_hoststring;
 }
 
-QString NextcloudSettingsBase::username() const
+QString AccountBase::username() const
 {
     return m_username;
 }
 
-void NextcloudSettingsBase::setUsername(QString value)
+void AccountBase::setUsername(QString value)
 {
     if (this->m_username == value)
         return;
@@ -191,12 +191,12 @@ void NextcloudSettingsBase::setUsername(QString value)
     Q_EMIT usernameChanged();
 }
 
-QString NextcloudSettingsBase::password() const
+QString AccountBase::password() const
 {
     return m_password;
 }
 
-void NextcloudSettingsBase::setPassword(QString value)
+void AccountBase::setPassword(QString value)
 {
     if (this->m_password == value)
         return;
@@ -205,12 +205,12 @@ void NextcloudSettingsBase::setPassword(QString value)
     Q_EMIT passwordChanged();
 }
 
-int NextcloudSettingsBase::providerType() const
+int AccountBase::providerType() const
 {
     return static_cast<int>(this->m_providerType);
 }
 
-void NextcloudSettingsBase::setProviderType(int type)
+void AccountBase::setProviderType(int type)
 {
     const ProviderType providerType = static_cast<ProviderType>(type);
     if (this->m_providerType == providerType)
@@ -221,12 +221,12 @@ void NextcloudSettingsBase::setProviderType(int type)
     Q_EMIT providerTypeChanged();
 }
 
-QString NextcloudSettingsBase::md5Hex() const
+QString AccountBase::md5Hex() const
 {
     return this->m_md5Hex;
 }
 
-void NextcloudSettingsBase::setMd5Hex(const QString &value)
+void AccountBase::setMd5Hex(const QString &value)
 {
     if (this->m_md5Hex == value)
         return;
@@ -235,12 +235,12 @@ void NextcloudSettingsBase::setMd5Hex(const QString &value)
     Q_EMIT md5HexChanged();
 }
 
-QString NextcloudSettingsBase::sha1Hex() const
+QString AccountBase::sha1Hex() const
 {
     return this->m_sha1Hex;
 }
 
-void NextcloudSettingsBase::setSha1Hex(const QString &value)
+void AccountBase::setSha1Hex(const QString &value)
 {
     if (this->m_sha1Hex == value)
         return;
@@ -249,12 +249,12 @@ void NextcloudSettingsBase::setSha1Hex(const QString &value)
     Q_EMIT sha1HexChanged();
 }
 
-bool NextcloudSettingsBase::uploadAutomatically() const
+bool AccountBase::uploadAutomatically() const
 {
     return m_uploadAutomatically;
 }
 
-void NextcloudSettingsBase::setUploadAutomatically(bool enabled)
+void AccountBase::setUploadAutomatically(bool enabled)
 {
     qDebug() << Q_FUNC_INFO << enabled;
     if (this->m_uploadAutomatically == enabled)
@@ -263,12 +263,12 @@ void NextcloudSettingsBase::setUploadAutomatically(bool enabled)
     Q_EMIT uploadAutomaticallyChanged();
 }
 
-bool NextcloudSettingsBase::mobileUpload() const
+bool AccountBase::mobileUpload() const
 {
     return m_mobileUpload;
 }
 
-void NextcloudSettingsBase::setMobileUpload(bool enabled)
+void AccountBase::setMobileUpload(bool enabled)
 {
     if (this->m_mobileUpload == enabled)
         return;
@@ -276,12 +276,12 @@ void NextcloudSettingsBase::setMobileUpload(bool enabled)
     Q_EMIT mobileUploadChanged();
 }
 
-QString NextcloudSettingsBase::localPicturesPath() const
+QString AccountBase::localPicturesPath() const
 {
     return m_localPicturesPath;
 }
 
-void NextcloudSettingsBase::setLocalPicturesPath(QString newPath)
+void AccountBase::setLocalPicturesPath(QString newPath)
 {
     if (this->m_localPicturesPath == newPath)
         return;
@@ -289,7 +289,7 @@ void NextcloudSettingsBase::setLocalPicturesPath(QString newPath)
     Q_EMIT localPicturesPathChanged();
 }
 
-void NextcloudSettingsBase::acceptTlsFingerprints(QString md5, QString sha1)
+void AccountBase::acceptTlsFingerprints(QString md5, QString sha1)
 {
     if (this->m_md5Hex == md5 && this->m_sha1Hex == sha1)
         return;
@@ -300,13 +300,13 @@ void NextcloudSettingsBase::acceptTlsFingerprints(QString md5, QString sha1)
     Q_EMIT customCertChanged();
 }
 
-void NextcloudSettingsBase::setCustomCert(bool value)
+void AccountBase::setCustomCert(bool value)
 {
     if (!value)
         acceptTlsFingerprints("", "");
 }
 
-bool NextcloudSettingsBase::isCustomCert() const
+bool AccountBase::isCustomCert() const
 {
     return !(this->m_md5Hex.isEmpty() || this->m_sha1Hex.isEmpty());
 }

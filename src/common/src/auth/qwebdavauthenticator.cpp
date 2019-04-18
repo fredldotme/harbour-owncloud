@@ -6,7 +6,7 @@
 #include <QDebug>
 
 QWebDavAuthenticator::QWebDavAuthenticator(QObject *parent,
-                                           NextcloudSettingsBase* settings) :
+                                           AccountBase* settings) :
     Authenticator(parent, settings)
 {
     QObject::connect(&this->m_dirParser, &QWebdavDirParser::errorChanged,

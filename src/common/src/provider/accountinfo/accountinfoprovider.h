@@ -11,7 +11,7 @@ class AccountInfoProvider : public SettingsBackedCommandQueue
     Q_PROPERTY(QVariantMap userInfo READ userInfo NOTIFY userInfoChanged)
 public:
     explicit AccountInfoProvider(QObject *parent = Q_NULLPTR,
-                                 NextcloudSettingsBase* settings = Q_NULLPTR);
+                                 AccountBase* settings = Q_NULLPTR);
 
 public slots:
     virtual CommandEntity* userInfoRequest() = 0;

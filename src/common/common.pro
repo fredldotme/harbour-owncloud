@@ -116,8 +116,13 @@ contains(QT, dbus) {
 
 INCLUDEPATH += $$PWD/src
 DEPENDPATH += $$PWD/src
+
 INCLUDEPATH += $$PWD/../../3rdparty/qwebdavlib/qwebdavlib
 DEPENDPATH += $$PWD/../../3rdparty/qwebdavlib/qwebdavlib
+
+INCLUDEPATH += $$PWD/../../3rdparty/libqtcommandqueue/src
+DEPENDPATH += $$PWD/../../3rdparty/libqtcommandqueue/src
+
 INCLUDEPATH += $$PWD/../../3rdparty/libqtcommandqueue/src
 DEPENDPATH += $$PWD/../../3rdparty/libqtcommandqueue/src
 

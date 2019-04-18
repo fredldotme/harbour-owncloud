@@ -14,7 +14,7 @@ class AccountWorkers : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(NextcloudSettingsBase* account READ account CONSTANT)
+    Q_PROPERTY(AccountBase* account READ account CONSTANT)
     Q_PROPERTY(CloudStorageProvider* browserCommandQueue READ browserCommandQueue CONSTANT)
     Q_PROPERTY(CloudStorageProvider* transferCommandQueue READ transferCommandQueue CONSTANT)
     Q_PROPERTY(AccountInfoProvider* accountInfoCommandQueue READ accountInfoCommandQueue CONSTANT)
@@ -25,12 +25,12 @@ class AccountWorkers : public QObject
 public:
     explicit AccountWorkers();
     explicit AccountWorkers(QObject *parent,
-                            NextcloudSettingsBase* account = Q_NULLPTR,
+                            AccountBase* account = Q_NULLPTR,
                             CloudStorageProvider* browserCommandQueue = Q_NULLPTR,
                             CloudStorageProvider* transferCommandQueue = Q_NULLPTR,
                             AccountInfoProvider* accountInfoCommandQueue = Q_NULLPTR);
 
-    NextcloudSettingsBase* account();
+    AccountBase* account();
     CloudStorageProvider* browserCommandQueue();
     CloudStorageProvider* transferCommandQueue();
     AccountInfoProvider* accountInfoCommandQueue();
@@ -39,7 +39,7 @@ public:
     ThumbnailFetcher* thumbnailFetcher();
 
 private:
-    NextcloudSettingsBase* m_account = Q_NULLPTR;
+    AccountBase* m_account = Q_NULLPTR;
     CloudStorageProvider* m_browserCommandQueue = Q_NULLPTR;
     CloudStorageProvider* m_transferCommandQueue = Q_NULLPTR;
     AccountInfoProvider* m_accountInfoCommandQueue = Q_NULLPTR;

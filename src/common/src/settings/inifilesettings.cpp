@@ -11,7 +11,7 @@ IniFileSettings* IniFileSettings::instance()
 }
 
 IniFileSettings::IniFileSettings(QObject *parent) :
-    NextcloudSettingsBase(parent),
+    AccountBase(parent),
     m_settings("harbour-owncloud", "harbour-owncloud")
 {
 }

@@ -5,7 +5,7 @@
 #include <QStandardPaths>
 #include <util/webdav_utils.h>
 
-OscNetAccess::OscNetAccess(QObject* parent, NextcloudSettingsBase* settings) :
+OscNetAccess::OscNetAccess(QObject* parent, AccountBase* settings) :
     QNetworkAccessManager(parent), m_settings(settings)
 {
     QObject::connect(this, &OscNetAccess::sslErrors,
@@ -41,7 +41,7 @@ QNetworkReply* OscNetAccess::createRequest(Operation op,
                                                 outgoingData);
 }
 
-OcsNetAccessFactory::OcsNetAccessFactory(NextcloudSettingsBase *settings)
+OcsNetAccessFactory::OcsNetAccessFactory(AccountBase *settings)
     : m_settings(settings)
 {
     qDebug() << Q_FUNC_INFO;

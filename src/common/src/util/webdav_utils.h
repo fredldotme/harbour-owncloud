@@ -8,18 +8,18 @@
 #include <qwebdav.h>
 #include <settings/nextcloudsettingsbase.h>
 
-QWebdav* getNewWebDav(NextcloudSettingsBase *settings,
+QWebdav* getNewWebDav(AccountBase *settings,
                       QObject* parent = Q_NULLPTR);
 
-void applySettingsToWebdav(NextcloudSettingsBase *settings,
+void applySettingsToWebdav(AccountBase *settings,
                            QWebdav *webdav);
 
 QMap<QByteArray, QByteArray> prepareOcsHeaders(
-        NextcloudSettingsBase* settings = Q_NULLPTR,
+        AccountBase* settings = Q_NULLPTR,
         QMap<QByteArray, QByteArray> headers = QMap<QByteArray, QByteArray>());
 
 QNetworkRequest getOcsRequest(const QNetworkRequest& request,
-                              NextcloudSettingsBase* settings);
+                              AccountBase* settings);
 
 QByteArray hexToDigest(const QString &input);
 

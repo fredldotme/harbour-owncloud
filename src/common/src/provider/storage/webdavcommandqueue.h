@@ -15,7 +15,7 @@ class WebDavCommandQueue : public CloudStorageProvider
 
 public:
     explicit WebDavCommandQueue(QObject* parent = Q_NULLPTR,
-                                NextcloudSettingsBase* settings = Q_NULLPTR);
+                                AccountBase* settings = Q_NULLPTR);
 
 public slots:
     virtual CommandEntity* fileDownloadRequest(QString from,

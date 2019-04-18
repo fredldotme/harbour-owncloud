@@ -1,12 +1,12 @@
 #include "accountworkers.h"
 
 AccountWorkers::AccountWorkers() : AccountWorkers(Q_NULLPTR,
-                                                  new NextcloudSettingsBase)
+                                                  new AccountBase)
 {
 }
 
 AccountWorkers::AccountWorkers(QObject *parent,
-                               NextcloudSettingsBase* account,
+                               AccountBase* account,
                                CloudStorageProvider* browserCommandQueue,
                                CloudStorageProvider* transferCommandQueue,
                                AccountInfoProvider* accountInfoCommandQueue) :
@@ -25,7 +25,7 @@ AccountWorkers::AccountWorkers(QObject *parent,
     this->m_thumbnailFetcher->setCommandQueue(this->m_browserCommandQueue);
 }
 
-NextcloudSettingsBase* AccountWorkers::account()
+AccountBase* AccountWorkers::account()
 {
     return this->m_account;
 }

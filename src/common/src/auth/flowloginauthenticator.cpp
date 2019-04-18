@@ -4,7 +4,7 @@
 #include <QDebug>
 
 FlowLoginAuthenticator::FlowLoginAuthenticator(QObject *parent,
-                                               NextcloudSettingsBase* settings) :
+                                               AccountBase* settings) :
     Authenticator(parent, settings)
 {
     QObject::connect(this, &FlowLoginAuthenticator::settingsChanged,

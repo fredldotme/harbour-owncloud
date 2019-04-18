@@ -13,21 +13,21 @@ class WebDavMediaFeeder : public QObject
                WRITE setMediaPlayer
                NOTIFY mediaPlayerChanged)
     Q_PROPERTY(QUrl url READ url WRITE setUrl NOTIFY urlChanged)
-    Q_PROPERTY(NextcloudSettingsBase* settings READ settings WRITE setSettings NOTIFY settingsChanged)
+    Q_PROPERTY(AccountBase* settings READ settings WRITE setSettings NOTIFY settingsChanged)
 
 public:
     explicit WebDavMediaFeeder(
             QObject* parent = Q_NULLPTR,
             QObject* mediaPlayer = Q_NULLPTR,
-            NextcloudSettingsBase* settings = Q_NULLPTR);
+            AccountBase* settings = Q_NULLPTR);
     ~WebDavMediaFeeder();
 
     void setMediaPlayer(QObject* object);
     QObject* mediaPlayer();
     void setUrl(const QUrl& url);
     QUrl url();
-    NextcloudSettingsBase* settings();
-    void setSettings(NextcloudSettingsBase* v);
+    AccountBase* settings();
+    void setSettings(AccountBase* v);
 
 public slots:
     void play();
@@ -36,7 +36,7 @@ public slots:
 
 private:
     QObject* m_mediaPlayer = Q_NULLPTR;
-    NextcloudSettingsBase* m_settings = Q_NULLPTR;
+    AccountBase* m_settings = Q_NULLPTR;
     QUrl m_url;
 
 signals:

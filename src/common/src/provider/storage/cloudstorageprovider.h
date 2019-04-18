@@ -13,7 +13,7 @@ class CloudStorageProvider : public SettingsBackedCommandQueue
 
 public:
     explicit CloudStorageProvider(QObject *parent = Q_NULLPTR,
-                                  NextcloudSettingsBase* settings = Q_NULLPTR);
+                                  AccountBase* settings = Q_NULLPTR);
 
     virtual CommandEntity* fileDownloadRequest(QString from,
                                                QString mimeType = QStringLiteral(""),

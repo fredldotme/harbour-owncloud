@@ -1,7 +1,7 @@
 #include "webdav_utils.h"
 #include <nextcloudendpointconsts.h>
 
-QWebdav* getNewWebDav(NextcloudSettingsBase *settings, QObject* parent)
+QWebdav* getNewWebDav(AccountBase *settings, QObject* parent)
 {
     // Allocating QWebdav object without settings doesn't make sense.
     if (!settings)
@@ -14,13 +14,13 @@ QWebdav* getNewWebDav(NextcloudSettingsBase *settings, QObject* parent)
     return newWebdav;
 }
 
-void applySettingsToWebdav(NextcloudSettingsBase *settings, QWebdav *webdav)
+void applySettingsToWebdav(AccountBase *settings, QWebdav *webdav)
 {
     if (!settings || !webdav)
         return;
 
     const QString apiPath =
-            (settings->providerType() == NextcloudSettingsBase::Nextcloud) ?
+            (settings->providerType() == AccountBase::Nextcloud) ?
                 NEXTCLOUD_ENDPOINT_WEBDAV :
                 QStringLiteral("");
 
@@ -35,7 +35,7 @@ void applySettingsToWebdav(NextcloudSettingsBase *settings, QWebdav *webdav)
 }
 
 QMap<QByteArray, QByteArray> prepareOcsHeaders(
-         NextcloudSettingsBase* settings, QMap<QByteArray, QByteArray> headers)
+         AccountBase* settings, QMap<QByteArray, QByteArray> headers)
 {
     // Return current headers when no valid settings have been provided
     if (!settings)
@@ -56,7 +56,7 @@ QMap<QByteArray, QByteArray> prepareOcsHeaders(
 }
 
 QNetworkRequest getOcsRequest(const QNetworkRequest& request,
-                              NextcloudSettingsBase* settings)
+                              AccountBase* settings)
 {
     qDebug() << Q_FUNC_INFO;
 

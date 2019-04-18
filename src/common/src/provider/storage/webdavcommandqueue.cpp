@@ -27,7 +27,7 @@
 #include <QtAndroid>
 #endif
 
-WebDavCommandQueue::WebDavCommandQueue(QObject* parent, NextcloudSettingsBase* settings) :
+WebDavCommandQueue::WebDavCommandQueue(QObject* parent, AccountBase* settings) :
     CloudStorageProvider(parent, settings)
 {
     updateConnectionSettings();
@@ -50,15 +50,15 @@ void WebDavCommandQueue::updateConnectionSettings()
     }
 
     // Connect to changes of credentials, certificate, hostname and provider settings
-    QObject::connect(this->settings(), &NextcloudSettingsBase::hoststringChanged,
+    QObject::connect(this->settings(), &AccountBase::hoststringChanged,
                      this, &WebDavCommandQueue::updateConnectionSettings);
-    QObject::connect(this->settings(), &NextcloudSettingsBase::usernameChanged,
+    QObject::connect(this->settings(), &AccountBase::usernameChanged,
                      this, &WebDavCommandQueue::updateConnectionSettings);
-    QObject::connect(this->settings(), &NextcloudSettingsBase::passwordChanged,
+    QObject::connect(this->settings(), &AccountBase::passwordChanged,
                      this, &WebDavCommandQueue::updateConnectionSettings);
-    QObject::connect(this->settings(), &NextcloudSettingsBase::providerTypeChanged,
+    QObject::connect(this->settings(), &AccountBase::providerTypeChanged,
                      this, &WebDavCommandQueue::updateConnectionSettings);
-    QObject::connect(this->settings(), &NextcloudSettingsBase::customCertChanged,
+    QObject::connect(this->settings(), &AccountBase::customCertChanged,
                      this, &WebDavCommandQueue::updateConnectionSettings);
 }
 

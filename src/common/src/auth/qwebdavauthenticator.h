@@ -14,7 +14,7 @@ class QWebDavAuthenticator : public Authenticator
 
 public:
     explicit QWebDavAuthenticator(QObject *parent = Q_NULLPTR,
-                                  NextcloudSettingsBase* settings = Q_NULLPTR);
+                                  AccountBase* settings = Q_NULLPTR);
 
 public slots:
     void authenticate() Q_DECL_OVERRIDE;

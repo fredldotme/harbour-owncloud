@@ -7,8 +7,8 @@
 class ProviderUtils
 {
 public:
-    static CloudStorageProvider* newStorageProviderByType(QObject* parent, NextcloudSettingsBase* settings);
-    static AccountInfoProvider* newAccountInfoProviderByType(QObject* parent, NextcloudSettingsBase* settings);
+    static CloudStorageProvider* newStorageProviderByType(QObject* parent, AccountBase* settings);
+    static AccountInfoProvider* newAccountInfoProviderByType(QObject* parent, AccountBase* settings);
 };
 
 #endif // PROVIDERUTILS_H

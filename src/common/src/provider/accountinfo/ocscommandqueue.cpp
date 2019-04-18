@@ -4,7 +4,7 @@
 
 #include <QVariantMap>
 
-OcsCommandQueue::OcsCommandQueue(QObject *parent, NextcloudSettingsBase* settings) :
+OcsCommandQueue::OcsCommandQueue(QObject *parent, AccountBase* settings) :
     AccountInfoProvider(parent, settings)
 {
     connect(this, &OcsCommandQueue::commandFinished,
@@ -25,7 +25,7 @@ CommandEntity* OcsCommandQueue::userInfoRequest()
     if (!this->settings())
         return Q_NULLPTR;
 
-    if (this->settings()->providerType() != NextcloudSettingsBase::ProviderType::Nextcloud) {
+    if (this->settings()->providerType() != AccountBase::ProviderType::Nextcloud) {
         qDebug() << "User info requests are only supported on Nextcloud and ownCloud servers";
         return Q_NULLPTR;
     }
@@ -41,7 +41,7 @@ QString OcsCommandQueue::providerSettingsUrl()
     if (!this->settings())
         return QString();
 
-    if (this->settings()->providerType() != NextcloudSettingsBase::ProviderType::Nextcloud) {
+    if (this->settings()->providerType() != AccountBase::ProviderType::Nextcloud) {
         qDebug() << "Provider settings are only supported on Nextcloud and ownCloud servers";
         return Q_NULLPTR;
     }

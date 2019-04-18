@@ -16,7 +16,7 @@ public:
     explicit HttpCommandEntity(QObject *parent = Q_NULLPTR,
                                QString path = QStringLiteral(""),
                                QMap<QByteArray, QByteArray> headers = QMap<QByteArray, QByteArray>(),
-                               NextcloudSettingsBase* settings = Q_NULLPTR);
+                               AccountBase* settings = Q_NULLPTR);
     ~HttpCommandEntity();
     bool startWork();
     bool abortWork();
@@ -26,7 +26,7 @@ protected:
     QNetworkReply* m_reply = Q_NULLPTR;
     QNetworkRequest m_request;
     QNetworkAccessManager m_accessManager;
-    NextcloudSettingsBase* m_settings = Q_NULLPTR;
+    AccountBase* m_settings = Q_NULLPTR;
 
 private:
     QUrl setupRequestUrl();

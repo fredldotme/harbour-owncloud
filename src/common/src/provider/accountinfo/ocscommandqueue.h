@@ -11,7 +11,7 @@ class OcsCommandQueue : public AccountInfoProvider
 
 public:
     explicit OcsCommandQueue(QObject *parent = nullptr,
-                             NextcloudSettingsBase* settings = Q_NULLPTR);
+                             AccountBase* settings = Q_NULLPTR);
 
 public slots:
     virtual CommandEntity* userInfoRequest() Q_DECL_OVERRIDE;

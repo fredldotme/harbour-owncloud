@@ -21,7 +21,7 @@ const QString NEXTCLOUD_SETTINGS_KEY_UPLOADAUTOMATICALLY = QStringLiteral("uploa
 const QString NEXTCLOUD_SETTINGS_KEY_AUTOLOGIN = QStringLiteral("autoLogin");
 const QString NEXTCLOUD_PERMD_REQUESTDENIED = QStringLiteral("requestDenied");
 
-class NextcloudSettingsBase : public QObject
+class AccountBase : public QObject
 {
     Q_OBJECT
 
@@ -45,7 +45,7 @@ class NextcloudSettingsBase : public QObject
     Q_PROPERTY(bool isHttps READ isHttps)
 
 public:
-    NextcloudSettingsBase(QObject *parent = Q_NULLPTR);
+    AccountBase(QObject *parent = Q_NULLPTR);
 
     enum ProviderType {
         Nextcloud = 0,
@@ -142,6 +142,6 @@ signals:
 
     void settingsChanged();
 };
-Q_DECLARE_METATYPE(NextcloudSettingsBase*)
+Q_DECLARE_METATYPE(AccountBase*)
 
 #endif // NEXTCLOUDSETTINGSBASE_H

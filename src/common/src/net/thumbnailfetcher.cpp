@@ -37,7 +37,7 @@ void ThumbnailFetcher::fetch()
         return;
     }
 
-    if (this->commandQueue()->settings()->providerType() != NextcloudSettingsBase::ProviderType::Nextcloud) {
+    if (this->commandQueue()->settings()->providerType() != AccountBase::ProviderType::Nextcloud) {
         qDebug() << "Thumbnail fetching is only supported on Nextcloud and ownCloud servers";
         return;
     }

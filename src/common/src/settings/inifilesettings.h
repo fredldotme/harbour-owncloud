@@ -6,7 +6,7 @@
 
 #include "nextcloudsettingsbase.h"
 
-class IniFileSettings : public NextcloudSettingsBase
+class IniFileSettings : public AccountBase
 {
     Q_OBJECT
 

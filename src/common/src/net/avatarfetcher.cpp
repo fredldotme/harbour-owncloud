@@ -27,7 +27,7 @@ void AvatarFetcher::fetch()
         return;
     }
 
-    if (this->commandQueue()->settings()->providerType() != NextcloudSettingsBase::ProviderType::Nextcloud) {
+    if (this->commandQueue()->settings()->providerType() != AccountBase::ProviderType::Nextcloud) {
         qDebug() << "Avatar thumbnail fetching is only supported on Nextcloud and ownCloud servers";
         return;
     }

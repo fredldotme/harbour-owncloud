@@ -6,7 +6,7 @@
 HttpCommandEntity::HttpCommandEntity(QObject *parent,
                                      QString path,
                                      QMap<QByteArray, QByteArray> headers,
-                                     NextcloudSettingsBase* settings) :
+                                     AccountBase* settings) :
   CommandEntity(parent), m_settings(settings), m_path(path), m_headers(headers) { }
 
 HttpCommandEntity::~HttpCommandEntity()

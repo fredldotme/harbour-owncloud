@@ -1,7 +1,7 @@
 #include "accountinfoprovider.h"
 
 AccountInfoProvider::AccountInfoProvider(QObject *parent,
-                                         NextcloudSettingsBase* settings) :
+                                         AccountBase* settings) :
     SettingsBackedCommandQueue(parent, settings)
 {
 

@@ -1,17 +1,17 @@
 #include "settingsbackedcommandqueue.h"
 
-SettingsBackedCommandQueue::SettingsBackedCommandQueue(QObject *parent, NextcloudSettingsBase* settings) :
+SettingsBackedCommandQueue::SettingsBackedCommandQueue(QObject *parent, AccountBase* settings) :
     CommandQueue(parent)
 {
     setSettings(settings);
 }
 
-NextcloudSettingsBase* SettingsBackedCommandQueue::settings()
+AccountBase* SettingsBackedCommandQueue::settings()
 {
     return this->m_settings;
 }
 
-void SettingsBackedCommandQueue::setSettings(NextcloudSettingsBase *v)
+void SettingsBackedCommandQueue::setSettings(AccountBase *v)
 {
     if (this->m_settings == v)
         return;

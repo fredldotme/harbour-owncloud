@@ -139,8 +139,7 @@ int main(int argc, char *argv[])
 
     qmlRegisterType<QmlMap>("harbour.owncloud", 1, 0, "QmlMap");
     qmlRegisterType<DirectoryContentModel>("harbour.owncloud", 1, 0, "DirectoryContentModel");
-    qmlRegisterType<NextcloudSettingsBase>("harbour.owncloud", 1, 0, "NextcloudSettingsBase");
-    qmlRegisterType<IniFileSettings>("harbour.owncloud", 1, 0, "NextcloudSettings");
+    qmlRegisterType<AccountBase>("harbour.owncloud", 1, 0, "AccountBase");
     qmlRegisterType<AccountDb>("harbour.owncloud", 1, 0, "AccountDb");
     qmlRegisterType<SyncDb>("harbour.owncloud", 1, 0, "SyncDb");
     qmlRegisterType<QWebDavAuthenticator>("harbour.owncloud", 1, 0, "QWebDavAuthenticator");

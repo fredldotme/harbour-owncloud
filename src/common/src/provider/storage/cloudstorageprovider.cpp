@@ -1,6 +1,6 @@
 #include "cloudstorageprovider.h"
 
-CloudStorageProvider::CloudStorageProvider(QObject *parent, NextcloudSettingsBase* settings) :
+CloudStorageProvider::CloudStorageProvider(QObject *parent, AccountBase* settings) :
     SettingsBackedCommandQueue(parent, settings)
 {
 

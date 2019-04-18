@@ -111,7 +111,7 @@ protected:
 
 private:
     QWebdav* m_client;
-    NextcloudSettingsBase* m_settings;
+    AccountBase* m_settings;
     QSharedPointer<NcDirNode> m_rootNode;
 
     // As the list commands are run serially we can keep

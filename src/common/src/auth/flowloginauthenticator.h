@@ -12,7 +12,7 @@ class FlowLoginAuthenticator : public Authenticator
     Q_PROPERTY(QString url READ url NOTIFY urlChanged)
 public:
     explicit FlowLoginAuthenticator(QObject *parent = Q_NULLPTR,
-                                    NextcloudSettingsBase* commandQueue = Q_NULLPTR);
+                                    AccountBase* commandQueue = Q_NULLPTR);
 
     QString url() {
         if (!this->settings())

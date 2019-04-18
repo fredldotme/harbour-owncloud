@@ -5,7 +5,7 @@
 
 #include "nextcloudsettingsbase.h"
 
-class PermittedSettings : public NextcloudSettingsBase
+class PermittedSettings : public AccountBase
 {
     Q_OBJECT
 

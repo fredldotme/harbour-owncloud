@@ -4,7 +4,7 @@
 #include <provider/storage/webdavcommandqueue.h>
 #include <provider/accountinfo/ocscommandqueue.h>
 
-CloudStorageProvider* ProviderUtils::newStorageProviderByType(QObject* parent, NextcloudSettingsBase *settings)
+CloudStorageProvider* ProviderUtils::newStorageProviderByType(QObject* parent, AccountBase *settings)
 {
     CloudStorageProvider* provider = Q_NULLPTR;
 
@@ -14,8 +14,8 @@ CloudStorageProvider* ProviderUtils::newStorageProviderByType(QObject* parent, N
     }
 
     switch (settings->providerType()) {
-    case NextcloudSettingsBase::Nextcloud:
-    case NextcloudSettingsBase::WebDav:
+    case AccountBase::Nextcloud:
+    case AccountBase::WebDav:
         provider = new WebDavCommandQueue(parent, settings);
         break;
     default:
@@ -26,7 +26,7 @@ CloudStorageProvider* ProviderUtils::newStorageProviderByType(QObject* parent, N
     return provider;
 }
 
-AccountInfoProvider* ProviderUtils::newAccountInfoProviderByType(QObject* parent, NextcloudSettingsBase* settings)
+AccountInfoProvider* ProviderUtils::newAccountInfoProviderByType(QObject* parent, AccountBase* settings)
 {
     AccountInfoProvider* provider = Q_NULLPTR;
 
@@ -36,7 +36,7 @@ AccountInfoProvider* ProviderUtils::newAccountInfoProviderByType(QObject* parent
     }
 
     switch (settings->providerType()) {
-    case NextcloudSettingsBase::Nextcloud:
+    case AccountBase::Nextcloud:
         provider = new OcsCommandQueue(parent, settings);
         break;
     default:

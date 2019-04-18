@@ -16,8 +16,8 @@ AccountWorkers* AccountWorkerGenerator::newAccount()
     //       into accounts database
 
     if (!this->m_defaultNewAW.get()) {
-        NextcloudSettingsBase* newAccountSettings =
-                new NextcloudSettingsBase(this);
+        AccountBase* newAccountSettings =
+                new AccountBase(this);
 
         CloudStorageProvider* browserCommandQueue =
                 ProviderUtils::newStorageProviderByType(this, newAccountSettings);
@@ -50,7 +50,7 @@ void AccountWorkerGenerator::generateAccountWorkers()
     QVector<AccountWorkers*> newAccountWorkers;
     qDebug() << "this->m_database->accounts().length() " << this->m_database->accounts().length();
 
-    for (NextcloudSettingsBase* account : this->m_database->accounts()) {
+    for (AccountBase* account : this->m_database->accounts()) {
         CloudStorageProvider* browserCommandQueue =
                 ProviderUtils::newStorageProviderByType(this, account);
         CloudStorageProvider* transferCommandQueue =

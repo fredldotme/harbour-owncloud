@@ -18,20 +18,20 @@ public:
     ~AccountDb();
 
 public slots:
-    QVector<NextcloudSettingsBase*> accounts();
+    QVector<AccountBase*> accounts();
     QVariantList accountVariantList();
-    bool accountExists(const NextcloudSettingsBase* account);
-    bool addAccount(NextcloudSettingsBase* account);
-    bool updateAccount(NextcloudSettingsBase* account);
-    bool removeAccount(NextcloudSettingsBase* account);
+    bool accountExists(const AccountBase* account);
+    bool addAccount(AccountBase* account);
+    bool updateAccount(AccountBase* account);
+    bool removeAccount(AccountBase* account);
 
 private:
     void createDatabase();
     void cleanup();
-    bool insertAccountIntoDatabase(NextcloudSettingsBase* account);
+    bool insertAccountIntoDatabase(AccountBase* account);
 
     QSqlDatabase m_database;
-    QVector<NextcloudSettingsBase*> m_accounts;
+    QVector<AccountBase*> m_accounts;
 
 signals:
     void accountsChanged();

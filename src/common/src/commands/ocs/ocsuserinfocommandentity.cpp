@@ -71,7 +71,7 @@ private:
     QString m_total;
 };
 
-QString prepareUserinfoPath(NextcloudSettingsBase* settingsBase)
+QString prepareUserinfoPath(AccountBase* settingsBase)
 {
     const QString ret = NEXTCLOUD_ENDPOINT_OCS_USERINFO +
             (settingsBase ? settingsBase->username() : QStringLiteral(""));
@@ -79,7 +79,7 @@ QString prepareUserinfoPath(NextcloudSettingsBase* settingsBase)
 }
 
 OcsUserInfoCommandEntity::OcsUserInfoCommandEntity(QObject *parent,
-                                                   NextcloudSettingsBase* settings,
+                                                   AccountBase* settings,
                                                    QMap<QByteArray, QByteArray> headers) :
     OcsCommandEntity(parent, prepareUserinfoPath(settings), headers, settings)
 {

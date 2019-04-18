@@ -113,16 +113,16 @@ void AccountDb::createDatabase()
 void AccountDb::cleanup()
 {
     while (!this->m_accounts.empty()) {
-        NextcloudSettingsBase* account = this->m_accounts.takeFirst();
+        AccountBase* account = this->m_accounts.takeFirst();
         if (!account)
             continue;
         delete account;
     }
 }
 
-QVector<NextcloudSettingsBase*> AccountDb::accounts()
+QVector<AccountBase*> AccountDb::accounts()
 {
-    QVector<NextcloudSettingsBase*> tmpAccounts;
+    QVector<AccountBase*> tmpAccounts;
 
     if (!this->m_database.open()) {
         qWarning() << "Failed to open AccountDb database:"
@@ -154,7 +154,7 @@ QVector<NextcloudSettingsBase*> AccountDb::accounts()
         const QString certMd5 = selectQuery.value("certMd5").toString();
         const QString certSha1 = selectQuery.value("certSha1").toString();
 
-        NextcloudSettingsBase* account = new NextcloudSettingsBase(this);
+        AccountBase* account = new AccountBase(this);
         account->setUsername(username);
         account->setPassword(password);
         account->setHoststring(hoststring);
@@ -176,13 +176,13 @@ QVector<NextcloudSettingsBase*> AccountDb::accounts()
 QVariantList AccountDb::accountVariantList()
 {
     QVariantList ret;
-    for (NextcloudSettingsBase* settings : this->accounts()) {
+    for (AccountBase* settings : this->accounts()) {
         ret.append(QVariant::fromValue(settings));
     }
     return ret;
 }
 
-bool AccountDb::accountExists(const NextcloudSettingsBase *account)
+bool AccountDb::accountExists(const AccountBase *account)
 {
     if (!account) {
         qWarning() << "Invalid account provided, bailing out";
@@ -219,7 +219,7 @@ bool AccountDb::accountExists(const NextcloudSettingsBase *account)
     return existanceQuery.record().count() > 0;
 }
 
-bool AccountDb::insertAccountIntoDatabase(NextcloudSettingsBase *account)
+bool AccountDb::insertAccountIntoDatabase(AccountBase *account)
 {
     if (!account) {
         qWarning() << "Invalid account provided, bailing out";
@@ -271,7 +271,7 @@ bool AccountDb::insertAccountIntoDatabase(NextcloudSettingsBase *account)
     return true;
 }
 
-bool AccountDb::addAccount(NextcloudSettingsBase *account)
+bool AccountDb::addAccount(AccountBase *account)
 {
     if (!account) {
         qWarning() << "Invalid account provided, bailing out";
@@ -286,7 +286,7 @@ bool AccountDb::addAccount(NextcloudSettingsBase *account)
 
     const bool insertionSuccess = insertAccountIntoDatabase(account);
     if (insertionSuccess) {
-        QObject::connect(account, &NextcloudSettingsBase::settingsChanged,
+        QObject::connect(account, &AccountBase::settingsChanged,
                          this, [this, account](){
             this->updateAccount(account);
         });
@@ -295,7 +295,7 @@ bool AccountDb::addAccount(NextcloudSettingsBase *account)
     return insertionSuccess;
 }
 
-bool AccountDb::updateAccount(NextcloudSettingsBase *account)
+bool AccountDb::updateAccount(AccountBase *account)
 {
     if (!account) {
         qWarning() << "Invalid account provided, bailing out";
@@ -312,7 +312,7 @@ bool AccountDb::updateAccount(NextcloudSettingsBase *account)
     return insertSuccess;
 }
 
-bool AccountDb::removeAccount(NextcloudSettingsBase *account)
+bool AccountDb::removeAccount(AccountBase *account)
 {
     if (!account) {
         qWarning() << "Invalid account provided, bailing out";

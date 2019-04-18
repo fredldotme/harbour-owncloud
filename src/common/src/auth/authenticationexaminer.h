@@ -27,7 +27,7 @@ public slots:
 
 private:
     AuthenticationMethod m_method;
-    NextcloudSettingsBase m_tempSettings;
+    AccountBase m_tempSettings;
 
     void setRunning(bool v);
     bool m_running = false;

@@ -28,8 +28,12 @@ ApplicationWindow
     }
     QmlMap {
         id: directoryContents
+        onInserted: {
+            console.log("Inserted contents for path " + key)
+        }
     }
     property alias dirContents : directoryContents
+    property alias directoryContents : directoryContents
 
     AccountSelection {
         id: accountSelection
@@ -93,10 +97,10 @@ ApplicationWindow
                 return;
         }
 
-        if (transferQueue.queue.length < 1) {
+        /*if (transferQueue.queue.length < 1) {
             ocsCommandQueue.userInfoRequest();
             ocsCommandQueue.run()
-        }
+        }*/
     }
 
     function notify(summary, body) {
@@ -111,16 +115,6 @@ ApplicationWindow
         notifier.previewSummary = summary
         notifier.isTransient = true
         notifier.publish();
-    }
-
-    function isTransferEnqueued(remoteFilePath) {
-        for(var i = 0; i < transferQueue.queue.length; i++) {
-            var info = transferQueue.queue[i].info;
-            if (info.property("remoteFile") === remoteFilePath) {
-                return true;
-            }
-        }
-        return false;
     }
 }
 

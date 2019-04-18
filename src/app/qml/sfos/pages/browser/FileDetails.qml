@@ -3,6 +3,7 @@ import Sailfish.Silica 1.0
 import harbour.owncloud 1.0
 import SailfishUiSet 1.0
 import QtMultimedia 5.6
+import "qrc:/qml/sfos/js/TransferUtil.js" as TransferUtil
 
 Page {
     id: pageRoot
@@ -16,7 +17,7 @@ Page {
 
     readonly property bool isDownloading :
         (downloadCommand !== null ||
-         applicationWindow.isTransferEnqueued(entry.path))
+         TransferUtil.isTransferEnqueued(entry.path, accountWorkers))
 
     readonly property string imgSrc :
         (!entry.isDirectory && !thumbnailFetcher.fetching &&
@@ -113,7 +114,7 @@ Page {
     }
 
     function startDownload(path, mimeType, open, overwriteExistingFile) {
-        var destinationDir = FilePathUtil.destinationFromMIME(mimeType)
+        var destinationDir = FilePathUtil.destination(accountWorkers.account)
         var fileName = path.substring(path.lastIndexOf("/") + 1)
         var localFilePath = destinationDir + "/" + fileName
         console.log("fileExists: " + localFilePath)
@@ -131,7 +132,7 @@ Page {
         downloadCommand =
                 accountWorkers.transferCommandQueue.fileDownloadRequest(path, mimeType,
                                                                         open, entry.lastModified)
-        transferQueue.run()
+        accountWorkers.transferCommandQueue.run()
     }
 
     SilicaFlickable {

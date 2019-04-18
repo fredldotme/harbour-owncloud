@@ -14,6 +14,8 @@ description: |
     - Document previews
     - Video & audio previews
     - Storage usage information
+  
+  Also available on Android & SailfishOS.
 
 apps:
   harbour-owncloud:

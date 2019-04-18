@@ -134,10 +134,6 @@
         <translation>Passwort</translation>
     </message>
     <message>
-        <source>Login automatically</source>
-        <translation>Automatisch anmelden</translation>
-    </message>
-    <message>
         <source>Accept certificate</source>
         <translation>Zertifikat akzeptieren</translation>
     </message>

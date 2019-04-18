@@ -134,10 +134,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Login automatically</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Accept certificate</source>
         <translation type="unfinished"></translation>
     </message>

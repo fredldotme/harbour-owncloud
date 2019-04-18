@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <commands/http/httpgetcommandentity.h>
-#include <settings/examinationsettings.h>
+#include <settings/nextcloudsettingsbase.h>
 #include <auth/authenticator.h>
 #include <auth/qwebdavauthenticator.h>
 
@@ -27,11 +27,7 @@ public slots:
 
 private:
     AuthenticationMethod m_method;
-    ExaminationSettings m_tempSettings;
-
-    const QVector<Authenticator*> supportedAuthenticators {
-        new QWebDavAuthenticator
-    };
+    AccountBase m_tempSettings;
 
     void setRunning(bool v);
     bool m_running = false;

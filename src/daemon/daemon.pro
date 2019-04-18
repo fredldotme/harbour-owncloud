@@ -1,9 +1,7 @@
 TARGET = harbour-owncloud-daemon
 
-CONFIG = qt c++11
+CONFIG = qt c++11 sailfish_build
 QT = dbus network xml
-
-include(../common/common.pri)
 
 SOURCES += \
     $$PWD/main.cpp \
@@ -19,6 +17,8 @@ HEADERS += \
     $$PWD/uploader.h
 
 OTHER_FILES += harbour-owncloud-daemon.service
+
+include($$PWD/../common/common.pri)
 
 service.path = /usr/lib/systemd/user/
 service.files += harbour-owncloud-daemon.service

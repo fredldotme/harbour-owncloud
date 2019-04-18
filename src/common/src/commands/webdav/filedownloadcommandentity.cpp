@@ -24,6 +24,14 @@ FileDownloadCommandEntity::FileDownloadCommandEntity(QObject* parent,
     this->m_commandInfo = CommandEntityInfo(info);
 }
 
+FileDownloadCommandEntity::~FileDownloadCommandEntity()
+{
+    /*if (this->m_localFile) {
+        this->m_localFile->deleteLater();
+        this->m_localFile = Q_NULLPTR;
+    }*/
+}
+
 bool FileDownloadCommandEntity::startWork()
 {
     if (!CommandEntity::startWork())

@@ -93,20 +93,20 @@ bool NcSyncCommandUnit::fileExistsRemotely(const QString& localFilePath,
     return fileFound;
 }
 
-void NcSyncCommandUnit::decideAdditionalWorkRequired(CommandEntity *entity)
+void NcSyncCommandUnit::expand(CommandEntity *previousCommandEntity)
 {
-    if (!entity) {
+    if (!previousCommandEntity) {
         qWarning() << Q_FUNC_INFO << "entity is not valid.";
         return;
     }
 
-    const QString commandType = entity->info().property(QStringLiteral("type")).toString();
+    const QString commandType = previousCommandEntity->info().property(QStringLiteral("type")).toString();
 
     if (commandType != QStringLiteral("dirTree")) {
         return;
     }
 
-    NcDirTreeCommandUnit* treeCommandUnit = qobject_cast<NcDirTreeCommandUnit*>(entity);
+    NcDirTreeCommandUnit* treeCommandUnit = qobject_cast<NcDirTreeCommandUnit*>(previousCommandEntity);
     if (!treeCommandUnit) {
         qWarning() << "NcDirTreeCommandUnit couldn't be retrieved";
         return;
@@ -161,7 +161,12 @@ void NcSyncCommandUnit::decideAdditionalWorkRequired(CommandEntity *entity)
         const bool exists = fileExistsRemotely(sourcePath, missingDirectories);
         qDebug() << "file exists remotely?" << exists;
 
-        // No need to upload a file if the file exists remotely
+        /*const QString remoteRelativeFilePath = localFilePath.mid(this->m_localPath.length());
+        const QString remoteRelativeDir = remoteRelativeFilePath.split('/', QString::SkipEmptyParts).join('/');
+        NcDirNode* node = this->m_cachedTree->getNode(remoteRelativeDir);
+        const bool uniqueIdExists = (node && node->containsFileWithUniqueId());*/
+
+        // Skip the file upload if it already exists remotely
         if (exists)
             continue;
 
@@ -169,7 +174,7 @@ void NcSyncCommandUnit::decideAdditionalWorkRequired(CommandEntity *entity)
         if (missingDirectories.length() > 0) {
             QString missingRelativeDir = this->m_remotePath;
             for (QString remainingCrumb : missingDirectories) {
-                missingRelativeDir += remainingCrumb + QStringLiteral("/");
+                missingRelativeDir += remainingCrumb + NODE_PATH_SEPARATOR;
 
                 if (dirsToCreate.contains(missingRelativeDir))
                     break;
@@ -198,7 +203,7 @@ void NcSyncCommandUnit::decideAdditionalWorkRequired(CommandEntity *entity)
         // Join directories back together without the file name
         if (!targetDirectory.isEmpty()) {
             targetDirectory.takeLast();
-            relativeTargetDir = targetDirectory.join('/') + QStringLiteral("/");
+            relativeTargetDir = targetDirectory.join('/') + NODE_PATH_SEPARATOR;
         }
 
         qDebug() << "relativeTargetDir" << relativeTargetDir;

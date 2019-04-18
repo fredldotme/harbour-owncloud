@@ -1,27 +1,43 @@
 #include "filepathutil.h"
 
+#include <QDebug>
 #include <QFileInfo>
 #include <QStandardPaths>
 
 #include <nextcloudendpointconsts.h>
 
-QString FilePathUtil::destinationFromMIME(QString mime)
+QString FilePathUtil::destinationFromMIME(const QString& mime)
 {
-    QStandardPaths::StandardLocation location;
+    QStandardPaths::StandardLocation rootLocation;
 
     if (mime.startsWith("image")) {
-        location = QStandardPaths::PicturesLocation;
+        rootLocation = QStandardPaths::PicturesLocation;
     } else if (mime.startsWith("video")) {
-        location = QStandardPaths::MoviesLocation;
+        rootLocation = QStandardPaths::MoviesLocation;
     } else if (mime.startsWith("audio")) {
-        location = QStandardPaths::MusicLocation;
+        rootLocation = QStandardPaths::MusicLocation;
     } else if (mime.startsWith("application")) {
-        location = QStandardPaths::DocumentsLocation;
+        rootLocation = QStandardPaths::DocumentsLocation;
     } else {
-        location = QStandardPaths::DownloadLocation;
+        rootLocation = QStandardPaths::DownloadLocation;
     }
 
-    return QStandardPaths::writableLocation(location);
+    return QStandardPaths::writableLocation(rootLocation);
+}
+
+
+QString FilePathUtil::destination(AccountBase* account)
+{
+    if (!account) {
+        qWarning() << "account is NULL, bailing out.";
+        return QStringLiteral("/");
+    }
+
+    const QString pattern = QStringLiteral("%1/GhostCloud/%2/%3/%4/");
+    return pattern.arg(QStandardPaths::writableLocation(QStandardPaths::DownloadLocation),
+                       account->hostname(),
+                       QString::number(account->port()),
+                       account->username());
 }
 
 QString FilePathUtil::getCanonicalPath(const QString &path)
@@ -46,13 +62,15 @@ QString FilePathUtil::getCanonicalPath(const QString &path)
 }
 
 QString FilePathUtil::getWebDavFileUrl(const QString &path,
-                                       NextcloudSettingsBase *settings)
+                                       AccountBase *settings)
 {
     if (!settings) {
         return QStringLiteral();
     }
 
-    const QString urlString = settings->hoststring() + NEXTCLOUD_ENDPOINT_WEBDAV + path;
+    const QString urlString = settings->hoststring() + "/" +
+            NEXTCLOUD_ENDPOINT_WEBDAV + path;
+    qDebug() << Q_FUNC_INFO << urlString;
     return urlString;
 }
 
@@ -60,4 +78,9 @@ bool FilePathUtil::fileExists(const QString &filePath)
 {
     QFileInfo fileInfo(filePath);
     return !fileInfo.isDir() && fileInfo.exists();
+}
+
+bool FilePathUtil::removeFile(const QString &filePath)
+{
+    return QFile::remove(filePath);
 }

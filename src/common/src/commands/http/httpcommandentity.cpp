@@ -6,7 +6,7 @@
 HttpCommandEntity::HttpCommandEntity(QObject *parent,
                                      QString path,
                                      QMap<QByteArray, QByteArray> headers,
-                                     NextcloudSettingsBase* settings) :
+                                     AccountBase* settings) :
   CommandEntity(parent), m_settings(settings), m_path(path), m_headers(headers) { }
 
 HttpCommandEntity::~HttpCommandEntity()
@@ -83,7 +83,10 @@ bool HttpCommandEntity::startWork()
 
     this->m_requestUrl = setupRequestUrl();
     this->m_request.setUrl(this->m_requestUrl);
+
+#if (QT_VERSION >= 0x050600)
     this->m_request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
+#endif
     for (const QByteArray& key : this->m_headers.keys()) {
         const QByteArray value = this->m_headers.value(key);
         this->m_request.setRawHeader(key, value);
@@ -109,12 +112,14 @@ bool HttpCommandEntity::abortWork()
 
 QUrl HttpCommandEntity::setupRequestUrl()
 {
+    const QString separator = QStringLiteral("/");
+
     const QString pathToCloudInstall = this->m_settings ?
                 this->m_settings->path() :
-                QStringLiteral("/");
+                separator;
     QString urlPath = pathToCloudInstall + this->m_path;
     if (!urlPath.startsWith("/"))
-        urlPath = QStringLiteral("/") + this->m_path;
+        urlPath = separator + this->m_path;
 
     QUrl requestUrl;
     requestUrl.setScheme(this->m_settings->isHttps() ?

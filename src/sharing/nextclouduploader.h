@@ -4,7 +4,7 @@
 #include <TransferEngine-qt5/mediatransferinterface.h>
 #include <TransferEngine-qt5/mediaitem.h>
 #include <settings/nextcloudsettingsbase.h>
-#include <webdavcommandqueue.h>
+#include <provider/storage/webdavcommandqueue.h>
 
 class NextcloudUploader : public MediaTransferInterface
 {

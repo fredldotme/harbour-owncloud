@@ -1,11 +1,19 @@
 # GhostCloud
 Nextcloud/ownCloud and WebDav client for SailfishOS
 
-![Login](/readme/cover.png) ![File browser](/readme/filebrowser.png) ![User info](/readme/userinfo.png) ![File details](/readme/filedetails.png) ![Media preview](/readme/mediapreview.png)
+![Login](/misc/readme/cover.png) ![File browser](/misc/readme/filebrowser.png) ![User info](/misc/readme/userinfo.png) ![File details](/misc/readme/filedetails.png) ![Media preview](/misc/readme/mediapreview.png)
 
 Allows you to easily access your ownCloud, NextCloud and WebDav instances with a native Free Software application.
 
 For automatic camera photo backup and upload from within other apps (i.e. Gallery) take a look at the "Nextcloud/ownCloud additionals" over at OpenRepos.
+
+Current qmake build configurations:
+- SailfishOS: CONFIG+=sailfish_build
+- GNU/Linux desktop: CONFIG+=noadditionals CONFIG+=quickcontrols
+- Ubuntu Touch: CONFIG+=noadditionals CONFIG+=quickcontrols CONFIG+=click
+- Android: CONFIG+=noadditionals CONFIG+=quickcontrols
+- macOS/iOS: CONFIG+=noadditionals CONFIG+=quickcontrols
+
 
 You can donate to the project through:
 

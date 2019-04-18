@@ -16,7 +16,7 @@ public:
             QObject* parent = Q_NULLPTR,
             QString path = QStringLiteral(""),
             QMap<QByteArray, QByteArray> headers = prepareOcsHeaders(),
-            NextcloudSettingsBase* settings = Q_NULLPTR);
+            AccountBase* settings = Q_NULLPTR);
 
 };
 

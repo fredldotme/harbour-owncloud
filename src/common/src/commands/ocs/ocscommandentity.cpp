@@ -3,7 +3,7 @@
 OcsCommandEntity::OcsCommandEntity(QObject *parent,
                                    QString path,
                                    QMap<QByteArray, QByteArray> headers,
-                                   NextcloudSettingsBase* settings) :
+                                   AccountBase* settings) :
     HttpGetCommandEntity(parent, path, prepareOcsHeaders(settings, headers), settings)
 {
 

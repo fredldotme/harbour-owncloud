@@ -1,21 +1,19 @@
 <RCC>
     <qresource prefix="/">
-        <file>qml/harbour-owncloud.qml</file>
-        <file>qml/cover/CoverPage.qml</file>
-        <file>qml/pages/browser/FileBrowser.qml</file>
-        <file>qml/pages/browser/FileDetails.qml</file>
-        <file>qml/pages/login/BasicAuthentication.qml</file>
-        <file>qml/pages/browser/RemoteDirSelectDialog.qml</file>
-        <file>qml/pages/SettingsPage.qml</file>
-        <file>qml/pages/login/SSLErrorDialog.qml</file>
-        <file>qml/pages/TransferPage.qml</file>
-        <file>qml/pages/login/FlowAuthentication.qml</file>
-        <file>qml/pages/login/Entrance.qml</file>
-        <file>qml/cover/CoverDetailItem.qml</file>
-        <file>qml/pages/browser/controls/FileOperationsContextMenu.qml</file>
-        <file>qml/OcsUserInfo.qml</file>
-        <file>qml/navigation/CommandPageFlow.qml</file>
-        <file>qml/navigation/BrowserCommandPageFlow.qml</file>
-        <file>qml/pages/About.qml</file>
+        <file>qml/qqc/main.qml</file>
+        <file>qml/qqc/pages/AccountSelection.qml</file>
+        <file>qml/qqc/BrowserCommandPageFlow.qml</file>
+        <file>qml/qqc/CommandPageFlow.qml</file>
+        <file>qml/qqc/pages/browser/FileBrowser.qml</file>
+        <file>qml/qqc/pages/browser/FileDetails.qml</file>
+        <file>qml/qqc/dialogs/WebDavAccountDialog.qml</file>
+        <file>qml/qqc/pages/TransferPage.qml</file>
+        <file>qml/qqc/dialogs/RemoteDirSelectDialog.qml</file>
+        <file>qml/qqc/dialogs/SSLErrorDialog.qml</file>
+        <file>qml/qqc/pages/SettingsPage.qml</file>
+        <file>qml/qqc/pages/About.qml</file>
+        <file>qml/qqc/controls/GCButton.qml</file>
+        <file>qml/qqc/dialogs/fileselect/UbuntuContentPicker.qml</file>
+        <file>qml/qqc/dialogs/fileselect/QQDFilePicker.qml</file>
     </qresource>
 </RCC>

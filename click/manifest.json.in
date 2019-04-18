@@ -1,0 +1,15 @@
+{
+    "name": "me.fredl.ghostcloud",
+    "title": "GhostCloud",
+    "version": "0.9.0",
+    "description": "A multi-platform client for ownCloud, NextCloud & WebDav",
+    "architecture": "@CLICK_ARCH@",
+    "framework": "ubuntu-sdk-16.04",
+    "maintainer": "Alfred Neumayer <dev.beidl@gmail.com>",
+    "hooks": {
+        "harbour-owncloud": {
+            "apparmor": "harbour-owncloud.apparmor",
+            "desktop": "harbour-owncloud.desktop"
+        }
+    }
+}

@@ -1,6 +1,6 @@
 TEMPLATE = lib
 TARGET = $$qtLibraryTarget(harbourowncloudqmlplugin)
-CONFIG += plugin
+CONFIG += plugin sailfish_build
 DEPENDPATH += .
 
 include($$PWD/../common/common.pri)

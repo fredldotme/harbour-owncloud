@@ -7,15 +7,16 @@
 
 #include <ownclouddbusconsts.h>
 
-#include <webdavcommandqueue.h>
 #include "filesystem.h"
-#include "settings/nextcloudsettings.h"
+#include "settings/inifilesettings.h"
 #include "dbushandler.h"
 #include "networkmonitor.h"
 #include "uploader.h"
 
 #include <commands/sync/ncdirtreecommandunit.h>
 #include <commands/sync/ncsynccommandunit.h>
+#include <accountworkergenerator.h>
+#include <settings/db/accountdb.h>
 
 QString remoteDirectoryFromHwRelease()
 {
@@ -25,16 +26,17 @@ QString remoteDirectoryFromHwRelease()
         hwRelease.close();
         QStringList lineArray = allLines.split("\n");
         for (QString& line : lineArray) {
-            if (line.startsWith("NAME=")) {
+            if (!line.startsWith("NAME="))
+                continue;
 
-                // Replace characters which would be invalid
-                // within a WebDav directory name
-                return QStringLiteral("/") +
-                        line.replace("NAME=", "")
-                        .replace("\"", "")
-                        .replace("/", "_")
-                        .trimmed() + "/";
-            }
+            // Replace characters which would be invalid
+            // within a WebDav directory name
+            return NODE_PATH_SEPARATOR +
+                    line.replace("NAME=", "")
+                    .replace("\"", "")
+                    .replace("/", "_")
+                    .trimmed() + "/";
+
         }
     }
     return QStringLiteral("/Jolla/");
@@ -43,8 +45,6 @@ QString remoteDirectoryFromHwRelease()
 int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
-
-    NextcloudSettings* settings = NextcloudSettings::instance();
 
     // Status updates and config reload requests through DBus
     DBusHandler *dbusHandler = new DBusHandler();
@@ -60,74 +60,90 @@ int main(int argc, char *argv[])
 
     const QString targetDirectory = remoteDirectoryFromHwRelease();
 
-    Filesystem *fsHandler = Filesystem::instance();
-    NetworkMonitor *netMonitor = NetworkMonitor::instance(settings);
-    Uploader* uploader = new Uploader(&app, targetDirectory, netMonitor, settings);
+    AccountWorkerGenerator generator;
+    AccountDb accountDatabase;
+    generator.setDatabase(&accountDatabase);
 
-    // Periodically check for existance of the local pictures path until found.
-    // Don't stop the timer as the external storage could be ejected anytime.
-    // Every 10 minutes should be enough in this specific case.
-    QDir localPath(settings->localPicturesPath());
-    QTimer localPathCheck;
-    localPathCheck.setInterval(60000 * 10);
-    localPathCheck.setSingleShot(false);
-    QObject::connect(&localPathCheck, &QTimer::timeout, &localPathCheck,
-                     [&localPath, &localPathCheck, fsHandler]() {
-        if (!localPath.exists())
-            return;
-
-        fsHandler->triggerRescan();
-    });
-    localPathCheck.start();
-
-    QObject::connect(fsHandler, &Filesystem::fileFound, [uploader](QString fullPath){
-        Q_UNUSED(fullPath)
-        uploader->triggerSync();
-    });
-
-    // DBus connections
-    QObject::connect(dbusHandler, &DBusHandler::configReloadRequested,
-                     settings, &NextcloudSettings::readSettings,
-                     Qt::QueuedConnection);
-    QObject::connect(dbusHandler, &DBusHandler::abortRequested, uploader, &Uploader::stopSync);
-
-    QObject::connect(netMonitor, &NetworkMonitor::shouldSyncChanged, [uploader, fsHandler] (bool shouldSync) {
-        if (!(uploader && fsHandler)) {
-            qCritical() << "Invalid object existance (uploader, fsHandler), bailing out.";
-            return;
+    for (const QVariant& accountWorkerVariant : generator.accountWorkers()) {
+        QObject* workersReference = qvariant_cast<QObject *>(accountWorkerVariant.data());
+        if (!workersReference) {
+            qWarning() << "'workersReference' is invalid, skipping...";
+            continue;
         }
 
-        fsHandler->inhibitScan(!uploader->shouldSync());
+        AccountWorkers* workers = qobject_cast<AccountWorkers*>(workersReference);
+        if (!workers) {
+            qWarning() << "'workers' is invalid, skipping...";
+            continue;
+        }
 
-        if (shouldSync) {
+        NextcloudSettingsBase* settings = workers->account();
+
+        Filesystem *fsHandler = new Filesystem(settings);
+        NetworkMonitor *netMonitor = new NetworkMonitor(workers, settings);
+        Uploader* uploader = new Uploader(&app, targetDirectory, netMonitor, settings);
+
+        // Periodically check for existance of the local pictures path until found.
+        // Don't stop the timer as the external storage could be ejected anytime.
+        // Every 10 minutes should be enough in this specific case.
+        QDir localPath(settings->localPicturesPath());
+        QTimer localPathCheck;
+        localPathCheck.setInterval(60000 * 10);
+        localPathCheck.setSingleShot(false);
+        QObject::connect(&localPathCheck, &QTimer::timeout, &localPathCheck,
+                         [&localPath, fsHandler]() {
+            if (!localPath.exists())
+                return;
+
+            fsHandler->triggerRescan();
+        });
+        localPathCheck.start();
+
+        QObject::connect(fsHandler, &Filesystem::fileFound, [uploader](QString fullPath){
+            Q_UNUSED(fullPath)
             uploader->triggerSync();
-        } else {
-            uploader->stopSync();
-        }
-    });
+        });
 
-    QObject::connect(uploader, &Uploader::runningChanged, [dbusHandler, uploader]() {
-        if (!(dbusHandler && uploader)) {
-            qCritical() << "Invalid object existance (dbusHandler, uploader), bailing out.";
-            return;
-        }
-        dbusHandler->setUploading(uploader->running());
-    });
+        // DBus connections
+        QObject::connect(dbusHandler, &DBusHandler::abortRequested, uploader, &Uploader::stopSync);
 
-    QObject::connect(settings, &NextcloudSettings::uploadAutomaticallyChanged,
-                     &app, [uploader, fsHandler](){
-        if (!(uploader && fsHandler)) {
-            qCritical() << "Invalid object existance (uploader, fsHandler), bailing out.";
-            return;
-        }
+        QObject::connect(netMonitor, &NetworkMonitor::shouldSyncChanged, [uploader, fsHandler] (bool shouldSync) {
+            if (!(uploader && fsHandler)) {
+                qCritical() << "Invalid object existance (uploader, fsHandler), bailing out.";
+                return;
+            }
+
+            fsHandler->inhibitScan(!uploader->shouldSync());
+
+            if (shouldSync) {
+                uploader->triggerSync();
+            } else {
+                uploader->stopSync();
+            }
+        });
+
+        QObject::connect(uploader, &Uploader::runningChanged, [dbusHandler, uploader]() {
+            if (!(dbusHandler && uploader)) {
+                qCritical() << "Invalid object existance (dbusHandler, uploader), bailing out.";
+                return;
+            }
+            dbusHandler->setUploading(uploader->running());
+        });
+
+        QObject::connect(settings, &IniFileSettings::uploadAutomaticallyChanged,
+                         &app, [uploader, fsHandler](){
+            if (!(uploader && fsHandler)) {
+                qCritical() << "Invalid object existance (uploader, fsHandler), bailing out.";
+                return;
+            }
+            fsHandler->inhibitScan(!uploader->shouldSync());
+            uploader->triggerSync();
+        }, Qt::QueuedConnection);
+
+        netMonitor->recheckNetworks();
         fsHandler->inhibitScan(!uploader->shouldSync());
-        uploader->triggerSync();
-    }, Qt::QueuedConnection);
-
-    settings->readSettings();
-    netMonitor->recheckNetworks();
-    fsHandler->inhibitScan(!uploader->shouldSync());
-    fsHandler->triggerRescan();
+        fsHandler->triggerRescan();
+    }
 
     return app.exec();
 }

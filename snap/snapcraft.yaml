@@ -1,0 +1,114 @@
+name: ghostcloud
+version: 0.9.0
+grade: stable
+confinement: strict
+base: core18
+summary: A modern cross-platform client for Nextcloud, ownCloud, WebDav.
+description: |
+  Allows you to easily access your NextCloud, ownCloud and WebDav 
+  instances with a cross-platform, native Free Software application.
+  
+  Features:
+    - Support for NextCloud, ownCloud & WebDav
+    - File management
+    - Document previews
+    - Video & audio previews
+    - Storage usage information
+  
+  Also available on Android & SailfishOS.
+
+apps:
+  harbour-owncloud:
+    environment:
+      QT_PLUGIN_PATH: ${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/qt5/plugins
+      QML2_IMPORT_PATH: ${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/qt5/qml
+    command: desktop-launch harbour-owncloud -platform xcb
+    plugs: [ x11, wayland, desktop, desktop-legacy, opengl, alsa, pulseaudio, home, removable-media, network ]
+
+parts:
+  harbour-owncloud:
+    plugin: qmake
+    source: .
+    options:
+      - CONFIG+=noadditionals
+      - CONFIG+=quickcontrols
+    project-files:
+      - harbour-owncloud.pro
+    build-packages:
+      - make
+      - qt5-qmake
+      - qttools5-dev
+      - build-essential
+      - qtdeclarative5-dev
+      - libqt5svg5-dev
+      - qttools5-dev-tools
+      - libqt5xmlpatterns5-dev
+      - qtmultimedia5-dev
+      - libqt5webkit5-dev
+      - qtbase5-dev
+      - qtquickcontrols2-5-dev
+      - qml-module-qtquick2
+      - qml-module-qtgraphicaleffects
+      - qml-module-qtquick-window2
+      - qml-module-qtquick-dialogs
+      - qml-module-qtquick-controls2
+      - qml-module-qtquick-layouts
+      - qml-module-qtquick-extras
+      - qml-module-qt-labs-folderlistmodel
+      - qml-module-qtquick-controls
+      - qml-module-qt-labs-settings
+      - qml-module-qtquick-localstorage
+    stage-packages:
+      - libqt5multimedia5
+      - libqt5multimedia5-plugins
+      - libqt5sql5
+      - libqt5sql5-sqlite
+      - libqt5svg5
+      - libqt5webkit5
+      - libqt5xml5
+      - libqt5xmlpatterns5
+      - libqt5quickcontrols2-5
+      - qml-module-qtquick2
+      - qml-module-qtgraphicaleffects
+      - qml-module-qtquick-window2
+      - qml-module-qtquick-dialogs
+      - qml-module-qtquick-controls2
+      - qml-module-qtquick-layouts
+      - qml-module-qtquick-extras
+      - qml-module-qt-labs-folderlistmodel
+      - qml-module-qtquick-controls
+      - qml-module-qt-labs-settings
+      - qml-module-qtquick-localstorage
+      - qml-module-qtmultimedia
+      - gstreamer1.0-plugins-good
+      - gstreamer1.0-plugins-bad
+      - gstreamer1.0-plugins-ugly
+      - gstreamer1.0-libav
+      - libva2
+      - libva-x11-2
+      - mesa-va-drivers
+      - libslang2
+      - libslang2-modules
+    after: [ desktop-qt5 ]
+  desktop-qt5:
+    build-packages:
+      - qtbase5-dev
+      - dpkg-dev
+    make-parameters:
+      - FLAVOR=qt5
+    plugin: make
+    source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
+    source-subdir: qt
+    stage-packages:
+      - libxkbcommon0
+      - ttf-ubuntu-font-family
+      - dmz-cursor-theme
+      - light-themes
+      - adwaita-icon-theme
+      - gnome-themes-standard
+      - shared-mime-info
+      - libqt5gui5
+      - libgdk-pixbuf2.0-0
+      - libqt5svg5
+      - locales-all
+      - xdg-user-dirs

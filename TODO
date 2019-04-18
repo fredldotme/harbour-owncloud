@@ -1,5 +1,4 @@
 * Proper securing of credentials
   - Long term: investigate feasability of SailfishOS 3.0 "Secrets" feature
-* Investigate feasability of adding support for multiple accounts
 * Fix double uploading of files
 * Offline support/syncing

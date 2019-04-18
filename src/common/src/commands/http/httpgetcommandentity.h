@@ -15,7 +15,7 @@ public:
     explicit HttpGetCommandEntity(QObject* parent = Q_NULLPTR,
                                   QString path = QStringLiteral(""),
                                   QMap<QByteArray, QByteArray> headers = QMap<QByteArray, QByteArray>(),
-                                  NextcloudSettingsBase* settings = Q_NULLPTR);
+                                  AccountBase* settings = Q_NULLPTR);
 
     bool startWork();
 

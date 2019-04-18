@@ -1,6 +1,6 @@
 TEMPLATE = lib
 TARGET = $$qtLibraryTarget(owncloudshareplugin)
-CONFIG += plugin
+CONFIG += plugin sailfish_build
 DEPENDPATH += .
 
 CONFIG += link_pkgconfig
@@ -13,14 +13,12 @@ HEADERS += \
     nextcloudconsts.h \
     nextclouduploader.h \
     nextcloudplugininfo.h \
-    nextcloudshareplugin.h \
-    globaltransfermanager.h
+    nextcloudshareplugin.h
 
 SOURCES += \
     nextcloudplugininfo.cpp \
     nextclouduploader.cpp \
-    nextcloudshareplugin.cpp \
-    globaltransfermanager.cpp
+    nextcloudshareplugin.cpp
 
 OTHER_FILES += \
     NextcloudShareUI.qml

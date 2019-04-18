@@ -12,7 +12,7 @@ class FlowLoginAuthenticator : public Authenticator
     Q_PROPERTY(QString url READ url NOTIFY urlChanged)
 public:
     explicit FlowLoginAuthenticator(QObject *parent = Q_NULLPTR,
-                                    NextcloudSettingsBase* commandQueue = Q_NULLPTR);
+                                    AccountBase* commandQueue = Q_NULLPTR);
 
     QString url() {
         if (!this->settings())
@@ -24,7 +24,8 @@ protected:
     void updateClientSettings() Q_DECL_OVERRIDE {}
 
 public slots:
-    void authenticate(bool saveCredentials = false) Q_DECL_OVERRIDE;
+    void authenticate() Q_DECL_OVERRIDE;
+    void abort() Q_DECL_OVERRIDE;
     void validateFlowResponse(QString responseUrl);
 
 signals:

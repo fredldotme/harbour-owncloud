@@ -1,10 +1,9 @@
 #include "networkmonitor.h"
 
-#include <settings/nextcloudsettings.h>
 #include <QCoreApplication>
 
 NetworkMonitor::NetworkMonitor(QObject *parent,
-                               NextcloudSettings* settings) :
+                               NextcloudSettingsBase* settings) :
     QObject(parent), m_settings(settings)
 {
     this->m_shouldSync = false;
@@ -21,12 +20,6 @@ NetworkMonitor::NetworkMonitor(QObject *parent,
 NetworkMonitor::~NetworkMonitor()
 {
 
-}
-
-NetworkMonitor* NetworkMonitor::instance(NextcloudSettings* settings)
-{
-    static NetworkMonitor monitor(qApp, settings);
-    return &monitor;
 }
 
 void NetworkMonitor::recheckNetworks()

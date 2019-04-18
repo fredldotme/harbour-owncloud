@@ -1,5 +1,13 @@
 *.pro.user*
 build-*
+build/
 moc*
 *.o
 rpm/harbour-owncloud.spec.*
+parts/
+stage/
+prime/
+*.tar.gz
+*.tar.gz.*
+openssl-*.*.*
+.DS_Store

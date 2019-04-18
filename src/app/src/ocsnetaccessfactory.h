@@ -16,10 +16,10 @@ class OscNetAccess : public QNetworkAccessManager
     Q_OBJECT
 public:
     explicit OscNetAccess(QObject* parent = Q_NULLPTR,
-                          NextcloudSettingsBase* settings = Q_NULLPTR);
+                          AccountBase* settings = Q_NULLPTR);
 
 private:
-    NextcloudSettingsBase* m_settings = Q_NULLPTR;
+    AccountBase* m_settings = Q_NULLPTR;
 
 public:
     QNetworkReply* createRequest(Operation op,
@@ -32,14 +32,14 @@ class OcsNetAccessFactory :
         public QQmlNetworkAccessManagerFactory
 {
 public:
-    OcsNetAccessFactory(NextcloudSettingsBase* settings = Q_NULLPTR);
+    OcsNetAccessFactory(AccountBase* settings = Q_NULLPTR);
     OcsNetAccessFactory(const OcsNetAccessFactory& o);
 
     //QUrl intercept(const QUrl& url, DataType type) Q_DECL_OVERRIDE;
     QNetworkAccessManager* create(QObject *parent) Q_DECL_OVERRIDE;
 
 private:
-    NextcloudSettingsBase* m_settings = Q_NULLPTR;
+    AccountBase* m_settings = Q_NULLPTR;
 };
 
 

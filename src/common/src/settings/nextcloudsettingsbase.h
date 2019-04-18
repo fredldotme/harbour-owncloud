@@ -6,6 +6,7 @@
 
 const QString NEXTCLOUD_SETTINGS_KEY_CERTMD5 = QStringLiteral("certMD5");
 const QString NEXTCLOUD_SETTINGS_KEY_CERTSHA1 = QStringLiteral("certSHA1");
+const QString NEXTCLOUD_SETTINGS_KEY_HOSTSTRING = QStringLiteral("hoststring");
 const QString NEXTCLOUD_SETTINGS_KEY_ISHTTPS = QStringLiteral("isHttps");
 const QString NEXTCLOUD_SETTINGS_KEY_HOSTNAME = QStringLiteral("hostname");
 const QString NEXTCLOUD_SETTINGS_KEY_PORT = QStringLiteral("port");
@@ -20,17 +21,17 @@ const QString NEXTCLOUD_SETTINGS_KEY_UPLOADAUTOMATICALLY = QStringLiteral("uploa
 const QString NEXTCLOUD_SETTINGS_KEY_AUTOLOGIN = QStringLiteral("autoLogin");
 const QString NEXTCLOUD_PERMD_REQUESTDENIED = QStringLiteral("requestDenied");
 
-class NextcloudSettingsBase : public QObject
+class AccountBase : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(bool autoLogin READ isAutoLogin WRITE setAutoLogin NOTIFY autoLoginChanged)
+    Q_PROPERTY(bool autoLogin READ autoLogin WRITE setAutoLogin NOTIFY autoLoginChanged)
     Q_PROPERTY(bool notifications READ notifications WRITE setNotifications NOTIFY notificationSettingsChanged)
 
     Q_PROPERTY(QString hoststring READ hoststring NOTIFY hoststringChanged)
     Q_PROPERTY(QString username READ username WRITE setUsername NOTIFY usernameChanged)
     Q_PROPERTY(QString password READ password WRITE setPassword NOTIFY passwordChanged)
-    Q_PROPERTY(bool isCustomCert READ isCustomCert WRITE acceptCertificate NOTIFY customCertChanged)
+    Q_PROPERTY(bool isCustomCert READ isCustomCert WRITE setCustomCert NOTIFY customCertChanged)
 
     Q_PROPERTY(int providerType READ providerType WRITE setProviderType NOTIFY providerTypeChanged)
 
@@ -44,7 +45,7 @@ class NextcloudSettingsBase : public QObject
     Q_PROPERTY(bool isHttps READ isHttps)
 
 public:
-    NextcloudSettingsBase(QObject *parent = 0);
+    AccountBase(QObject *parent = Q_NULLPTR);
 
     enum ProviderType {
         Nextcloud = 0,
@@ -52,48 +53,53 @@ public:
     };
     Q_ENUMS(ProviderType)
 
-    QString hostname();
-    QString path();
-    int port();
-    bool isHttps();
+    QString hostname() const;
+    void setHostname(const QString& value);
+    QString path() const;
+    void setPath(const QString& value);
+    int port() const;
+    void setPort(int value);
+    bool isHttps() const;
+    void setIsHttps(bool value);
 
-    QString hoststring();
-    QString username();
-    QString password();
-    int providerType();
-    bool isCustomCert();
+    QString hoststring() const;
+    int providerType() const;
+    bool isCustomCert() const;
 
-    bool isAutoLogin();
-    bool notifications();
+    bool autoLogin() const;
+    bool notifications() const;
 
-    QString md5Hex();
-    QString sha1Hex();
+    QString md5Hex() const;
+    void setMd5Hex(const QString& value);
+    QString sha1Hex() const;
+    void setSha1Hex(const QString& value);
 
-    bool uploadAutomatically();
+    bool uploadAutomatically() const;
     void setUploadAutomatically(bool enabled);
-    bool mobileUpload();
+    bool mobileUpload() const;
     void setMobileUpload(bool enabled);
-    QString localPicturesPath();
+    QString localPicturesPath() const;
     void setLocalPicturesPath(QString newPath);
 
-    Q_INVOKABLE bool parseFromAddressString(QString value);
-
-public slots:
-    void resetSettings();
-    virtual bool readSettings();
-    virtual void writeSettings();
-
+    QString username() const;
     void setUsername(QString value);
+    QString password() const;
     void setPassword(QString value);
     void setProviderType(int type);
-    void acceptCertificate(QString md5, QString sha1, bool write = true);
-    void acceptCertificate(bool value);
-
-protected:
-    void refreshHostString();
+    void setCustomCert(bool value);
     void setAutoLogin(bool value);
     void setNotifications(bool value);
 
+
+public slots:
+    bool setHoststring(QString value);
+    void acceptTlsFingerprints(QString md5, QString sha1);
+    void resetSettings();
+
+protected:
+    void refreshHostString();
+
+private:
     QString m_hostname;
     QString m_path;
     int m_port;
@@ -115,7 +121,13 @@ protected:
     QString m_localPicturesPath;
 
 signals:
-    void settingsChanged();
+    void hostnameChanged();
+    void portChanged();
+    void pathChanged();
+    void isHttpsChanged();
+
+    void md5HexChanged();
+    void sha1HexChanged();
 
     void usernameChanged();
     void passwordChanged();
@@ -127,7 +139,9 @@ signals:
     void uploadAutomaticallyChanged();
     void mobileUploadChanged();
     void localPicturesPathChanged();
+
+    void settingsChanged();
 };
-Q_DECLARE_METATYPE(NextcloudSettingsBase*)
+Q_DECLARE_METATYPE(AccountBase*)
 
 #endif // NEXTCLOUDSETTINGSBASE_H

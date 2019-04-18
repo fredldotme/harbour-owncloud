@@ -10,13 +10,4 @@ const QString NEXTCLOUD_ENDPOINT_THUMBNAIL = QStringLiteral("index.php/apps/file
 const QString NEXTCLOUD_ENDPOINT_AVATAR = QStringLiteral("index.php/avatar/%1/%2");
 const QString NEXTCLOUD_ENDPOINT_OCS_USERINFO = QStringLiteral("ocs/v2.php/cloud/users/");
 
-/*class NextcloudApiEndpoints {
-    Q_GADGET
-
-    Q_PROPERTY(QString webdav MEMBER webdav CONSTANT)
-    Q_PROPERTY(QString loginFlow MEMBER  CONSTANT)
-    Q_PROPERTY(QString thumbnail MEMBER NEXTCLOUD_ENDPOINT_THUMBNAIL CONSTANT)
-};
-Q_DECLARE_METATYPE(NextcloudApiEndpoints)*/
-
 #endif // NEXTCLOUDENDPOINTCONSTS_H

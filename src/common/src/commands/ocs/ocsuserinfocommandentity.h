@@ -10,7 +10,7 @@ class OcsUserInfoCommandEntity : public OcsCommandEntity
 public:
     explicit OcsUserInfoCommandEntity(
             QObject* parent = Q_NULLPTR,
-            NextcloudSettingsBase* settings = Q_NULLPTR,
+            AccountBase* settings = Q_NULLPTR,
             QMap<QByteArray, QByteArray> headers = prepareOcsHeaders());
 
     bool startWork();

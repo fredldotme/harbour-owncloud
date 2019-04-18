@@ -2,45 +2,41 @@
 
 #include <QDebug>
 
-Authenticator::Authenticator(QObject *parent, NextcloudSettingsBase* settings) :
+Authenticator::Authenticator(QObject *parent, AccountBase* settings) :
     QObject(parent), m_settings(settings)
 {
-    QObject::connect(this, &Authenticator::authenticationSuccessful,
-                     this, [=]() {
-        if (this->m_saveCredentials && this->m_settings) {
-            this->m_settings->writeSettings();
-            qInfo() << "Credentials saved";
-        }
-    });
 }
 
-NextcloudSettingsBase* Authenticator::settings()
+AccountBase* Authenticator::settings()
 {
     return this->m_settings;
 }
 
-void Authenticator::setSettings(NextcloudSettingsBase *v)
+void Authenticator::setSettings(AccountBase *v)
 {
     qDebug() << Q_FUNC_INFO << v;
     if (this->m_settings == v)
         return;
 
     if (this->m_settings)
-        QObject::disconnect(this->m_settings, 0, 0, 0);
+        QObject::disconnect(this->m_settings,
+                            nullptr,
+                            nullptr,
+                            nullptr);
 
     this->m_settings = v;
 
     // Connect to changes of credentials, certificate and hostname settings
     if (this->m_settings) {
-        QObject::connect(this->m_settings, &NextcloudSettingsBase::hoststringChanged,
+        QObject::connect(this->m_settings, &AccountBase::hoststringChanged,
                          this, &Authenticator::updateClientSettings);
-        QObject::connect(this->m_settings, &NextcloudSettingsBase::usernameChanged,
+        QObject::connect(this->m_settings, &AccountBase::usernameChanged,
                          this, &Authenticator::updateClientSettings);
-        QObject::connect(this->m_settings, &NextcloudSettingsBase::passwordChanged,
+        QObject::connect(this->m_settings, &AccountBase::passwordChanged,
                          this, &Authenticator::updateClientSettings);
-        QObject::connect(this->m_settings, &NextcloudSettingsBase::providerTypeChanged,
+        QObject::connect(this->m_settings, &AccountBase::providerTypeChanged,
                          this, &Authenticator::updateClientSettings);
-        QObject::connect(this->m_settings, &NextcloudSettingsBase::customCertChanged,
+        QObject::connect(this->m_settings, &AccountBase::customCertChanged,
                          this, &Authenticator::updateClientSettings);
     }
 

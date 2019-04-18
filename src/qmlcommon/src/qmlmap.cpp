@@ -28,3 +28,11 @@ int QmlMap::remove(const QString &key)
         Q_EMIT removed(key);
     return ret;
 }
+
+void QmlMap::clear()
+{
+    if (this->m_map.empty())
+        return;
+    this->m_map.clear();
+    Q_EMIT cleared();
+}

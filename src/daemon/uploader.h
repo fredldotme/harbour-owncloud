@@ -2,7 +2,7 @@
 #define UPLOADER_H
 
 #include <QObject>
-#include <webdavcommandqueue.h>
+#include <provider/storage/webdavcommandqueue.h>
 #include <settings/nextcloudsettingsbase.h>
 #include "networkmonitor.h"
 

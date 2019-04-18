@@ -1,0 +1,23 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/sfos/harbour-owncloud.qml</file>
+        <file>qml/sfos/cover/CoverPage.qml</file>
+        <file>qml/sfos/pages/browser/FileBrowser.qml</file>
+        <file>qml/sfos/pages/browser/FileDetails.qml</file>
+        <file>qml/sfos/pages/login/BasicAuthentication.qml</file>
+        <file>qml/sfos/pages/browser/RemoteDirSelectDialog.qml</file>
+        <file>qml/sfos/pages/SettingsPage.qml</file>
+        <file>qml/sfos/pages/login/SSLErrorDialog.qml</file>
+        <file>qml/sfos/pages/TransferPage.qml</file>
+        <file>qml/sfos/pages/login/FlowAuthentication.qml</file>
+        <file>qml/sfos/pages/login/Entrance.qml</file>
+        <file>qml/sfos/cover/CoverDetailItem.qml</file>
+        <file>qml/sfos/pages/browser/controls/FileOperationsContextMenu.qml</file>
+        <file>qml/sfos/OcsUserInfo.qml</file>
+        <file>qml/sfos/navigation/CommandPageFlow.qml</file>
+        <file>qml/sfos/navigation/BrowserCommandPageFlow.qml</file>
+        <file>qml/sfos/pages/About.qml</file>
+        <file>qml/sfos/pages/login/AccountSelection.qml</file>
+        <file>qml/sfos/js/TransferUtil.js</file>
+    </qresource>
+</RCC>

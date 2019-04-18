@@ -4,22 +4,30 @@
 #include <QStandardPaths>
 #include <QUrl>
 
-NextcloudSettingsBase::NextcloudSettingsBase(QObject *parent) : QObject(parent)
+AccountBase::AccountBase(QObject *parent) : QObject(parent)
 {
+    QObject::connect(this, &AccountBase::customCertChanged,
+                     this, [=](){
+        qDebug() << "customCertChanged" << this->isCustomCert();
+    });
+
     m_hoststring = "https://";
     m_isHttps = true;
+    m_port = 443;
     m_autoLogin = false;
     m_notifications = true;
     m_providerType = ProviderType::Nextcloud;
+    m_uploadAutomatically = false;
+    m_mobileUpload = false;
 
-//    connect(this, &NextcloudSettingsBase::hoststringChanged, this, &NextcloudSettingsBase::settingsChanged);
-//    connect(this, &NextcloudSettingsBase::usernameChanged, this, &NextcloudSettingsBase::settingsChanged);
-//    connect(this, &NextcloudSettingsBase::passwordChanged, this, &NextcloudSettingsBase::settingsChanged);
-//    connect(this, &NextcloudSettingsBase::uploadAutomaticallyChanged, this, &NextcloudSettingsBase::settingsChanged);
-//    connect(this, &NextcloudSettingsBase::localPicturesPathChanged, this, &NextcloudSettingsBase::settingsChanged);
+    connect(this, &AccountBase::hoststringChanged, this, &AccountBase::settingsChanged);
+    connect(this, &AccountBase::usernameChanged, this, &AccountBase::settingsChanged);
+    connect(this, &AccountBase::passwordChanged, this, &AccountBase::settingsChanged);
+    connect(this, &AccountBase::uploadAutomaticallyChanged, this, &AccountBase::settingsChanged);
+    connect(this, &AccountBase::localPicturesPathChanged, this, &AccountBase::settingsChanged);
 }
 
-void NextcloudSettingsBase::refreshHostString()
+void AccountBase::refreshHostString()
 {
     QString hostString;
     hostString = m_isHttps ? "https://" : "http://";
@@ -31,76 +39,61 @@ void NextcloudSettingsBase::refreshHostString()
     }
 }
 
-bool NextcloudSettingsBase::parseFromAddressString(QString value)
+bool AccountBase::setHoststring(QString value)
 {
     if(!value.startsWith("https://") && !value.startsWith("http://")) {
         return false;
     }
 
     QUrl url(value, QUrl::StrictMode);
+
     if(url.isValid()) {
-        if(url.host().isEmpty())
-            return false;
+        setIsHttps(value.startsWith("https://"));
+        setHostname(url.host());
+        setPath(url.path());
+        if(path().isEmpty())
+            setPath("/");
+        if(!path().endsWith("/"))
+            setPath(path() + "/");
 
-        m_isHttps = value.startsWith("https://");
-        m_hostname = url.host();
-        m_path = url.path();
-        if(m_path.isEmpty())
-            m_path = "/";
-        if(!m_path.endsWith("/"))
-            m_path += "/";
+        setPort(url.port());
 
-        m_port = url.port();
-
-        if(m_port == -1) {
-            m_port = m_isHttps ? 443 : 80;
+        if(port() == -1) {
+            setPort(isHttps() ? 443 : 80);
         }
     }
+    refreshHostString();
 
-    return url.isValid();
+    return url.isValid() && !url.host().isEmpty();
 }
 
-bool NextcloudSettingsBase::readSettings()
+void AccountBase::resetSettings()
 {
-    Q_EMIT settingsChanged();
-    return true;
-}
+    setHostname("");
+    setPath("/");
+    setPort(443);
+    setIsHttps(true);
+    setUsername("");
+    setPassword("");
+    setProviderType(ProviderType::Nextcloud);
+    setMd5Hex("");
+    setSha1Hex("");
 
-void NextcloudSettingsBase::writeSettings()
-{
-}
-
-void NextcloudSettingsBase::resetSettings()
-{
-    m_hostname = "";
-    m_path = "/";
-    m_port = 443;
-    m_username = "";
-    m_password = "";
-    m_providerType = ProviderType::Nextcloud;
-    m_md5Hex = "";
-    m_sha1Hex = "";
-
-    m_hoststring = "https://";
-    m_isHttps = true;
-    m_autoLogin = false;
-    m_uploadAutomatically = false;
-    m_mobileUpload = false;
-    m_notifications = true;
-
-    emit hoststringChanged();
-    emit usernameChanged();
-    emit passwordChanged();
+    refreshHostString();
+    setAutoLogin(false);
+    setUploadAutomatically(false);
+    setMobileUpload(false);
+    setNotifications(true);
 
     emit settingsChanged();
 }
 
-bool NextcloudSettingsBase::isAutoLogin()
+bool AccountBase::autoLogin() const
 {
     return this->m_autoLogin;
 }
 
-void NextcloudSettingsBase::setAutoLogin(bool value)
+void AccountBase::setAutoLogin(bool value)
 {
     if (this->m_autoLogin == value)
         return;
@@ -109,12 +102,12 @@ void NextcloudSettingsBase::setAutoLogin(bool value)
     emit autoLoginChanged();
 }
 
-bool NextcloudSettingsBase::notifications()
+bool AccountBase::notifications() const
 {
     return m_notifications;
 }
 
-void NextcloudSettingsBase::setNotifications(bool value)
+void AccountBase::setNotifications(bool value)
 {
     if (this->m_notifications == value)
         return;
@@ -123,37 +116,73 @@ void NextcloudSettingsBase::setNotifications(bool value)
     emit notificationSettingsChanged();
 }
 
-QString NextcloudSettingsBase::hostname()
+QString AccountBase::hostname() const
 {
     return this->m_hostname;
 }
 
-QString NextcloudSettingsBase::path()
+void AccountBase::setHostname(const QString &value)
+{
+    if (this->m_hostname == value)
+        return;
+
+    this->m_hostname = value;
+    Q_EMIT hostnameChanged();
+}
+
+QString AccountBase::path() const
 {
     return this->m_path.isEmpty() ? "/" : this->m_path;
 }
 
-int NextcloudSettingsBase::port()
+void AccountBase::setPath(const QString &value)
+{
+    if (this->m_path == value)
+        return;
+
+    this->m_path = value;
+    Q_EMIT pathChanged();
+}
+
+int AccountBase::port() const
 {
     return m_port;
 }
 
-bool NextcloudSettingsBase::isHttps()
+void AccountBase::setPort(int value)
+{
+    if (this->m_port == value)
+        return;
+
+    this->m_port = value;
+    Q_EMIT portChanged();
+}
+
+bool AccountBase::isHttps() const
 {
     return m_isHttps;
 }
 
-QString NextcloudSettingsBase::hoststring()
+void AccountBase::setIsHttps(bool value)
+{
+    if (this->m_isHttps == value)
+        return;
+
+    this->m_isHttps = value;
+    Q_EMIT isHttpsChanged();
+}
+
+QString AccountBase::hoststring() const
 {
     return m_hoststring;
 }
 
-QString NextcloudSettingsBase::username()
+QString AccountBase::username() const
 {
     return m_username;
 }
 
-void NextcloudSettingsBase::setUsername(QString value)
+void AccountBase::setUsername(QString value)
 {
     if (this->m_username == value)
         return;
@@ -162,12 +191,12 @@ void NextcloudSettingsBase::setUsername(QString value)
     Q_EMIT usernameChanged();
 }
 
-QString NextcloudSettingsBase::password()
+QString AccountBase::password() const
 {
     return m_password;
 }
 
-void NextcloudSettingsBase::setPassword(QString value)
+void AccountBase::setPassword(QString value)
 {
     if (this->m_password == value)
         return;
@@ -176,37 +205,56 @@ void NextcloudSettingsBase::setPassword(QString value)
     Q_EMIT passwordChanged();
 }
 
-int NextcloudSettingsBase::providerType()
+int AccountBase::providerType() const
 {
-    return this->m_providerType;
+    return static_cast<int>(this->m_providerType);
 }
 
-void NextcloudSettingsBase::setProviderType(int type)
+void AccountBase::setProviderType(int type)
 {
-    const ProviderType providerType = (ProviderType)type;
+    const ProviderType providerType = static_cast<ProviderType>(type);
     if (this->m_providerType == providerType)
         return;
 
+    qDebug() << "New value:" << providerType;
     this->m_providerType = providerType;
     Q_EMIT providerTypeChanged();
 }
 
-QString NextcloudSettingsBase::md5Hex()
+QString AccountBase::md5Hex() const
 {
     return this->m_md5Hex;
 }
 
-QString NextcloudSettingsBase::sha1Hex()
+void AccountBase::setMd5Hex(const QString &value)
+{
+    if (this->m_md5Hex == value)
+        return;
+
+    this->m_md5Hex = value;
+    Q_EMIT md5HexChanged();
+}
+
+QString AccountBase::sha1Hex() const
 {
     return this->m_sha1Hex;
 }
 
-bool NextcloudSettingsBase::uploadAutomatically()
+void AccountBase::setSha1Hex(const QString &value)
+{
+    if (this->m_sha1Hex == value)
+        return;
+
+    this->m_sha1Hex = value;
+    Q_EMIT sha1HexChanged();
+}
+
+bool AccountBase::uploadAutomatically() const
 {
     return m_uploadAutomatically;
 }
 
-void NextcloudSettingsBase::setUploadAutomatically(bool enabled)
+void AccountBase::setUploadAutomatically(bool enabled)
 {
     qDebug() << Q_FUNC_INFO << enabled;
     if (this->m_uploadAutomatically == enabled)
@@ -215,12 +263,12 @@ void NextcloudSettingsBase::setUploadAutomatically(bool enabled)
     Q_EMIT uploadAutomaticallyChanged();
 }
 
-bool NextcloudSettingsBase::mobileUpload()
+bool AccountBase::mobileUpload() const
 {
     return m_mobileUpload;
 }
 
-void NextcloudSettingsBase::setMobileUpload(bool enabled)
+void AccountBase::setMobileUpload(bool enabled)
 {
     if (this->m_mobileUpload == enabled)
         return;
@@ -228,12 +276,12 @@ void NextcloudSettingsBase::setMobileUpload(bool enabled)
     Q_EMIT mobileUploadChanged();
 }
 
-QString NextcloudSettingsBase::localPicturesPath()
+QString AccountBase::localPicturesPath() const
 {
     return m_localPicturesPath;
 }
 
-void NextcloudSettingsBase::setLocalPicturesPath(QString newPath)
+void AccountBase::setLocalPicturesPath(QString newPath)
 {
     if (this->m_localPicturesPath == newPath)
         return;
@@ -241,25 +289,24 @@ void NextcloudSettingsBase::setLocalPicturesPath(QString newPath)
     Q_EMIT localPicturesPathChanged();
 }
 
-void NextcloudSettingsBase::acceptCertificate(QString md5, QString sha1, bool write)
+void AccountBase::acceptTlsFingerprints(QString md5, QString sha1)
 {
     if (this->m_md5Hex == md5 && this->m_sha1Hex == sha1)
         return;
 
-    this->m_md5Hex = md5;
-    this->m_sha1Hex = sha1;
-    if (write)
-        writeSettings();
-    emit customCertChanged();
+    setMd5Hex(md5);
+    setSha1Hex(sha1);
+
+    Q_EMIT customCertChanged();
 }
 
-void NextcloudSettingsBase::acceptCertificate(bool value)
+void AccountBase::setCustomCert(bool value)
 {
-    if(!value)
-        acceptCertificate("", "");
+    if (!value)
+        acceptTlsFingerprints("", "");
 }
 
-bool NextcloudSettingsBase::isCustomCert()
+bool AccountBase::isCustomCert() const
 {
     return !(this->m_md5Hex.isEmpty() || this->m_sha1Hex.isEmpty());
 }

@@ -4,18 +4,25 @@
 #include <QDebug>
 
 FlowLoginAuthenticator::FlowLoginAuthenticator(QObject *parent,
-                                               NextcloudSettingsBase* settings) :
+                                               AccountBase* settings) :
     Authenticator(parent, settings)
 {
     QObject::connect(this, &FlowLoginAuthenticator::settingsChanged,
                      this, &FlowLoginAuthenticator::urlChanged);
 }
 
-void FlowLoginAuthenticator::authenticate(bool saveCredentials)
+void FlowLoginAuthenticator::authenticate()
 {
-    this->m_saveCredentials = saveCredentials;
+    // TODO: implement
+
     setRunning(true);
 }
+
+void FlowLoginAuthenticator::abort()
+{
+    setRunning(false);
+}
+
 
 void FlowLoginAuthenticator::validateFlowResponse(QString responseUrl)
 {
@@ -52,7 +59,7 @@ void FlowLoginAuthenticator::validateFlowResponse(QString responseUrl)
     }
 
     qDebug() << "nc:" << server << username;
-    if (this->m_saveCredentials && this->settings()) {
+    if (this->settings()) {
         this->settings()->setUsername(username);
         this->settings()->setPassword(password);
     }

@@ -16,6 +16,7 @@ public slots:
     bool contains(const QString& key);
     QVariant value(const QString& key);
     int remove(const QString& key);
+    void clear();
 
 private:
     QMap<QString, QVariant> m_map;
@@ -23,6 +24,7 @@ private:
 signals:
     void inserted(QString key);
     void removed(QString key);
+    void cleared();
 
 };
 Q_DECLARE_METATYPE(QmlMap*)

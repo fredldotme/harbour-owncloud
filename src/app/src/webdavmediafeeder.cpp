@@ -12,6 +12,7 @@ inline QMediaPlayer* mediaPlayerObjectCast(QObject* object) {
     QMediaPlayer* mediaPlayer = qvariant_cast<QMediaPlayer*>(object->property("mediaObject"));
     if (!mediaPlayer) {
         qWarning() << "the object doesn't contain a QMediaPlayer*";
+        qWarning() << "is mediaObject null?" << object->property("mediaObject").isNull();
         return Q_NULLPTR;
     }
     return mediaPlayer;
@@ -25,7 +26,7 @@ inline bool objectContainsQMediaPlayer(QObject* object) {
 WebDavMediaFeeder::WebDavMediaFeeder(
         QObject* parent,
         QObject* mediaPlayer,
-        NextcloudSettingsBase* settings) :
+        AccountBase* settings) :
     QObject(parent),
     m_mediaPlayer(mediaPlayer),
     m_settings(settings)
@@ -108,12 +109,12 @@ QUrl WebDavMediaFeeder::url()
     return this->m_url;
 }
 
-NextcloudSettingsBase* WebDavMediaFeeder::settings()
+AccountBase* WebDavMediaFeeder::settings()
 {
     return this->m_settings;
 }
 
-void WebDavMediaFeeder::setSettings(NextcloudSettingsBase *v)
+void WebDavMediaFeeder::setSettings(AccountBase *v)
 {
     if (this->m_settings == v)
         return;

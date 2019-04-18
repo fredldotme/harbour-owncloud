@@ -5,7 +5,7 @@
 HttpGetCommandEntity::HttpGetCommandEntity(QObject *parent,
                                            QString path,
                                            QMap<QByteArray, QByteArray> headers,
-                                           NextcloudSettingsBase* settings) :
+                                           AccountBase* settings) :
     HttpCommandEntity(parent, path, headers, settings) { }
 
 bool HttpGetCommandEntity::startWork()

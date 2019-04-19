@@ -5,8 +5,8 @@
 #include <QFileInfo>
 #include <QMutexLocker>
 
-Filesystem::Filesystem(AccountBase* account) :
-    m_account(account)
+Filesystem::Filesystem(AccountBase* account, const QString& localPath) :
+    m_account(account), m_localPath(localPath)
 {
     connect(&m_watcher, &QFileSystemWatcher::directoryChanged, this, &Filesystem::prepareScan);
 }
@@ -84,15 +84,12 @@ void Filesystem::triggerRescan()
     if (!this->m_account)
         return;
 
-    QString newPath = this->m_account->localPicturesPath();
-
     if (!m_watcher.directories().isEmpty()) {
         m_watcher.removePaths(m_watcher.directories());
     }
     m_existingFiles.clear();
     clearDelays();
 
-    m_localPath = newPath;
     rescan();
 }
 

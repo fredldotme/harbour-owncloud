@@ -18,7 +18,8 @@ class Filesystem : public QObject
     };
 
 public:
-    Filesystem(AccountBase* account = Q_NULLPTR);
+    Filesystem(AccountBase* account = Q_NULLPTR,
+               const QString& localPath = QStringLiteral(""));
 
 signals:
     void fileFound(QString fullPath);
@@ -36,7 +37,7 @@ private:
 
     AccountBase* m_account;
     QFileSystemWatcher m_watcher;
-    QString m_localPath;
+    const QString m_localPath;
     QSet<QString> m_existingFiles;
     bool m_inhibit = false;
 

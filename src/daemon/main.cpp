@@ -6,6 +6,7 @@
 #include <QTimer>
 
 #include <ownclouddbusconsts.h>
+#include <util/qappprepareutil.h>
 
 #include "filesystem.h"
 #include "settings/inifilesettings.h"
@@ -17,6 +18,10 @@
 #include <commands/sync/ncsynccommandunit.h>
 #include <accountworkergenerator.h>
 #include <settings/db/accountdb.h>
+
+#ifdef Q_OS_UNIX
+#include <unistd.h>
+#endif
 
 QString remoteDirectoryFromHwRelease()
 {
@@ -45,20 +50,7 @@ QString remoteDirectoryFromHwRelease()
 int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
-
-#ifndef GHOSTCLOUD_UI_QUICKCONTROLS
-    const QString QHOSTCLOUD_APP_NAME = QStringLiteral("harbour-owncloud");
-#else
-    const QString QHOSTCLOUD_APP_NAME = QStringLiteral("GhostCloud");
-#endif
-
-#ifdef GHOSTCLOUD_UBUNTU_TOUCH
-    app.setApplicationName(QStringLiteral("me.fredl.ghostcloud"));
-#else
-    app.setOrganizationName(QHOSTCLOUD_APP_NAME);
-    app.setOrganizationDomain(QHOSTCLOUD_APP_NAME);
-    app.setApplicationName(QHOSTCLOUD_APP_NAME);
-#endif
+    prepareAppProperties(app);
 
     // Status updates and config reload requests through DBus
     DBusHandler *dbusHandler = new DBusHandler();
@@ -71,6 +63,14 @@ int main(int argc, char *argv[])
                                                           QDBusConnection::ExportAllSignals)) {
         exit(1);
     }
+
+#ifdef Q_OS_UNIX
+    // Re-exec on reload request
+    QObject::connect(dbusHandler, &DBusHandler::configReloadRequested,
+                     &app, [=]() {
+        execv(argv[0], argv);
+    });
+#endif
 
     const QString targetDirectory = remoteDirectoryFromHwRelease();
 
@@ -96,14 +96,17 @@ int main(int argc, char *argv[])
         if (!settings->uploadAutomatically())
             continue;
 
-        Filesystem *fsHandler = new Filesystem(settings);
+        const QString localPicturesPath =
+                QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
+
         NetworkMonitor *netMonitor = new NetworkMonitor(workers, settings);
-        Uploader* uploader = new Uploader(&app, targetDirectory, netMonitor, settings);
+        Filesystem *fsHandler = new Filesystem(settings, localPicturesPath);
+        Uploader* uploader = new Uploader(&app, localPicturesPath, targetDirectory, netMonitor, settings);
 
         // Periodically check for existance of the local pictures path until found.
         // Don't stop the timer as the external storage could be ejected anytime.
         // Every 10 minutes should be enough in this specific case.
-        QDir localPath(settings->localPicturesPath());
+        QDir localPath(localPicturesPath);
         QTimer localPathCheck;
         localPathCheck.setInterval(60000 * 10);
         localPathCheck.setSingleShot(false);

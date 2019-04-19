@@ -11,6 +11,7 @@ class Uploader : public QObject
     Q_OBJECT
 public:
     explicit Uploader(QObject *parent = Q_NULLPTR,
+                      const QString& localPath = QStringLiteral(""),
                       const QString& targetDirectory = QStringLiteral(""),
                       NetworkMonitor* networkMonitor = Q_NULLPTR,
                       AccountBase* settings = Q_NULLPTR);
@@ -23,6 +24,7 @@ public slots:
     void stopSync();
 
 private:
+    const QString m_localPath;
     const QString m_targetDirectory;
     NetworkMonitor* m_networkMonitor = Q_NULLPTR;
     AccountBase* m_settings = Q_NULLPTR;

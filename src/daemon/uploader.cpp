@@ -3,10 +3,12 @@
 #include <commands/sync/ncsynccommandunit.h>
 
 Uploader::Uploader(QObject *parent,
+                   const QString& localPath,
                    const QString& targetDirectory,
                    NetworkMonitor* networkMonitor,
                    AccountBase* settings) :
     QObject(parent),
+    m_localPath(localPath),
     m_targetDirectory(targetDirectory),
     m_networkMonitor(networkMonitor),
     m_settings(settings),
@@ -39,7 +41,7 @@ void Uploader::triggerSync()
     NcSyncCommandUnit* syncDirectoriesUnit =
             new NcSyncCommandUnit(this->m_webDavCommandQueue,
                                   this->m_webDavCommandQueue,
-                                  this->m_settings->localPicturesPath(),
+                                  this->m_localPath,
                                   this->m_targetDirectory);
 
     this->m_webDavCommandQueue->enqueue((CommandEntity*)syncDirectoriesUnit);

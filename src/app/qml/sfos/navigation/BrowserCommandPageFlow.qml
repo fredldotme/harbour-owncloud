@@ -18,15 +18,20 @@ CommandPageFlow {
             var isDavRmCommand = (receipt.info.property("type") === "davRemove")
 
             // Ignore invalid CommandReceipts
-            if (!receipt.valid)
+            if (!receipt.valid) {
+                console.warn("Receipt invalid")
                 return;
+            }
 
             // Ignore if the command was intentionally aborted by the user
-            if (receipt.abortIntended)
+            if (receipt.abortIntended) {
+                console.warn("Abort intended")
                 return
+            }
 
             // Error messages
             if (!receipt.finished) {
+                console.warn("Receipt: unfinished")
                 if (isDavListCommand) {
                     notificationRequest(
                                 qsTr("Failed to get remote content"),
@@ -47,13 +52,15 @@ CommandPageFlow {
             // a new page into the PageStack in case a refresh was not requested
             if (isDavListCommand) {
                 var remotePath = receipt.info.property("remotePath")
-                if (remotePath !== targetRemotePath)
-                    return;
-
                 var isRefresh = receipt.info.property("refresh")
                 var dirContent = receipt.result.dirContent;
 
                 directoryContents.insert(remotePath, dirContent);
+
+                if (remotePath !== targetRemotePath) {
+                    console.log("remotePath !== targetRemotePath")
+                    return;
+                }
 
                 // Done in case of a refresh
                 if (isRefresh)

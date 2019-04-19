@@ -9,12 +9,10 @@ Dialog {
     property string remotePath : "/"
 
     property var __listCommand : null
-    on__ListCommandChanged: {
-        console.log("remotePath contents:" + dirContents.value(remotePath))
-    }
 
     readonly property bool isLoadingDirectory : __listCommand !== null
     property CloudStorageProvider browserCommandQueue : null
+    property QmlMap directoryContents : applicationWindow.dirContents
 
     // Prepend ".." in case remotePath !== "/"
     function mangledDirectoryList(dirs) {
@@ -27,10 +25,10 @@ Dialog {
         remotePath = FilePathUtil.getCanonicalPath(path)
 
         if (dirContents.contains(remotePath)) {
-            listView.model = mangledDirectoryList(dirContents.value(remotePath))
+            listView.model = mangledDirectoryList(dialogRoot.directoryContents.value(remotePath))
             return;
         }
-        __listCommand = dialogRoot.browserCommandQueue.directoryListingRequest(remotePath, false)
+        __listCommand = dialogRoot.browserCommandQueue.directoryListingRequest(remotePath, true)
     }
 
     Component.onCompleted: {
@@ -38,7 +36,7 @@ Dialog {
     }
 
     Connections {
-        target: dirContents
+        target: directoryContents
         onInserted: {
             console.log("key:" + key + " remotePath:" + remotePath)
             if (key !== remotePath)

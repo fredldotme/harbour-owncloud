@@ -64,7 +64,7 @@ CoverBackground {
         return false
     }
 
-    CoverActionList {
+    /*CoverActionList {
         enabled: isTransfering
 
         CoverAction {
@@ -79,7 +79,7 @@ CoverBackground {
                 }
             }
         }
-    }
+    }*/
 }
 
 

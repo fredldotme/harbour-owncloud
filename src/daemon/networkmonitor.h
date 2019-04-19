@@ -13,7 +13,7 @@ class NetworkMonitor : public QObject
     Q_OBJECT
 public:
     explicit NetworkMonitor(QObject *parent = Q_NULLPTR,
-                            NextcloudSettingsBase* settings = Q_NULLPTR);
+                            AccountBase* settings = Q_NULLPTR);
     ~NetworkMonitor();
     bool shouldSync() { return m_shouldSync; }
 
@@ -27,7 +27,7 @@ private:
     void setShouldDownload(bool value);
 
     QNetworkConfigurationManager m_configManager;
-    NextcloudSettingsBase* m_settings = Q_NULLPTR;
+    AccountBase* m_settings = Q_NULLPTR;
     bool m_shouldSync;
     QMutex checkerMutex;
 };

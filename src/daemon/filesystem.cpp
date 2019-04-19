@@ -5,7 +5,7 @@
 #include <QFileInfo>
 #include <QMutexLocker>
 
-Filesystem::Filesystem(NextcloudSettingsBase* account) :
+Filesystem::Filesystem(AccountBase* account) :
     m_account(account)
 {
     connect(&m_watcher, &QFileSystemWatcher::directoryChanged, this, &Filesystem::prepareScan);
@@ -66,7 +66,7 @@ void Filesystem::rescan()
 {
     QFileInfo dirInfo(m_localPath);
     if (!dirInfo.exists() || !dirInfo.isDir()) {
-        qWarning() << "invalid path for watching";
+        qWarning() << "invalid path for watching" << dirInfo.absolutePath();
     }
 
     scan(dirInfo.absoluteFilePath(), true);

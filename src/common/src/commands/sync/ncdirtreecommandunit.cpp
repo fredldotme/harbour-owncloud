@@ -17,12 +17,16 @@ inline QVariantMap buildResultData(bool success, QSharedPointer<NcDirNode> tree)
     return result;
 }
 
-DavListCommandEntity* startingListCommand(QObject* parent,
+CommandEntity* startingListCommand(QObject* parent,
                                           const QString& rootPath,
-                                          QWebdav* client)
+                                          CloudStorageProvider* client)
 {
-    DavListCommandEntity* davListCommand =
-            new DavListCommandEntity(parent, rootPath, true, client);
+    if (!client) {
+        qWarning() << Q_FUNC_INFO << "client is null";
+        return nullptr;
+    }
+    CommandEntity* davListCommand =
+            client->directoryListingRequest(rootPath, false);
     return davListCommand;
 }
 
@@ -35,7 +39,7 @@ CommandEntityInfo defaultCommandInfo(const QString& rootPath)
 }
 
 NcDirTreeCommandUnit::NcDirTreeCommandUnit(QObject *parent,
-                                           QWebdav *client,
+                                           CloudStorageProvider *client,
                                            QString rootPath,
                                            QSharedPointer<NcDirNode> cachedTree) :
     CommandUnit(parent, {startingListCommand(parent, rootPath, client)},
@@ -64,12 +68,8 @@ void NcDirTreeCommandUnit::expand(CommandEntity* previousCommandEntity)
     if (!previousCommandEntity)
         return;
 
-    DavListCommandEntity* listCommand = qobject_cast<DavListCommandEntity*>(previousCommandEntity);
-    if (!listCommand)
-        return;
-
     // Command hasn't successfully finished
-    if (!listCommand->isFinished()) {
+    if (!previousCommandEntity->isFinished()) {
         // iterating through child directories wouldn't be possible,
         // so go back to the parent node if possible.
         if (this->m_currentNode)
@@ -81,7 +81,7 @@ void NcDirTreeCommandUnit::expand(CommandEntity* previousCommandEntity)
         return;
     }
 
-    const QVariantMap commandResult = listCommand->resultData();
+    const QVariantMap commandResult = previousCommandEntity->resultData();
     const int httpCode = commandResult.value(QStringLiteral("httpCode")).toInt();
     const bool success = (httpCode >= 200 && httpCode < 300);
 
@@ -92,7 +92,7 @@ void NcDirTreeCommandUnit::expand(CommandEntity* previousCommandEntity)
         return;
     }
 
-    const QString remotePath = listCommand->info().property(QStringLiteral("remotePath")).toString();
+    const QString remotePath = previousCommandEntity->info().property(QStringLiteral("remotePath")).toString();
     const QVariantList directoryContent = commandResult.value(QStringLiteral("dirContent")).toList();
 
     for (const QVariant& tmpEntry : directoryContent) {
@@ -134,11 +134,7 @@ void NcDirTreeCommandUnit::expand(CommandEntity* previousCommandEntity)
         const QString fullPath = remotePath + entryName + NODE_PATH_SEPARATOR;
 
         // then add required DavListCommandEntity
-        DavListCommandEntity* additionalCommand =
-                new DavListCommandEntity(this,
-                                         fullPath,
-                                         true,
-                                         this->m_client);
+        CommandEntity* additionalCommand = this->m_client->directoryListingRequest(fullPath, false);
         this->queue()->push_front(additionalCommand);
         qDebug() << "DavListCommandEntity" << fullPath;
     }

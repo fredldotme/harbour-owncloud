@@ -5,7 +5,7 @@
 Uploader::Uploader(QObject *parent,
                    const QString& targetDirectory,
                    NetworkMonitor* networkMonitor,
-                   NextcloudSettingsBase* settings) :
+                   AccountBase* settings) :
     QObject(parent),
     m_targetDirectory(targetDirectory),
     m_networkMonitor(networkMonitor),
@@ -38,7 +38,7 @@ void Uploader::triggerSync()
 
     NcSyncCommandUnit* syncDirectoriesUnit =
             new NcSyncCommandUnit(this->m_webDavCommandQueue,
-                                  this->m_webDavCommandQueue->getWebdav(),
+                                  this->m_webDavCommandQueue,
                                   this->m_settings->localPicturesPath(),
                                   this->m_targetDirectory);
 

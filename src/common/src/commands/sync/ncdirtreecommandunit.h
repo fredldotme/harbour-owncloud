@@ -2,9 +2,12 @@
 #define NCDIRTREECOMMANDUNIT_H
 
 #include <QObject>
+#include <QVector>
+#include <QVectorIterator>
+#include <QSharedPointer>
 #include <commandunit.h>
-#include <qwebdav.h>
 #include <settings/nextcloudsettingsbase.h>
+#include <provider/storage/cloudstorageprovider.h>
 
 const QString NODE_PATH_SEPARATOR = QStringLiteral("/");
 
@@ -15,7 +18,6 @@ class NcDirNode : public QObject
 public:
     ~NcDirNode()
     {
-        qDebug() << Q_FUNC_INFO;
         while (!directories.isEmpty()) {
             NcDirNode* backReference = this->directories.back();
             this->directories.pop_back();
@@ -102,7 +104,7 @@ class NcDirTreeCommandUnit : public CommandUnit
 
 public:
     NcDirTreeCommandUnit(QObject* parent = Q_NULLPTR,
-                         QWebdav* client = Q_NULLPTR,
+                         CloudStorageProvider* client = Q_NULLPTR,
                          QString rootPath = NODE_PATH_SEPARATOR,
                          QSharedPointer<NcDirNode> cachedTree = QSharedPointer<NcDirNode>());
 
@@ -110,7 +112,7 @@ protected:
     void expand(CommandEntity* previousCommandEntity) Q_DECL_OVERRIDE;
 
 private:
-    QWebdav* m_client;
+    CloudStorageProvider* m_client;
     AccountBase* m_settings;
     QSharedPointer<NcDirNode> m_rootNode;
 

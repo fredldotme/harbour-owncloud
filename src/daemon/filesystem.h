@@ -18,7 +18,7 @@ class Filesystem : public QObject
     };
 
 public:
-    Filesystem(NextcloudSettingsBase* account = Q_NULLPTR);
+    Filesystem(AccountBase* account = Q_NULLPTR);
 
 signals:
     void fileFound(QString fullPath);
@@ -34,7 +34,7 @@ private slots:
 private:
     void rescan();
 
-    NextcloudSettingsBase* m_account;
+    AccountBase* m_account;
     QFileSystemWatcher m_watcher;
     QString m_localPath;
     QSet<QString> m_existingFiles;

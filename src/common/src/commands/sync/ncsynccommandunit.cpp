@@ -1,5 +1,6 @@
 #include "ncsynccommandunit.h"
 
+#include <provider/storage/cloudstorageprovider.h>
 #include <commands/webdav/mkdavdircommandentity.h>
 #include <commands/webdav/fileuploadcommandentity.h>
 #include <commands/webdav/davproppatchcommandentity.h>
@@ -9,7 +10,7 @@
 #include <QFileInfo>
 
 CommandEntity* defaultCommandEntity(QObject* parent,
-                                    QWebdav* client,
+                                    CloudStorageProvider* client,
                                     QString remotePath,
                                     QSharedPointer<NcDirNode> cachedTree)
 {
@@ -26,7 +27,7 @@ CommandEntityInfo defaultCommandInfo(const QString& localPath, const QString& re
 }
 
 NcSyncCommandUnit::NcSyncCommandUnit(QObject* parent,
-                                     QWebdav* client,
+                                     CloudStorageProvider* client,
                                      QString localPath,
                                      QString remotePath,
                                      QSharedPointer<NcDirNode> cachedTree) :
@@ -95,6 +96,11 @@ bool NcSyncCommandUnit::fileExistsRemotely(const QString& localFilePath,
 
 void NcSyncCommandUnit::expand(CommandEntity *previousCommandEntity)
 {
+    if (!this->m_client) {
+        qWarning() << "Client is null, bailing out.";
+        return;
+    }
+
     if (!previousCommandEntity) {
         qWarning() << Q_FUNC_INFO << "entity is not valid.";
         return;
@@ -119,10 +125,8 @@ void NcSyncCommandUnit::expand(CommandEntity *previousCommandEntity)
             qInfo() << "trying to create target directory";
             this->m_directoryCreation = true;
 
-            MkDavDirCommandEntity* mkdirCommand =
-                    new MkDavDirCommandEntity(parent(),
-                                              this->m_remotePath,
-                                              this->m_client);
+            CommandEntity* mkdirCommand =
+                    this->m_client->makeDirectoryRequest(this->m_remotePath);
 
             this->queue()->push_back(mkdirCommand);
             this->queue()->push_back(defaultCommandEntity(parent(),
@@ -180,10 +184,8 @@ void NcSyncCommandUnit::expand(CommandEntity *previousCommandEntity)
                     break;
                 dirsToCreate.append(missingRelativeDir);
 
-                MkDavDirCommandEntity* mkdirCommand =
-                        new MkDavDirCommandEntity(parent(),
-                                                  missingRelativeDir,
-                                                  this->m_client);
+                CommandEntity* mkdirCommand =
+                        this->m_client->makeDirectoryRequest(missingRelativeDir);
                 this->queue()->push_back(mkdirCommand);
             }
         }
@@ -209,31 +211,11 @@ void NcSyncCommandUnit::expand(CommandEntity *previousCommandEntity)
         qDebug() << "relativeTargetDir" << relativeTargetDir;
 
         const QString targetPath = this->m_remotePath + relativeTargetDir;
-        FileUploadCommandEntity* uploadCommand = Q_NULLPTR;
-        DavPropPatchCommandEntity* propPatchCommand  = Q_NULLPTR;
-
-        {
-            uploadCommand = new FileUploadCommandEntity(parent(),
-                                                        sourcePath,
-                                                        targetPath,
-                                                        this->m_client);
-        }
-        {
-            QWebdav::PropValues props;
-            QMap<QString, QVariant> propMap;
-
-            // Last modified in seconds
-            propMap["lastmodified"] = (QVariant)(fileInfo.lastModified().toMSecsSinceEpoch() / 1000);
-            props["DAV:"] = propMap;
-
-
-            propPatchCommand =
-                    new DavPropPatchCommandEntity(this, targetPath + fileInfo.fileName(),
-                                                  props, this->m_client);
-        }
+        CommandEntity* uploadCommand =
+                this->m_client->fileUploadRequest(sourcePath, targetPath, fileInfo.lastModified());
 
         this->queue()->push_back(new CommandUnit(parent(),
-        {uploadCommand, propPatchCommand}, uploadCommand->info()));
+        {uploadCommand}, uploadCommand->info()));
     }
 
     qDebug() << "directories.length()" << this->m_cachedTree->directories.length();

@@ -3,7 +3,7 @@
 #include <QCoreApplication>
 
 NetworkMonitor::NetworkMonitor(QObject *parent,
-                               NextcloudSettingsBase* settings) :
+                               AccountBase* settings) :
     QObject(parent), m_settings(settings)
 {
     this->m_shouldSync = false;

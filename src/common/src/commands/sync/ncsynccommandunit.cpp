@@ -33,9 +33,9 @@ NcSyncCommandUnit::NcSyncCommandUnit(QObject* parent,
                                      QSharedPointer<NcDirNode> cachedTree) :
     CommandUnit(parent, {defaultCommandEntity(parent, client, remotePath, cachedTree)},
                 defaultCommandInfo(localPath, remotePath)),
+    m_client(client),
     m_localPath(localPath),
     m_remotePath(remotePath),
-    m_client(client),
     m_cachedTree(cachedTree)
 {
 
@@ -109,6 +109,7 @@ void NcSyncCommandUnit::expand(CommandEntity *previousCommandEntity)
     const QString commandType = previousCommandEntity->info().property(QStringLiteral("type")).toString();
 
     if (commandType != QStringLiteral("dirTree")) {
+        qWarning() << Q_FUNC_INFO << "command isn't of type 'dirTree' but" << commandType;
         return;
     }
 
@@ -126,7 +127,7 @@ void NcSyncCommandUnit::expand(CommandEntity *previousCommandEntity)
             this->m_directoryCreation = true;
 
             CommandEntity* mkdirCommand =
-                    this->m_client->makeDirectoryRequest(this->m_remotePath);
+                    this->m_client->makeDirectoryRequest(this->m_remotePath, false);
 
             this->queue()->push_back(mkdirCommand);
             this->queue()->push_back(defaultCommandEntity(parent(),
@@ -185,7 +186,7 @@ void NcSyncCommandUnit::expand(CommandEntity *previousCommandEntity)
                 dirsToCreate.append(missingRelativeDir);
 
                 CommandEntity* mkdirCommand =
-                        this->m_client->makeDirectoryRequest(missingRelativeDir);
+                        this->m_client->makeDirectoryRequest(missingRelativeDir, false);
                 this->queue()->push_back(mkdirCommand);
             }
         }
@@ -212,10 +213,9 @@ void NcSyncCommandUnit::expand(CommandEntity *previousCommandEntity)
 
         const QString targetPath = this->m_remotePath + relativeTargetDir;
         CommandEntity* uploadCommand =
-                this->m_client->fileUploadRequest(sourcePath, targetPath, fileInfo.lastModified());
+                this->m_client->fileUploadRequest(sourcePath, targetPath, fileInfo.lastModified(), false);
 
-        this->queue()->push_back(new CommandUnit(parent(),
-        {uploadCommand}, uploadCommand->info()));
+        this->queue()->push_back(uploadCommand);
     }
 
     qDebug() << "directories.length()" << this->m_cachedTree->directories.length();

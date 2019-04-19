@@ -27,9 +27,9 @@ private:
     bool fileExistsRemotely(const QString& localFilePath,
                             QStringList& missingDirectories);
 
+    CloudStorageProvider* m_client = Q_NULLPTR;
     QString m_localPath;
     QString m_remotePath;
-    CloudStorageProvider* m_client = Q_NULLPTR;
     QSharedPointer<NcDirNode> m_cachedTree;
     bool m_directoryCreation = false;
 

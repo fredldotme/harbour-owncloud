@@ -26,7 +26,7 @@ CommandEntity* startingListCommand(QObject* parent,
         return nullptr;
     }
     CommandEntity* davListCommand =
-            client->directoryListingRequest(rootPath, false);
+            client->directoryListingRequest(rootPath, false, false);
     return davListCommand;
 }
 
@@ -134,7 +134,7 @@ void NcDirTreeCommandUnit::expand(CommandEntity* previousCommandEntity)
         const QString fullPath = remotePath + entryName + NODE_PATH_SEPARATOR;
 
         // then add required DavListCommandEntity
-        CommandEntity* additionalCommand = this->m_client->directoryListingRequest(fullPath, false);
+        CommandEntity* additionalCommand = this->m_client->directoryListingRequest(fullPath, false, false);
         this->queue()->push_front(additionalCommand);
         qDebug() << "DavListCommandEntity" << fullPath;
     }

@@ -26,6 +26,7 @@
 #include <auth/authenticationexaminer.h>
 #include <auth/flowloginauthenticator.h>
 #include <util/filepathutil.h>
+#include <util/qappprepareutil.h>
 #include <net/thumbnailfetcher.h>
 #include <net/avatarfetcher.h>
 #include <qmlmap.h>
@@ -123,10 +124,8 @@ int main(int argc, char *argv[])
 
 #ifndef GHOSTCLOUD_UI_QUICKCONTROLS
     SailfishUiSet::registerQmlTypes();
-    const QString QHOSTCLOUD_APP_NAME = QStringLiteral("harbour-owncloud");
 #else
     QmlUiSet::registerQmlTypes();
-    const QString QHOSTCLOUD_APP_NAME = QStringLiteral("GhostCloud");
 #endif
 
 #ifdef Q_OS_ANDROID
@@ -167,14 +166,7 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonType("harbour.owncloud", 1, 0, "FilePathUtil", filePathUtilProvider);
 
     QGuiApplication* app = SailfishApp::application(argc, argv);
-
-#ifdef GHOSTCLOUD_UBUNTU_TOUCH
-    app->setApplicationName(QStringLiteral("me.fredl.ghostcloud"));
-#else
-    app->setOrganizationName(QHOSTCLOUD_APP_NAME);
-    app->setOrganizationDomain(QHOSTCLOUD_APP_NAME);
-    app->setApplicationName(QHOSTCLOUD_APP_NAME);
-#endif
+    prepareAppProperties(*app);
 
     QIcon::setThemeName("theme");
 

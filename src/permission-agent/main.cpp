@@ -4,6 +4,7 @@
 #include <QDBusConnection>
 
 #include <ownclouddbusconsts.h>
+#include <util/qappprepareutil.h>
 
 #include "dbushandler.h"
 #include "dialogview.h"
@@ -12,6 +13,7 @@
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
+    prepareAppProperties(app);
 
     DBusHandler *dbusHandler = new DBusHandler;
     PermissionRequestQueue *requestQueue = new PermissionRequestQueue;

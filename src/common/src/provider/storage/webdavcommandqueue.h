@@ -18,18 +18,34 @@ public:
                                 AccountBase* settings = Q_NULLPTR);
 
 public slots:
-    virtual CommandEntity* fileDownloadRequest(QString from,
-                                               QString mimeType = QStringLiteral(""),
-                                               bool open = false,
-                                               QDateTime lastModified = QDateTime()) Q_DECL_OVERRIDE;
-    virtual CommandEntity* fileUploadRequest(QString from,
-                                             QString to,
-                                             QDateTime lastModified = QDateTime()) Q_DECL_OVERRIDE;
-    virtual CommandEntity* makeDirectoryRequest(QString dirName) Q_DECL_OVERRIDE;
-    virtual CommandEntity* removeRequest(QString name) Q_DECL_OVERRIDE;
-    virtual CommandEntity* moveRequest(QString from, QString to) Q_DECL_OVERRIDE;
-    virtual CommandEntity* copyRequest(QString from, QString to) Q_DECL_OVERRIDE;
-    virtual CommandEntity* directoryListingRequest(QString path, bool refresh) Q_DECL_OVERRIDE;
+    virtual CommandEntity* fileDownloadRequest(const QString from,
+                                               const QString mimeType = QStringLiteral(""),
+                                               const bool open = false,
+                                               const QDateTime lastModified = QDateTime(),
+                                               const bool enqueue = true) Q_DECL_OVERRIDE;
+
+    virtual CommandEntity* fileUploadRequest(const QString from,
+                                             const QString to,
+                                             const QDateTime lastModified = QDateTime(),
+                                             const bool enqueue = true) Q_DECL_OVERRIDE;
+
+    virtual CommandEntity* makeDirectoryRequest(const QString dirName,
+                                                const bool enqueue = true) Q_DECL_OVERRIDE;
+
+    virtual CommandEntity* removeRequest(const QString name,
+                                         const bool enqueue = true) Q_DECL_OVERRIDE;
+
+    virtual CommandEntity* moveRequest(const QString from,
+                                       const QString to,
+                                       const bool enqueue = true) Q_DECL_OVERRIDE;
+
+    virtual CommandEntity* copyRequest(const QString from,
+                                       const QString to,
+                                       const bool enqueue = true) Q_DECL_OVERRIDE;
+
+    virtual CommandEntity* directoryListingRequest(const QString path,
+                                                   const bool refresh,
+                                                   const bool enqueue = true) Q_DECL_OVERRIDE;
 
     virtual bool supportsQFile() Q_DECL_OVERRIDE {
         return false;

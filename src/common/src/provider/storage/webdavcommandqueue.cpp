@@ -62,56 +62,70 @@ void WebDavCommandQueue::updateConnectionSettings()
                      this, &WebDavCommandQueue::updateConnectionSettings);
 }
 
-CommandEntity* WebDavCommandQueue::makeDirectoryRequest(QString dirName)
+CommandEntity* WebDavCommandQueue::makeDirectoryRequest(const QString dirName,
+                                                        const bool enqueue)
 {
     MkDavDirCommandEntity* command =
             new MkDavDirCommandEntity(this, dirName, this->getWebdav());
 
-    enqueue(command);
+    if (enqueue)
+        this->enqueue(command);
     return command;
 }
 
-CommandEntity* WebDavCommandQueue::removeRequest(QString name)
+CommandEntity* WebDavCommandQueue::removeRequest(const QString name,
+                                                 const bool enqueue)
 {
     DavRmCommandEntity* command =
             new DavRmCommandEntity(this, name, this->getWebdav());
 
-    enqueue(command);
+    if (enqueue)
+        this->enqueue(command);
     return command;
 }
 
-CommandEntity* WebDavCommandQueue::moveRequest(QString from, QString to)
+CommandEntity* WebDavCommandQueue::moveRequest(const QString from,
+                                               const QString to,
+                                               const bool enqueue)
 {
     DavMoveCommandEntity* command =
             new DavMoveCommandEntity(this, from, to, this->getWebdav());
 
-    enqueue(command);
+    if (enqueue)
+        this->enqueue(command);
     return command;
 }
 
-CommandEntity* WebDavCommandQueue::copyRequest(QString from, QString to)
+CommandEntity* WebDavCommandQueue::copyRequest(const QString from,
+                                               const QString to,
+                                               const bool enqueue)
 {
     DavCopyCommandEntity* command =
             new DavCopyCommandEntity(this, from, to, this->getWebdav());
 
-    enqueue(command);
+    if (enqueue)
+        this->enqueue(command);
     return command;
 }
 
-CommandEntity* WebDavCommandQueue::directoryListingRequest(QString path, bool refresh)
+CommandEntity* WebDavCommandQueue::directoryListingRequest(const QString path,
+                                                           const bool refresh,
+                                                           const bool enqueue)
 {
     qDebug() << Q_FUNC_INFO;
     DavListCommandEntity* command =
             new DavListCommandEntity(this, path, refresh, this->getWebdav());
 
-    enqueue(command);
+    if (enqueue)
+        this->enqueue(command);
     return command;
 }
 
-CommandEntity* WebDavCommandQueue::fileDownloadRequest(QString remotePath,
-                                                       QString mimeType,
-                                                       bool open,
-                                                       QDateTime lastModified)
+CommandEntity* WebDavCommandQueue::fileDownloadRequest(const QString remotePath,
+                                                       const QString mimeType,
+                                                       const bool open,
+                                                       const QDateTime lastModified,
+                                                       const bool enqueue)
 {
 #ifdef Q_OS_ANDROID
     const QStringList requiredPermissions =
@@ -158,15 +172,17 @@ CommandEntity* WebDavCommandQueue::fileDownloadRequest(QString remotePath,
 
     CommandUnit* commandUnit = new CommandUnit(this,
     {downloadCommand, lastModifiedCommand}, unitInfo);
-
-    enqueue(commandUnit);
-    enqueue(openFileCommand);
+    if (enqueue) {
+        this->enqueue(commandUnit);
+        this->enqueue(openFileCommand);
+    }
     return commandUnit;
 }
 
-CommandEntity* WebDavCommandQueue::fileUploadRequest(QString localPath,
-                                                     QString remotePath,
-                                                     QDateTime lastModified)
+CommandEntity* WebDavCommandQueue::fileUploadRequest(const QString localPath,
+                                                     const QString remotePath,
+                                                     const QDateTime lastModified,
+                                                     const bool enqueue)
 {
 #ifdef Q_OS_ANDROID
     const QStringList requiredPermissions =
@@ -182,15 +198,16 @@ CommandEntity* WebDavCommandQueue::fileUploadRequest(QString localPath,
     }
 #endif
 
-    if (localPath.startsWith("file://")) {
-        localPath = localPath.mid(7);
+    QString newLocalPath = localPath;
+    if (newLocalPath.startsWith("file://")) {
+        newLocalPath = newLocalPath.mid(7);
     }
-    qDebug() << localPath;
-    const QString fileName = localPath.mid(localPath.lastIndexOf('/') + 1);
+    qDebug() << newLocalPath;
+    const QString fileName = newLocalPath.mid(newLocalPath.lastIndexOf('/') + 1);
 
     qDebug() << "upload requested";
     FileUploadCommandEntity* uploadCommand =
-            new FileUploadCommandEntity(this, localPath, remotePath, this->getWebdav());
+            new FileUploadCommandEntity(this, newLocalPath, remotePath, this->getWebdav());
     CommandEntity* lastModifiedCommand = Q_NULLPTR;
 
     // if lastModified has been provided update the remote lastModified information afterwards
@@ -201,7 +218,7 @@ CommandEntity* WebDavCommandQueue::fileUploadRequest(QString localPath,
 
     QMap<QString, QVariant> info;
     info["type"] = QStringLiteral("fileUpload");
-    info["localPath"] = localPath;
+    info["localPath"] = newLocalPath;
     info["remotePath"] = remotePath;
     info["fileName"] = fileName;
     info["remoteFile"] = remotePath + fileName;
@@ -209,7 +226,8 @@ CommandEntity* WebDavCommandQueue::fileUploadRequest(QString localPath,
     CommandUnit* commandUnit = new CommandUnit(this,
     {uploadCommand, lastModifiedCommand}, CommandEntityInfo(info));
 
-    enqueue(commandUnit);
+    if (enqueue)
+        this->enqueue(commandUnit);
     return uploadCommand;
 }
 

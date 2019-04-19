@@ -118,6 +118,10 @@
         <source>%1 couldn&apos;t be downloaded</source>
         <translation type="unfinished">%1 n’a pas été téléchargé</translation>
     </message>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished">Paramètres</translation>
+    </message>
 </context>
 <context>
     <name>BasicAuthentication</name>
@@ -240,10 +244,6 @@
     <message>
         <source>Refresh</source>
         <translation>Actualiser</translation>
-    </message>
-    <message>
-        <source>Settings</source>
-        <translation>Paramètres</translation>
     </message>
     <message>
         <source>File transfers</source>
@@ -447,10 +447,6 @@
         <translation>Paramètres</translation>
     </message>
     <message>
-        <source>Reset connection settings</source>
-        <translation>Réinitialiser les paramètres de connexion</translation>
-    </message>
-    <message>
         <source>Login automatically</source>
         <translation>Connexion automatique</translation>
     </message>
@@ -567,6 +563,10 @@
     <message>
         <source>Please check your host address</source>
         <translation type="unfinished">Vérifiez l’adresse hôte</translation>
+    </message>
+    <message>
+        <source>Dropbox</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

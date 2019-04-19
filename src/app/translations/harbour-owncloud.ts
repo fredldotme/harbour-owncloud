@@ -118,6 +118,10 @@
         <source>%1 couldn&apos;t be downloaded</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BasicAuthentication</name>
@@ -239,10 +243,6 @@
     <name>FileBrowser</name>
     <message>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -447,10 +447,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Reset connection settings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Login automatically</source>
         <translation type="unfinished"></translation>
     </message>
@@ -566,6 +562,10 @@
     </message>
     <message>
         <source>Please check your host address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dropbox</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

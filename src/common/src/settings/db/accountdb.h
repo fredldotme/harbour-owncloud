@@ -27,6 +27,8 @@ public slots:
 
 private:
     void createDatabase();
+    void upgradeDatabase();
+    int currentDatabaseVersion();
     void cleanup();
     bool insertAccountIntoDatabase(AccountBase* account);
 

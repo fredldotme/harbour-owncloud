@@ -10,6 +10,8 @@
 #include <QtSql/QSqlRecord>
 #include <QVariant>
 
+const int MAX_CURRENT_DB_VERSION = 1;
+
 AccountDb::AccountDb(QObject *parent) : QObject(parent)
 {
     if (!qApp) {
@@ -44,6 +46,7 @@ AccountDb::AccountDb(QObject *parent) : QObject(parent)
     qDebug() << "Database location: " << dbFilePath;
     this->m_database.setDatabaseName(dbFilePath);
     createDatabase();
+    upgradeDatabase();
     accounts();
     Q_EMIT accountsChanged();
 }
@@ -108,6 +111,39 @@ void AccountDb::createDatabase()
             return;
         }
     }
+}
+
+int AccountDb::currentDatabaseVersion()
+{
+    const QString statement =
+            QStringLiteral("SELECT versionNumber from VERSION;");
+    QSqlQuery query = this->m_database.exec(statement);
+
+    // There's supposed to be only one row in the table
+    if (query.first()) {
+        bool parseOk = false;
+        const QString columnName = QStringLiteral("versionNumber");
+        const int currentVersion =
+                query.value(columnName).toInt(&parseOk);
+
+        if (parseOk)
+            return currentVersion;
+    }
+
+    return -1;
+}
+
+void AccountDb::upgradeDatabase()
+{
+    const int currentDbVersion = currentDatabaseVersion();
+    qDebug() << Q_FUNC_INFO << "current version"
+             << currentDbVersion;
+
+    if (MAX_CURRENT_DB_VERSION == currentDbVersion)
+        return;
+
+    qInfo() << "Upgrading database tables";
+    // TODO: New tables, columns, etc.
 }
 
 void AccountDb::cleanup()

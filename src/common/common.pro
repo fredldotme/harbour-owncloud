@@ -102,7 +102,8 @@ HEADERS += \
     $$PWD/src/provider/accountinfo/accountinfoprovider.h \
     $$PWD/src/util/providerutils.h \
     $$PWD/src/accountworkers.h \
-    $$PWD/src/accountworkergenerator.h
+    $$PWD/src/accountworkergenerator.h \
+    src/util/qappprepareutil.h
 
 include($$PWD/../../3rdparty/libqtcommandqueue/libqtcommandqueue.pri)
 

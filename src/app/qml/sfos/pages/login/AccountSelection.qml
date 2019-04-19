@@ -12,7 +12,10 @@ Page {
 
     property CommandEntity __listCommand : null
     property var selectedAccountWorkers : null
-    readonly property var providerTypeNames : ["Nextcloud/ownCloud", "WebDav"]
+    readonly property var providerTypeNames : [
+        "Nextcloud/ownCloud",
+        "WebDav"
+    ]
 
     BrowserCommandPageFlow {
         id: pageFlow
@@ -66,6 +69,7 @@ Page {
 
         delegate: ListItem {
             width: ListView.view.width
+            enabled: __listCommand === null
             //height: mainColumn.height
 
             property var delegateAccountWorkers : accountsList.model[index]
@@ -134,7 +138,21 @@ Page {
 
             menu: ContextMenu {
                 MenuItem {
+                    text: qsTr("Settings")
+                    enabled: __listCommand === null
+                    onClicked: {
+                        var settingsPage =
+                                settingsPageComponent.createObject(accountsSelectionRoot,
+                                                                   {
+                                                                       accountWorkers : delegateAccountWorkers,
+                                                                       accountDb: accountWorkerGenerator.database
+                                                                   });
+                        pageStack.push(settingsPage)
+                    }
+                }
+                MenuItem {
                     text: qsTr("Remove account")
+                    enabled: __listCommand === null
                     onClicked: {
                         removeRemorse.execute(mainColumn,
                                               qsTr("Removing account"),
@@ -160,10 +178,6 @@ Page {
                 __listCommand = selectedAccountWorkers.browserCommandQueue.directoryListingRequest(nextPath, false)
 
                 console.debug("onClicked: __listCommand " + __listCommand)
-            }
-
-            onPressAndHold: {
-                // TODO: "Remove account" button
             }
         }
     }

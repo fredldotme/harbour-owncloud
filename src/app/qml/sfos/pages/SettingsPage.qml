@@ -11,6 +11,7 @@ Page {
     onStatusChanged: {
         if (status === PageStatus.Deactivating) {
             if (_navigation === PageNavigation.Back) {
+                accountDb.updateAccount(accountWorkers.account)
                 daemonCtrl.reloadConfig()
             }
         }
@@ -22,19 +23,6 @@ Page {
         PageHeader {
             id: pageHeader
             title: qsTr("Settings")
-        }
-
-        PullDownMenu {
-            id: pulley
-            MenuItem {
-                text: qsTr("Reset connection settings")
-                onClicked: {
-                    accountWorkers.transferQueue.stop()
-                    accountWorkers.settings.resetSettings();
-                    pageStack.clear();
-                    pageStack.push(accountSelection);
-                }
-            }
         }
 
         Column {
@@ -50,16 +38,16 @@ Page {
                 id: autoLoginSwitch
                 text: qsTr("Login automatically")
                 description: qsTr("Automatically log in to your ownCloud server when starting the app", "Login automatically description")
-                checked: accountWorkers.settings.autoLogin
-                onClicked: accountWorkers.settings.autoLogin = checked
+                checked: accountWorkers.account.autoLogin
+                onClicked: accountWorkers.account.autoLogin = checked
             }
 
             TextSwitch {
                 id: notificationSwitch
                 text: qsTr("Notifications")
                 description: qsTr("Show global notifications when transfering files", "Notifications description")
-                checked: persistentSettings.notifications
-                onClicked: persistentSettings.notifications = checked
+                checked: accountWorkers.account.notifications
+                onClicked: accountWorkers.account.notifications = checked
             }
 
             TextSwitch {
@@ -67,8 +55,8 @@ Page {
                 text: qsTr("Camera photo backups")
                 description: qsTr("Automatically save camera photos to your ownCloud instance when on WiFi", "Camera photo backups escription")
                 visible: daemonCtrl.daemonInstalled
-                checked: persistentSettings.uploadAutomatically
-                onClicked: persistentSettings.uploadAutomatically = checked
+                checked: accountWorkers.account.uploadAutomatically
+                onClicked: accountWorkers.account.uploadAutomatically = checked
             }
 
             TextSwitch {
@@ -77,14 +65,14 @@ Page {
                 description: qsTr("Also automatically backup camera photos when connected via 2G, 3G or LTE", "hoto backups via mobile internet connection description")
                 visible: daemonCtrl.daemonInstalled
                 enabled: cameraUploadSwitch.checked
-                checked: persistentSettings.mobileUpload
-                onClicked: persistentSettings.mobileUpload = checked
+                checked: accountWorkers.account.mobileUpload
+                onClicked: accountWorkers.account.mobileUpload = checked
             }
 
             Button {
                 anchors.horizontalCenter: parent.horizontalCenter
                 text: qsTr("Clear cache")
-                onClicked: thumbnailCache.clearCache()
+                onClicked: accountWorkers.cacheProvider.clearCache()
             }
         }
     }

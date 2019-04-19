@@ -269,19 +269,10 @@ Page {
                             transferPageComponent.createObject(pageRoot,
                                                                {
                                                                    accountWorkers : accountWorkers
-                                                               }
-                                                               );
+                                                               });
                     pageStack.push(transferPage)
                 }
             }
-
-            MenuItem {
-                text: qsTr("Settings")
-                onClicked: {
-                    pageStack.push(settingsPageComponent)
-                }
-            }
-
             MenuItem {
                 text: qsTr("About")
                 onClicked: {

@@ -46,6 +46,20 @@ int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
 
+#ifndef GHOSTCLOUD_UI_QUICKCONTROLS
+    const QString QHOSTCLOUD_APP_NAME = QStringLiteral("harbour-owncloud");
+#else
+    const QString QHOSTCLOUD_APP_NAME = QStringLiteral("GhostCloud");
+#endif
+
+#ifdef GHOSTCLOUD_UBUNTU_TOUCH
+    app.setApplicationName(QStringLiteral("me.fredl.ghostcloud"));
+#else
+    app.setOrganizationName(QHOSTCLOUD_APP_NAME);
+    app.setOrganizationDomain(QHOSTCLOUD_APP_NAME);
+    app.setApplicationName(QHOSTCLOUD_APP_NAME);
+#endif
+
     // Status updates and config reload requests through DBus
     DBusHandler *dbusHandler = new DBusHandler();
 
@@ -65,7 +79,7 @@ int main(int argc, char *argv[])
     generator.setDatabase(&accountDatabase);
 
     for (const QVariant& accountWorkerVariant : generator.accountWorkers()) {
-        QObject* workersReference = qvariant_cast<QObject *>(accountWorkerVariant.data());
+        QObject* workersReference = qvariant_cast<QObject *>(accountWorkerVariant);
         if (!workersReference) {
             qWarning() << "'workersReference' is invalid, skipping...";
             continue;
@@ -77,7 +91,10 @@ int main(int argc, char *argv[])
             continue;
         }
 
-        NextcloudSettingsBase* settings = workers->account();
+        AccountBase* settings = workers->account();
+
+        if (!settings->uploadAutomatically())
+            continue;
 
         Filesystem *fsHandler = new Filesystem(settings);
         NetworkMonitor *netMonitor = new NetworkMonitor(workers, settings);

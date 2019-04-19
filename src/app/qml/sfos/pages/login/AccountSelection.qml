@@ -81,7 +81,7 @@ Page {
                     id: providerLabel
                     text: providerTypeNames[delegateAccountWorkers.account.providerType]
                     font.bold: true
-                    font.pixelSize: Theme.fontSizeSmall
+                    font.pixelSize: Theme.fontSizeMedium
                     enabled: __listCommand == null
                     width: accountsList.width
                 }
@@ -91,7 +91,7 @@ Page {
                     text: delegateAccountWorkers.account.username
                           + " on "
                           + delegateAccountWorkers.account.hoststring
-                    font.pixelSize: Theme.fontSizeSmall
+                    font.pixelSize: Theme.fontSizeMedium
                     enabled: __listCommand == null
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                     width: accountsList.width

@@ -1,13 +1,10 @@
 #include "nextclouduploader.h"
 
 #include <QDebug>
-#include <settings/inifilesettings.h>
+#include <settings/nextcloudsettingsbase.h>
 
 NextcloudUploader::NextcloudUploader(QObject *parent) : MediaTransferInterface(parent)
 {
-    IniFileSettings::instance()->readSettings();
-    this->m_commandQueue.setSettings(IniFileSettings::instance());
-
     QObject::connect(&this->m_commandQueue, &WebDavCommandQueue::commandFinished,
                      this, [=](CommandReceipt receipt) {
         if (receipt.finished)
@@ -51,6 +48,16 @@ void NextcloudUploader::start()
     if (localPath.startsWith("file://"))
         localPath = localPath.mid(7);
     const QString remotePath = userData.value("remoteDir").toString();
+    AccountBase* account = new AccountBase();
+    const QString hoststring = userData.value("hoststring").toString();
+    const QString username = userData.value("username").toString();
+    const QString password = userData.value("password").toString();
+
+    account->setHoststring(hoststring);
+    account->setUsername(username);
+    account->setPassword(password);
+
+    this->m_commandQueue.setSettings(account);
 
     CommandEntity* transferCommand =
             this->m_commandQueue.fileUploadRequest(localPath, remotePath);

@@ -6,24 +6,27 @@ import com.github.beidl.harbourowncloud 1.0
 
 ShareDialog {
     id: root
-    canAccept: shouldShowList && !isLoadingDirectory
+    canAccept: shouldShowList && !isLoadingDirectory && isValidAccount
 
     enabled: !isLoadingDirectory
 
     property int viewWidth: root.isPortrait ? Screen.width : Screen.width / 2
     property string remotePath : "/"
     property string localPath : root.source
+    property var selectedAccount : permittedSettings
     readonly property bool isLoadingDirectory : webDavCommandQueue.running
     property bool errorOccured : false
     property bool thumbnailErrorOccured : false
+    readonly property bool isValidAccount : (permittedSettings.username !== "" &&
+                                             permittedSettings.password !== "")
 
     readonly property bool shouldShowList : (!errorOccured)
 
     readonly property string loginHint :
-         "Please log in to your Nextcloud/ownCloud"
+         "Please log in to your cloud"
 
     readonly property string errorHint :
-         "An error occured while contacting the Nextcloud/ownCloud instance"
+         "An error occured while contacting the cloud instance"
 
     Component.onCompleted: {
         permittedSettings.readSettings()
@@ -162,6 +165,17 @@ ShareDialog {
                     }
                 }
             }
+
+            ViewPlaceholder {
+                id: placeholderHint
+                anchors.centerIn: parent
+                enabled: !shouldShowList || !isValidAccount
+                text: loginHint
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: permittedSettings.readSettings()
+                }
+            }
         }
     }
 
@@ -171,17 +185,13 @@ ShareDialog {
         metadataStripped: true
         serviceId: root.methodId
         userData: {
-                    "localPath" : localPath,
-                    "remoteDir" : remotePath
+            "localPath" : localPath,
+            "remoteDir" : remotePath,
+            "hoststring" : selectedAccount.hoststring,
+            "username" : selectedAccount.username,
+            "password" : selectedAccount.password
         }
     }    
-
-    ViewPlaceholder {
-        id: placeholderHint
-        anchors.centerIn: parent
-        enabled: !shouldShowList
-        text: loginHint
-    }
 
     DialogHeader {
     }

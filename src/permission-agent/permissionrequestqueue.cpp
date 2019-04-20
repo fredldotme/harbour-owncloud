@@ -2,7 +2,6 @@
 
 #include <QDebug>
 #include <QDBusConnection>
-#include <settings/inifilesettings.h>
 
 PermissionRequestQueue::PermissionRequestQueue(QObject *parent) : QObject(parent)
 {
@@ -14,31 +13,27 @@ void PermissionRequestQueue::enqueueRequest(QDBusMessage requestMessage)
     emit permissionRequested();
 }
 
-void PermissionRequestQueue::permitFirstInQueue()
+void PermissionRequestQueue::permitFirstInQueue(AccountBase* account)
 {
     if (m_requestQueue.length() < 1)
         return;
 
     QDBusMessage request = m_requestQueue.dequeue();
 
-    // Refresh settings values
-    //IniFileSettings::instance()->readSettings();
-
     QMap<QString, QVariant> values;
-    /*values.insert(NEXTCLOUD_SETTINGS_KEY_CERTMD5, IniFileSettings::instance()->md5Hex());
-    values.insert(NEXTCLOUD_SETTINGS_KEY_CERTSHA1, IniFileSettings::instance()->sha1Hex());
-    values.insert(NEXTCLOUD_SETTINGS_KEY_ISHTTPS, IniFileSettings::instance()->isHttps());
-    values.insert(NEXTCLOUD_SETTINGS_KEY_HOSTNAME, IniFileSettings::instance()->hostname());
-    values.insert(NEXTCLOUD_SETTINGS_KEY_PORT, IniFileSettings::instance()->port());
-    values.insert(NEXTCLOUD_SETTINGS_KEY_PATH, IniFileSettings::instance()->path());
-    values.insert(NEXTCLOUD_SETTINGS_KEY_USERNAME, IniFileSettings::instance()->username());
-    values.insert(NEXTCLOUD_SETTINGS_KEY_PASSWORD, IniFileSettings::instance()->password());
-    values.insert(NEXTCLOUD_SETTINGS_KEY_PROVIDERTYPE, IniFileSettings::instance()->providerType());
-    values.insert(NEXTCLOUD_SETTINGS_KEY_PICTURESPATH, IniFileSettings::instance()->localPicturesPath());
-    values.insert(NEXTCLOUD_SETTINGS_KEY_MOBILEUPLOAD, IniFileSettings::instance()->mobileUpload());
-    values.insert(NEXTCLOUD_SETTINGS_KEY_NOTIFICATIONS, IniFileSettings::instance()->notifications());
-    values.insert(NEXTCLOUD_SETTINGS_KEY_UPLOADAUTOMATICALLY, IniFileSettings::instance()->uploadAutomatically());
-    values.insert(NEXTCLOUD_PERMD_REQUESTDENIED, false);*/
+    values.insert(NEXTCLOUD_SETTINGS_KEY_CERTMD5, account->md5Hex());
+    values.insert(NEXTCLOUD_SETTINGS_KEY_CERTSHA1, account->sha1Hex());
+    values.insert(NEXTCLOUD_SETTINGS_KEY_ISHTTPS, account->isHttps());
+    values.insert(NEXTCLOUD_SETTINGS_KEY_HOSTNAME, account->hostname());
+    values.insert(NEXTCLOUD_SETTINGS_KEY_PORT, account->port());
+    values.insert(NEXTCLOUD_SETTINGS_KEY_PATH, account->path());
+    values.insert(NEXTCLOUD_SETTINGS_KEY_USERNAME, account->username());
+    values.insert(NEXTCLOUD_SETTINGS_KEY_PASSWORD, account->password());
+    values.insert(NEXTCLOUD_SETTINGS_KEY_PROVIDERTYPE, account->providerType());
+    values.insert(NEXTCLOUD_SETTINGS_KEY_MOBILEUPLOAD, account->mobileUpload());
+    values.insert(NEXTCLOUD_SETTINGS_KEY_NOTIFICATIONS, account->notifications());
+    values.insert(NEXTCLOUD_SETTINGS_KEY_UPLOADAUTOMATICALLY, account->uploadAutomatically());
+    values.insert(NEXTCLOUD_PERMD_REQUESTDENIED, false);
 
     QDBusMessage reply = request.createReply(values);
     QDBusConnection::sessionBus().send(reply);

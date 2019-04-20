@@ -1,5 +1,6 @@
 import QtQuick 2.2
 import Sailfish.Silica 1.0
+import harbour.owncloud 1.0
 
 ApplicationWindow
 {
@@ -8,7 +9,10 @@ ApplicationWindow
 
     Connections {
         target: queue
-        onPermissionRequested: pageStack.openDialog(dialog)
+        onPermissionRequested: {
+            accountDb.refresh()
+            pageStack.openDialog(dialog)
+        }
     }
 
     initialPage: Component {
@@ -20,17 +24,65 @@ ApplicationWindow
     Dialog {
         id: dialog
 
+        property var selectedAccount : null
+        canAccept: selectedAccount !== null
+
+        AccountWorkerGenerator {
+            id: accountWorkerGenerator
+            database: AccountDb {
+                id: accountDb
+            }
+        }
+
         DialogHeader {
-            title: qsTr("Do you want to grant temporary access to your Nextcloud/ownCloud?")
+            id: header
+            title: qsTr("Which cloud storage account would you like to use?")
+        }
+
+        ComboBox {
+            id: accountsList
+            width: parent.width
+            anchors {
+                top: header.bottom
+                left: parent.left
+                right: parent.right
+            }
+            onCurrentIndexChanged: {
+                if (currentIndex === 0) {
+                    dialog.selectedAccount = null
+                }
+            }
+
+            menu: ContextMenu {
+                MenuItem {
+                    text: qsTr("Select an account...")
+                }
+
+                Repeater {
+                    id: accountRepeater
+                    model: accountWorkerGenerator.accountWorkers
+                    delegate: MenuItem {
+                        property var delegateAccountWorkers : accountRepeater.model[index]
+                        text: delegateAccountWorkers.account.username + " on " +
+                              delegateAccountWorkers.account.hoststring
+
+                        onClicked: {
+                            dialog.selectedAccount = delegateAccountWorkers.account
+                        }
+                    }
+                }
+            }
         }
 
         onAccepted: {
             dialogRoot.deactivate()
-            queue.permitFirstInQueue()
+            queue.permitFirstInQueue(selectedAccount)
+            accountsList.currentIndex = 0
         }
         onRejected: {
             dialogRoot.deactivate()
             queue.discardFirstInQueue()
+            accountsList.currentIndex = 0
         }
     }
 }

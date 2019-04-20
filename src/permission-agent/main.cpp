@@ -6,12 +6,21 @@
 #include <ownclouddbusconsts.h>
 #include <util/qappprepareutil.h>
 
+#include <accountworkergenerator.h>
+#include <accountworkers.h>
+#include <settings/db/accountdb.h>
+
 #include "dbushandler.h"
 #include "dialogview.h"
 #include "permissionrequestqueue.h"
 
 int main(int argc, char *argv[])
 {
+    qmlRegisterType<AccountDb>("harbour.owncloud", 1, 0, "AccountDb");
+    qmlRegisterType<AccountWorkerGenerator>("harbour.owncloud", 1, 0, "AccountWorkerGenerator");
+    qmlRegisterUncreatableType<AccountWorkers>("harbour.owncloud", 1, 0, "AccountWorkers",
+                                               "AccountWorkers are provided through the AccountDbWorkers type");
+
     QGuiApplication app(argc, argv);
     prepareAppProperties(app);
 

@@ -5,6 +5,8 @@
 #include <QQueue>
 #include <QDBusMessage>
 
+#include <settings/nextcloudsettingsbase.h>
+
 class PermissionRequestQueue : public QObject
 {
     Q_OBJECT
@@ -14,7 +16,7 @@ public:
     void enqueueRequest(QDBusMessage requestMessage);
 
 public slots:
-    void permitFirstInQueue();
+    void permitFirstInQueue(AccountBase* account);
     void discardFirstInQueue();
 
 private:

@@ -1,9 +1,9 @@
 TARGET = harbour-owncloud-permission-agent
 
-CONFIG = qt c++11 sailfishapp
-
-include(../common/common.pri)
+CONFIG = qt c++11 sailfishapp sailfish_build
 QT = dbus quick xml gui-private
+
+include($$PWD/../common/common.pri)
 
 SOURCES += \
     main.cpp \

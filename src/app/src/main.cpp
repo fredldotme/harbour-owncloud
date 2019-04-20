@@ -122,18 +122,18 @@ int main(int argc, char *argv[])
 {
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
-#ifndef GHOSTCLOUD_UI_QUICKCONTROLS
-    SailfishUiSet::registerQmlTypes();
-#else
-    QmlUiSet::registerQmlTypes();
-#endif
-
 #ifdef Q_OS_ANDROID
     QAndroidJniObject::callStaticObjectMethod(
         "me/fredl/ghostcloud/ShareUtil",
         "setupVmPolicy",
         "()Ljava/lang/String;");
 
+#endif
+
+#ifndef GHOSTCLOUD_UI_QUICKCONTROLS
+    SailfishUiSet::registerQmlTypes();
+#else
+    QmlUiSet::registerQmlTypes();
 #endif
 
     qmlRegisterType<QmlMap>("harbour.owncloud", 1, 0, "QmlMap");

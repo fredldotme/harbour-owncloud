@@ -17,6 +17,8 @@ public:
     explicit AccountDb(QObject *parent = Q_NULLPTR);
     ~AccountDb();
 
+    Q_INVOKABLE void refresh();
+
 public slots:
     QVector<AccountBase*> accounts();
     QVariantList accountVariantList();

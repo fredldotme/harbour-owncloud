@@ -47,8 +47,7 @@ AccountDb::AccountDb(QObject *parent) : QObject(parent)
     this->m_database.setDatabaseName(dbFilePath);
     createDatabase();
     upgradeDatabase();
-    accounts();
-    Q_EMIT accountsChanged();
+    refresh();
 }
 
 AccountDb::~AccountDb()
@@ -154,6 +153,12 @@ void AccountDb::cleanup()
             continue;
         delete account;
     }
+}
+
+void AccountDb::refresh()
+{
+    accounts();
+    Q_EMIT accountsChanged();
 }
 
 QVector<AccountBase*> AccountDb::accounts()

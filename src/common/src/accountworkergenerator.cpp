@@ -36,6 +36,8 @@ AccountWorkers* AccountWorkerGenerator::newAccount()
         this->m_defaultNewAW = std::unique_ptr<AccountWorkers>(newDefaultWorkers);
     }
 
+    this->m_defaultNewAW->account()->resetSettings();
+
     qDebug() << Q_FUNC_INFO << this->m_defaultNewAW.get();
     return this->m_defaultNewAW.get();
 }

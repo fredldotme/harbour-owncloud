@@ -14,7 +14,6 @@ const QString NEXTCLOUD_SETTINGS_KEY_PATH = QStringLiteral("path");
 const QString NEXTCLOUD_SETTINGS_KEY_USERNAME = QStringLiteral("username");
 const QString NEXTCLOUD_SETTINGS_KEY_PASSWORD = QStringLiteral("password");
 const QString NEXTCLOUD_SETTINGS_KEY_PROVIDERTYPE = QStringLiteral("providerType");
-const QString NEXTCLOUD_SETTINGS_KEY_PICTURESPATH = QStringLiteral("localPicturesPath");
 const QString NEXTCLOUD_SETTINGS_KEY_MOBILEUPLOAD = QStringLiteral("mobileUpload");
 const QString NEXTCLOUD_SETTINGS_KEY_NOTIFICATIONS = QStringLiteral("notifications");
 const QString NEXTCLOUD_SETTINGS_KEY_UPLOADAUTOMATICALLY = QStringLiteral("uploadAutomatically");
@@ -37,7 +36,6 @@ class AccountBase : public QObject
 
     Q_PROPERTY(bool uploadAutomatically READ uploadAutomatically WRITE setUploadAutomatically NOTIFY uploadAutomaticallyChanged)
     Q_PROPERTY(bool mobileUpload READ mobileUpload WRITE setMobileUpload NOTIFY mobileUploadChanged)
-    Q_PROPERTY(QString localPicturesPath READ localPicturesPath WRITE setLocalPicturesPath NOTIFY localPicturesPathChanged)
 
     Q_PROPERTY(QString hostname READ hostname)
     Q_PROPERTY(QString path READ path)
@@ -78,8 +76,6 @@ public:
     void setUploadAutomatically(bool enabled);
     bool mobileUpload() const;
     void setMobileUpload(bool enabled);
-    QString localPicturesPath() const;
-    void setLocalPicturesPath(QString newPath);
 
     QString username() const;
     void setUsername(QString value);
@@ -118,7 +114,6 @@ private:
 
     bool m_uploadAutomatically;
     bool m_mobileUpload;
-    QString m_localPicturesPath;
 
 signals:
     void hostnameChanged();

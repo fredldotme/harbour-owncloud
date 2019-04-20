@@ -276,19 +276,6 @@ void AccountBase::setMobileUpload(bool enabled)
     Q_EMIT mobileUploadChanged();
 }
 
-QString AccountBase::localPicturesPath() const
-{
-    return m_localPicturesPath;
-}
-
-void AccountBase::setLocalPicturesPath(QString newPath)
-{
-    if (this->m_localPicturesPath == newPath)
-        return;
-    this->m_localPicturesPath = newPath;
-    Q_EMIT localPicturesPathChanged();
-}
-
 void AccountBase::acceptTlsFingerprints(QString md5, QString sha1)
 {
     if (this->m_md5Hex == md5 && this->m_sha1Hex == sha1)

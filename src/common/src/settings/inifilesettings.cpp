@@ -104,10 +104,6 @@ bool IniFileSettings::readSettings()
                                                      false).toBool();
     setMobileUpload(mobileUpload);
 
-    const QString localPicturesPath = this->m_settings.value(NEXTCLOUD_SETTINGS_KEY_PICTURESPATH,
-                                                             QStandardPaths::writableLocation(QStandardPaths::PicturesLocation)).toString();
-    setLocalPicturesPath(localPicturesPath);
-
     this->m_settings.endGroup();
 
     Q_EMIT settingsChanged();

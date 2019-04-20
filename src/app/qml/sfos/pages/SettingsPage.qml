@@ -35,22 +35,6 @@ Page {
             }
 
             TextSwitch {
-                id: autoLoginSwitch
-                text: qsTr("Login automatically")
-                description: qsTr("Automatically log in to your ownCloud server when starting the app", "Login automatically description")
-                checked: accountWorkers.account.autoLogin
-                onClicked: accountWorkers.account.autoLogin = checked
-            }
-
-            TextSwitch {
-                id: notificationSwitch
-                text: qsTr("Notifications")
-                description: qsTr("Show global notifications when transfering files", "Notifications description")
-                checked: accountWorkers.account.notifications
-                onClicked: accountWorkers.account.notifications = checked
-            }
-
-            TextSwitch {
                 id: cameraUploadSwitch
                 text: qsTr("Camera photo backups")
                 description: qsTr("Automatically save camera photos to your ownCloud instance when on WiFi", "Camera photo backups escription")

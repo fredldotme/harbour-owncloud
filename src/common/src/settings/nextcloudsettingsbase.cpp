@@ -73,13 +73,13 @@ void AccountBase::resetSettings()
     setPath("/");
     setPort(443);
     setIsHttps(true);
+    m_hoststring = "https://";
     setUsername("");
     setPassword("");
     setProviderType(ProviderType::Nextcloud);
     setMd5Hex("");
     setSha1Hex("");
 
-    refreshHostString();
     setAutoLogin(false);
     setUploadAutomatically(false);
     setMobileUpload(false);

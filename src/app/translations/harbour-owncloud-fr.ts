@@ -447,17 +447,9 @@
         <translation>Paramètres</translation>
     </message>
     <message>
-        <source>Login automatically</source>
-        <translation>Connexion automatique</translation>
-    </message>
-    <message>
         <source>Automatically log in to your ownCloud server when starting the app</source>
         <comment>Login automatically description</comment>
         <translation>Vous connecter à votre ownCloud au lancement de l’application</translation>
-    </message>
-    <message>
-        <source>Notifications</source>
-        <translation>Notifications</translation>
     </message>
     <message>
         <source>Show global notifications when transfering files</source>
@@ -563,10 +555,6 @@
     <message>
         <source>Please check your host address</source>
         <translation type="unfinished">Vérifiez l’adresse hôte</translation>
-    </message>
-    <message>
-        <source>Dropbox</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

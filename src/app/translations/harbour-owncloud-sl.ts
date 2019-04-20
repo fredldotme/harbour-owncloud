@@ -447,16 +447,8 @@
         <translation type="unfinished">Nastavitve</translation>
     </message>
     <message>
-        <source>Login automatically</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Automatically log in to your ownCloud server when starting the app</source>
         <comment>Login automatically description</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Notifications</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -563,10 +555,6 @@
     </message>
     <message>
         <source>Please check your host address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Dropbox</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

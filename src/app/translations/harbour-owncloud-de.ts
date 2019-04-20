@@ -209,7 +209,7 @@
     <name>CoverPage</name>
     <message>
         <source>User:</source>
-        <translation>Benutzer:</translation>
+        <translation>Nutzer:</translation>
     </message>
     <message>
         <source>Usage:</source>
@@ -263,7 +263,7 @@
     </message>
     <message>
         <source>User:</source>
-        <translation>Benutzer:</translation>
+        <translation>Nutzer:</translation>
     </message>
     <message>
         <source>Mail:</source>
@@ -447,17 +447,9 @@
         <translation>Einstellungen</translation>
     </message>
     <message>
-        <source>Login automatically</source>
-        <translation>Automatisch anmelden</translation>
-    </message>
-    <message>
         <source>Automatically log in to your ownCloud server when starting the app</source>
         <comment>Login automatically description</comment>
         <translation>Automatisch anmelden, wenn die Anwendung startet</translation>
-    </message>
-    <message>
-        <source>Notifications</source>
-        <translation>Benachrichtigungen</translation>
     </message>
     <message>
         <source>Show global notifications when transfering files</source>
@@ -563,10 +555,6 @@
     <message>
         <source>Please check your host address</source>
         <translation type="unfinished">Bitte überprüfe deine Serveradresse</translation>
-    </message>
-    <message>
-        <source>Dropbox</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

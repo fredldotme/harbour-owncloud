@@ -49,9 +49,6 @@ Page {
             ocsCommandQueue.stop()
             browserCommandQueue.stop()
             pageStack.completeAnimation();
-            pageStack.clear();
-            pageStack.replace(pageRoot)
-            gc()
             pageStack.push(sslErrorDialogComponent,
                            {
                                md5Digest : certMd5,

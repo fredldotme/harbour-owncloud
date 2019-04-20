@@ -150,7 +150,7 @@ int main(int argc, char *argv[])
             dbusHandler->setUploading(uploader->running());
         });
 
-        QObject::connect(settings, &IniFileSettings::uploadAutomaticallyChanged,
+        QObject::connect(settings, &AccountBase::uploadAutomaticallyChanged,
                          &app, [uploader, fsHandler](){
             if (!(uploader && fsHandler)) {
                 qCritical() << "Invalid object existance (uploader, fsHandler), bailing out.";

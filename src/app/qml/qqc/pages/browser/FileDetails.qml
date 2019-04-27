@@ -148,6 +148,7 @@ Page {
             Row {
                 anchors.horizontalCenter: parent.horizontalCenter
                 spacing: paddingMedium
+                visible: !entry.isDirectory
 
                 Button {
                     text: qsTr("Download")

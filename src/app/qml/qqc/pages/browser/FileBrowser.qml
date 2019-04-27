@@ -71,7 +71,7 @@ Page {
             fileUploadDialog.accepted.connect(function (){
                 for (var i = 0; i < fileUploadDialog.fileUrls.length; i++) {
                     console.log("Enqueueing upload " +
-                                openFileDialog.fileUrls[i] +
+                                fileUploadDialog.fileUrls[i] +
                                 " to " + pageRoot.remotePath)
 
                     transferCommandQueue.fileUploadRequest(fileUploadDialog.fileUrls[i],

@@ -1,19 +1,5 @@
 {
-    "policy_groups": [
-        "networking",
-        "audio",
-        "connectivity",
-        "video",
-        "content_exchange"
-    ],
-    "read_path": [
-        "@{HOME}/Downloads",
-        "@{HOME}/Downloads/*",
-    ],
-    "write_path": [
-        "@{HOME}/Downloads"
-        "@{HOME}/Downloads/*"
-     ],
+    "policy_groups": [],
     "template" : "unconfined",
     "policy_version": 16.04
 }

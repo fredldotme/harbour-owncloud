@@ -143,7 +143,6 @@ CommandEntity* WebDavCommandQueue::fileDownloadRequest(const QString remotePath,
 
     FileDownloadCommandEntity* downloadCommand = Q_NULLPTR;
     CommandEntity* lastModifiedCommand = Q_NULLPTR;
-    CommandEntity* openFileCommand = Q_NULLPTR;
     Q_UNUSED(mimeType);
     QString destination = FilePathUtil::destination(this->settings()) + remotePath;
 
@@ -157,10 +156,6 @@ CommandEntity* WebDavCommandQueue::fileDownloadRequest(const QString remotePath,
                                                        lastModified);
     }
 
-    if (open) {
-        openFileCommand = openFileRequest(destination);
-    }
-
     const QString fileName = QFileInfo(destination).fileName();
     QMap<QString, QVariant> info;
     info["type"] = QStringLiteral("fileDownload");
@@ -168,13 +163,13 @@ CommandEntity* WebDavCommandQueue::fileDownloadRequest(const QString remotePath,
     info["remotePath"] = remotePath;
     info["fileName"] = fileName;
     info["remoteFile"] = remotePath + fileName;
+    info["fileOpen"] = QVariant::fromValue<bool>(open);
     CommandEntityInfo unitInfo(info);
 
     CommandUnit* commandUnit = new CommandUnit(this,
     {downloadCommand, lastModifiedCommand}, unitInfo);
     if (enqueue) {
         this->enqueue(commandUnit);
-        this->enqueue(openFileCommand);
     }
     return commandUnit;
 }
@@ -254,32 +249,6 @@ CommandEntity* WebDavCommandQueue::localLastModifiedRequest(const QString &desti
     });
 
     return updateLocalLastModifiedCommand;
-}
-
-CommandEntity* WebDavCommandQueue::openFileRequest(const QString &destination)
-{
-    const QString fileName = QFileInfo(destination).fileName();
-    QMap<QString, QVariant> info;
-    info["type"] = QStringLiteral("fileOpen");
-    info["localPath"] = destination;
-    info["fileName"] = fileName;
-    CommandEntityInfo commandInfo(info);
-
-    StdFunctionCommandEntity* executeCommand =
-            new StdFunctionCommandEntity(this, [destination]() {
-        const bool fileExists = QFile(destination).exists();
-        qDebug() << destination << fileExists;
-        if (!fileExists)
-            return;
-
-#if defined(QT_GUI_LIB)
-        QDesktopServices::openUrl("file://" + destination);
-#else
-        ShellCommand::runCommand(QStringLiteral("xdg-open"), QStringList() << destination);
-#endif
-    }, commandInfo);
-
-    return executeCommand;
 }
 
 CommandEntity* WebDavCommandQueue::remoteLastModifiedRequest(const QString &destination,

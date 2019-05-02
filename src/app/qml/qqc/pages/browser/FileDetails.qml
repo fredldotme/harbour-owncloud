@@ -27,8 +27,10 @@ Page {
             thumbnailFetcher.source :
             fileDetailsHelper.getIconFromMime(entry.mimeType)
 
+    readonly property bool supportsMediaPreview : (!osIsUbuntuTouch && !osIsIOS)
+
     readonly property bool isAudioVideo :
-        (!entry.isDirectory &&
+        supportsMediaPreview && (!entry.isDirectory &&
          (entry.mimeType.indexOf("video") === 0 ||
           entry.mimeType.indexOf("audio") === 0))
 

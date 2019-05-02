@@ -8,6 +8,23 @@ CommandPageFlow {
 
     FileDetailsHelper { id: fileDetailsHelper }
 
+    // Open files conditionally after download
+    Connections {
+        target: accountWorkers.transferCommandQueue
+        onCommandFinished: {
+            console.log("transfer command finished")
+            const isFileDownload = (receipt.info.property("type") === "fileDownload")
+            if (!isFileDownload)
+                return;
+
+            const fileOpenRequested = receipt.info.property("fileOpen");
+            const fileDestination = receipt.info.property("localPath");
+            if (fileOpenRequested) {
+                Qt.openUrlExternally("file://" + fileDestination)
+            }
+        }
+    }
+
     Connections {
         target: accountWorkers.browserCommandQueue
         onCommandFinished: {

@@ -20,6 +20,9 @@ CommandPageFlow {
     readonly property Component fileDetailsComponent :
         Qt.createComponent("qrc:/qml/qqc/pages/browser/FileDetails.qml",
                            Component.PreferSynchronous);
+    readonly property Component contentHubOpenerComponent :
+        Qt.createComponent("qrc:/qml/qqc/dialogs/fileselect/ContentHubOpener.qml",
+                           Component.PreferSynchronous);
 
     FileDetailsHelper { id: fileDetailsHelper }
 
@@ -34,6 +37,38 @@ CommandPageFlow {
             userInfo.freeBytes = fileDetailsHelper.getHRSize(receipt.result.freeBytes)
             userInfo.usedBytes = fileDetailsHelper.getHRSize(receipt.result.usedBytes)
             userInfo.totalBytes = fileDetailsHelper.getHRSize(receipt.result.totalBytes)
+        }
+    }
+
+    // Open files conditionally after download
+    Connections {
+        target: accountWorkers.transferCommandQueue
+        onCommandFinished: {
+            console.log("transfer command finished")
+            const isFileDownload = (receipt.info.property("type") === "fileDownload")
+            if (!isFileDownload)
+                return;
+
+            const fileOpenRequested = receipt.info.property("fileOpen");
+            const fileDestination = "file://" + receipt.info.property("localPath");
+            if (!fileOpenRequested)
+                return
+
+            if (osIsUbuntuTouch) {
+                var contentHubOpener =
+                contentHubOpenerComponent.createObject(pageStack,
+                                                       {
+                                                           fileUri : fileDestination
+                                                       })
+                if (!contentHubOpener) {
+                    console.error(contentHubOpenerComponent.errorString())
+                    return;
+                }
+
+                detailsStack.push(contentHubOpener)
+            } else {
+                Qt.openUrlExternally(fileDestination)
+            }
         }
     }
 

@@ -154,4 +154,9 @@ macx {
     qwebdavlib.files += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.1.dylib
 }
 
+# Ubuntu Touch configuration
+contains(CONFIG, click) {
+    DEFINES += GHOSTCLOUD_UBUNTU_TOUCH
+}
+
 INSTALLS += qwebdavlib target

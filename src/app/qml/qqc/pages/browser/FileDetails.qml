@@ -28,6 +28,7 @@ Page {
             fileDetailsHelper.getIconFromMime(entry.mimeType)
 
     readonly property bool supportsMediaPreview : (!osIsUbuntuTouch && !osIsIOS)
+    readonly property bool supportsDownloads : supportsMediaPreview
 
     readonly property bool isAudioVideo :
         supportsMediaPreview && (!entry.isDirectory &&
@@ -154,6 +155,7 @@ Page {
 
                 Button {
                     text: qsTr("Download")
+                    visible: supportsDownloads
                     onClicked: {
                         startDownload(entry.path,
                                       entry.mimeType,

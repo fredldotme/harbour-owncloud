@@ -33,8 +33,14 @@ QString FilePathUtil::destination(AccountBase* account)
         return QStringLiteral("/");
     }
 
+#ifdef GHOSTCLOUD_UBUNTU_TOUCH
+    const QStandardPaths::StandardLocation location = QStandardPaths::CacheLocation;
+#else
+    const QStandardPaths::StandardLocation location = QStandardPaths::DownloadLocation;
+#endif
+
     const QString pattern = QStringLiteral("%1/GhostCloud/%2/%3/%4/");
-    return pattern.arg(QStandardPaths::writableLocation(QStandardPaths::DownloadLocation),
+    return pattern.arg(QStandardPaths::writableLocation(location),
                        account->hostname(),
                        QString::number(account->port()),
                        account->username());

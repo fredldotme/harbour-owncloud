@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Application
-Icon=usr/share/icons/hicolor/128x128/apps/harbour-owncloud.png
+Icon=ghostcloud.png
 Exec=run.sh
 Name=GhostCloud
 X-Ubuntu-Touch=true
+X-Ubuntu-Splash-Color=#F5F5F5

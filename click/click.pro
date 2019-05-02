@@ -29,6 +29,10 @@ mfile.path = /
 apparmor.files += $$PWD/harbour-owncloud.apparmor
 apparmor.path = /
 
+# Desktop launcher icon
+desktopicon.files += $$PWD/ghostcloud.png
+desktopicon.path = /
+
 # Desktop launcher
 desktop.files += $$PWD/harbour-owncloud.desktop
 desktop.path = /
@@ -37,4 +41,4 @@ desktop.path = /
 runscript.files += $$PWD/run.sh
 runscript.path = /
 
-INSTALLS += mfile apparmor desktop runscript
+INSTALLS += mfile apparmor runscript desktopicon desktop

@@ -3,8 +3,7 @@ import Sailfish.Silica 1.0
 import harbour.owncloud 1.0
 
 Dialog {
-
-    property NextcloudSettings settings : null
+    property AccountBase settings : null
 
     id: sslDialog
     anchors.fill: parent
@@ -85,6 +84,5 @@ Dialog {
         }
 
         settings.acceptTlsFingerprints(md5Digest, sha1Digest);
-        settings.readSettings()
     }
 }

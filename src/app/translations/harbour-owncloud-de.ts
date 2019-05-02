@@ -206,6 +206,13 @@
     </message>
 </context>
 <context>
+    <name>ContentHubOpener</name>
+    <message>
+        <source>Open &apos;%1&apos; with</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>CoverPage</name>
     <message>
         <source>User:</source>

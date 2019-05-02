@@ -441,8 +441,8 @@ ApplicationWindow {
             Row {
                 id: splitView
                 anchors.fill: parent
-                anchors.topMargin: 2
-                spacing: 2
+                anchors.topMargin: 1
+                spacing: 1
                 focus: true
 
                 Rectangle {

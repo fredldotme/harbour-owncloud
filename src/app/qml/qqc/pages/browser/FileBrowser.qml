@@ -185,10 +185,10 @@ Page {
         y: (parent.height - height) / 2
         onAccepted: {
             console.debug("accepted")
-            console.debug("copy " + rightClickMenu.selectedDavInfo.path + " to " +
-                          moveEntryDialog.remotePath + rightClickMenu.selectedDavInfo.name)
-            browserCommandQueue.copyRequest(rightClickMenu.selectedDavInfo.path,
-                                            copyEntryDialog.remotePath + rightClickMenu.selectedDavInfo.name)
+            const from = rightClickMenu.selectedDavInfo.path
+            const to = copyEntryDialog.remotePath + rightClickMenu.selectedDavInfo.name
+            console.debug("copy " + from + " to " + to)
+            browserCommandQueue.copyRequest(from, to)
             refreshListView(true)
         }
     }
@@ -204,10 +204,10 @@ Page {
         y: (parent.height - height) / 2
         onAccepted: {
             console.debug("accepted")
-            console.debug("moving " + rightClickMenu.selectedDavInfo.path + " to " +
-                          moveEntryDialog.remotePath + rightClickMenu.selectedDavInfo.name)
-            browserCommandQueue.moveRequest(rightClickMenu.selectedDavInfo.path,
-                                            moveEntryDialog.remotePath + rightClickMenu.selectedDavInfo.name)
+            const from = rightClickMenu.selectedDavInfo.path
+            const to = moveEntryDialog.remotePath + rightClickMenu.selectedDavInfo.name
+            console.debug("moving " + from + " to " + to)
+            browserCommandQueue.moveRequest(from, to)
             refreshListView(true)
         }
     }
@@ -346,6 +346,9 @@ Page {
     Menu {
         id: rightClickMenu
         property var selectedDavInfo : null
+        onClosed: {
+            selectedDavInfo = null
+        }
 
         MenuItem {
             enabled: rightClickMenu.selectedDavInfo &&
@@ -492,7 +495,8 @@ Page {
                 width: listView.width
                 height: 48
                 font.pixelSize: fontSizeSmall
-                forcePressed: clickArea.pressed
+                forcePressed: clickArea.pressed ||
+                              rightClickMenu.selectedDavInfo == davInfo
                 MouseArea {
                     id: clickArea
                     anchors.fill: parent

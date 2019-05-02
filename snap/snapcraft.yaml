@@ -1,5 +1,5 @@
 name: ghostcloud
-version: 0.9.0
+version: 0.9.1
 grade: stable
 confinement: strict
 base: core18

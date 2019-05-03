@@ -437,6 +437,8 @@ ApplicationWindow {
             id: mainContainer
             color: "lightgray"
             anchors.fill: parent
+            anchors.bottomMargin: osIsUbuntuTouch && Qt.inputMethod.visible ?
+                                      Qt.inputMethod.keyboardRectangle.height / (units.gridUnit / 8) : 0
 
             Row {
                 id: splitView

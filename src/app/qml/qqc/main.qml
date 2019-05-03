@@ -137,7 +137,7 @@ ApplicationWindow {
         RowLayout {
             anchors.fill: parent
             GCButton {
-                source: "qrc:/icons/theme/actions/16/arrow-left-double.svg"
+                source: "qrc:/icons/theme/actions/32/go-previous.svg"
                 visible: showBackButton
                 onClicked: popPage()
                 height: parent.height

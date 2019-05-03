@@ -1,6 +1,7 @@
 {
   "template": "qmake",
   "default": "clean build click-build",
+  "kill": "harbour-owncloud",
   "build_args": [
     "CONFIG+=noadditionals",
     "CONFIG+=quickcontrols",

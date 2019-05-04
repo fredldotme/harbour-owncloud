@@ -42,11 +42,6 @@ void Uploader::triggerSync(const QString &localPath, const QString &remoteSubdir
         return;
     }
 
-    if (this->m_webDavCommandQueue->queue().length() > 64) {
-        qWarning() << "Skip sync, queue is busy";
-        return;
-    }
-
     QString remoteDir = this->m_targetDirectory + '/' + remoteSubdir + '/';
     qDebug() << "Trigger sync" << localPath << "to" << remoteDir;
 

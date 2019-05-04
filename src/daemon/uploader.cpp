@@ -1,14 +1,15 @@
 #include "uploader.h"
 
 #include <commands/sync/ncsynccommandunit.h>
+#include <commands/webdav/mkdavdircommandentity.h>
+
+#include <QDir>
 
 Uploader::Uploader(QObject *parent,
-                   const QString& localPath,
                    const QString& targetDirectory,
                    NetworkMonitor* networkMonitor,
                    AccountBase* settings) :
     QObject(parent),
-    m_localPath(localPath),
     m_targetDirectory(targetDirectory),
     m_networkMonitor(networkMonitor),
     m_settings(settings),
@@ -19,7 +20,7 @@ Uploader::Uploader(QObject *parent,
                      this, &Uploader::runningChanged);
 }
 
-void Uploader::triggerSync()
+void Uploader::triggerSync(const QString &localPath, const QString &remoteSubdir)
 {
     if (!(this->m_webDavCommandQueue && this->m_settings && this->m_networkMonitor)) {
         qCritical() << "Invalid object existance (webDavQueue, settings, netMonitor), "
@@ -35,14 +36,30 @@ void Uploader::triggerSync()
         return;
     }
 
-    if (this->m_webDavCommandQueue->queue().length() > 0)
+    // detect if sync for "localPath" is in the queue already
+    if (m_syncingPaths.contains(localPath)){
+        qWarning() << "Syncing already:" << localPath;
         return;
+    }
+
+    QString remoteDir = this->m_targetDirectory + '/' + remoteSubdir + '/';
+    qDebug() << "Trigger sync" << localPath << "to" << remoteDir;
+
+    // create parent directory
+    // NcSyncCommandUnit dont creating remote directories recursively
+    // TODO: do it properly
+    this->m_webDavCommandQueue->makeDirectoryRequest(this->m_targetDirectory, true);
 
     NcSyncCommandUnit* syncDirectoriesUnit =
             new NcSyncCommandUnit(this->m_webDavCommandQueue,
                                   this->m_webDavCommandQueue,
-                                  this->m_localPath,
-                                  this->m_targetDirectory);
+                                  localPath,
+                                  remoteDir);
+
+    m_syncingPaths << localPath;
+
+    connect(syncDirectoriesUnit, &CommandEntity::aborted, [localPath, this](){ m_syncingPaths.remove(localPath); });
+    connect(syncDirectoriesUnit, &CommandEntity::done,    [localPath, this](){ m_syncingPaths.remove(localPath); });
 
     this->m_webDavCommandQueue->enqueue((CommandEntity*)syncDirectoriesUnit);
 }

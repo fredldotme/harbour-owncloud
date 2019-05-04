@@ -5,6 +5,7 @@
 #include <QFileSystemWatcher>
 #include <QMutex>
 #include <QSet>
+#include <QMap>
 #include <QTimer>
 #include <settings/nextcloudsettingsbase.h>
 
@@ -17,19 +18,24 @@ class Filesystem : public QObject
         QTimer *timer = Q_NULLPTR;
     };
 
+    struct WatchedLocation {
+        QString localDir;
+        QString name;
+    };
+
 public:
-    Filesystem(AccountBase* account = Q_NULLPTR,
-               const QString& localPath = QStringLiteral(""));
+    Filesystem(AccountBase* account = Q_NULLPTR);
 
 signals:
-    void fileFound(QString fullPath);
+    void fileFound(QString locationDir, QString locationName, QString fullPath);
+    void locationFound(QString locationDir, QString locationName);
 
 public slots:
     void inhibitScan(bool inhibit);
     void triggerRescan();
 
 private slots:
-    void scan(QString dirPath, bool recursive = false);
+    void scan(WatchedLocation location, QString dirPath, bool recursive = false);
     void prepareScan(QString dirPath);
 
 private:
@@ -37,7 +43,7 @@ private:
 
     AccountBase* m_account;
     QFileSystemWatcher m_watcher;
-    const QString m_localPath;
+    QMap<QString, WatchedLocation> m_watcherLocations;
     QSet<QString> m_existingFiles;
     bool m_inhibit = false;
 

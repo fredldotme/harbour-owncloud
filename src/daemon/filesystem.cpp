@@ -4,9 +4,12 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QMutexLocker>
+#include <QStandardPaths>
+#include <QStorageInfo>
+#include <QSet>
 
-Filesystem::Filesystem(AccountBase* account, const QString& localPath) :
-    m_account(account), m_localPath(localPath)
+Filesystem::Filesystem(AccountBase* account) :
+    m_account(account)
 {
     connect(&m_watcher, &QFileSystemWatcher::directoryChanged, this, &Filesystem::prepareScan);
 }
@@ -21,7 +24,7 @@ void Filesystem::prepareScan(QString dirPath)
     }
 }
 
-void Filesystem::scan(QString dirPath, bool recursive)
+void Filesystem::scan(WatchedLocation location, QString dirPath, bool recursive)
 {
     if (this->m_inhibit)
         return;
@@ -32,6 +35,7 @@ void Filesystem::scan(QString dirPath, bool recursive)
 
     if (!m_watcher.directories().contains(dirPath)) {
         m_watcher.addPath(dirPath);
+        m_watcherLocations[dirPath]=location;
     }
 
     const QFileInfoList entries = dir.entryInfoList(QDir::Dirs |
@@ -42,7 +46,7 @@ void Filesystem::scan(QString dirPath, bool recursive)
     for (const QFileInfo &entry : entries) {
         QString path = entry.absoluteFilePath();
         if (entry.isDir() && recursive) {
-            scan(path, recursive);
+            scan(location, path, recursive);
             continue;
         }
 
@@ -54,22 +58,52 @@ void Filesystem::scan(QString dirPath, bool recursive)
         }
 
         if(!entry.isDir()) {
-            emit fileFound(path);
+            emit fileFound(location.localDir, location.name, path);
             m_existingFiles.insert(path);
         } else if (entry.isDir() && !m_watcher.directories().contains(path)){
             m_watcher.addPath(path);
+            m_watcherLocations[dirPath]=location;
         }
     }
 }
 
 void Filesystem::rescan()
 {
-    QFileInfo dirInfo(m_localPath);
-    if (!dirInfo.exists() || !dirInfo.isDir()) {
-        qWarning() << "invalid path for watching" << dirInfo.absolutePath();
+    QList<WatchedLocation> pictureLocations;
+
+    QString internalPictureStorage = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
+    if (QFileInfo(internalPictureStorage).exists()) {
+        pictureLocations << WatchedLocation{internalPictureStorage, "Internal"};
     }
 
-    scan(dirInfo.absoluteFilePath(), true);
+    // iterate through mount volumes and try to find external drives with Pictures
+    // TODO: use card UUID and some kind of persistent configuration to proper support of multiple SD cards
+    int sdCardNum = 0;
+    for (const QStorageInfo &storage : QStorageInfo::mountedVolumes()){
+        QString mountPoint = storage.rootPath();
+        QString pictureDir = mountPoint + QDir::separator() + "Pictures";
+
+        if (storage.isValid() &&
+            storage.isReady() &&
+            mountPoint.startsWith("/run/media/") && // Sailfish OS specific mount point base for SD cards!
+            QDir(pictureDir).exists()){
+
+            qDebug() << "Found photo storage:" << pictureDir;
+            QString locationName = "SD Card" + (sdCardNum == 0 ? QString(): " " + QString::number(sdCardNum));
+            pictureLocations << WatchedLocation{pictureDir, locationName};
+            sdCardNum++;
+        }
+    }
+
+    for (const WatchedLocation &location: pictureLocations) {
+        QFileInfo dirInfo(location.localDir);
+        if (!dirInfo.exists() || !dirInfo.isDir()) {
+            qWarning() << "invalid path for watching" << dirInfo.absolutePath();
+        }
+
+        emit locationFound(location.localDir, location.name);
+        scan(location, dirInfo.absoluteFilePath(), true);
+    }
 }
 
 void Filesystem::inhibitScan(bool inhibit)
@@ -85,6 +119,7 @@ void Filesystem::triggerRescan()
         return;
 
     if (!m_watcher.directories().isEmpty()) {
+        m_watcherLocations.clear();
         m_watcher.removePaths(m_watcher.directories());
     }
     m_existingFiles.clear();
@@ -117,7 +152,11 @@ void Filesystem::insertDelay(QString path)
             if(m_delayers.at(i).path == path)
                 m_delayers.removeAt(i);
         }
-        scan(path);
+        if (m_watcherLocations.contains(path)) {
+            scan(m_watcherLocations[path], path);
+        }else{
+            qWarning() << "Can't found location for path" << path;
+        }
     });
     delay.timer->start();
     connect(delay.timer, &QTimer::timeout, delay.timer, &QObject::deleteLater);

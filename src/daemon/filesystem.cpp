@@ -89,7 +89,8 @@ void Filesystem::rescan()
             QDir(pictureDir).exists()){
 
             qDebug() << "Found photo storage:" << pictureDir;
-            pictureLocations << WatchedLocation{pictureDir, "SD Card" + (sdCardNum == 0 ? QString(): " " + QString::number(sdCardNum))};
+            QString locationName = "SD Card" + (sdCardNum == 0 ? QString(): " " + QString::number(sdCardNum));
+            pictureLocations << WatchedLocation{pictureDir, locationName};
             sdCardNum++;
         }
     }

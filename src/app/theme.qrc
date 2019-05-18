@@ -13,9 +13,10 @@
         <file>icons/theme/actions/32/application-menu.svg</file>
         <file>icons/theme/actions/32/media-playback-pause.svg</file>
         <file>icons/theme/actions/32/media-playback-start.svg</file>
-        <file>icons/theme/actions/22/escape-direction-down.svg</file>
-        <file>icons/theme/actions/22/escape-direction-up.svg</file>
         <file>qtquickcontrols2.conf</file>
         <file>icons/theme/actions/32/go-previous.svg</file>
+        <file>icons/theme/actions/24/list-add.svg</file>
+        <file>icons/theme/actions/32/go-down.svg</file>
+        <file>icons/theme/actions/32/go-up.svg</file>
     </qresource>
 </RCC>

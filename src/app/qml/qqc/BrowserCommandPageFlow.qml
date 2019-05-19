@@ -150,10 +150,10 @@ CommandPageFlow {
                 return
             }
 
-            var isDavListCommand = (receipt.info.property("type") === "davList")
-            var isDavMoveCommand = (receipt.info.property("type") === "davMove")
-            var isDavCopyCommand = (receipt.info.property("type") === "davCopy")
-            var isDavRmCommand = (receipt.info.property("type") === "davRemove")
+            const isDavListCommand = (receipt.info.property("type") === "davList")
+            const isDavMoveCommand = (receipt.info.property("type") === "davMove")
+            const isDavCopyCommand = (receipt.info.property("type") === "davCopy")
+            const isDavRmCommand = (receipt.info.property("type") === "davRemove")
 
             // Ignore invalid CommandReceipts
             if (!receipt.valid) {
@@ -191,8 +191,8 @@ CommandPageFlow {
             if (isDavListCommand) {
                 console.log("list command")
 
-                var remotePath = receipt.info.property("remotePath")
-                var dirContent = receipt.result.dirContent;
+                const remotePath = receipt.info.property("remotePath")
+                const dirContent = receipt.result.dirContent;
                 rootWindow.dirContents.insert(remotePath, dirContent);
 
                 if (remotePath !== targetRemotePath) {

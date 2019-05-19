@@ -16,7 +16,7 @@ AccountWorkers::AccountWorkers(QObject *parent,
     m_transferCommandQueue(transferCommandQueue),
     m_accountInfoCommandQueue(accountInfoCommandQueue)
 {
-    this->m_cacheProvider = new CacheProvider(this);
+    this->m_cacheProvider = new CacheProvider(this, account);
     this->m_avatarFetcher = new AvatarFetcher(this);
     this->m_avatarFetcher->setCacheProvider(this->m_cacheProvider);
     this->m_avatarFetcher->setCommandQueue(this->m_browserCommandQueue);

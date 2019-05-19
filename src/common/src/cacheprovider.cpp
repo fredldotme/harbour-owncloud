@@ -5,10 +5,20 @@
 #include <QDirIterator>
 #include <QStandardPaths>
 
-CacheProvider::CacheProvider(QObject *parent) :
+CacheProvider::CacheProvider(QObject* parent, AccountBase* account) :
     QObject(parent)
 {
-    this->m_cacheDir = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
+    if (!account) {
+        qWarning() << "No account provided, bailing out...";
+        return;
+    }
+    const QString cacheSubdir =
+            QStringLiteral("/%1/%2/%3/").arg(account->hostname(),
+                                             QString::number(account->port()),
+                                             account->username());
+    this->m_cacheDir =
+            QStandardPaths::writableLocation(QStandardPaths::CacheLocation) +
+            cacheSubdir;
 
     const int clearInterval = 1000 * 60 * 60;
 

@@ -481,7 +481,7 @@ Page {
             GCButton {
                 id: icon
                 source: davInfo.isDirectory
-                        ? "qrc:/icons/theme/places/64/folder.svg"
+                        ? getFolderIcon("folder")
                         : fileDetailsHelper.getIconFromMime(davInfo.mimeType)
                 text: davInfo.name
                 detailText: fileDetailsHelper.getHRSize(davInfo.size)

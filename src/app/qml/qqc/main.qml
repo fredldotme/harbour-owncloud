@@ -129,6 +129,30 @@ ApplicationWindow {
         }
     }
 
+    function getActionBarIcon(icon) {
+        if (osIsUbuntuTouch) {
+            if (icon === "application-menu") {
+                return "image://theme/navigation-menu"
+            }
+
+            return "image://theme/" + icon
+        } else {
+            if (icon === "list-add") {
+                return "qrc:/icons/theme/actions/24/" + icon + ".svg"
+            }
+
+            return "qrc:/icons/theme/actions/32/" + icon + ".svg"
+        }
+    }
+
+    function getFolderIcon(icon) {
+        if (osIsUbuntuTouch) {
+            return "image://theme/" + icon
+        } else {
+            return "qrc:/icons/theme/places/64/" + icon + ".svg"
+        }
+    }
+
     header: ToolBar {
         id: headerBar
         height: headerBarSize
@@ -137,7 +161,7 @@ ApplicationWindow {
         RowLayout {
             anchors.fill: parent
             GCButton {
-                source: "qrc:/icons/theme/actions/32/go-previous.svg"
+                source: getActionBarIcon("go-previous")
                 visible: showBackButton
                 onClicked: popPage()
                 height: parent.height
@@ -176,6 +200,7 @@ ApplicationWindow {
                 elide: Label.ElideRight
                 horizontalAlignment: Qt.AlignHCenter
                 verticalAlignment: Qt.AlignVCenter
+                height: parent.height
                 Layout.fillWidth: true
                 text: {
                     if (sideStack.depth > 1 &&
@@ -190,35 +215,7 @@ ApplicationWindow {
             }
 
             GCButton {
-                source: "qrc:/icons/theme/actions/32/folder-new.svg"
-                visible: rootStack.currentItem.objectName === "FileBrowser" &&
-                         sideStack.depth == 1
-                enabled: !rootStack.currentItem.isBusy
-                height: parent.height
-                width: height
-                anchors.margins: paddingSmall
-                onClicked: {
-                    rootStack.currentItem.dirCreationDialog.open()
-                }
-            }
-            GCButton {
-                source: "qrc:/icons/theme/actions/32/document-new.svg"
-                visible: rootStack.currentItem.objectName === "FileBrowser" &&
-                         sideStack.depth == 1
-                enabled: !rootStack.currentItem.isBusy
-                height: parent.height
-                width: height
-                onClicked: {
-                    if (osIsAndroid) {
-                        rootStack.currentItem.openNativeFileSelector()
-                        return
-                    }
-
-                    rootStack.currentItem.fileUploadDialog.open()
-                }
-            }
-            GCButton {
-                source: "qrc:/icons/theme/actions/32/view-refresh.svg"
+                source: getActionBarIcon("view-refresh")
                 visible: rootStack.currentItem.objectName === "FileBrowser" &&
                          sideStack.depth == 1
                 enabled: !rootStack.currentItem.isBusy
@@ -230,7 +227,19 @@ ApplicationWindow {
                 }
             }
             GCButton {
-                source: "qrc:/icons/theme/actions/32/application-menu.svg"
+                source: getActionBarIcon("list-add")
+                visible: rootStack.currentItem.objectName === "FileBrowser" &&
+                         sideStack.depth == 1
+                enabled: !rootStack.currentItem.isBusy
+                height: parent.height
+                width: height
+                anchors.margins: paddingSmall
+                onClicked: {
+                    addMenu.open(rootWindow)
+                }
+            }
+            GCButton {
+                source: getActionBarIcon("application-menu")
                 height: parent.height
                 width: height
                 anchors.margins: paddingSmall
@@ -274,6 +283,30 @@ ApplicationWindow {
             }
         }
 
+
+        Menu {
+            id: addMenu
+            x: rootWindow.width - width
+
+            MenuItem {
+                text: qsTr("Upload file...")
+                font.pixelSize: fontSizeSmall
+                onClicked: {
+                    if (osIsAndroid) {
+                        rootStack.currentItem.openNativeFileSelector()
+                        return
+                    }
+
+                    rootStack.currentItem.fileUploadDialog.open()
+                }
+            }
+            MenuItem {
+                text: qsTr("New folder...")
+                font.pixelSize: fontSizeSmall
+                visible: (accountWorkerGenerator.accountWorkers.length > 0)
+                onClicked: rootStack.currentItem.dirCreationDialog.open()
+            }
+        }
 
         Menu {
             id: hamburgerMenu

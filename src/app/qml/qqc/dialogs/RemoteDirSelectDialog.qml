@@ -62,7 +62,7 @@ Dialog {
             delegate: GCButton {
                 id: icon
                 visible: davInfo.isDirectory
-                source: "qrc:/icons/theme/places/64/folder.svg"
+                source: getFolderIcon("folder")
                 text: davInfo.name
                 width: listView.width
                 height: 32

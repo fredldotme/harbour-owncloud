@@ -82,7 +82,7 @@ Page {
                     id: thumbnail
                     anchors.fill: parent
                     source: (entry.isDirectory
-                                ? "qrc:/icons/theme/places/64/folder.svg"
+                                ? getFolderIcon("folder")
                                 : imgSrc)
                     visible: !isAudioVideo
                 }

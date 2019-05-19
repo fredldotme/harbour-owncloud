@@ -114,6 +114,8 @@ Item {
                     font.bold: true
                     font.pixelSize: fontSizeMedium
                     enabled: __listCommand == null
+                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                    width: accountsList.width
                 }
 
                 Label {

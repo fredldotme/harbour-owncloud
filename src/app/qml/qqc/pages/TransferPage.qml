@@ -84,20 +84,19 @@ Page {
         anchors.bottom: parent.bottom
         contentHeight: groupDelegate.height
 
-        Repeater {
+        Column {
             id: groupDelegate
-            model: activeAccountWorkers
             anchors.fill: parent
 
-            delegate: Column {
-                width: parent.width
+            Repeater {
+                model: activeAccountWorkers
 
-                property AccountWorkers accountWorker : activeAccountWorkers[index]
-                property CloudStorageProvider transferQueue : accountWorker.transferCommandQueue
+                delegate: Row {
+                    property AccountWorkers accountWorker : activeAccountWorkers[index]
+                    property CloudStorageProvider transferQueue : accountWorker.transferCommandQueue
 
-                Row {
                     spacing: paddingLarge
-                    width: parent.width
+                    width: flickableRoot.width
                     visible: transferQueue.queue.length > 0
 
                     Repeater {
@@ -123,9 +122,9 @@ Page {
 
                             function getIconForCommandType() {
                                 if (commandType == "fileDownload")
-                                    return "qrc:/icons/theme/actions/22/escape-direction-down.svg"
+                                    return "qrc:/icons/theme/actions/32/go-down.svg"
                                 if (commandType == "fileUpload")
-                                    return "qrc:/icons/theme/actions/22/escape-direction-up.svg"
+                                    return "qrc:/icons/theme/actions/32/go-up.svg"
                                 if (commandType == "fileOpen")
                                     return "qrc:/icons/theme/places/64/folder.svg"
                                 return ""

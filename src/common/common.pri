@@ -68,6 +68,7 @@ contains(CONFIG, sailfish_build) {
 # Ubuntu Touch configuration
 contains(CONFIG, click) {
     DEFINES += GHOSTCLOUD_UBUNTU_TOUCH
+    DEFINES += OS_SUPPORTS_THEME_PROVIDER # Qml-Ui-Set
 }
 
 QMAKE_RPATHDIR += /usr/share/harbour-owncloud/lib

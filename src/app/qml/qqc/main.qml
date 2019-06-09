@@ -112,7 +112,8 @@ ApplicationWindow {
 
     function addAccount() {
         // TODO: check if memory leaks happen here
-        detailsStack.push(webDavAccountDialog)
+        //detailsStack.push(webDavAccountDialog)
+        webDavAccountDialog.open()
     }
 
     // Android back button support
@@ -283,6 +284,34 @@ ApplicationWindow {
             }
         }
 
+        WebDavAccountDialog {
+            id: webDavAccountDialog
+            x: (parent.width - width) / 2
+            y: (parent.height - height) / 2
+            width: parent.width - (paddingLarge * 2)
+            height: parent.height - (paddingLarge * 2)
+            accountWorkers: accountWorkerGenerator.newAccount();
+            daemonCtrl: daemonCtrl
+            accountDatabase: accountWorkerGenerator.database
+            viewStack: detailsStack
+        }
+
+        TransferPage {
+            id: transfersTab
+            x: (parent.width - width) / 2
+            y: (parent.height - height) / 2
+            width: parent.width - (paddingLarge * 2)
+            height: parent.height - (paddingLarge * 2)
+            accountGenerator: accountWorkerGenerator
+        }
+
+        About {
+            id: infoPage
+            x: (parent.width - width) / 2
+            y: (parent.height - height) / 2
+            width: parent.width - (paddingLarge * 2)
+            height: parent.height - (paddingLarge * 2)
+        }
 
         Menu {
             id: addMenu
@@ -316,7 +345,7 @@ ApplicationWindow {
                 text: qsTr("Transfers")
                 font.pixelSize: fontSizeSmall
                 onClicked: {
-                    detailsStack.push(transfersTab)
+                    transfersTab.open()
                 }
             }
             MenuItem {
@@ -333,7 +362,7 @@ ApplicationWindow {
                 font.pixelSize: fontSizeSmall
                 visible: true
                 onClicked: {
-                    detailsStack.push(infoPage)
+                    infoPage.open()
                 }
             }
         }
@@ -378,25 +407,6 @@ ApplicationWindow {
                         onClicked: addAccount()
                     }
                 }
-            }
-
-            WebDavAccountDialog {
-                id: webDavAccountDialog
-                accountWorkers: accountWorkerGenerator.newAccount();
-                daemonCtrl: daemonCtrl
-                accountDatabase: accountWorkerGenerator.database
-                viewStack: detailsStack
-            }
-
-            About {
-                id: infoPage
-                onCloseRequest: popAndTryDestroy()
-            }
-
-            TransferPage {
-                id: transfersTab
-                accountGenerator: accountWorkerGenerator
-                onCloseRequest: popAndTryDestroy()
             }
         }
 

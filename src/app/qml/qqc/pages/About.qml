@@ -1,11 +1,12 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.2
 
-Page {
+Dialog {
     title: qsTr("About GhostCloud")
     focus: true
 
     readonly property bool destroyable : false
+    standardButtons: Dialog.Cancel
 
     signal closeRequest()
 
@@ -25,7 +26,7 @@ Page {
                 id: icon
                 source: "qrc:/icons/icon_gray.svg"
                 anchors.horizontalCenter: parent.horizontalCenter
-                width: parent.width / 2
+                width: parent.width / 3
                 height: width
                 scale: 1.5
                 sourceSize.width: width

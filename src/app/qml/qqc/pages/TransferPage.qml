@@ -1,13 +1,11 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.2
-import QtQuick.Dialogs 1.2
 import harbour.owncloud 1.0
 import "qrc:/qml/qqc/controls"
 import "qrc:/qml-ui-set"
 
-Page {
+Dialog {
     id: pageRoot
-    focus: true
 
     signal closeRequest()
 
@@ -16,6 +14,8 @@ Page {
     property AccountWorkerGenerator accountGenerator : null
     property var activeAccountWorkers : accountGenerator.accountWorkers
     property bool noTransfersHint : true
+
+    standardButtons: Dialog.Cancel
 
     function refreshNoTransfersHint()
     {

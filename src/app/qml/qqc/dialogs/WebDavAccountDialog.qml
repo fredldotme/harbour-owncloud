@@ -3,9 +3,9 @@ import QtQuick.Controls 2.2
 import harbour.owncloud 1.0
 import "qrc:/qml-ui-set"
 
-Rectangle {
+Dialog {
     id: dialogRoot
-    color: "white"
+    standardButtons: Dialog.Cancel
 
     property var accountWorkers : null
     property var clientSettings: accountWorkers.account
@@ -27,7 +27,6 @@ Rectangle {
         (authenticator.running ||
          browserCommandQueue.running);
 
-
     Component.onCompleted: {
         if (clientSettings.autoLogin) {
             authenticator.authenticate(false)
@@ -44,12 +43,9 @@ Rectangle {
                 return;
             }
 
-            viewStack.pop()
             daemonCtrl.reloadConfig()
-            /*browserCommandQueue.directoryListingRequest("/", false)
-            browserCommandQueue.run()
-            ocsCommandQueue.userInfoRequest();
-            ocsCommandQueue.run()*/
+            clientSettings.resetSettings()
+            dialogRoot.close()
         }
         onAuthenticationFailed: {
             console.log("onAuthenticationFailed")
@@ -71,6 +67,9 @@ Rectangle {
 
     SSLErrorDialog {
         id: sslErrorDialog
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
+        parent: viewStack
         onAccepted: {
             console.log("Accepting certificate...")
             clientSettings.acceptTlsFingerprints(sslErrorDialog.md5Fingerprint,
@@ -86,22 +85,8 @@ Rectangle {
 
     Flickable {
         anchors.fill: parent
-        contentHeight: topIcon.height + mainColumn.height + (paddingLarge*5)
+        contentHeight: mainColumn.height
         ScrollBar.vertical: ScrollBar {}
-
-        Image {
-            id: topIcon
-            source: "qrc:/icons/icon_gray.svg"
-            enabled: !loginInProgress
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: parent.top
-            anchors.topMargin: 48
-            width: Math.min(parent.width / 3, 600)
-            height: Math.min(width, 800)
-            sourceSize.width: width
-            sourceSize.height: height
-            scale: 1.5
-        }
 
         Column {
             id: mainColumn

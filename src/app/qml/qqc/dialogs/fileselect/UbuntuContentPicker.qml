@@ -6,9 +6,20 @@ Item {
     id: dialogRoot
     property list<ContentItem> importItems
     property var activeTransfer
+    property var fileUrls : new Array
 
     onImportItemsChanged: {
         if (importItems.length > 0) {
+            fileUrls = new Array
+
+            for (var i = 0; i < importItems.length; i++) {
+                const url = importItems[i].url
+                console.log("URL: " + url)
+                if (fileUrls.indexOf(url) == -1) {
+                    fileUrls.push(url)
+                }
+            }
+
             dialogRoot.accepted()
         }
     }
@@ -16,14 +27,21 @@ Item {
     signal accepted()
 
     function open() {
-        activeTransfer = picSourceMulti.request()
+        var peer = null
+        for (var i = 0; i < model.peers.length; ++i) {
+            var p = model.peers[i]
+            if (p.appId.indexOf("com.ubuntu.filemanager_") === 0) {
+                peer = p
+            }
+        }
+
+        activeTransfer = peer.request()
     }
 
-    ContentPeer {
-        id: picSourceMulti
-        contentType: ContentType.Pictures
+    ContentPeerModel {
+        id: model
+        contentType: ContentType.Documents
         handler: ContentHandler.Source
-        selectionType: ContentTransfer.Multiple
     }
     ContentTransferHint {
         id: importHint

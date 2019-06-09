@@ -53,33 +53,23 @@ Page {
         // Ubuntu Touch
         if (osIsUbuntuTouch) {
             fileUploadDialog = ubuntuContentPicker.createObject(pageRoot)
-            fileUploadDialog.accepted.connect(function (){
-                for (var i = 0; i < fileUploadDialog.importItems.length; i++) {
-                    console.log("Enqueueing upload " +
-                                fileUploadDialog.importItems[i].url +
-                                " to " + pageRoot.remotePath)
-
-                    transferCommandQueue.fileUploadRequest(fileUploadDialog.importItems[i].url,
-                                                           pageRoot.remotePath)
-                }
-                transferCommandQueue.run()
-            })
         }
         // Generic incl. Android and iOS
         else {
             fileUploadDialog = qqdFilePicker.createObject(pageRoot)
-            fileUploadDialog.accepted.connect(function (){
-                for (var i = 0; i < fileUploadDialog.fileUrls.length; i++) {
-                    console.log("Enqueueing upload " +
-                                fileUploadDialog.fileUrls[i] +
-                                " to " + pageRoot.remotePath)
-
-                    transferCommandQueue.fileUploadRequest(fileUploadDialog.fileUrls[i],
-                                                           pageRoot.remotePath)
-                }
-                transferCommandQueue.run()
-            })
         }
+
+        fileUploadDialog.accepted.connect(function (){
+            for (var i = 0; i < fileUploadDialog.fileUrls.length; i++) {
+                console.log("Enqueueing upload " +
+                            fileUploadDialog.fileUrls[i] +
+                            " to " + pageRoot.remotePath)
+
+                transferCommandQueue.fileUploadRequest(fileUploadDialog.fileUrls[i],
+                                                       pageRoot.remotePath)
+            }
+            transferCommandQueue.run()
+        })
     }
 
 

@@ -1,7 +1,7 @@
 {
     "name": "me.fredl.ghostcloud",
     "title": "GhostCloud",
-    "version": "0.9.2",
+    "version": "0.9.3",
     "description": "A multi-platform client for ownCloud, NextCloud & WebDav",
     "architecture": "@CLICK_ARCH@",
     "framework": "ubuntu-sdk-16.04",

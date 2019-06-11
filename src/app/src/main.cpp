@@ -1,4 +1,5 @@
 // Qt Core & QML
+#include <QByteArray>
 #include <QGuiApplication>
 #include <QtQuick>
 #include <QDebug>
@@ -192,6 +193,9 @@ int main(int argc, char *argv[])
         }
     }
 
+    bool gspParse = false;
+    const int gspEnv = qgetenv("GRID_UNIT_PX").toInt(&gspParse);
+    const int GRID_UNIT_PX = gspParse ? gspEnv : 8;
 
 #if defined(Q_OS_ANDROID)
     // Keep asking for file access permissions
@@ -220,6 +224,7 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine* newEngine = new QQmlApplicationEngine(app);
     newEngine->rootContext()->setContextProperty("headerBarSize", headerBarSize);
     newEngine->rootContext()->setContextProperty("targetOs", targetOs);
+    newEngine->rootContext()->setContextProperty("GRID_UNIT_PX", GRID_UNIT_PX);
     newEngine->load(QUrl("qrc:/qml/qqc/main.qml"));
 #endif
 

@@ -40,10 +40,19 @@ ApplicationWindow {
         (sideStack.depth > 1)
 
     readonly property bool sideStackIsActive : {
-        if (width > height) {
+        if (width > height && detailStackVisibleRequired) {
             return true;
         } else {
             return false;
+        }
+    }
+    onSideStackIsActiveChanged: {
+        if (sideStackIsActive) {
+            pullInAnimation.stop();
+            pullOutAnimation.start()
+        } else {
+            pullOutAnimation.stop();
+            pullInAnimation.start();
         }
     }
 
@@ -468,7 +477,7 @@ ApplicationWindow {
                         }
                     }
                     onPushEnterChanged: {
-                        if (detailStackVisibleRequired) {
+                        if (sideStack.depth > 1) {
                             popAndTryDestroy();
                         }
                     }
@@ -476,12 +485,11 @@ ApplicationWindow {
             }
         }
 
-        Rectangle {
+        Item {
             id: mainContainer
-            color: "lightgray"
             anchors.fill: parent
-            anchors.bottomMargin: osIsUbuntuTouch && Qt.inputMethod.visible ?
-                                      Qt.inputMethod.keyboardRectangle.height / (units.gridUnit / 8) : 0
+            anchors.bottomMargin: Qt.inputMethod.visible ?
+                                      Qt.inputMethod.keyboardRectangle.height / (GRID_UNIT_PX / 8) : 0
 
             Row {
                 id: splitView
@@ -489,6 +497,28 @@ ApplicationWindow {
                 anchors.topMargin: 1
                 spacing: 1
                 focus: true
+
+                property real pullOutFactor : 0.0
+                readonly property int __pullOutDuration : 200
+
+                NumberAnimation {
+                    id: pullInAnimation
+                    target: splitView
+                    property: "pullOutFactor"
+                    duration: splitView.__pullOutDuration
+                    from: 1.0
+                    to: 0.0
+                    easing.type: Easing.InOutQuad
+                }
+                NumberAnimation {
+                    id: pullOutAnimation
+                    target: splitView
+                    property: "pullOutFactor"
+                    duration: splitView.__pullOutDuration
+                    from: 0.0
+                    to: 1.0
+                    easing.type: Easing.InOutQuad
+                }
 
                 Rectangle {
                     id: rootStackContainer
@@ -501,8 +531,10 @@ ApplicationWindow {
                     id: sideStackContainer
                     width: sideStackIsActive ? ((parent.width / 3) * 2)
                                              : parent.width
+                    scale: splitView.pullOutFactor
+                    opacity: splitView.pullOutFactor
                     height: parent.height
-                    visible: sideStackIsActive || detailStackVisibleRequired
+                    visible: sideStackIsActive
                     clip: true
                 }
             }

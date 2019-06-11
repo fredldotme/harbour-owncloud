@@ -54,21 +54,7 @@ CommandPageFlow {
             if (!fileOpenRequested)
                 return
 
-            if (osIsUbuntuTouch) {
-                var contentHubOpener =
-                contentHubOpenerComponent.createObject(pageStack,
-                                                       {
-                                                           fileUri : fileDestination
-                                                       })
-                if (!contentHubOpener) {
-                    console.error(contentHubOpenerComponent.errorString())
-                    return;
-                }
-
-                detailsStack.push(contentHubOpener)
-            } else {
-                Qt.openUrlExternally(fileDestination)
-            }
+            openFileDestination(fileDestination)
         }
     }
 
@@ -114,6 +100,24 @@ CommandPageFlow {
         /*onDiscard: {
             console.debug("Discard")
         }*/
+    }
+
+    function openFileDestination(fileDestination) {
+        if (osIsUbuntuTouch) {
+            var contentHubOpener =
+            contentHubOpenerComponent.createObject(pageStack,
+                                                   {
+                                                       fileUri : fileDestination
+                                                   })
+            if (!contentHubOpener) {
+                console.error(contentHubOpenerComponent.errorString())
+                return;
+            }
+
+            detailsStack.push(contentHubOpener)
+        } else {
+            Qt.openUrlExternally(fileDestination)
+        }
     }
 
     function startDownload(path, mimeType, open, overwriteExistingFile, lastModified, transferCommandQueue) {

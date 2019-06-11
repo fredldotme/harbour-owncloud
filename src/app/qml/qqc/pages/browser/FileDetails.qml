@@ -176,7 +176,7 @@ Page {
 
                         if (exists) {
                             // Open from cache
-                            Qt.openUrlExternally(fileDestination);
+                            openFileDestination(fileDestination);
                             return;
                         }
 

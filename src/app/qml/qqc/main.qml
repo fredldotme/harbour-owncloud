@@ -169,6 +169,8 @@ ApplicationWindow {
         category: "windowProperties"
         property alias width: rootWindow.width
         property alias height: rootWindow.height
+        property alias x: rootWindow.x
+        property alias y: rootWindow.y
     }
 
     header: ToolBar {

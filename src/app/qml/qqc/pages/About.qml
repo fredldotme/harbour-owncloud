@@ -26,7 +26,7 @@ Dialog {
                 id: icon
                 source: "qrc:/icons/icon_gray.svg"
                 anchors.horizontalCenter: parent.horizontalCenter
-                width: parent.width / 3
+                width: Math.min(parent.width / 3, 200)
                 height: width
                 scale: 1.5
                 sourceSize.width: width

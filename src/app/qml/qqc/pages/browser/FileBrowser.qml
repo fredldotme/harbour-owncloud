@@ -255,7 +255,7 @@ Page {
         DetailItem {
             width: parent.width
             label: qsTr("Free:")
-            value: pageFlow.userInfo.totalBytes
+            value: pageFlow.userInfo.freeBytes
         }
         DetailItem {
             width: parent.width

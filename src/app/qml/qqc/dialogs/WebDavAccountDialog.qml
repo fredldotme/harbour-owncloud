@@ -92,8 +92,6 @@ Dialog {
         Column {
             id: mainColumn
             width: Math.min(parent.width, 400)
-            anchors.top: topIcon.bottom
-            anchors.topMargin: 48
             anchors.horizontalCenter: parent.horizontalCenter
 
             TextField {

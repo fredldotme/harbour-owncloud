@@ -168,6 +168,18 @@ Page {
                 Button {
                     text: qsTr("Open")
                     onClicked: {
+                        const destinationDir = FilePathUtil.destination(accountWorkers.account)
+                        const fileName = entry.path.substring(entry.path.lastIndexOf("/") + 1)
+                        const localFilePath = destinationDir + "/" + fileName
+                        const fileDestination = "file://" + localFilePath
+                        const exists = FilePathUtil.fileExists(localFilePath);
+
+                        if (exists) {
+                            // Open from cache
+                            Qt.openUrlExternally(fileDestination);
+                            return;
+                        }
+
                         startDownload(entry.path,
                                       entry.mimeType,
                                       true,

@@ -2,6 +2,7 @@ import QtQuick 2.9
 import QtQuick.Window 2.3
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
+import Qt.labs.settings 1.0
 import harbour.owncloud 1.0
 import "qrc:/qml/qqc"
 import "qrc:/qml/qqc/controls"
@@ -127,9 +128,9 @@ ApplicationWindow {
 
     // Android back button support
     onClosing: {
-        // TODO: save window geometry before closing
-        if (!osIsAndroid)
+        if (!osIsAndroid) {
             return
+        }
 
         if (showBackButton) {
             popPage()
@@ -161,6 +162,13 @@ ApplicationWindow {
         } else {
             return "qrc:/icons/theme/places/64/" + icon + ".svg"
         }
+    }
+
+    Settings {
+        id: windowSettings
+        category: "windowProperties"
+        property alias width: rootWindow.width
+        property alias height: rootWindow.height
     }
 
     header: ToolBar {
@@ -485,8 +493,9 @@ ApplicationWindow {
             }
         }
 
-        Item {
+        Rectangle {
             id: mainContainer
+            color: "lightgray"
             anchors.fill: parent
             anchors.bottomMargin: Qt.inputMethod.visible ?
                                       Qt.inputMethod.keyboardRectangle.height / (GRID_UNIT_PX / 8) : 0

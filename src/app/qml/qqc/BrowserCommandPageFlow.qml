@@ -123,7 +123,7 @@ CommandPageFlow {
         console.log("remote path: " + path)
         console.log("fileExists: " + localFilePath + "?")
 
-        var exists = FilePathUtil.fileExists(localFilePath);
+        const exists = FilePathUtil.fileExists(localFilePath);
 
         if (!overwriteExistingFile && exists) {
             fileExistsDialog.fileName = fileName

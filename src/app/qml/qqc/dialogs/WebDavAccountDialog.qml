@@ -86,6 +86,7 @@ Dialog {
     Flickable {
         anchors.fill: parent
         contentHeight: mainColumn.height
+        clip: true
         ScrollBar.vertical: ScrollBar {}
 
         Column {

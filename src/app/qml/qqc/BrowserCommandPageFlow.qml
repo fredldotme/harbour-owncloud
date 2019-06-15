@@ -44,6 +44,18 @@ CommandPageFlow {
     Connections {
         target: accountWorkers.transferCommandQueue
         onCommandFinished: {
+            // Ignore invalid CommandReceipts
+            if (!receipt.valid) {
+                console.debug("invalid receipt")
+                return;
+            }
+
+            // Ignore if the command was intentionally aborted by the user
+            if (receipt.abortIntended) {
+                console.debug("abort intended")
+                return
+            }
+
             console.log("transfer command finished")
             const isFileDownload = (receipt.info.property("type") === "fileDownload")
             if (!isFileDownload)

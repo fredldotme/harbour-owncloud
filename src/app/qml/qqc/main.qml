@@ -197,6 +197,8 @@ ApplicationWindow {
                          sideStack.depth == 1
                 height: parent.height
                 width: height
+                forcePressed: rootStack.currentItem.avatarMenuOpen !== undefined &&
+                              rootStack.currentItem.avatarMenuOpen
                 source: {
                     if (rootStack.currentItem.objectName == "FileBrowser") {
                         return rootStack.currentItem.accountWorkers.avatarFetcher.source
@@ -254,6 +256,7 @@ ApplicationWindow {
                 height: parent.height
                 width: height
                 anchors.margins: paddingSmall
+                forcePressed: addMenu.visible
                 onClicked: {
                     addMenu.open(rootWindow)
                 }
@@ -263,6 +266,7 @@ ApplicationWindow {
                 height: parent.height
                 width: height
                 anchors.margins: paddingSmall
+                forcePressed: hamburgerMenu.visible
                 onClicked: {
                     hamburgerMenu.open(rootWindow)
                 }

@@ -233,10 +233,16 @@ Page {
             return
 
         avatarMenu.open()
+        avatarMenuOpen = true
     }
+    property bool avatarMenuOpen : false
 
     Menu {
         id: avatarMenu
+        onClosed: {
+            avatarMenuOpen = false
+        }
+
         DetailItem {
             width: parent.width
             label: qsTr("User:")
@@ -336,6 +342,10 @@ Page {
     Menu {
         id: rightClickMenu
         property var selectedDavInfo : null
+
+        onClosed: {
+            selectedDavInfo = null
+        }
 
         MenuItem {
             enabled: rightClickMenu.selectedDavInfo &&
@@ -482,7 +492,7 @@ Page {
                 width: listView.width
                 height: 48
                 font.pixelSize: fontSizeSmall
-                forcePressed: clickArea.pressed
+                forcePressed: clickArea.pressed || rightClickMenu.selectedDavInfo == davInfo
                 MouseArea {
                     id: clickArea
                     anchors.fill: parent

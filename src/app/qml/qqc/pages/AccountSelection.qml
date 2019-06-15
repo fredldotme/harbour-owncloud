@@ -12,6 +12,7 @@ Item {
     property Component browserPage : null
     property QmlMap dirContents : null
     property StackView detailStack : null
+    property bool avatarMenuOpen : false
 
     readonly property Component settingsPageComponent :
         Qt.createComponent("qrc:/qml/qqc/pages/SettingsPage.qml",

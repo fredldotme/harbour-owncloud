@@ -1,3 +1,16 @@
+0.9.4:
+Show the 'Download' button on Ubuntu Touch
+Fix erroneously opening files of canceled transfers
+Save and restore window position, width & height
+Open cached file if available
+Animate secondary panel appearance
+
+0.9.3:
+Use the File Manager to select file to upload
+Account settings page with "Clear cache" functionality
+Show Transfer, About & new account dialogs as overlays
+Improve layout/visibility of custom SSL error dialogs
+
 0.8.1:
 Adapt branding and fix ShareUI directory browsing
 

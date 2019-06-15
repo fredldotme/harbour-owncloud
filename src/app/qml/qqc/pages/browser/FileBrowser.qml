@@ -343,10 +343,6 @@ Page {
         id: rightClickMenu
         property var selectedDavInfo : null
 
-        onClosed: {
-            selectedDavInfo = null
-        }
-
         MenuItem {
             enabled: rightClickMenu.selectedDavInfo &&
                      (!rightClickMenu.selectedDavInfo.isDirectory)
@@ -492,7 +488,7 @@ Page {
                 width: listView.width
                 height: 48
                 font.pixelSize: fontSizeSmall
-                forcePressed: clickArea.pressed || rightClickMenu.selectedDavInfo == davInfo
+                forcePressed: clickArea.pressed
                 MouseArea {
                     id: clickArea
                     anchors.fill: parent

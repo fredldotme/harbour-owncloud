@@ -124,7 +124,7 @@ Dialog {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        Qt.openUrlExternally("https://github.com/beidl/harbour-owncloud")
+                        Qt.openUrlExternally("https://github.com/fredldotme/harbour-owncloud")
                     }
                 }
                 anchors {

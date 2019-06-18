@@ -133,9 +133,9 @@ CommandPageFlow {
     }
 
     function startDownload(path, mimeType, open, overwriteExistingFile, lastModified, transferCommandQueue) {
-        var destinationDir = FilePathUtil.destination(accountWorkers.account)
-        var fileName = path.substring(path.lastIndexOf("/") + 1)
-        var localFilePath = destinationDir + "/" + fileName
+        const destinationDir = FilePathUtil.destination(accountWorkers.account)
+        const fileName = path.substring(path.lastIndexOf("/") + 1)
+        const localFilePath = destinationDir + "/" + fileName
         console.log("remote path: " + path)
         console.log("fileExists: " + localFilePath + "?")
 

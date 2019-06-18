@@ -274,21 +274,21 @@ ApplicationWindow {
         }
     }
 
+    AccountWorkerGenerator {
+        id: accountWorkerGenerator
+        database: AccountDb { }
+    }
+
+    DaemonControl {
+        id: daemonCtrl
+    }
+
+    QmlMap {
+        id: directoryContents
+    }
+
     Item {
         anchors.fill: parent
-
-        AccountWorkerGenerator {
-            id: accountWorkerGenerator
-            database: AccountDb { }
-        }
-
-        DaemonControl {
-            id: daemonCtrl
-        }
-
-        QmlMap {
-            id: directoryContents
-        }
 
         Dialog {
             function showMessage(summary, body) {

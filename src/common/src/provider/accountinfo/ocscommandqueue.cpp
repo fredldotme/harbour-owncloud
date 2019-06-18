@@ -1,6 +1,7 @@
 #include "ocscommandqueue.h"
 
 #include <commands/ocs/ocsuserinfocommandentity.h>
+#include <nextcloudendpointconsts.h>
 
 #include <QVariantMap>
 
@@ -9,13 +10,7 @@ OcsCommandQueue::OcsCommandQueue(QObject *parent, AccountBase* settings) :
 {
     connect(this, &OcsCommandQueue::commandFinished,
             this, [=](CommandReceipt receipt) {
-        const bool enabled = receipt.result.toMap()["enabled"].toBool();
         qDebug() << "receipt.result: " << receipt.result;
-        qDebug() << "Enabled? " << enabled;
-
-        if (!enabled)
-            return;
-
         Q_EMIT userInfoChanged();
     });
 }
@@ -46,7 +41,6 @@ QString OcsCommandQueue::providerSettingsUrl()
         return Q_NULLPTR;
     }
 
-    // TODO: correct URL to settings landing page
     // TODO: split implementation into NC and oC
-    return QString();
+    return this->settings()->hoststring() + "/" + NEXTCLOUD_ENDPOINT_OCS_SETTINGS;
 }

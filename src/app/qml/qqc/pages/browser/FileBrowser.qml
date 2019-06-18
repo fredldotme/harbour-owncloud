@@ -229,9 +229,6 @@ Page {
     }
 
     function openAvatarMenu() {
-        if (!pageFlow.userInfo.enabled)
-            return
-
         avatarMenu.open()
         avatarMenuOpen = true
     }
@@ -239,50 +236,70 @@ Page {
 
     Menu {
         id: avatarMenu
+        height: userInfoColumn.childrenRect.height + paddingMedium
+
         onClosed: {
             avatarMenuOpen = false
         }
 
-        DetailItem {
-            width: parent.width
-            label: qsTr("User:")
-            value: pageFlow.userInfo.displayName
-        }
-        /*DetailItem {
-            width: parent.width
-            label: qsTr("Mail:")
-            value: pageFlow.userInfo.email
-        }*/
-        DetailItem {
-            width: parent.width
-            label: qsTr("Usage:")
-            value: pageFlow.userInfo.usedBytes
-        }
-        DetailItem {
-            width: parent.width
-            label: qsTr("Free:")
-            value: pageFlow.userInfo.freeBytes
-        }
-        DetailItem {
-            width: parent.width
-            label: qsTr("Total:")
-            value: pageFlow.userInfo.totalBytes
-        }
-        /*MouseArea {
-            width: parent.width - paddingSmall*2
-            height: settingsButton.height
-            anchors.horizontalCenter: parent.horizontalCenter
-            Label {
-                id: settingsButton
-                text: qsTr("Settings")
+        Column {
+            id: userInfoColumn
+            anchors.fill: parent
+
+            DetailItem {
+                width: parent.width
+                label: qsTr("User:")
+                value: pageFlow.userInfo.displayName
+                visible: pageFlow.userInfo.enabled && value.length > 0
+            }
+            DetailItem {
+                width: parent.width
+                label: qsTr("Mail:")
+                value: pageFlow.userInfo.email
+                visible: pageFlow.userInfo.enabled && value.length > 0
+            }
+            DetailItem {
+                width: parent.width
+                label: qsTr("Usage:")
+                value: pageFlow.userInfo.usedBytes
+                visible: pageFlow.userInfo.enabled && value.length > 0
+            }
+            DetailItem {
+                width: parent.width
+                label: qsTr("Free:")
+                value: pageFlow.userInfo.freeBytes
+                visible: pageFlow.userInfo.enabled && value.length > 0
+            }
+            DetailItem {
+                width: parent.width
+                label: qsTr("Total:")
+                value: pageFlow.userInfo.totalBytes
+                visible: pageFlow.userInfo.enabled && value.length > 0
+            }
+            MouseArea {
+                readonly property string settingsUrl : accountWorkers.accountInfoCommandQueue.providerSettingsUrl()
+                width: parent.width - paddingSmall*2
+                height: !visible ? 0 : settingsButton.font.pixelSize + paddingTiny
                 anchors.horizontalCenter: parent.horizontalCenter
-                font.underline: true
-                color: "blue"
+                visible: settingsUrl !== ""
+
+                Label {
+                    id: settingsButton
+                    text: qsTr("Settings")
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    font.underline: true
+                    color: parent.pressed ? "red" : "blue"
+                }
+                onClicked: {
+                    if (settingsUrl === "") {
+                        return
+                    }
+
+                    console.log("Opening: " + settingsUrl)
+                    Qt.openUrlExternally(settingsUrl)
+                }
             }
-            onClicked: {
-                Qt.openUrlExternally(accountWorkers.providerSettingsUrl)
-            }
-        }*/
+        }
     }
 
     Connections {

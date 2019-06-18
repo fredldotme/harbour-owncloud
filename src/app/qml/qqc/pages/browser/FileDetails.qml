@@ -30,16 +30,19 @@ Page {
     readonly property bool supportsMediaPreview : (!osIsUbuntuTouch && !osIsIOS)
     readonly property bool supportsDownloads : !osIsIOS
 
-    readonly property bool isAudioVideo :
+    readonly property bool isAudio :
         supportsMediaPreview && (!entry.isDirectory &&
-         (entry.mimeType.indexOf("video") === 0 ||
-          entry.mimeType.indexOf("audio") === 0))
+         (entry.mimeType.indexOf("audio") === 0))
+    readonly property bool isVideo :
+        supportsMediaPreview && (!entry.isDirectory &&
+         (entry.mimeType.indexOf("video") === 0))
+    readonly property bool isAudioVideo : (isAudio || isVideo)
 
     readonly property string fileExistsHintText :
         qsTr("The file '%1' already exists. Would you like to overwrite it?")
 
     Component.onCompleted: {
-        if (isAudioVideo || entry.isDirectory)
+        if (isVideo || entry.isDirectory)
             return;
 
         thumbnailFetcher.remoteFile = entry.path
@@ -69,9 +72,9 @@ Page {
             Item {
                 // Wider side margins when only showing
                 // a default icon from the icon set
-                property int margins : (thumbnailFetcher.source === "" && !isAudioVideo)
-                                       ? (parent.width/4)
-                                       : (parent.width/8)
+                readonly property int margins : (thumbnailFetcher.source === "" && !isAudioVideo)
+                                                ? (parent.width/4)
+                                                : (parent.width/8)
                 id: filePreview
                 width: parent.width / 2
                 height: width
@@ -84,7 +87,7 @@ Page {
                     source: (entry.isDirectory
                                 ? getFolderIcon("folder")
                                 : imgSrc)
-                    visible: !isAudioVideo
+                    visible: !isVideo
                 }
 
                 // Media player for video and audio preview
@@ -170,9 +173,11 @@ Page {
                     onClicked: {
                         const destinationDir = FilePathUtil.destination(accountWorkers.account)
                         const fileName = entry.path.substring(entry.path.lastIndexOf("/") + 1)
-                        const localFilePath = destinationDir + "/" + fileName
+                        const localFilePath = destinationDir + entry.path
                         const fileDestination = "file://" + localFilePath
                         const exists = FilePathUtil.fileExists(localFilePath);
+
+                        console.log("fileDestination: " + fileDestination)
 
                         if (exists) {
                             // Open from cache

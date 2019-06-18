@@ -1,5 +1,6 @@
 0.9.4:
 Show the 'Download' button on Ubuntu Touch
+Fix "Free space" information
 Fix erroneously opening files of canceled transfers
 Save and restore window position, width & height
 Open cached file if available

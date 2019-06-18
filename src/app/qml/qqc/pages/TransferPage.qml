@@ -15,7 +15,7 @@ Dialog {
     property var activeAccountWorkers : accountGenerator.accountWorkers
     property bool noTransfersHint : true
 
-    standardButtons: Dialog.Cancel
+    standardButtons: Dialog.Ok
 
     function refreshNoTransfersHint()
     {
@@ -190,7 +190,6 @@ Dialog {
                                 }
                             }
                         }
-
                     }
                 }
             }

@@ -6,7 +6,7 @@ Dialog {
     focus: true
 
     readonly property bool destroyable : false
-    standardButtons: Dialog.Cancel
+    standardButtons: Dialog.Ok
 
     signal closeRequest()
 

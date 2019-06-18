@@ -25,13 +25,16 @@ AccountWorkers* AccountWorkerGenerator::newAccount()
                 ProviderUtils::newStorageProviderByType(this, newAccountSettings);
         AccountInfoProvider* accountInfoProvider =
                 ProviderUtils::newAccountInfoProviderByType(this, newAccountSettings);
+        SharingProvider* sharingProvider =
+                ProviderUtils::newSharingProviderByType(this, newAccountSettings);
 
         AccountWorkers* newDefaultWorkers =
                 new AccountWorkers(Q_NULLPTR,
                                    newAccountSettings,
                                    browserCommandQueue,
                                    transferCommandQueue,
-                                   accountInfoProvider);
+                                   accountInfoProvider,
+                                   sharingProvider);
 
         this->m_defaultNewAW = std::unique_ptr<AccountWorkers>(newDefaultWorkers);
     }

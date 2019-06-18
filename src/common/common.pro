@@ -59,7 +59,10 @@ SOURCES += \
     $$PWD/src/provider/accountinfo/accountinfoprovider.cpp \
     $$PWD/src/util/providerutils.cpp \
     $$PWD/src/accountworkers.cpp \
-    $$PWD/src/accountworkergenerator.cpp
+    $$PWD/src/accountworkergenerator.cpp \
+    $$PWD/src/provider/sharing/sharingprovider.cpp \
+    $$PWD/src/provider/sharing/ocssharingcommandqueue.cpp \
+    $$PWD/src/commands/ocs/ocssharelistcommandentity.cpp
 
 HEADERS += \
     $$PWD/src/net/abstractfetcher.h \
@@ -103,7 +106,10 @@ HEADERS += \
     $$PWD/src/util/providerutils.h \
     $$PWD/src/accountworkers.h \
     $$PWD/src/accountworkergenerator.h \
-    src/util/qappprepareutil.h
+    $$PWD/src/provider/sharing/sharingprovider.h \
+    $$PWD/src/util/qappprepareutil.h \
+    $$PWD/src/provider/sharing/ocssharingcommandqueue.h \
+    $$PWD/src/commands/ocs/ocssharelistcommandentity.h
 
 include($$PWD/../../3rdparty/libqtcommandqueue/libqtcommandqueue.pri)
 

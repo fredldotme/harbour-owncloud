@@ -38,9 +38,6 @@ Page {
          (entry.mimeType.indexOf("video") === 0))
     readonly property bool isAudioVideo : (isAudio || isVideo)
 
-    readonly property string fileExistsHintText :
-        qsTr("The file '%1' already exists. Would you like to overwrite it?")
-
     Component.onCompleted: {
         if (isVideo || entry.isDirectory)
             return;
@@ -76,7 +73,7 @@ Page {
                                                 ? (parent.width/4)
                                                 : (parent.width/8)
                 id: filePreview
-                width: parent.width / 2
+                width: Math.min(256, parent.width / 2)
                 height: width
                 anchors.horizontalCenter: parent.horizontalCenter
 

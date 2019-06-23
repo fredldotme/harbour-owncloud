@@ -117,7 +117,7 @@ CommandPageFlow {
     function openFileDestination(fileDestination) {
         if (osIsUbuntuTouch) {
             var contentHubOpener =
-            contentHubOpenerComponent.createObject(pageStack,
+            contentHubOpenerComponent.createObject(dialogLayer,
                                                    {
                                                        fileUri : fileDestination
                                                    })
@@ -126,7 +126,15 @@ CommandPageFlow {
                 return;
             }
 
-            detailsStack.push(contentHubOpener)
+            dialogLayer.widthChanged.connect(function(){
+                contentHubOpener.width = dialogLayer.width
+            });
+            dialogLayer.heightChanged.connect(function(){
+                contentHubOpener.height = dialogLayer.height
+            });
+            contentHubOpener.width = dialogLayer.width
+            contentHubOpener.height = dialogLayer.height
+            contentHubOpener.open()
         } else {
             Qt.openUrlExternally(fileDestination)
         }

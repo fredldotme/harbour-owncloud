@@ -288,6 +288,7 @@ ApplicationWindow {
     }
 
     Item {
+        id: dialogLayer
         anchors.fill: parent
 
         Dialog {

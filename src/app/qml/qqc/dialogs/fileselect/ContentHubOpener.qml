@@ -1,10 +1,11 @@
 import QtQuick 2.4
-import QtQuick.Controls 2.0
+import QtQuick.Controls 2.1
 import Ubuntu.Content 1.3
 
-Page {
+Dialog {
     id: pageRoot
     title: qsTr("Open '%1' with").arg(fileName)
+    standardButtons: Dialog.Cancel
 
     readonly property bool destroyable : true
 
@@ -42,12 +43,12 @@ Page {
 
         onPeerSelected: {
             pageRoot.activeTransfer = peer.request();
-            detailsStack.pop();
             exportContent(pageRoot.fileUri)
+            pageRoot.close()
         }
 
         onCancelPressed: {
-            detailsStack.pop();
+            pageRoot.close()
         }
     }
 }

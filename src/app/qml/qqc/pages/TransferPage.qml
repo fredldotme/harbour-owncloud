@@ -83,6 +83,7 @@ Dialog {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         contentHeight: groupDelegate.height
+        clip: true
 
         Column {
             id: groupDelegate

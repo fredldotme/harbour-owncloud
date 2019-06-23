@@ -305,7 +305,7 @@ Page {
 
             CircularImageButton {
                 property bool __showAvatar :
-                    (accountWorkers.account.providerType === NextcloudSettings.Nextcloud)
+                    (accountWorkers.account.providerType === AccountBase.Nextcloud)
                 source: __showAvatar ? accountWorkers.avatarFetcher.source : ""
                 enabled: __showAvatar
                 visible: ocsUserInfo.userInfoEnabled

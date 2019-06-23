@@ -285,7 +285,7 @@ Page {
 
                 Label {
                     id: settingsButton
-                    text: qsTr("Settings")
+                    text: qsTr("Change user info")
                     anchors.horizontalCenter: parent.horizontalCenter
                     font.underline: true
                     color: parent.pressed ? "red" : "blue"
@@ -433,7 +433,7 @@ Page {
             enabled: true
             text: qsTr("Details")
             font.pixelSize: fontSizeSmall
-            onClicked: openDetails(rightClickMenu.selectedDavInfo, accountWorkers);
+            onClicked: openDetails(rightClickMenu.selectedDavInfo);
         }
     }
 

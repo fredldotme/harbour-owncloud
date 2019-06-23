@@ -122,6 +122,10 @@
         <source>Settings</source>
         <translation type="unfinished">Einstellungen</translation>
     </message>
+    <message>
+        <source>Settings...</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BasicAuthentication</name>
@@ -332,6 +336,10 @@
         <source>Details</source>
         <translation type="unfinished">Details</translation>
     </message>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished">Einstellungen</translation>
+    </message>
 </context>
 <context>
     <name>FileDetails</name>
@@ -454,16 +462,6 @@
         <translation>Einstellungen</translation>
     </message>
     <message>
-        <source>Automatically log in to your ownCloud server when starting the app</source>
-        <comment>Login automatically description</comment>
-        <translation>Automatisch anmelden, wenn die Anwendung startet</translation>
-    </message>
-    <message>
-        <source>Show global notifications when transfering files</source>
-        <comment>Notifications description</comment>
-        <translation>Zeige globale Benachrichtigungen wenn Dateiübertragungen stattfinden</translation>
-    </message>
-    <message>
         <source>Camera photo backups</source>
         <translation>Kamera Backup</translation>
     </message>
@@ -484,10 +482,6 @@
     <message>
         <source>Clear cache</source>
         <translation>Zwischenspeicher leeren</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -580,6 +574,14 @@
     </message>
     <message>
         <source>No account available yet. Please add an account to continue.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Upload file...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New folder...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

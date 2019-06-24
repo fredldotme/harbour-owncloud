@@ -70,7 +70,6 @@ Page {
         delegate: ListItem {
             width: ListView.view.width
             enabled: __listCommand === null
-            //height: mainColumn.height
 
             property var delegateAccountWorkers : accountsList.model[index]
 
@@ -93,7 +92,7 @@ Page {
                           + delegateAccountWorkers.account.hoststring
                     font.pixelSize: Theme.fontSizeMedium
                     enabled: __listCommand == null
-                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                    elide: Label.ElideRight
                     width: accountsList.width
                 }
             }

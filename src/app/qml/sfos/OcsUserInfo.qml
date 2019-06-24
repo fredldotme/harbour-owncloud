@@ -9,6 +9,7 @@ Item {
     property string displayName : ""
     property string emailAddress : ""
     property string usedBytes : ""
+    property string freeBytes : ""
     property string totalBytes : ""
 
     readonly property string hrDisplayName :
@@ -23,6 +24,10 @@ Item {
         usedBytes.length < 15 ?
             usedBytes :
             usedBytes.substring(0, 15) + ".."
+    readonly property string hrFreeBytes :
+        freeBytes.length < 15 ?
+            freeBytes :
+            freeBytes.substring(0, 15) + ".."
     readonly property string hrTotalBytes :
         totalBytes.length < 15 ?
             totalBytes :
@@ -57,6 +62,8 @@ Item {
             ocsUserInfo.emailAddress = receipt.result.email;
             ocsUserInfo.usedBytes = fileDetailsHelper.getHRSizeFromString(
                         receipt.result.usedBytes);
+            ocsUserInfo.freeBytes = fileDetailsHelper.getHRSizeFromString(
+                        receipt.result.freeBytes);
             ocsUserInfo.totalBytes = fileDetailsHelper.getHRSizeFromString(
                         receipt.result.totalBytes);
         }

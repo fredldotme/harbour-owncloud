@@ -174,6 +174,12 @@ Page {
                     }
                     DetailItem {
                         width: parent.width
+                        label: qsTr("Free:")
+                        value: ocsUserInfo.hrFreeBytes
+                        visible: value.length > 0
+                    }
+                    DetailItem {
+                        width: parent.width
                         label: qsTr("Total:")
                         value: ocsUserInfo.hrTotalBytes
                         visible: value.length > 0

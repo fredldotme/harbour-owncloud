@@ -63,10 +63,10 @@ Page {
                     onClicked: accountWorkers.cacheProvider.clearCache()
                 }
 
-                /*Button {
-                    text: qsTr("OK")
-                    onClicked: accountDb.updateAccount(accountWorkers.account)
-                }*/
+                Button {
+                    text: qsTr("Clear downloads")
+                    onClicked: accountWorkers.cacheProvider.clearDownloads()
+                }
             }
         }
     }

@@ -21,7 +21,7 @@ CommandPageFlow {
         Qt.createComponent("qrc:/qml/qqc/pages/browser/FileDetails.qml",
                            Component.PreferSynchronous);
     readonly property Component contentHubOpenerComponent :
-        Qt.createComponent("qrc:/qml/qqc/dialogs/fileselect/ContentHubOpener.qml",
+        Qt.createComponent("qrc:/qml/qqc/dialogs/fileselect/UbuntuContentHubOpener.qml",
                            Component.PreferSynchronous);
 
     FileDetailsHelper { id: fileDetailsHelper }

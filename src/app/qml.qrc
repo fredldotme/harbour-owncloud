@@ -15,6 +15,6 @@
         <file>qml/qqc/controls/GCButton.qml</file>
         <file>qml/qqc/dialogs/fileselect/UbuntuContentPicker.qml</file>
         <file>qml/qqc/dialogs/fileselect/QQDFilePicker.qml</file>
-        <file>qml/qqc/dialogs/fileselect/ContentHubOpener.qml</file>
+        <file>qml/qqc/dialogs/fileselect/UbuntuContentHubOpener.qml</file>
     </qresource>
 </RCC>

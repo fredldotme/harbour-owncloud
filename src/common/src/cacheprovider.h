@@ -20,10 +20,14 @@ public:
 
 public slots:
     void clearCache();
+    void clearDownloads();
 
 private:
+    bool clearPath(const QString& path);
+
     QTimer m_clearTimer;
     QString m_cacheDir;
+    QString m_downloadDir;
 
 signals:
     void cacheCleared();

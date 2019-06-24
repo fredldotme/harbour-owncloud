@@ -210,13 +210,6 @@
     </message>
 </context>
 <context>
-    <name>ContentHubOpener</name>
-    <message>
-        <source>Open &apos;%1&apos; with</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>CoverPage</name>
     <message>
         <source>User:</source>
@@ -337,8 +330,8 @@
         <translation type="unfinished">Details</translation>
     </message>
     <message>
-        <source>Settings</source>
-        <translation type="unfinished">Einstellungen</translation>
+        <source>Edit user info</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -483,6 +476,10 @@
         <source>Clear cache</source>
         <translation>Zwischenspeicher leeren</translation>
     </message>
+    <message>
+        <source>Clear downloads</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>TransferPage</name>
@@ -505,6 +502,13 @@
     <message>
         <source>Open: &apos;%1&apos;</source>
         <translation>Öffne: &apos;%1&apos;</translation>
+    </message>
+</context>
+<context>
+    <name>UbuntuContentHubOpener</name>
+    <message>
+        <source>Open &apos;%1&apos; with</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

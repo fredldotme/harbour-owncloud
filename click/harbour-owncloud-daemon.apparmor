@@ -1,0 +1,8 @@
+{
+    "policy_groups": [
+        "connectivity",
+        "networking",
+        "picture_files_read"
+    ],
+    "policy_version": 16.04
+}

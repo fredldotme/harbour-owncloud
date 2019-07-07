@@ -3,7 +3,9 @@
   "default": "clean build click-build",
   "kill": "harbour-owncloud",
   "build_args": [
-    "CONFIG+=noadditionals",
+    "CONFIG+=nopermissionagent",
+    "CONFIG+=noqmlextension",
+    "CONFIG+=nosharing",
     "CONFIG+=quickcontrols",
     "CONFIG+=click"
   ],

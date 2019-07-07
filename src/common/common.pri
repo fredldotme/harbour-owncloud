@@ -41,12 +41,23 @@ linux:!android {
 
 macx {
     LIBS += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.1.dylib
+    PRE_TARGETDEPS += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.1.dylib
+
+    libs.path = Contents/MacOS
+    libs.files += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.1.dylib
+
     CONFIG(release, debug|release) {
         LIBS += $$OUT_PWD/../../src/common/libharbourowncloudcommon.1.dylib
+        PRE_TARGETDEPS += $$OUT_PWD/../../src/common/libharbourowncloudcommon.1.dylib
+        libs.files += $$OUT_PWD/../../src/common/libharbourowncloudcommon.1.dylib
     }
     CONFIG(debug, debug|release) {
         LIBS += $$OUT_PWD/../../src/common/libharbourowncloudcommon_debug.1.dylib
+        PRE_TARGETDEPS += $$OUT_PWD/../../src/common/libharbourowncloudcommon_debug.1.dylib
+        libs.files += $$OUT_PWD/../../src/common/libharbourowncloudcommon_debug.1.dylib
     }
+
+    QMAKE_BUNDLE_DATA += libs
 }
 
 ios {

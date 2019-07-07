@@ -44,13 +44,19 @@ QString remoteDirectoryFromHwRelease()
 
         }
     }
+#ifdef GHOSTCLOUD_UBUNTU_TOUCH
+    return QStringLiteral("/GhostCloud");
+#else
     return QStringLiteral("/Jolla");
+#endif
 }
 
 int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
     prepareAppProperties(app);
+
+    qInfo() << "Starting harbour-owncloud-daemon";
 
     // Status updates and config reload requests through DBus
     DBusHandler *dbusHandler = new DBusHandler();
@@ -95,6 +101,8 @@ int main(int argc, char *argv[])
 
         if (!settings->uploadAutomatically())
             continue;
+
+        qInfo() << "Photo backup enabled for account" << settings->hoststring();
 
         NetworkMonitor *netMonitor = new NetworkMonitor(workers, settings);
         Filesystem *fsHandler = new Filesystem(settings);

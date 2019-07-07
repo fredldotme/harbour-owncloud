@@ -43,7 +43,7 @@ void Uploader::triggerSync(const QString &localPath, const QString &remoteSubdir
     }
 
     QString remoteDir = this->m_targetDirectory + '/' + remoteSubdir + '/';
-    qDebug() << "Trigger sync" << localPath << "to" << remoteDir;
+    qInfo() << "Trigger sync" << localPath << "to" << remoteDir;
 
     // create parent directory
     // NcSyncCommandUnit dont creating remote directories recursively

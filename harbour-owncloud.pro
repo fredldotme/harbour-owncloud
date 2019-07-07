@@ -11,9 +11,9 @@ android {
     exists($$OUT_PWD/3rdparty/build_android_openssl.sh) {
         !exists ($$OUT_PWD/3rdparty/openssl) {
             warning(OpenSSL library missing)
+            system($$OUT_PWD/3rdparty/build_android_openssl.sh --help)
             error(Change to the $$OUT_PWD/3rdparty directory \
                 and run the script manually)
-            system($$OUT_PWD/3rdparty/build_android_openssl.sh --help)
         }
     }
 }

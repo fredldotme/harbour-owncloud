@@ -17,12 +17,12 @@ public:
     Q_PROPERTY(bool daemonInstalled READ daemonInstalled NOTIFY daemonInstalledChanged)
     Q_PROPERTY(bool uploading READ uploading NOTIFY uploadingChanged)
 
-    bool daemonInstalled();
     bool uploading();
 
 public slots:
     void reloadConfig();
     void abort();
+    bool daemonInstalled();
 
 private:
     void daemonRegistered(const QString& serviceName);

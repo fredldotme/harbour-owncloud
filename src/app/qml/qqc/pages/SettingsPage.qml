@@ -42,7 +42,10 @@ Page {
                 width: parent.width
                 visible: daemonCtrl.daemonInstalled
                 checked: accountWorkers.account.uploadAutomatically
-                onClicked: accountWorkers.account.uploadAutomatically = checked
+                onClicked:{
+                    accountWorkers.account.uploadAutomatically = checked
+                    accountDb.updateAccount(accountWorkers.account)
+                }
             }
 
             CheckBox {
@@ -52,7 +55,10 @@ Page {
                 visible: daemonCtrl.daemonInstalled
                 enabled: cameraUploadSwitch.checked
                 checked: accountWorkers.account.mobileUpload
-                onClicked: accountWorkers.account.mobileUpload = checked
+                onClicked: {
+                    accountWorkers.account.mobileUpload = checked
+                    accountDb.updateAccount(accountWorkers.account)
+                }
             }
 
             Row {

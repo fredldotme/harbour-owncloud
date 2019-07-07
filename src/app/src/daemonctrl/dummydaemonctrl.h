@@ -14,7 +14,7 @@ public:
 
     explicit DaemonControl(QObject *parent = nullptr);
 
-    bool uploading() { return false; };
+    bool uploading() { return false; }
 
 public slots:
     bool daemonInstalled() { return false; }

@@ -95,7 +95,7 @@ void AccountWorkerGenerator::cleanup()
             continue;
         delete workers;
     }
-    accountWorkersChanged();
+    Q_EMIT accountWorkersChanged();
 }
 
 QVariantList AccountWorkerGenerator::accountWorkers()

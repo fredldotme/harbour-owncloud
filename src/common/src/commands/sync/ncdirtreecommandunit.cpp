@@ -17,9 +17,8 @@ inline QVariantMap buildResultData(bool success, QSharedPointer<NcDirNode> tree)
     return result;
 }
 
-CommandEntity* startingListCommand(QObject* parent,
-                                          const QString& rootPath,
-                                          CloudStorageProvider* client)
+CommandEntity* startingListCommand(const QString& rootPath,
+                                   CloudStorageProvider* client)
 {
     if (!client) {
         qWarning() << Q_FUNC_INFO << "client is null";
@@ -42,7 +41,7 @@ NcDirTreeCommandUnit::NcDirTreeCommandUnit(QObject *parent,
                                            CloudStorageProvider *client,
                                            QString rootPath,
                                            QSharedPointer<NcDirNode> cachedTree) :
-    CommandUnit(parent, {startingListCommand(parent, rootPath, client)},
+    CommandUnit(parent, {startingListCommand(rootPath, client)},
                 defaultCommandInfo(rootPath)),
     m_client(client)
 {

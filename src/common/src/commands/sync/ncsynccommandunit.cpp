@@ -171,6 +171,10 @@ void NcSyncCommandUnit::expand(CommandEntity *previousCommandEntity)
         NcDirNode* node = this->m_cachedTree->getNode(remoteRelativeDir);
         const bool uniqueIdExists = (node && node->containsFileWithUniqueId());*/
 
+        // TODO: Remove files that don't exist remotely anymore
+        // Might need a 3-way comparison (local past, local now, server now)
+        // Policy: in case of doubt the server wins
+
         // Skip the file upload if it already exists remotely
         if (exists)
             continue;

@@ -26,6 +26,7 @@
 #include <auth/qwebdavauthenticator.h>
 #include <auth/authenticationexaminer.h>
 #include <auth/flowloginauthenticator.h>
+#include <util/commandutil.h>
 #include <util/filepathutil.h>
 #include <util/qappprepareutil.h>
 #include <net/thumbnailfetcher.h>
@@ -74,6 +75,15 @@ static QJSValue filePathUtilProvider(QQmlEngine *engine, QJSEngine *scriptEngine
 
     QJSValue filePathUtilObj = scriptEngine->newQObject(new FilePathUtil);
     filePathUtilObj.setProperty("FilePathUtil", filePathUtilObj);
+    return filePathUtilObj;
+}
+
+static QJSValue commandUtilProvider(QQmlEngine *engine, QJSEngine *scriptEngine)
+{
+    Q_UNUSED(engine)
+
+    QJSValue filePathUtilObj = scriptEngine->newQObject(new CommandUtil);
+    filePathUtilObj.setProperty("CommandUtil", filePathUtilObj);
     return filePathUtilObj;
 }
 
@@ -165,17 +175,20 @@ int main(int argc, char *argv[])
     qmlRegisterUncreatableType<AccountWorkers>("harbour.owncloud", 1, 0, "AccountWorkers",
                                                "AccountWorkers are provided through the AccountDbWorkers type");
     qmlRegisterSingletonType("harbour.owncloud", 1, 0, "FilePathUtil", filePathUtilProvider);
+    qmlRegisterSingletonType("harbour.owncloud", 1, 0, "CommandUtil", commandUtilProvider);
 
     QGuiApplication* app = SailfishApp::application(argc, argv);
     prepareAppProperties(*app);
 
     QIcon::setThemeName("theme");
 
+    // Create common directories
     {
         createNecessaryDir(QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation));
         createNecessaryDir(QStandardPaths::writableLocation(QStandardPaths::CacheLocation));
     }
 
+    // Migrate settings from .ini to the new database
     {
         AccountDb accounts;
         IniFileSettings iniSettings;

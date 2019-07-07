@@ -1,20 +1,30 @@
 #include "fileuploadcommandentity.h"
 
+#ifdef Q_OS_IOS
+#include <QUrlQuery>
+#endif
+
 FileUploadCommandEntity::FileUploadCommandEntity(QObject* parent,
                                                  QString localPath,
                                                  QString remotePath,
                                                  QWebdav* client) :
-    WebDavCommandEntity(parent, client)
+    WebDavCommandEntity(parent, client),
+    m_localFile(new QFile(localPath, this))
 {
 #ifdef Q_OS_IOS
     // On iOS we need to resolve the URL before use
-    {
-        QUrl localUrl(localPath);
-        localPath = localUrl.toLocalFile();
-    }
-#endif
-    this->m_localFile = new QFile(localPath, this);
+    const QUrl localUrl(localPath);
+    localPath = localUrl.toLocalFile();
+
+    const QUrlQuery fileNameQuery(localPath.mid(localPath.indexOf("id=")));
+    qInfo() << "FILENAME on iOS:" << fileNameQuery.toString(QUrl::FullyEncoded);
+    const QString fileId = fileNameQuery.queryItemValue("id");
+    const QString fileExtension = fileNameQuery.queryItemValue("ext");
+    const QString fileName = fileId + "." + fileExtension;
+#else
     const QString fileName = QFileInfo(*this->m_localFile).fileName();
+#endif
+
     this->m_remotePath = remotePath + fileName;
 
     // extensible list of command properties

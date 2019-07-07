@@ -237,6 +237,8 @@ Page {
     Menu {
         id: avatarMenu
         height: userInfoColumn.childrenRect.height + paddingMedium
+        width: parent.width - paddingLarge*2
+        x: paddingLarge
 
         onClosed: {
             avatarMenuOpen = false
@@ -247,36 +249,41 @@ Page {
             anchors.fill: parent
 
             DetailItem {
+                ratio: 0.35
                 width: parent.width
                 label: qsTr("User:")
                 value: pageFlow.userInfo.displayName
                 visible: pageFlow.userInfo.enabled && value.length > 0
             }
             DetailItem {
+                ratio: 0.35
                 width: parent.width
                 label: qsTr("Mail:")
                 value: pageFlow.userInfo.email
                 visible: pageFlow.userInfo.enabled && value.length > 0
             }
             DetailItem {
+                ratio: 0.35
                 width: parent.width
                 label: qsTr("Usage:")
                 value: pageFlow.userInfo.usedBytes
                 visible: pageFlow.userInfo.enabled && value.length > 0
             }
             DetailItem {
+                ratio: 0.35
                 width: parent.width
                 label: qsTr("Free:")
                 value: pageFlow.userInfo.freeBytes
                 visible: pageFlow.userInfo.enabled && value.length > 0
             }
             DetailItem {
+                ratio: 0.35
                 width: parent.width
                 label: qsTr("Total:")
                 value: pageFlow.userInfo.totalBytes
                 visible: pageFlow.userInfo.enabled && value.length > 0
             }
-            MouseArea {
+            /*MouseArea {
                 readonly property string settingsUrl : accountWorkers.accountInfoCommandQueue.providerSettingsUrl()
                 width: parent.width - paddingSmall*2
                 height: !visible ? 0 : settingsButton.font.pixelSize + paddingTiny
@@ -298,7 +305,7 @@ Page {
                     console.log("Opening: " + settingsUrl)
                     Qt.openUrlExternally(settingsUrl)
                 }
-            }
+            }*/
         }
     }
 

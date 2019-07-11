@@ -126,7 +126,8 @@ enum GCTargetOs {
     GENERIC = 0,
     ANDROID_OS,
     IOS,
-    UBUNTU_TOUCH
+    UBUNTU_TOUCH,
+    MACOS
 };
 
 int main(int argc, char *argv[])
@@ -222,6 +223,9 @@ int main(int argc, char *argv[])
 #elif defined(GHOSTCLOUD_UBUNTU_TOUCH)
     const int headerBarSize = 48;
     const GCTargetOs targetOs = GCTargetOs::UBUNTU_TOUCH;
+#elif defined(Q_OS_MAC)
+    const int headerBarSize = 38;
+    const GCTargetOs targetOs = GCTargetOs::MACOS;
 #else
     const int headerBarSize = 38;
     const GCTargetOs targetOs = GCTargetOs::GENERIC;

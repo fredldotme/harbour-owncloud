@@ -33,6 +33,7 @@ ApplicationWindow {
     readonly property bool osIsAndroid : targetOs === 1
     readonly property bool osIsIOS : targetOs === 2
     readonly property bool osIsUbuntuTouch : targetOs === 3
+    readonly property bool osIsMacOs : targetOs === 4
 
     readonly property alias pageStack : rootStack
     readonly property alias detailsStack : sideStack

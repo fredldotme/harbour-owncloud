@@ -28,6 +28,12 @@ contains(CONFIG, quickcontrols) {
         QMAKE_INFO_PLIST = $$PWD/ios/Info.plist
     }
 
+    macx {
+        info.path = Contents
+        info.files += $$PWD/macos/Info.plist
+        QMAKE_BUNDLE_DATA += info
+    }
+
     # OpenSSL for Android
     android {
         LIBS += -L $$OUT_PWD/../../3rdparty/openssl -lcrypto -lssl

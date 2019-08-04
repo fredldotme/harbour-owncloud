@@ -64,7 +64,11 @@ AbstractButton {
     MouseArea {
         id: mouseArea
         anchors.fill: parent
-        onClicked: buttonRoot.clicked()
+        onClicked: {
+            if (forcePressed || pressed)
+                return;
+            buttonRoot.clicked()
+        }
         enabled: buttonRoot.enabled
     }
 }

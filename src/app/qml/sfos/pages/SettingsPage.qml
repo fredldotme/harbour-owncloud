@@ -53,10 +53,18 @@ Page {
                 onClicked: accountWorkers.account.mobileUpload = checked
             }
 
-            Button {
+            Row {
                 anchors.horizontalCenter: parent.horizontalCenter
-                text: qsTr("Clear cache")
-                onClicked: accountWorkers.cacheProvider.clearCache()
+                spacing: Theme.paddingLarge
+                Button {
+                    text: qsTr("Clear cache")
+                    onClicked: accountWorkers.cacheProvider.clearCache()
+                }
+
+                Button {
+                    text: qsTr("Clear downloads")
+                    onClicked: accountWorkers.cacheProvider.clearDownloads()
+                }
             }
         }
     }

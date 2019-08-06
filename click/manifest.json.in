@@ -10,10 +10,6 @@
         "harbour-owncloud": {
             "apparmor": "harbour-owncloud.apparmor",
             "desktop": "harbour-owncloud.desktop"
-        },
-        "service": {
-            "apparmor": "harbour-owncloud-daemon.apparmor",
-            "desktop": "harbour-owncloud-daemon.desktop"
         }
     }
 }

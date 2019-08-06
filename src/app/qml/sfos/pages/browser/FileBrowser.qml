@@ -352,33 +352,52 @@ Page {
 
             property var davInfo : listView.model[index]
 
-            Image {
-                id: icon
-                source: davInfo.isDirectory ?
-                            "image://theme/icon-m-folder" :
-                            fileDetailsHelper.getIconFromMime(davInfo.mimeType)
-                anchors.left: parent.left
-                anchors.leftMargin: Theme.horizontalPageMargin
-                anchors.top: parent.top
-                anchors.topMargin: Theme.paddingSmall
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: Theme.paddingSmall
-                enabled: parent.enabled
-                fillMode: Image.PreserveAspectFit
-            }
+            Row {
+                id: mainEntryRow
+                anchors.fill: parent
+                anchors.margins: Theme.paddingMedium
+                spacing: Theme.paddingMedium
+                height: label.height + entryDetails.height
 
-            Label {
-                id: label
-                anchors.left: icon.right
-                anchors.leftMargin: Theme.paddingMedium
-                anchors.right: parent.right
-                enabled: parent.enabled
-                text: davInfo.name
-                anchors.verticalCenter: parent.verticalCenter
-                color: delegate.highlighted ?
-                           Theme.highlightColor :
-                           Theme.primaryColor
-                truncationMode: TruncationMode.Fade
+                Image {
+                    id: icon
+                    source: davInfo.isDirectory ?
+                                "image://theme/icon-m-folder" :
+                                fileDetailsHelper.getIconFromMime(davInfo.mimeType)
+                    enabled: parent.enabled
+                    fillMode: Image.PreserveAspectFit
+                    height: parent.height
+                }
+
+                Column {
+                    height: parent.height
+                    width: parent.width - icon.width
+
+                    Label {
+                        id: label
+                        enabled: parent.enabled
+                        text: davInfo.name
+                        color: delegate.highlighted ?
+                                   Theme.highlightColor :
+                                   Theme.primaryColor
+                        truncationMode: TruncationMode.Fade
+                        font.pixelSize: Theme.fontSizeSmall
+                    }
+
+                    Label {
+                        id: entryDetails
+                        enabled: parent.enabled
+                        text: fileDetailsHelper.getHRSize(davInfo.size)
+                              + (!davInfo.isDirectory ?
+                                     (", " +
+                                      Qt.formatDateTime(davInfo.lastModified, Qt.SystemLocaleShortDate)) : "")
+                        color: delegate.highlighted ?
+                                   Theme.highlightColor :
+                                   Theme.primaryColor
+                        truncationMode: TruncationMode.Fade
+                        font.pixelSize: Theme.fontSizeExtraSmall
+                    }
+                }
             }
 
             function showDetails() {

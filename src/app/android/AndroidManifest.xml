@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<manifest package="me.fredl.ghostcloud" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="0.9.5" android:versionCode="2" android:installLocation="auto">
+<manifest package="me.fredl.ghostcloud" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="0.9.5" android:versionCode="3" android:installLocation="auto">
     <application android:hardwareAccelerated="true" android:name="org.qtproject.qt5.android.bindings.QtApplication" android:label="GhostCloud" android:icon="@drawable/icon">
-        <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density"
+        <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|locale|fontScale|keyboard|keyboardHidden|navigation"
             android:name="org.qtproject.qt5.android.bindings.QtActivity" android:label="GhostCloud"
             android:screenOrientation="sensor" android:launchMode="singleTop">
             <intent-filter>

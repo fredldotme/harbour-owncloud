@@ -16,11 +16,11 @@ Name:       harbour-owncloud
 %{!?qtc_make:%define qtc_make make}
 %{?qtc_builddir:%define _builddir %qtc_builddir}
 Summary:    ownCloud
-Version:    0.9.1
+Version:    0.9.5
 Release:    1
 Group:      Qt/Qt
 License:    GPLv2
-URL:        https://github.com/beidl/harbour-owncloud
+URL:        https://github.com/fredldotme/harbour-owncloud
 Source0:    %{name}-%{version}.tar.bz2
 Source100:  harbour-owncloud.yaml
 Requires:   sailfishsilica-qt5 >= 0.10.9

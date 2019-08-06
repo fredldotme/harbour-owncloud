@@ -63,6 +63,10 @@
         <source>KDE Breeze Icon Theme (LGPL v2.1)</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>libqtcommandqueue (LGPL v2.1)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>AccountSelection</name>
@@ -327,10 +331,6 @@
     </message>
     <message>
         <source>Details</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit user info</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

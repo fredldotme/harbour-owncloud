@@ -1,3 +1,8 @@
+0.9.5:
+"Clear downloads" & "Clear cache" buttons in the account settings page
+SailfishOS: Fix free space hint
+SailfishOS: Fix showing the avatar button
+
 0.9.4:
 Show the 'Download' button on Ubuntu Touch
 Fix "Free space" information
@@ -11,6 +16,16 @@ Use the File Manager to select file to upload
 Account settings page with "Clear cache" functionality
 Show Transfer, About & new account dialogs as overlays
 Improve layout/visibility of custom SSL error dialogs
+
+0.9.2:
+SailfishOS: External storage support in the backup daemon
+Ubuntu Touch: Support system theme icons
+
+0.9.1:
+Fix custom certificate dialog
+
+0.9.0:
+Support for multiple accounts
 
 0.8.1:
 Adapt branding and fix ShareUI directory browsing

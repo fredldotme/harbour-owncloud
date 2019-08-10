@@ -1,231 +1,231 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>About</name>
     <message>
         <source>Donation</source>
-        <translation type="unfinished"></translation>
+        <translation>Faire un don</translation>
     </message>
     <message>
         <source>Copyright notices</source>
-        <translation type="unfinished"></translation>
+        <translation>Notes sur le droit d'auteur</translation>
     </message>
     <message>
         <source>QWebDAV library (qwebdavlib) version 1.0 (LGPL v2.1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Bibliothèque QWebDAV (qwebdavlib) version 1.0 (LGPL v2.1)</translation>
     </message>
     <message>
         <source>Licensed under GPL v2</source>
-        <translation type="unfinished"></translation>
+        <translation>Licenciée sous les termes de la GPL v2</translation>
     </message>
     <message>
         <source>Source code on GitHub</source>
-        <translation type="unfinished"></translation>
+        <translation>Code source sur GitHub</translation>
     </message>
     <message>
         <source>Via PayPal</source>
-        <translation type="unfinished"></translation>
+        <translation>Via PayPal</translation>
     </message>
     <message>
         <source>Via Flattr</source>
-        <translation type="unfinished"></translation>
+        <translation>Via Flattr</translation>
     </message>
     <message>
         <source>SailfishUiSet UI components (GPL v2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Composants d'IU SailfishUiSet (GPL v2)</translation>
     </message>
     <message>
         <source>About GhostCloud</source>
-        <translation type="unfinished"></translation>
+        <translation>À propos de GhostCloud</translation>
     </message>
     <message>
         <source>GhostCloud</source>
-        <translation type="unfinished"></translation>
+        <translation>GhostCloud</translation>
     </message>
     <message>
         <source>Icon based on &quot;Cute clouds for CSS sprites&quot; by Yug (CC BY-SA 3.0)</source>
-        <translation type="unfinished"></translation>
+        <translation>Icône basée sur « Cute clouds for CSS sprites » par Yug (CC BY-SA 3.0)</translation>
     </message>
     <message>
         <source>Easily access your Nextcloud, ownCloud and WebDav instances with a native Free Software application</source>
-        <translation type="unfinished"></translation>
+        <translation>Accédez facilement à vos instances Nextcloud, ownCloud et WebDav via une application native libre</translation>
     </message>
     <message>
         <source>Easily access your Nextcloud, ownCloud and WebDav instances with a native, multi-platform Free Software application</source>
-        <translation type="unfinished"></translation>
+        <translation>Accédez facilement à vos instances Nextcloud, ownCloud et WebDav via une application native, libre et multiplateformes</translation>
     </message>
     <message>
         <source>QmlUiSet UI components (LGPL v2.1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Composants d'IU QmlUiSet (LGPL v2.1)</translation>
     </message>
     <message>
         <source>KDE Breeze Icon Theme (LGPL v2.1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Thème d'icônes KDE Breeze (LGPL v2.1)</translation>
     </message>
     <message>
         <source>libqtcommandqueue (LGPL v2.1)</source>
-        <translation type="unfinished"></translation>
+        <translation>libqtcommandqueue (LGPL v2.1)</translation>
     </message>
 </context>
 <context>
     <name>AccountSelection</name>
     <message>
         <source>Remove account</source>
-        <translation type="unfinished"></translation>
+        <translation>Supprimer le compte</translation>
     </message>
     <message>
         <source>Add account...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajouter un compte...</translation>
     </message>
     <message>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>À propos</translation>
     </message>
     <message>
         <source>No accounts available. Please add an account to continue.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucun compte disponible. Veuillez en ajouter un pour continuer.</translation>
     </message>
     <message>
         <source>Removing account</source>
-        <translation type="unfinished"></translation>
+        <translation>Suppression du compte</translation>
     </message>
     <message>
         <source>Upload complete</source>
-        <translation type="unfinished">Téléversement fini</translation>
+        <translation>Téléversement terminé</translation>
     </message>
     <message>
         <source>%1 uploaded successfully</source>
-        <translation type="unfinished">%1 envoyé correctement</translation>
+        <translation>%1 téléversé avec succès</translation>
     </message>
     <message>
         <source>Upload failed!</source>
-        <translation type="unfinished">Échec de l’envoi</translation>
+        <translation>Échec du téléversement !</translation>
     </message>
     <message>
         <source>%1 couldn&apos;t be uploaded</source>
-        <translation type="unfinished">%1 n’a pas été envoyé</translation>
+        <translation>%1 n’a pas été téléversé</translation>
     </message>
     <message>
         <source>Download complete</source>
-        <translation type="unfinished">Téléchargement fini</translation>
+        <translation>Téléchargement terminé</translation>
     </message>
     <message>
         <source>%1 downloaded successfully</source>
-        <translation type="unfinished">%1 téléchargé correctement</translation>
+        <translation>%1 téléchargé avec succès</translation>
     </message>
     <message>
         <source>Download failed!</source>
-        <translation type="unfinished">Échec du téléchargement</translation>
+        <translation>Échec du téléchargement !</translation>
     </message>
     <message>
         <source>%1 couldn&apos;t be downloaded</source>
-        <translation type="unfinished">%1 n’a pas été téléchargé</translation>
+        <translation>%1 n’a pas été téléchargé</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished">Paramètres</translation>
+        <translation>Paramètres</translation>
     </message>
     <message>
         <source>Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>Paramètres...</translation>
     </message>
 </context>
 <context>
     <name>BasicAuthentication</name>
     <message>
         <source>Host address</source>
-        <translation type="unfinished">Adresse hôte</translation>
+        <translation>Adresse de l'hôte</translation>
     </message>
     <message>
         <source>User name</source>
-        <translation type="unfinished">Nom d’utilisateur</translation>
+        <translation>Identifiant</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished">Mot de passe</translation>
+        <translation>Mot de passe</translation>
     </message>
     <message>
         <source>Accept certificate</source>
-        <translation type="unfinished">Accepter le certificat</translation>
+        <translation>Accepter le certificat</translation>
     </message>
     <message>
         <source>Continue</source>
-        <translation type="unfinished">Continuer</translation>
+        <translation>Continuer</translation>
     </message>
     <message>
         <source>Invalid URL</source>
-        <translation type="unfinished">URL invalide</translation>
+        <translation>Lien invalide</translation>
     </message>
     <message>
         <source>Please check your host address</source>
-        <translation type="unfinished">Vérifiez l’adresse hôte</translation>
+        <translation>Veuillez vérifier l’adresse de l'hôte</translation>
     </message>
     <message>
         <source>Login failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec de la connexion</translation>
     </message>
     <message>
         <source>Please check your connection or try again later.</source>
-        <translation type="unfinished"></translation>
+        <translation>Veuillez vérifier votre connexion ou réessayer plus tard.</translation>
     </message>
     <message>
         <source>Provider:</source>
-        <translation type="unfinished"></translation>
+        <translation>Fournisseur :</translation>
     </message>
     <message>
         <source>Nextcloud/ownCloud</source>
-        <translation type="unfinished"></translation>
+        <translation>Nextcloud/ownCloud</translation>
     </message>
     <message>
         <source>WebDav</source>
-        <translation type="unfinished"></translation>
+        <translation>WebDav</translation>
     </message>
     <message>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>À propos</translation>
     </message>
 </context>
 <context>
     <name>BrowserCommandPageFlow</name>
     <message>
         <source>Failed to get remote content</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d'accéder au contenu distant</translation>
     </message>
     <message>
         <source>Please check your connection or try again later.</source>
-        <translation type="unfinished"></translation>
+        <translation>Veuillez vérifier votre connexion ou réessayer plus tard.</translation>
     </message>
     <message>
         <source>Operation failed</source>
-        <translation type="unfinished"></translation>
+        <translation>L'opération a échoué</translation>
     </message>
     <message>
         <source>Would you like to remove the existing file &apos;%1&apos; before starting the download?</source>
-        <translation type="unfinished"></translation>
+        <translation>Voulez-vous supprimer le fichier « %1 » existant avant de commencer le téléchargement ?</translation>
     </message>
     <message>
         <source>Error occured</source>
-        <translation type="unfinished"></translation>
+        <translation>Une erreur s'est produite</translation>
     </message>
     <message>
         <source>Please check your credentials or try again later.</source>
-        <translation type="unfinished"></translation>
+        <translation>Veuillez vérifier vos identifiants ou réessayer plus tard.</translation>
     </message>
 </context>
 <context>
     <name>CoverPage</name>
     <message>
         <source>User:</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilisateur/trice :</translation>
     </message>
     <message>
         <source>Usage:</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilisation :</translation>
     </message>
     <message>
         <source>Total:</source>
-        <translation type="unfinished"></translation>
+        <translation>Total :</translation>
     </message>
 </context>
 <context>
@@ -236,15 +236,15 @@
     </message>
     <message>
         <source>Host address</source>
-        <translation type="unfinished">Adresse hôte</translation>
+        <translation>Adresse de l'hôte</translation>
     </message>
     <message>
         <source>Continue</source>
-        <translation type="unfinished">Continuer</translation>
+        <translation>Continuer</translation>
     </message>
     <message>
         <source>Manual configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuration manuelle</translation>
     </message>
 </context>
 <context>
@@ -255,7 +255,7 @@
     </message>
     <message>
         <source>File transfers</source>
-        <translation>Transfert de fichier</translation>
+        <translation>Transferts des fichiers</translation>
     </message>
     <message>
         <source>Upload</source>
@@ -263,75 +263,75 @@
     </message>
     <message>
         <source>Create directory</source>
-        <translation>Créer dossier</translation>
+        <translation>Créer un dossier</translation>
     </message>
     <message>
         <source>Directory name</source>
-        <translation type="unfinished">Nom du dossier</translation>
+        <translation>Nom du dossier</translation>
     </message>
     <message>
         <source>User:</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilisateur/trice :</translation>
     </message>
     <message>
         <source>Mail:</source>
-        <translation type="unfinished"></translation>
+        <translation>Courriel :</translation>
     </message>
     <message>
         <source>Usage:</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilisation :</translation>
     </message>
     <message>
         <source>Total:</source>
-        <translation type="unfinished"></translation>
+        <translation>Total :</translation>
     </message>
     <message>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>À propos</translation>
     </message>
     <message>
         <source>Folder is empty</source>
-        <translation type="unfinished"></translation>
+        <translation>Ce dossier est vide</translation>
     </message>
     <message>
         <source>Enter directory name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Saisissez un nom de dossier :</translation>
     </message>
     <message>
         <source>Enter new name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Saisissez un nouveau nom :</translation>
     </message>
     <message>
         <source>Free:</source>
-        <translation type="unfinished"></translation>
+        <translation>Libre :</translation>
     </message>
     <message>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation type="unfinished">Télécharger</translation>
+        <translation>Télécharger</translation>
     </message>
     <message>
         <source>Rename</source>
-        <translation type="unfinished"></translation>
+        <translation>Renommer</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished">Copier</translation>
+        <translation>Copier</translation>
     </message>
     <message>
         <source>Move</source>
-        <translation type="unfinished">Déplacer</translation>
+        <translation>Déplacer</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished">Supprimer</translation>
+        <translation>Supprimer</translation>
     </message>
     <message>
         <source>Details</source>
-        <translation type="unfinished">Détails</translation>
+        <translation>Détails</translation>
     </message>
 </context>
 <context>
@@ -366,59 +366,59 @@
     </message>
     <message>
         <source>Created at:</source>
-        <translation type="unfinished"></translation>
+        <translation>Créé le :</translation>
     </message>
     <message>
         <source>Entity tag:</source>
-        <translation type="unfinished"></translation>
+        <translation>Balise de l'entité :</translation>
     </message>
     <message>
         <source>File ID:</source>
-        <translation type="unfinished"></translation>
+        <translation>Identifiant du fichier :</translation>
     </message>
     <message>
         <source>Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Répertoire</translation>
     </message>
     <message>
         <source>The file &apos;%1&apos; already exists. Would you like to overwrite it?</source>
-        <translation type="unfinished"></translation>
+        <translation>Le fichier « %1 » existe déjà. Voulez-vous vraiment l'écraser ?</translation>
     </message>
     <message>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir</translation>
     </message>
 </context>
 <context>
     <name>FileOperationsContextMenu</name>
     <message>
         <source>Rename</source>
-        <translation type="unfinished"></translation>
+        <translation>Renommer</translation>
     </message>
     <message>
         <source>New name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nouveau nom</translation>
     </message>
     <message>
         <source>Move</source>
-        <translation type="unfinished">Déplacer</translation>
+        <translation>Déplacer</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished">Copier</translation>
+        <translation>Copier</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished">Supprimer</translation>
+        <translation>Supprimer</translation>
     </message>
     <message>
         <source>Deleting</source>
         <comment>RemorseItem text</comment>
-        <translation type="unfinished">Suppresion</translation>
+        <translation>Suppresion</translation>
     </message>
     <message>
         <source>Details</source>
-        <translation type="unfinished">Détails</translation>
+        <translation>Détails</translation>
     </message>
 </context>
 <context>
@@ -437,15 +437,15 @@
     </message>
     <message>
         <source>Would you like to accept the certificate?</source>
-        <translation type="unfinished"></translation>
+        <translation>Voulez-vous accepter le certificat ?</translation>
     </message>
     <message>
         <source>MD5: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>MD5 : %1</translation>
     </message>
     <message>
         <source>SHA1: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>SHA1 : %1</translation>
     </message>
 </context>
 <context>
@@ -461,24 +461,24 @@
     <message>
         <source>Automatically save camera photos to your ownCloud instance when on WiFi</source>
         <comment>Camera photo backups escription</comment>
-        <translation>Sauvegarder automatiquement les photos sur votre instance ownCloud en WiFi</translation>
+        <translation>Sauvegarder automatiquement les photos sur votre instance ownCloud lorsque vous êtes en Wi-Fi</translation>
     </message>
     <message>
         <source>Photo backups via mobile internet connection</source>
-        <translation>Sauvegardes des photos via connexion Internet mobile</translation>
+        <translation>Sauvegardes des photos via une connexion internet mobile</translation>
     </message>
     <message>
         <source>Also automatically backup camera photos when connected via 2G, 3G or LTE</source>
         <comment>hoto backups via mobile internet connection description</comment>
-        <translation>Sauvegarder aussi automatiquement les photos via 2G, 3G ou LTE</translation>
+        <translation>Sauvegarder aussi automatiquement les photos lorsque vous êtes en 2G, 3G ou 4G</translation>
     </message>
     <message>
         <source>Clear cache</source>
-        <translation type="unfinished"></translation>
+        <translation>Vider le cache</translation>
     </message>
     <message>
         <source>Clear downloads</source>
-        <translation type="unfinished"></translation>
+        <translation>Supprimer les téléchargements</translation>
     </message>
 </context>
 <context>
@@ -489,11 +489,11 @@
     </message>
     <message>
         <source>File transfers</source>
-        <translation>Transfert de fichiers</translation>
+        <translation>Transferts de fichiers</translation>
     </message>
     <message>
         <source>Camera backup in progress...</source>
-        <translation>Sauvegarde des photo en cours...</translation>
+        <translation>Sauvegarde des photos en cours...</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -501,92 +501,92 @@
     </message>
     <message>
         <source>Open: &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir : « %1 »</translation>
     </message>
 </context>
 <context>
     <name>UbuntuContentHubOpener</name>
     <message>
         <source>Open &apos;%1&apos; with</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir « %1 » avec</translation>
     </message>
 </context>
 <context>
     <name>WebDavAccountDialog</name>
     <message>
         <source>Login failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec de la connexion</translation>
     </message>
     <message>
         <source>Please check your connection or try again later.</source>
-        <translation type="unfinished"></translation>
+        <translation>Veuillez vérifier votre connexion ou réessayer plus tard.</translation>
     </message>
     <message>
         <source>Host address</source>
-        <translation type="unfinished">Adresse hôte</translation>
+        <translation>Adresse de l'hôte</translation>
     </message>
     <message>
         <source>User name</source>
-        <translation type="unfinished">Nom d’utilisateur</translation>
+        <translation>Identifiant</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished">Mot de passe</translation>
+        <translation>Mot de passe</translation>
     </message>
     <message>
         <source>Provider:</source>
-        <translation type="unfinished"></translation>
+        <translation>Fournisseur :</translation>
     </message>
     <message>
         <source>Nextcloud/ownCloud</source>
-        <translation type="unfinished"></translation>
+        <translation>Nextcloud/ownCloud</translation>
     </message>
     <message>
         <source>WebDav</source>
-        <translation type="unfinished"></translation>
+        <translation>WebDav</translation>
     </message>
     <message>
         <source>Accept certificate</source>
-        <translation type="unfinished">Accepter le certificat</translation>
+        <translation>Accepter le certificat</translation>
     </message>
     <message>
         <source>Continue</source>
-        <translation type="unfinished">Continuer</translation>
+        <translation>Continuer</translation>
     </message>
     <message>
         <source>Invalid URL</source>
-        <translation type="unfinished">URL invalide</translation>
+        <translation>Lien invalide</translation>
     </message>
     <message>
         <source>Please check your host address</source>
-        <translation type="unfinished">Vérifiez l’adresse hôte</translation>
+        <translation>Veuillez vérifier l’adresse de l'hôte</translation>
     </message>
 </context>
 <context>
     <name>main</name>
     <message>
         <source>Transfers</source>
-        <translation type="unfinished"></translation>
+        <translation>Transferts</translation>
     </message>
     <message>
         <source>Add account</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajouter un compte</translation>
     </message>
     <message>
         <source>About GhostCloud</source>
-        <translation type="unfinished"></translation>
+        <translation>À propos de GhostCloud</translation>
     </message>
     <message>
         <source>No account available yet. Please add an account to continue.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucun compte disponible pour le moment. Veuillez en ajouter un pour continuer.</translation>
     </message>
     <message>
         <source>Upload file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Téléversement du fichier...</translation>
     </message>
     <message>
         <source>New folder...</source>
-        <translation type="unfinished"></translation>
+        <translation>Nouveau dossier...</translation>
     </message>
 </context>
 </TS>

@@ -138,7 +138,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>User name</source>
+        <source>Username</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

@@ -108,7 +108,7 @@ Dialog {
                 width: parent.width
                 text: clientSettings.username;
                 inputMethodHints: Qt.ImhNoAutoUppercase
-                placeholderText: qsTr("User name")
+                placeholderText: qsTr("Username")
             }
 
             TextField {

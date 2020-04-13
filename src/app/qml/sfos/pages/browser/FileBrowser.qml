@@ -349,15 +349,14 @@ Page {
         delegate: ListItem {
             id: delegate
             enabled: (__listCommand === null)
+            contentHeight: mainEntryItem.height
 
             property var davInfo : listView.model[index]
 
-            Row {
-                id: mainEntryRow
-                anchors.fill: parent
-                anchors.margins: Theme.paddingMedium
-                spacing: Theme.paddingMedium
-                height: label.height + entryDetails.height
+            Item {
+                id: mainEntryItem
+                width: parent.width
+                height: itemLabel.height + entryDetails.height + Theme.paddingSmall
 
                 Image {
                     id: icon
@@ -366,15 +365,29 @@ Page {
                                 fileDetailsHelper.getIconFromMime(davInfo.mimeType)
                     enabled: parent.enabled
                     fillMode: Image.PreserveAspectFit
-                    height: parent.height
+                    height: Math.min(Theme.iconSizeMedium, parent.height)
+                    width: height
+                    anchors {
+                        left: parent.left
+                        verticalCenter: parent.verticalCenter
+                        leftMargin: Theme.paddingSmall
+                    }
                 }
-
-                Column {
-                    height: parent.height
-                    width: parent.width - icon.width
+                Item {
+                    anchors {
+                        left: icon.right
+                        right: parent.right
+                        verticalCenter: parent.verticalCenter
+                        leftMargin: Theme.paddingSmall
+                    }
+                    height: itemLabel.height + entryDetails.height
 
                     Label {
-                        id: label
+                        id: itemLabel
+                        anchors {
+                            left: parent.left
+                            top: parent.top
+                        }
                         enabled: parent.enabled
                         text: davInfo.name
                         color: delegate.highlighted ?
@@ -385,6 +398,10 @@ Page {
                     }
 
                     Label {
+                        anchors {
+                            left: parent.left
+                            top: itemLabel.bottom
+                        }
                         id: entryDetails
                         enabled: parent.enabled
                         text: fileDetailsHelper.getHRSize(davInfo.size)

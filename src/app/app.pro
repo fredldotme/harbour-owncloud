@@ -126,8 +126,10 @@ lupdate_only {
 CONFIG += sailfishapp_i18n
 TRANSLATIONS += \
     translations/harbour-owncloud-de.ts \
+    translations/harbour-owncloud-fr.ts \
     translations/harbour-owncloud-sl.ts \
-    translations/harbour-owncloud-fr.ts
+    translations/harbour-owncloud-sv.ts \
+    translations/harbour-owncloud-zh_CN.ts
 
 icon86.files += icons/86x86/harbour-owncloud.png
 icon86.path = /usr/share/icons/hicolor/86x86/apps

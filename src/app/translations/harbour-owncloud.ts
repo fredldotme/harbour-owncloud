@@ -531,10 +531,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>User name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
@@ -564,6 +560,10 @@
     </message>
     <message>
         <source>Please check your host address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Username</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

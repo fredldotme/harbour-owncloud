@@ -130,16 +130,17 @@
         <source>Settings...</source>
         <translation></translation>
     </message>
+    <message>
+        <source>%1 on %2</source>
+        <comment>username on https://server:443/dav/</comment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BasicAuthentication</name>
     <message>
         <source>Host address</source>
         <translation>Serveradresse</translation>
-    </message>
-    <message>
-        <source>User name</source>
-        <translation>Benutzername</translation>
     </message>
     <message>
         <source>Password</source>
@@ -184,6 +185,10 @@
     <message>
         <source>About</source>
         <translation>Über</translation>
+    </message>
+    <message>
+        <source>Username</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -526,10 +531,6 @@
         <translation>Serveradresse</translation>
     </message>
     <message>
-        <source>User name</source>
-        <translation>Benutzername</translation>
-    </message>
-    <message>
         <source>Password</source>
         <translation>Passwort</translation>
     </message>
@@ -560,6 +561,10 @@
     <message>
         <source>Please check your host address</source>
         <translation>Bitte überprüfe deine Serveradresse</translation>
+    </message>
+    <message>
+        <source>Username</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

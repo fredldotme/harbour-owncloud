@@ -63,6 +63,10 @@
         <source>KDE Breeze Icon Theme (LGPL v2.1)</source>
         <translation>KDE Breeze ikontema (LGPL v2.1)</translation>
     </message>
+    <message>
+        <source>libqtcommandqueue (LGPL v2.1)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>AccountSelection</name>
@@ -122,16 +126,21 @@
         <source>Settings</source>
         <translation>Inställningar</translation>
     </message>
+    <message>
+        <source>Settings...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 on %2</source>
+        <comment>username on https://server:443/dav/</comment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BasicAuthentication</name>
     <message>
         <source>Host address</source>
         <translation>Värdadress</translation>
-    </message>
-    <message>
-        <source>User name</source>
-        <translation>Användarnamn</translation>
     </message>
     <message>
         <source>Password</source>
@@ -177,6 +186,10 @@
         <source>About</source>
         <translation>Om</translation>
     </message>
+    <message>
+        <source>Username</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BrowserCommandPageFlow</name>
@@ -203,13 +216,6 @@
     <message>
         <source>Please check your credentials or try again later.</source>
         <translation>Kontrollera dina inloggningsuppgifter, eller försök senare.</translation>
-    </message>
-</context>
-<context>
-    <name>ContentHubOpener</name>
-    <message>
-        <source>Open &apos;%1&apos; with</source>
-        <translation>Öppna &quot;%1&quot; med</translation>
     </message>
 </context>
 <context>
@@ -454,16 +460,6 @@
         <translation>Inställningar</translation>
     </message>
     <message>
-        <source>Automatically log in to your ownCloud server when starting the app</source>
-        <comment>Login automatically description</comment>
-        <translation>Logga in automatiskt, till din ownCloud-server, när appen startas.</translation>
-    </message>
-    <message>
-        <source>Show global notifications when transfering files</source>
-        <comment>Notifications description</comment>
-        <translation>Visa övergripande meddelanden vid filöverföring</translation>
-    </message>
-    <message>
         <source>Camera photo backups</source>
         <translation>Säkerhetskopior av foton</translation>
     </message>
@@ -486,8 +482,8 @@
         <translation>Rensa cachen</translation>
     </message>
     <message>
-        <source>OK</source>
-        <translation>OK</translation>
+        <source>Clear downloads</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -514,6 +510,13 @@
     </message>
 </context>
 <context>
+    <name>UbuntuContentHubOpener</name>
+    <message>
+        <source>Open &apos;%1&apos; with</source>
+        <translation type="unfinished">Öppna &quot;%1&quot; med</translation>
+    </message>
+</context>
+<context>
     <name>WebDavAccountDialog</name>
     <message>
         <source>Login failed</source>
@@ -526,10 +529,6 @@
     <message>
         <source>Host address</source>
         <translation>Värdadress</translation>
-    </message>
-    <message>
-        <source>User name</source>
-        <translation>Användarnamn</translation>
     </message>
     <message>
         <source>Password</source>
@@ -563,6 +562,10 @@
         <source>Please check your host address</source>
         <translation>Kontrollera värdadressen</translation>
     </message>
+    <message>
+        <source>Username</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>main</name>
@@ -581,6 +584,14 @@
     <message>
         <source>No account available yet. Please add an account to continue.</source>
         <translation>Inget konto tillgängligt. Lägg till ett konto för att fortsätta.</translation>
+    </message>
+    <message>
+        <source>Upload file...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New folder...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

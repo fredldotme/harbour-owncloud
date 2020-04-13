@@ -126,6 +126,7 @@ lupdate_only {
 CONFIG += sailfishapp_i18n
 TRANSLATIONS += \
     translations/harbour-owncloud-de.ts \
+    translations/harbour-owncloud-fi.ts \
     translations/harbour-owncloud-fr.ts \
     translations/harbour-owncloud-sl.ts \
     translations/harbour-owncloud-sv.ts \

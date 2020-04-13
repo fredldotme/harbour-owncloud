@@ -100,9 +100,7 @@ Page {
 
                 Label {
                     id: userLabel
-                    text: delegateAccountWorkers.account.username
-                          + " on "
-                          + delegateAccountWorkers.account.hoststring
+                    text: qsTr("%1 on %2", "username on https://server:443/dav/").arg(delegateAccountWorkers.account.username).arg(delegateAccountWorkers.account.hoststring)
                     font.pixelSize: Theme.fontSizeSmall
                     enabled: __listCommand == null
                     elide: Label.ElideRight

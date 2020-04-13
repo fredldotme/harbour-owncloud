@@ -130,6 +130,11 @@
         <source>Settings...</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>%1 on %2</source>
+        <comment>username on https://server:443/dav/</comment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BasicAuthentication</name>

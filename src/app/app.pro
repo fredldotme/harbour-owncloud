@@ -133,13 +133,7 @@ TRANSLATIONS += \
     translations/harbour-owncloud-sv.ts \
     translations/harbour-owncloud-zh_CN.ts
 
-icon86.files += icons/86x86/harbour-owncloud.png
-icon86.path = /usr/share/icons/hicolor/86x86/apps
-
-icon128.files += icons/128x128/harbour-owncloud.png
-icon128.path = /usr/share/icons/hicolor/128x128/apps
-
-INSTALLS += icon86 icon128
+SAILFISHAPP_ICONS = 86x86 108x108 128x128 172x172
 
 DEFINES += QWEBDAVITEM_EXTENDED_PROPERTIES
 

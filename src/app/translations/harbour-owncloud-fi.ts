@@ -427,6 +427,25 @@
     </message>
 </context>
 <context>
+    <name>FileSelectionDialog</name>
+    <message>
+        <source>Storage:</source>
+        <translation>Sijainti:</translation>
+    </message>
+    <message>
+        <source>Home directory</source>
+        <translation>Kotihakemisto</translation>
+    </message>
+    <message>
+        <source>External storage</source>
+        <translation>Ulkoinen tallennustila</translation>
+    </message>
+    <message>
+        <source>External storage (2)</source>
+        <translation>Ulkoinen tallennustila (2)</translation>
+    </message>
+</context>
+<context>
     <name>SSLErrorDialog</name>
     <message>
         <source>Do you want to accept this certificate?</source>

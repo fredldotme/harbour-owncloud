@@ -429,6 +429,25 @@
     </message>
 </context>
 <context>
+    <name>FileSelectionDialog</name>
+    <message>
+        <source>Storage:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Home directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>External storage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>External storage (2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>SSLErrorDialog</name>
     <message>
         <source>Do you want to accept this certificate?</source>

@@ -118,7 +118,8 @@ lupdate_only {
         qml/pages/SSLErrorDialog.qml \
         qml/pages/SettingsPage.qml \
         qml/pages/TransferPage.qml \
-        qml/pages/RemoteDirSelectDialog.qml
+        qml/pages/RemoteDirSelectDialog.qml \
+        qml/dummy/FileSelectionDialog.qml
 }
 
 # to disable building translations every time, comment out the

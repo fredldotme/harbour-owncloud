@@ -66,6 +66,10 @@ Page {
             }
         }
 
+        header: PageHeader {
+            title: "GhostCloud"
+        }
+
         delegate: ListItem {
             width: ListView.view.width
             enabled: __listCommand === null

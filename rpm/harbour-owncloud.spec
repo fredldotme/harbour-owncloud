@@ -20,7 +20,7 @@ Version:    0.9.5
 Release:    1
 Group:      Qt/Qt
 License:    GPLv2
-URL:        https://github.com/fredldotme/harbour-owncloud
+URL:        https://github.com/beidl/harbour-owncloud
 Source0:    %{name}-%{version}.tar.bz2
 Source100:  harbour-owncloud.yaml
 Requires:   sailfishsilica-qt5 >= 0.10.9

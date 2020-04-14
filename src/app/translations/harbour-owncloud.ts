@@ -130,6 +130,11 @@
         <source>Settings...</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>%1 on %2</source>
+        <comment>username on https://server:443/dav/</comment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BasicAuthentication</name>
@@ -422,6 +427,25 @@
     </message>
 </context>
 <context>
+    <name>FileSelectionDialog</name>
+    <message>
+        <source>Storage:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Home directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>External storage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>External storage (2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>SSLErrorDialog</name>
     <message>
         <source>Do you want to accept this certificate?</source>
@@ -526,10 +550,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>User name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
@@ -559,6 +579,10 @@
     </message>
     <message>
         <source>Please check your host address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Username</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

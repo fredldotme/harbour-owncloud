@@ -9,7 +9,7 @@
     </message>
     <message>
         <source>Copyright notices</source>
-        <translation>Notes sur le droit d'auteur</translation>
+        <translation>Notes sur le droit d&apos;auteur</translation>
     </message>
     <message>
         <source>QWebDAV library (qwebdavlib) version 1.0 (LGPL v2.1)</source>
@@ -33,7 +33,7 @@
     </message>
     <message>
         <source>SailfishUiSet UI components (GPL v2)</source>
-        <translation>Composants d'IU SailfishUiSet (GPL v2)</translation>
+        <translation>Composants d&apos;IU SailfishUiSet (GPL v2)</translation>
     </message>
     <message>
         <source>About GhostCloud</source>
@@ -57,11 +57,11 @@
     </message>
     <message>
         <source>QmlUiSet UI components (LGPL v2.1)</source>
-        <translation>Composants d'IU QmlUiSet (LGPL v2.1)</translation>
+        <translation>Composants d&apos;IU QmlUiSet (LGPL v2.1)</translation>
     </message>
     <message>
         <source>KDE Breeze Icon Theme (LGPL v2.1)</source>
-        <translation>Thème d'icônes KDE Breeze (LGPL v2.1)</translation>
+        <translation>Thème d&apos;icônes KDE Breeze (LGPL v2.1)</translation>
     </message>
     <message>
         <source>libqtcommandqueue (LGPL v2.1)</source>
@@ -130,16 +130,17 @@
         <source>Settings...</source>
         <translation>Paramètres...</translation>
     </message>
+    <message>
+        <source>%1 on %2</source>
+        <comment>username on https://server:443/dav/</comment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BasicAuthentication</name>
     <message>
         <source>Host address</source>
-        <translation>Adresse de l'hôte</translation>
-    </message>
-    <message>
-        <source>User name</source>
-        <translation>Identifiant</translation>
+        <translation>Adresse de l&apos;hôte</translation>
     </message>
     <message>
         <source>Password</source>
@@ -159,7 +160,7 @@
     </message>
     <message>
         <source>Please check your host address</source>
-        <translation>Veuillez vérifier l’adresse de l'hôte</translation>
+        <translation>Veuillez vérifier l’adresse de l&apos;hôte</translation>
     </message>
     <message>
         <source>Login failed</source>
@@ -185,12 +186,16 @@
         <source>About</source>
         <translation>À propos</translation>
     </message>
+    <message>
+        <source>Username</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BrowserCommandPageFlow</name>
     <message>
         <source>Failed to get remote content</source>
-        <translation>Impossible d'accéder au contenu distant</translation>
+        <translation>Impossible d&apos;accéder au contenu distant</translation>
     </message>
     <message>
         <source>Please check your connection or try again later.</source>
@@ -198,7 +203,7 @@
     </message>
     <message>
         <source>Operation failed</source>
-        <translation>L'opération a échoué</translation>
+        <translation>L&apos;opération a échoué</translation>
     </message>
     <message>
         <source>Would you like to remove the existing file &apos;%1&apos; before starting the download?</source>
@@ -206,7 +211,7 @@
     </message>
     <message>
         <source>Error occured</source>
-        <translation>Une erreur s'est produite</translation>
+        <translation>Une erreur s&apos;est produite</translation>
     </message>
     <message>
         <source>Please check your credentials or try again later.</source>
@@ -236,7 +241,7 @@
     </message>
     <message>
         <source>Host address</source>
-        <translation>Adresse de l'hôte</translation>
+        <translation>Adresse de l&apos;hôte</translation>
     </message>
     <message>
         <source>Continue</source>
@@ -370,7 +375,7 @@
     </message>
     <message>
         <source>Entity tag:</source>
-        <translation>Balise de l'entité :</translation>
+        <translation>Balise de l&apos;entité :</translation>
     </message>
     <message>
         <source>File ID:</source>
@@ -382,7 +387,7 @@
     </message>
     <message>
         <source>The file &apos;%1&apos; already exists. Would you like to overwrite it?</source>
-        <translation>Le fichier « %1 » existe déjà. Voulez-vous vraiment l'écraser ?</translation>
+        <translation>Le fichier « %1 » existe déjà. Voulez-vous vraiment l&apos;écraser ?</translation>
     </message>
     <message>
         <source>Open</source>
@@ -419,6 +424,25 @@
     <message>
         <source>Details</source>
         <translation>Détails</translation>
+    </message>
+</context>
+<context>
+    <name>FileSelectionDialog</name>
+    <message>
+        <source>Storage:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Home directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>External storage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>External storage (2)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -523,11 +547,7 @@
     </message>
     <message>
         <source>Host address</source>
-        <translation>Adresse de l'hôte</translation>
-    </message>
-    <message>
-        <source>User name</source>
-        <translation>Identifiant</translation>
+        <translation>Adresse de l&apos;hôte</translation>
     </message>
     <message>
         <source>Password</source>
@@ -559,7 +579,11 @@
     </message>
     <message>
         <source>Please check your host address</source>
-        <translation>Veuillez vérifier l’adresse de l'hôte</translation>
+        <translation>Veuillez vérifier l’adresse de l&apos;hôte</translation>
+    </message>
+    <message>
+        <source>Username</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

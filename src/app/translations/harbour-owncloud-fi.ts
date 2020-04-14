@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="sv">
+<TS version="2.1" language="fi_FI">
 <context>
     <name>About</name>
     <message>
         <source>Donation</source>
-        <translation>Donation</translation>
+        <translation>Lahjoitukset</translation>
     </message>
     <message>
         <source>Copyright notices</source>
-        <translation>Copyright-notiser</translation>
+        <translation>Tekijänoikeudet</translation>
     </message>
     <message>
         <source>QWebDAV library (qwebdavlib) version 1.0 (LGPL v2.1)</source>
-        <translation>QWebDAV-bibliotek (qwebdavlib) version 1.0 (LGPL v2.1)</translation>
+        <translation>QWebDAV-kirjasto (qwebdavlib) versio 1.0 (LGPL v2.1)</translation>
     </message>
     <message>
         <source>Licensed under GPL v2</source>
-        <translation>Licensierad under GPL v2</translation>
+        <translation>Lisenssi: GPLv2</translation>
     </message>
     <message>
         <source>Source code on GitHub</source>
-        <translation>Källkod på GitHub</translation>
+        <translation>Lähdekoodi GitHubissa</translation>
     </message>
     <message>
         <source>Via PayPal</source>
-        <translation>Via PayPal</translation>
+        <translation>PayPal</translation>
     </message>
     <message>
         <source>Via Flattr</source>
-        <translation>Via Flattr</translation>
+        <translation>Flattr</translation>
     </message>
     <message>
         <source>SailfishUiSet UI components (GPL v2)</source>
-        <translation>SailfishUiSet UI-komponenter (GPL v2)</translation>
+        <translation>SailfishUiSet UI -komponentit (GPL v2)</translation>
     </message>
     <message>
         <source>About GhostCloud</source>
-        <translation>Om GhostCloud</translation>
+        <translation>Tietoja GhostCloudista</translation>
     </message>
     <message>
         <source>GhostCloud</source>
@@ -45,134 +45,138 @@
     </message>
     <message>
         <source>Icon based on &quot;Cute clouds for CSS sprites&quot; by Yug (CC BY-SA 3.0)</source>
-        <translation>Ikon baserad på &quot;Cute clouds for CSS sprites&quot; av Yug (CC BY-SA 3.0)</translation>
+        <translation>Ikoni tehty &quot;Cute clouds for CSS sprites&quot; -kuvan pohjalta, alkuperäinen tekijä: Yug (CC BY-SA 3.0)</translation>
     </message>
     <message>
         <source>Easily access your Nextcloud, ownCloud and WebDav instances with a native Free Software application</source>
-        <translation>Anslut enkelt till dina Nextcloud-, ownCloud- och WebDav-instanser med ett systemanpassat och fritt program.</translation>
+        <translation>Käytä helposti Nextcloud-, ownCloud- ja WebDav-palveluitasi natiivilla ja vapaalla sovelluksella</translation>
     </message>
     <message>
         <source>Easily access your Nextcloud, ownCloud and WebDav instances with a native, multi-platform Free Software application</source>
-        <translation>Anslut enkelt till dina Nextcloud-, ownCloud- och WebDav-instanser med ett systemanpassat och fritt multiplattformsprogram.</translation>
+        <translation>Käytä helposti Nextcloud-, ownCloud- ja WebDav-palveluitasi natiivilla ja vapaalla usealla alustalla toimivalla sovelluksella</translation>
     </message>
     <message>
         <source>QmlUiSet UI components (LGPL v2.1)</source>
-        <translation>QmlUiSet UI-komponenter (LGPL v2.1)</translation>
+        <translation>QmlUiSet UI -komponentit (LGPL v2.1)</translation>
     </message>
     <message>
         <source>KDE Breeze Icon Theme (LGPL v2.1)</source>
-        <translation>KDE Breeze ikontema (LGPL v2.1)</translation>
+        <translation>KDE Breeze -kuvaketeema (LGPL v2.1)</translation>
     </message>
     <message>
         <source>libqtcommandqueue (LGPL v2.1)</source>
-        <translation type="unfinished"></translation>
+        <translation>libqtcommandqueue (LGPL v2.1)</translation>
     </message>
 </context>
 <context>
     <name>AccountSelection</name>
     <message>
         <source>Remove account</source>
-        <translation>Ta bort konto</translation>
+        <translation>Poista tili</translation>
     </message>
     <message>
         <source>Add account...</source>
-        <translation>Lägg till konto...</translation>
+        <translation>Lisää tili...</translation>
     </message>
     <message>
         <source>About</source>
-        <translation>Om</translation>
+        <translation>Tietoja</translation>
     </message>
     <message>
         <source>No accounts available. Please add an account to continue.</source>
-        <translation>Inga konton tillgängliga. Lägg till ett konto för att fortsätta.</translation>
+        <translation>Tilejä ei saatavilla. Lisää uusi tili aloittaaksesi käyttö.</translation>
     </message>
     <message>
         <source>Removing account</source>
-        <translation>Tar bort konto</translation>
+        <translation>Poistetaan tili</translation>
     </message>
     <message>
         <source>Upload complete</source>
-        <translation>Uppladdning slutförd</translation>
+        <translation>Lähetys valmis</translation>
     </message>
     <message>
         <source>%1 uploaded successfully</source>
-        <translation>%1 uppladdat</translation>
+        <translation>%1 lähetetty onnistuneesti</translation>
     </message>
     <message>
         <source>Upload failed!</source>
-        <translation>Uppladdning misslyckades!</translation>
+        <translation>Lähetys epäonnistui!</translation>
     </message>
     <message>
         <source>%1 couldn&apos;t be uploaded</source>
-        <translation>Kunde inte ladda upp %1</translation>
+        <translation>%1 ei voitu lähettää</translation>
     </message>
     <message>
         <source>Download complete</source>
-        <translation>Nerladdning slutförd</translation>
+        <translation>Lataus valmis</translation>
     </message>
     <message>
         <source>%1 downloaded successfully</source>
-        <translation>%1 nerladdat</translation>
+        <translation>%1 ladattu onnistuneesti</translation>
     </message>
     <message>
         <source>Download failed!</source>
-        <translation>Nerladdning misslyckades!</translation>
+        <translation>Lataus epäonnistui!</translation>
     </message>
     <message>
         <source>%1 couldn&apos;t be downloaded</source>
-        <translation>Kunde inte ladda ner %1</translation>
+        <translation>%1 ei voitu ladata</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>Inställningar</translation>
+        <translation>Asetukset</translation>
     </message>
     <message>
         <source>Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>Asetukset...</translation>
     </message>
     <message>
         <source>%1 on %2</source>
         <comment>username on https://server:443/dav/</comment>
-        <translation type="unfinished"></translation>
+        <translation>%1 palvelimella %2</translation>
     </message>
 </context>
 <context>
     <name>BasicAuthentication</name>
     <message>
         <source>Host address</source>
-        <translation>Värdadress</translation>
+        <translation>Palvelimen osoite</translation>
+    </message>
+    <message>
+        <source>Username</source>
+        <translation>Käyttäjänimi</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation>Lösenord</translation>
+        <translation>Salasana</translation>
     </message>
     <message>
         <source>Accept certificate</source>
-        <translation>Acceptera certifikat</translation>
+        <translation>Hyväksy sertifikaatti</translation>
     </message>
     <message>
         <source>Continue</source>
-        <translation>Fortsätt</translation>
+        <translation>Jatka</translation>
     </message>
     <message>
         <source>Invalid URL</source>
-        <translation>Ogiltig URL</translation>
+        <translation>URL ei kelpaa</translation>
     </message>
     <message>
         <source>Please check your host address</source>
-        <translation>Kontrollera värdadressen</translation>
+        <translation>Tarkista palvelimen osoite</translation>
     </message>
     <message>
         <source>Login failed</source>
-        <translation>Inloggning misslyckades</translation>
+        <translation>Kirjautuminen epäonnistui</translation>
     </message>
     <message>
         <source>Please check your connection or try again later.</source>
-        <translation>Kontrollera din anslutning eller försök senare.</translation>
+        <translation>Tarkista verkkoyhteytesi tai yritä myöhemmin uudelleen.</translation>
     </message>
     <message>
         <source>Provider:</source>
-        <translation>Protokoll:</translation>
+        <translation>Tyyppi:</translation>
     </message>
     <message>
         <source>Nextcloud/ownCloud</source>
@@ -184,53 +188,49 @@
     </message>
     <message>
         <source>About</source>
-        <translation>Om</translation>
-    </message>
-    <message>
-        <source>Username</source>
-        <translation type="unfinished"></translation>
+        <translation>Tietoja</translation>
     </message>
 </context>
 <context>
     <name>BrowserCommandPageFlow</name>
     <message>
         <source>Failed to get remote content</source>
-        <translation>Kunte inte hämta fjärrinnehåll</translation>
+        <translation>Sisällön lataaminen epäonnistui</translation>
     </message>
     <message>
         <source>Please check your connection or try again later.</source>
-        <translation>Kontrollera din anslutning eller försök senare.</translation>
+        <translation>Tarkista verkkoyhteytesi tai yritä myöhemmin uudelleen.</translation>
     </message>
     <message>
         <source>Operation failed</source>
-        <translation>Åtgärden misslyckades</translation>
+        <translation>Toiminto epäonnistui</translation>
     </message>
     <message>
         <source>Would you like to remove the existing file &apos;%1&apos; before starting the download?</source>
-        <translation>Vill du ta bort den befintliga filen &quot;%1&quot;, innan nerladdning påbörjas?</translation>
+        <translation>Haluatko poistaa olemassa olevan tiedoston &apos;%1&apos; ennen latauksen aloittamista?</translation>
     </message>
     <message>
         <source>Error occured</source>
-        <translation>Ett fel uppstod</translation>
+        <translation>Tapahtui virhe</translation>
     </message>
     <message>
         <source>Please check your credentials or try again later.</source>
-        <translation>Kontrollera dina inloggningsuppgifter, eller försök senare.</translation>
+        <translation>Tarkista kirjautumistietosi tai yritä myöhemmin uudelleen.</translation>
     </message>
 </context>
 <context>
     <name>CoverPage</name>
     <message>
         <source>User:</source>
-        <translation>Användare:</translation>
+        <translation>Käyttäjä:</translation>
     </message>
     <message>
         <source>Usage:</source>
-        <translation>Användning:</translation>
+        <translation>Käyttö:</translation>
     </message>
     <message>
         <source>Total:</source>
-        <translation>Totalt:</translation>
+        <translation>Yhteensä:</translation>
     </message>
 </context>
 <context>
@@ -241,227 +241,227 @@
     </message>
     <message>
         <source>Host address</source>
-        <translation>Värdadress</translation>
+        <translation>Palvelimen osoite</translation>
     </message>
     <message>
         <source>Continue</source>
-        <translation>Fortsätt</translation>
+        <translation>Jatka</translation>
     </message>
     <message>
         <source>Manual configuration</source>
-        <translation>Manuell konfiguration</translation>
+        <translation>Syötä asetukset</translation>
     </message>
 </context>
 <context>
     <name>FileBrowser</name>
     <message>
         <source>Refresh</source>
-        <translation>Uppdatera</translation>
+        <translation>Päivitä</translation>
     </message>
     <message>
         <source>File transfers</source>
-        <translation>Filöverföringar</translation>
+        <translation>Siirrot</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Uppladdning</translation>
+        <translation>Lähetä</translation>
     </message>
     <message>
         <source>Create directory</source>
-        <translation>Skapa mapp</translation>
+        <translation>Luo hakemisto</translation>
     </message>
     <message>
         <source>Directory name</source>
-        <translation>Mappnamn</translation>
+        <translation>Hakemistonimi</translation>
     </message>
     <message>
         <source>User:</source>
-        <translation>Användare:</translation>
+        <translation>Käyttäjä:</translation>
     </message>
     <message>
         <source>Mail:</source>
-        <translation>E-post:</translation>
+        <translation>Sähköposti:</translation>
     </message>
     <message>
         <source>Usage:</source>
-        <translation>Användning:</translation>
+        <translation>Käyttö:</translation>
     </message>
     <message>
         <source>Total:</source>
-        <translation>Totalt:</translation>
+        <translation>Yhteensä:</translation>
     </message>
     <message>
         <source>About</source>
-        <translation>Om</translation>
+        <translation>Tietoja</translation>
     </message>
     <message>
         <source>Folder is empty</source>
-        <translation>Mappen är tom</translation>
+        <translation>Tyhjä hakemisto</translation>
     </message>
     <message>
         <source>Enter directory name:</source>
-        <translation>Ange mappnamn:</translation>
+        <translation>Anna hakemistonimi:</translation>
     </message>
     <message>
         <source>Enter new name:</source>
-        <translation>Ange nytt namn:</translation>
+        <translation>Anna uusi nimi:</translation>
     </message>
     <message>
         <source>Free:</source>
-        <translation>Ledigt:</translation>
+        <translation>Vapaana:</translation>
     </message>
     <message>
         <source>Open</source>
-        <translation>Öppna</translation>
+        <translation>Avaa</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Ladda ner</translation>
+        <translation>Lataa</translation>
     </message>
     <message>
         <source>Rename</source>
-        <translation>Byt namn</translation>
+        <translation>Nimeä uudelleen</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation>Kopiera</translation>
+        <translation>Kopioi</translation>
     </message>
     <message>
         <source>Move</source>
-        <translation>Flytta</translation>
+        <translation>Siirrä</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Ta bort</translation>
+        <translation>Poista</translation>
     </message>
     <message>
         <source>Details</source>
-        <translation>Detaljerat</translation>
+        <translation>Tiedot</translation>
     </message>
 </context>
 <context>
     <name>FileDetails</name>
     <message>
         <source>Download</source>
-        <translation>Ladda ner</translation>
+        <translation>Lataa</translation>
     </message>
     <message>
         <source>Download and open</source>
-        <translation>Ladda ner och öppna</translation>
+        <translation>Lataa ja avaa</translation>
     </message>
     <message>
         <source>Details</source>
-        <translation>Detaljerat</translation>
+        <translation>Tiedot</translation>
     </message>
     <message>
         <source>File name:</source>
-        <translation>Filnamn:</translation>
+        <translation>Tiedostonimi:</translation>
     </message>
     <message>
         <source>Size:</source>
-        <translation>Storlek:</translation>
+        <translation>Koko:</translation>
     </message>
     <message>
         <source>Last modified:</source>
-        <translation>Ändrad:</translation>
+        <translation>Muokattu:</translation>
     </message>
     <message>
         <source>Type:</source>
-        <translation>Typ:</translation>
+        <translation>Typpi:</translation>
     </message>
     <message>
         <source>Created at:</source>
-        <translation>Skapad:</translation>
+        <translation>Luotu:</translation>
     </message>
     <message>
         <source>Entity tag:</source>
-        <translation>Enhetstagg:</translation>
+        <translation>Tunniste:</translation>
     </message>
     <message>
         <source>File ID:</source>
-        <translation>Fil-ID:</translation>
+        <translation>Tiedosto-ID:</translation>
     </message>
     <message>
         <source>Directory</source>
-        <translation>Mapp</translation>
+        <translation>Hakemisto</translation>
     </message>
     <message>
         <source>The file &apos;%1&apos; already exists. Would you like to overwrite it?</source>
-        <translation>Filen &quot;%1&quot; finns redan. Vill du skriva över den?</translation>
+        <translation>Tiedosto &apos;%1&apos; on jo olemassa. Korvataanko tiedosto?</translation>
     </message>
     <message>
         <source>Open</source>
-        <translation>Öppna</translation>
+        <translation>Avaa</translation>
     </message>
 </context>
 <context>
     <name>FileOperationsContextMenu</name>
     <message>
         <source>Rename</source>
-        <translation>By namn</translation>
+        <translation>Nimeä uudelleen</translation>
     </message>
     <message>
         <source>New name</source>
-        <translation>Nytt namn</translation>
+        <translation>Uusi nimi</translation>
     </message>
     <message>
         <source>Move</source>
-        <translation>Flytta</translation>
+        <translation>Siirrä</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation>Kopiera</translation>
+        <translation>Kopioi</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Ta bort</translation>
+        <translation>Poista</translation>
     </message>
     <message>
         <source>Deleting</source>
         <comment>RemorseItem text</comment>
-        <translation>Tar bort</translation>
+        <translation>Poistetaan</translation>
     </message>
     <message>
         <source>Details</source>
-        <translation>Detaljerat</translation>
+        <translation>Tiedot</translation>
     </message>
 </context>
 <context>
     <name>FileSelectionDialog</name>
     <message>
         <source>Storage:</source>
-        <translation type="unfinished"></translation>
+        <translation>Sijainti:</translation>
     </message>
     <message>
         <source>Home directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Kotihakemisto</translation>
     </message>
     <message>
         <source>External storage</source>
-        <translation type="unfinished"></translation>
+        <translation>Ulkoinen tallennustila</translation>
     </message>
     <message>
         <source>External storage (2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ulkoinen tallennustila (2)</translation>
     </message>
 </context>
 <context>
     <name>SSLErrorDialog</name>
     <message>
         <source>Do you want to accept this certificate?</source>
-        <translation>Vill du acceptera det här certifikatet?</translation>
+        <translation>Hyväksytäänkö tämä sertifikaatti?</translation>
     </message>
     <message>
         <source>MD5 fingerprint:</source>
-        <translation>MD5 fingeravtryck:</translation>
+        <translation>MD5-sormenjälki:</translation>
     </message>
     <message>
         <source>SHA1 fingerprint:</source>
-        <translation>SHA1 fingeravtryck:</translation>
+        <translation>SHA1-sormenjälki:</translation>
     </message>
     <message>
         <source>Would you like to accept the certificate?</source>
-        <translation>Vill du acceptera certifikatet?</translation>
+        <translation>Haluatko hyväksyä tämän sertifikaatin?</translation>
     </message>
     <message>
         <source>MD5: %1</source>
@@ -476,86 +476,87 @@
     <name>SettingsPage</name>
     <message>
         <source>Settings</source>
-        <translation>Inställningar</translation>
+        <translation>Asetukset</translation>
     </message>
     <message>
         <source>Camera photo backups</source>
-        <translation>Säkerhetskopior av foton</translation>
+        <translation>Valokuvien varmuuskopiointi</translation>
     </message>
     <message>
         <source>Automatically save camera photos to your ownCloud instance when on WiFi</source>
         <comment>Camera photo backups escription</comment>
-        <translation>Spara kamerabilder automatisk, på din ownCloud-instans, vid WiFi-anslutning.</translation>
+        <translatorcomment>Using &quot;server&quot; instead of &quot;ownCloud&quot;, and WLAN instead of WiFi.</translatorcomment>
+        <translation>Lähetä kameralla otetut kuvat automaattisesti palvelimelle, kun laite on WLAN-verkossa</translation>
     </message>
     <message>
         <source>Photo backups via mobile internet connection</source>
-        <translation>Säkerhetskopior av foton via mobil internetuppkoppling</translation>
+        <translation>Varmuuskopioi kuvat matkapuhelinverkon kautta</translation>
     </message>
     <message>
         <source>Also automatically backup camera photos when connected via 2G, 3G or LTE</source>
         <comment>hoto backups via mobile internet connection description</comment>
-        <translation>Spara kamerabilder automatisk, också vid anslutning över 2G, 3G eller LTE.</translation>
+        <translation>Käytä kuvien varmuuskopiointiin myös matkapuhelinverkon Internet-yhteyttä</translation>
     </message>
     <message>
         <source>Clear cache</source>
-        <translation>Rensa cachen</translation>
+        <translation>Tyhjennä välimuisti</translation>
     </message>
     <message>
         <source>Clear downloads</source>
-        <translation type="unfinished"></translation>
+        <translation>Tyhjennä lataukset</translation>
     </message>
 </context>
 <context>
     <name>TransferPage</name>
     <message>
         <source>No pending file transfers</source>
-        <translation>Inga väntande filöverföringar</translation>
+        <translation>Ei odottavia siirtoja</translation>
     </message>
     <message>
         <source>File transfers</source>
-        <translation>Filöverföringar</translation>
+        <translation>Tiedostosiirrot</translation>
     </message>
     <message>
         <source>Camera backup in progress...</source>
-        <translation>Säkerhetskopiering av kamerabilder pågår...</translation>
+        <translation>Kuvien varmuuskopiointi käynnissä...</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Avbryt</translation>
+        <translation>Peruuta</translation>
     </message>
     <message>
         <source>Open: &apos;%1&apos;</source>
-        <translation>Öppna &quot;%1&quot;</translation>
+        <translation>Avaa: &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
     <name>UbuntuContentHubOpener</name>
     <message>
         <source>Open &apos;%1&apos; with</source>
-        <translation type="unfinished">Öppna &quot;%1&quot; med</translation>
+        <translation>Avaa &apos;%1&apos; ohjelmalla</translation>
     </message>
 </context>
 <context>
     <name>WebDavAccountDialog</name>
     <message>
         <source>Login failed</source>
-        <translation>Inloggning misslyckades</translation>
+        <translation>Kirjautuminen epäonnistui</translation>
     </message>
     <message>
         <source>Please check your connection or try again later.</source>
-        <translation>Kontrollera din anslutning eller försök senare.</translation>
+        <translation>Tarkista verkkoyhteytesi tai yritä myöhemmin uudelleen.</translation>
     </message>
     <message>
         <source>Host address</source>
-        <translation>Värdadress</translation>
+        <translation>Palvelimen osoite</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation>Lösenord</translation>
+        <translation>Salasana</translation>
     </message>
     <message>
         <source>Provider:</source>
-        <translation>Protokoll:</translation>
+        <translation>Tyyppi:</translation>
     </message>
     <message>
         <source>Nextcloud/ownCloud</source>
@@ -567,50 +568,50 @@
     </message>
     <message>
         <source>Accept certificate</source>
-        <translation>Acceptera certifikat</translation>
+        <translation>Hyväksy sertifikaatti</translation>
     </message>
     <message>
         <source>Continue</source>
-        <translation>Fortsätt</translation>
+        <translation>Jatka</translation>
     </message>
     <message>
         <source>Invalid URL</source>
-        <translation>Ogiltig URL</translation>
+        <translation>URL ei kelpaa</translation>
     </message>
     <message>
         <source>Please check your host address</source>
-        <translation>Kontrollera värdadressen</translation>
+        <translation>Tarkista palvelimen osoite</translation>
     </message>
     <message>
         <source>Username</source>
-        <translation type="unfinished"></translation>
+        <translation>Käyttäjänimi</translation>
     </message>
 </context>
 <context>
     <name>main</name>
     <message>
         <source>Transfers</source>
-        <translation>Överföringar</translation>
+        <translation>Siirrot</translation>
     </message>
     <message>
         <source>Add account</source>
-        <translation>Lägg till konto</translation>
+        <translation>Lisää tili</translation>
     </message>
     <message>
         <source>About GhostCloud</source>
-        <translation>Om GhostCloud</translation>
+        <translation>Tietoja GhostCloudista</translation>
     </message>
     <message>
         <source>No account available yet. Please add an account to continue.</source>
-        <translation>Inget konto tillgängligt. Lägg till ett konto för att fortsätta.</translation>
+        <translation>Tilejä ei saatavilla. Lisää uusi tili aloittaaksesi käyttö.</translation>
     </message>
     <message>
         <source>Upload file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Lähetä tiedosto...</translation>
     </message>
     <message>
         <source>New folder...</source>
-        <translation type="unfinished"></translation>
+        <translation>Uusi hakemisto...</translation>
     </message>
 </context>
 </TS>

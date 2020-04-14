@@ -232,6 +232,9 @@ int main(int argc, char *argv[])
 #endif
 
 #ifndef GHOSTCLOUD_UI_QUICKCONTROLS
+    Q_UNUSED(GRID_UNIT_PX);
+    Q_UNUSED(headerBarSize);
+    Q_UNUSED(targetOs);
     QQmlEngine* newEngine = new QQmlEngine;
     QQuickView *view = new QQuickView(newEngine, Q_NULLPTR); //SailfishApp::createView();
 

@@ -139,9 +139,7 @@ Item {
 
                 Label {
                     id: userLabel
-                    text: delegateAccountWorkers.account.username
-                          + " on "
-                          + delegateAccountWorkers.account.hoststring
+                    text: qsTr("%1 on %2", "username on https://server:443/dav/").arg(delegateAccountWorkers.account.username).arg(delegateAccountWorkers.account.hoststring)
                     font.pixelSize: fontSizeMedium
                     enabled: __listCommand == null
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere

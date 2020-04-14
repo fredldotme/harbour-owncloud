@@ -35,7 +35,6 @@ Page {
         id: accountsList
         anchors.fill: parent
         model: accountGenerator.accountWorkers
-        spacing: 8
 
         PullDownMenu {
             MenuItem {
@@ -67,33 +66,52 @@ Page {
             }
         }
 
+        header: PageHeader {
+            title: "GhostCloud"
+        }
+
         delegate: ListItem {
             width: ListView.view.width
             enabled: __listCommand === null
+            contentHeight: mainColumn.height
 
             property var delegateAccountWorkers : accountsList.model[index]
 
-            Column {
+            Item {
                 id: mainColumn
                 width: parent.width
+                height: providerLabel.height + userLabel.height + 2.0*Theme.paddingSmall
+
                 Label {
                     id: providerLabel
                     text: providerTypeNames[delegateAccountWorkers.account.providerType]
                     font.bold: true
                     font.pixelSize: Theme.fontSizeMedium
                     enabled: __listCommand == null
-                    width: accountsList.width
+                    anchors {
+                        top: parent.top
+                        left: parent.left
+                        right: parent.right
+                        topMargin: Theme.paddingSmall
+                        leftMargin: Theme.paddingSmall
+                        bottomMargin: Theme.paddingSmall
+                    }
                 }
 
                 Label {
                     id: userLabel
-                    text: delegateAccountWorkers.account.username
-                          + " on "
-                          + delegateAccountWorkers.account.hoststring
-                    font.pixelSize: Theme.fontSizeMedium
+                    text: qsTr("%1 on %2", "username on https://server:443/dav/").arg(delegateAccountWorkers.account.username).arg(delegateAccountWorkers.account.hoststring)
+                    font.pixelSize: Theme.fontSizeSmall
                     enabled: __listCommand == null
                     elide: Label.ElideRight
-                    width: accountsList.width
+                    anchors {
+                        top: providerLabel.bottom
+                        left: parent.left
+                        right: parent.right
+                        leftMargin: Theme.paddingSmall
+                        rightMargin: Theme.paddingSmall
+                        bottomMargin: Theme.paddingSmall
+                    }
                 }
             }
 

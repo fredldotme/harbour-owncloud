@@ -36,9 +36,9 @@
 #include <cacheprovider.h>
 
 // Platform-specific functionality
-#if defined(Q_OS_ANDROID) || defined(Q_OS_MAC) || defined(Q_OS_IOS)
+#if !defined(QT_DBUS_LIB)
 #include "daemonctrl/dummydaemonctrl.h"
-#elif defined(Q_OS_UNIX) && !defined(Q_OS_ANDROID)
+#else
 #include "daemonctrl/daemoncontrol.h"
 #endif
 

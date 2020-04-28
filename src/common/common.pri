@@ -2,7 +2,9 @@ CONFIG += qt c++11
 QT += network xml sql
 
 linux:!android {
-    QT += dbus
+    !contains(CONFIG, quickcontrols) {
+        QT += dbus
+    }
 }
 android {
     QT += androidextras

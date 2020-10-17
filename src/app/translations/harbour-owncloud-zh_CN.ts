@@ -133,7 +133,7 @@
     <message>
         <source>%1 on %2</source>
         <comment>username on https://server:443/dav/</comment>
-        <translation type="unfinished"></translation>
+        <translation>账户 %1 位于 %2</translation>
     </message>
 </context>
 <context>
@@ -176,7 +176,7 @@
     </message>
     <message>
         <source>Provider:</source>
-        <translation>提供者：</translation>
+        <translation>提供者:</translation>
     </message>
     <message>
         <source>Nextcloud/ownCloud</source>
@@ -224,15 +224,15 @@
     <name>CoverPage</name>
     <message>
         <source>User:</source>
-        <translation>用户名：</translation>
+        <translation>用户名:</translation>
     </message>
     <message>
         <source>Usage:</source>
-        <translation>使用：</translation>
+        <translation>使用:</translation>
     </message>
     <message>
         <source>Total:</source>
-        <translation>总的：</translation>
+        <translation>总计:</translation>
     </message>
 </context>
 <context>
@@ -278,19 +278,19 @@
     </message>
     <message>
         <source>User:</source>
-        <translation>用户：</translation>
+        <translation>用户:</translation>
     </message>
     <message>
         <source>Mail:</source>
-        <translation>邮件：</translation>
+        <translation>邮件:</translation>
     </message>
     <message>
         <source>Usage:</source>
-        <translation>使用：</translation>
+        <translation>使用:</translation>
     </message>
     <message>
         <source>Total:</source>
-        <translation>总的：</translation>
+        <translation>总计:</translation>
     </message>
     <message>
         <source>About</source>
@@ -306,11 +306,11 @@
     </message>
     <message>
         <source>Enter new name:</source>
-        <translation>输入新名称：</translation>
+        <translation>输入新名称:</translation>
     </message>
     <message>
         <source>Free:</source>
-        <translation>闲置：</translation>
+        <translation>闲置:</translation>
     </message>
     <message>
         <source>Open</source>
@@ -357,27 +357,27 @@
     </message>
     <message>
         <source>File name:</source>
-        <translation>文件名：</translation>
+        <translation>文件名:</translation>
     </message>
     <message>
         <source>Size:</source>
-        <translation>大小：</translation>
+        <translation>大小:</translation>
     </message>
     <message>
         <source>Last modified:</source>
-        <translation>最近修改：</translation>
+        <translation>最近修改:</translation>
     </message>
     <message>
         <source>Type:</source>
-        <translation>类型：</translation>
+        <translation>类型:</translation>
     </message>
     <message>
         <source>Created at:</source>
-        <translation>创建于：</translation>
+        <translation>创建于:</translation>
     </message>
     <message>
         <source>Entity tag:</source>
-        <translation>独立标签：</translation>
+        <translation>独立标签:</translation>
     </message>
     <message>
         <source>File ID:</source>
@@ -432,19 +432,19 @@
     <name>FileSelectionDialog</name>
     <message>
         <source>Storage:</source>
-        <translation type="unfinished"></translation>
+        <translation>存储:</translation>
     </message>
     <message>
         <source>Home directory</source>
-        <translation type="unfinished"></translation>
+        <translation>主目录</translation>
     </message>
     <message>
         <source>External storage</source>
-        <translation type="unfinished"></translation>
+        <translation>外部存储</translation>
     </message>
     <message>
         <source>External storage (2)</source>
-        <translation type="unfinished"></translation>
+        <translation>外部存储(2)</translation>
     </message>
 </context>
 <context>
@@ -455,11 +455,11 @@
     </message>
     <message>
         <source>MD5 fingerprint:</source>
-        <translation>MD5 指纹：</translation>
+        <translation>MD5 指纹:</translation>
     </message>
     <message>
         <source>SHA1 fingerprint:</source>
-        <translation>SHA1 指纹：</translation>
+        <translation>SHA1 指纹:</translation>
     </message>
     <message>
         <source>Would you like to accept the certificate?</source>
@@ -585,7 +585,7 @@
     </message>
     <message>
         <source>Username</source>
-        <translation type="unfinished">用户名</translation>
+        <translation>用户名</translation>
     </message>
 </context>
 <context>

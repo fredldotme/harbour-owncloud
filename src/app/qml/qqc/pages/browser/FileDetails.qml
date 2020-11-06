@@ -27,7 +27,7 @@ Page {
             thumbnailFetcher.source :
             fileDetailsHelper.getIconFromMime(entry.mimeType)
 
-    readonly property bool supportsMediaPreview : !(osIsUbuntuTouch || osIsIOS || osIsMacOs)
+    readonly property bool supportsMediaPreview : !(osIsIOS || osIsMacOs)
     readonly property bool supportsDownloads : !osIsIOS
 
     readonly property bool isAudio :
@@ -116,7 +116,7 @@ Page {
                 VideoOutput {
                     id: mediaView
                     source: previewPlayer
-                    visible: isAudioVideo
+                    visible: isVideo
                     anchors.fill: parent
                 }
                 GCButton {
@@ -127,7 +127,7 @@ Page {
                             "qrc:/icons/theme/actions/32/media-playback-start.svg"
                     height: 48
                     width: height
-                    visible: mediaView.visible
+                    visible: isAudioVideo
                     onClicked: {
                         console.log("clicked @ " + previewPlayer.playbackState)
                         if (previewPlayer.playbackState == MediaPlayer.PlayingState) {

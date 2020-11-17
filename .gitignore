@@ -11,3 +11,4 @@ prime/
 *.tar.gz.*
 openssl-*.*.*
 .DS_Store
+.clickable/

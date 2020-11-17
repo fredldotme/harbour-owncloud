@@ -65,7 +65,7 @@
     </message>
     <message>
         <source>libqtcommandqueue (LGPL v2.1)</source>
-        <translation type="unfinished"></translation>
+        <translation>libqtcommandqueue (LGPL v2.1)</translation>
     </message>
 </context>
 <context>
@@ -128,12 +128,12 @@
     </message>
     <message>
         <source>Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>Inställningar...</translation>
     </message>
     <message>
         <source>%1 on %2</source>
         <comment>username on https://server:443/dav/</comment>
-        <translation type="unfinished"></translation>
+        <translation>%1 på %2</translation>
     </message>
 </context>
 <context>
@@ -188,7 +188,7 @@
     </message>
     <message>
         <source>Username</source>
-        <translation type="unfinished"></translation>
+        <translation>Användarnamn</translation>
     </message>
 </context>
 <context>
@@ -430,19 +430,19 @@
     <name>FileSelectionDialog</name>
     <message>
         <source>Storage:</source>
-        <translation type="unfinished"></translation>
+        <translation>Lagring:</translation>
     </message>
     <message>
         <source>Home directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Hemkatalog</translation>
     </message>
     <message>
         <source>External storage</source>
-        <translation type="unfinished"></translation>
+        <translation>Extern lagring</translation>
     </message>
     <message>
         <source>External storage (2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Extern lagring (2)</translation>
     </message>
 </context>
 <context>
@@ -502,7 +502,7 @@
     </message>
     <message>
         <source>Clear downloads</source>
-        <translation type="unfinished"></translation>
+        <translation>Rensa nerladdningar</translation>
     </message>
 </context>
 <context>
@@ -532,7 +532,7 @@
     <name>UbuntuContentHubOpener</name>
     <message>
         <source>Open &apos;%1&apos; with</source>
-        <translation type="unfinished">Öppna &quot;%1&quot; med</translation>
+        <translation>Öppna &quot;%1&quot; med</translation>
     </message>
 </context>
 <context>
@@ -583,7 +583,7 @@
     </message>
     <message>
         <source>Username</source>
-        <translation type="unfinished"></translation>
+        <translation>Användarnamn</translation>
     </message>
 </context>
 <context>
@@ -606,11 +606,11 @@
     </message>
     <message>
         <source>Upload file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ladda upp fil...</translation>
     </message>
     <message>
         <source>New folder...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ny mapp...</translation>
     </message>
 </context>
 </TS>

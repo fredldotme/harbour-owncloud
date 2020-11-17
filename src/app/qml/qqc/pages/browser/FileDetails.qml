@@ -27,7 +27,7 @@ Page {
             thumbnailFetcher.source :
             fileDetailsHelper.getIconFromMime(entry.mimeType)
 
-    readonly property bool supportsMediaPreview : !(osIsIOS || osIsMacOs)
+    readonly property bool supportsMediaPreview : !(osIsUbuntuTouch || osIsIOS || osIsMacOs)
     readonly property bool supportsDownloads : !osIsIOS
 
     readonly property bool isAudio :

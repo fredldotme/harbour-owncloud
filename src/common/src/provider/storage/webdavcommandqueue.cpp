@@ -2,7 +2,11 @@
 
 #include <QDebug>
 
+#ifndef GHOSTCLOUD_UBUNTU_TOUCH
 #include <commands/webdav/filedownloadcommandentity.h>
+#else
+#include <commands/ubuntutouch/utfiledownloadcommandentity.h>
+#endif
 #include <commands/webdav/fileuploadcommandentity.h>
 #include <commands/webdav/mkdavdircommandentity.h>
 #include <commands/webdav/davrmcommandentity.h>
@@ -141,14 +145,18 @@ CommandEntity* WebDavCommandQueue::fileDownloadRequest(const QString remotePath,
     }
 #endif
 
-    FileDownloadCommandEntity* downloadCommand = Q_NULLPTR;
+    CommandEntity* downloadCommand = Q_NULLPTR;
     CommandEntity* lastModifiedCommand = Q_NULLPTR;
     Q_UNUSED(mimeType);
     QString destination = FilePathUtil::destination(this->settings()) + remotePath;
 
+#ifndef GHOSTCLOUD_UBUNTU_TOUCH
     downloadCommand = new FileDownloadCommandEntity(this, remotePath,
                                                     destination, this->getWebdav());
-
+#else
+    downloadCommand = new UtFileDownloadCommandEntity(this, remotePath,
+                                                      destination, this->settings());
+#endif
     // if lastModified has been provided update the local lastModified information after download
     qDebug() << lastModified;
     if (lastModified.isValid()) {

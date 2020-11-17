@@ -165,6 +165,11 @@ macx {
 # Ubuntu Touch configuration
 contains(CONFIG, click) {
     DEFINES += GHOSTCLOUD_UBUNTU_TOUCH
+    SOURCES += \
+        $$PWD/src/commands/ubuntutouch/utfiledownloadcommandentity.cpp
+    HEADERS += \
+        $$PWD/src/commands/ubuntutouch/utfiledownloadcommandentity.h
+    LIBS += -lubuntu-download-manager-client
 }
 
 INSTALLS += qwebdavlib target

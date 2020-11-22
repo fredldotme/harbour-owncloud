@@ -133,7 +133,7 @@
     <message>
         <source>%1 on %2</source>
         <comment>username on https://server:443/dav/</comment>
-        <translation type="unfinished"></translation>
+        <translation>%1 sur %2</translation>
     </message>
 </context>
 <context>
@@ -188,7 +188,7 @@
     </message>
     <message>
         <source>Username</source>
-        <translation type="unfinished"></translation>
+        <translation>Identifiant</translation>
     </message>
 </context>
 <context>
@@ -430,19 +430,19 @@
     <name>FileSelectionDialog</name>
     <message>
         <source>Storage:</source>
-        <translation type="unfinished"></translation>
+        <translation>Stockage :</translation>
     </message>
     <message>
         <source>Home directory</source>
-        <translation type="unfinished"></translation>
+        <translation type>Dossier personnel</translation>
     </message>
     <message>
         <source>External storage</source>
-        <translation type="unfinished"></translation>
+        <translation>Stockage externe</translation>
     </message>
     <message>
         <source>External storage (2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Stockage externe (2)</translation>
     </message>
 </context>
 <context>
@@ -583,7 +583,7 @@
     </message>
     <message>
         <source>Username</source>
-        <translation type="unfinished"></translation>
+        <translation>Identifiant</translation>
     </message>
 </context>
 <context>

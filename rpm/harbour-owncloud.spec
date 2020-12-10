@@ -92,7 +92,7 @@ desktop-file-install --delete-original       \
 %{_libdir}/systemd/user/user-session.target.wants/%{name}-daemon.service
 %{_libdir}/systemd/user/user-session.target.wants/%{name}-permission-agent.service
 %{_datadir}/nemo-transferengine/plugins/
-%{_libdir}/nemo-transferengine/plugins/libowncloudshareplugin.so
+%{_libdir}/nemo-transferengine/plugins/libghostcloudshareplugin.so
 %{_libdir}/qt5/qml/com/github/beidl/harbourowncloud/libharbourowncloudqmlplugin.so
 %{_libdir}/qt5/qml/com/github/beidl/harbourowncloud/qmldir
 %{_datadir}/themes/sailfish-default/meegotouch/z1.0/icons/icon-m-share-%{name}.png

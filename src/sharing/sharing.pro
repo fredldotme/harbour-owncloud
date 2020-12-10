@@ -1,5 +1,5 @@
 TEMPLATE = lib
-TARGET = $$qtLibraryTarget(owncloudshareplugin)
+TARGET = $$qtLibraryTarget(ghostcloudshareplugin)
 CONFIG += plugin sailfish_build
 DEPENDPATH += .
 
@@ -10,18 +10,18 @@ include($$PWD/../common/common.pri)
 
 # Input
 HEADERS += \
-    nextcloudconsts.h \
-    nextclouduploader.h \
-    nextcloudplugininfo.h \
-    nextcloudshareplugin.h
+    ghostcloudconsts.h \
+    ghostclouduploader.h \
+    ghostcloudplugininfo.h \
+    ghostcloudshareplugin.h
 
 SOURCES += \
-    nextcloudplugininfo.cpp \
-    nextclouduploader.cpp \
-    nextcloudshareplugin.cpp
+    ghostcloudplugininfo.cpp \
+    ghostclouduploader.cpp \
+    ghostcloudshareplugin.cpp
 
 OTHER_FILES += \
-    NextcloudShareUI.qml
+    GhostCloudShareUI.qml
 
 target.path = /usr/lib/nemo-transferengine/plugins
 

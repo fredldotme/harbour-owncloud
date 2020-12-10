@@ -6,12 +6,12 @@
 #include <settings/nextcloudsettingsbase.h>
 #include <provider/storage/webdavcommandqueue.h>
 
-class NextcloudUploader : public MediaTransferInterface
+class GhostCloudUploader : public MediaTransferInterface
 {
     Q_OBJECT
 public:
-    NextcloudUploader(QObject *parent = 0);
-    ~NextcloudUploader();
+    GhostCloudUploader(QObject *parent = 0);
+    ~GhostCloudUploader();
 
     QString displayName() const;
     QUrl serviceIcon() const;

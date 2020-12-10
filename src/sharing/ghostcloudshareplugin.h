@@ -5,14 +5,14 @@
 #include "ghostcloudconsts.h"
 #include <QObject>
 
-class Q_DECL_EXPORT NextcloudSharePlugin : public QObject, public TransferPluginInterface
+class Q_DECL_EXPORT GhostCloudSharePlugin : public QObject, public TransferPluginInterface
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID "com.github.beidl.harbour-owncloud.sharing")
     Q_INTERFACES(TransferPluginInterface)
 public:
-    NextcloudSharePlugin();
-    ~NextcloudSharePlugin();
+    GhostCloudSharePlugin();
+    ~GhostCloudSharePlugin();
 
     MediaTransferInterface * transferObject();
     TransferPluginInfo *infoObject();

@@ -4,12 +4,12 @@
 #include <TransferEngine-qt5/transferplugininfo.h>
 #include <QList>
 
-class NextcloudPluginInfo : public TransferPluginInfo
+class GhostCloudPluginInfo : public TransferPluginInfo
 {
     Q_OBJECT
 public:
-    NextcloudPluginInfo();
-    ~NextcloudPluginInfo();
+    GhostCloudPluginInfo();
+    ~GhostCloudPluginInfo();
 
     QList<TransferMethodInfo> info() const;
     void query();

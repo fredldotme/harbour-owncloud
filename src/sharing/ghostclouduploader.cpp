@@ -3,7 +3,7 @@
 #include <QDebug>
 #include <settings/nextcloudsettingsbase.h>
 
-NextcloudUploader::NextcloudUploader(QObject *parent) : MediaTransferInterface(parent)
+GhostCloudUploader::GhostCloudUploader(QObject *parent) : MediaTransferInterface(parent)
 {
     QObject::connect(&this->m_commandQueue, &WebDavCommandQueue::commandFinished,
                      this, [=](CommandReceipt receipt) {
@@ -14,31 +14,31 @@ NextcloudUploader::NextcloudUploader(QObject *parent) : MediaTransferInterface(p
     });
 }
 
-NextcloudUploader::~NextcloudUploader()
+GhostCloudUploader::~GhostCloudUploader()
 {
 }
 
-QString NextcloudUploader::displayName() const
+QString GhostCloudUploader::displayName() const
 {
-    return tr("Nextcloud");
+    return tr("GhostCloud");
 }
 
-QUrl NextcloudUploader::serviceIcon() const
+QUrl GhostCloudUploader::serviceIcon() const
 {
     return QUrl("image://theme/icon-s-cloud-upload");
 }
 
-bool NextcloudUploader::cancelEnabled() const
+bool GhostCloudUploader::cancelEnabled() const
 {
     return true;
 }
 
-bool NextcloudUploader::restartEnabled() const
+bool GhostCloudUploader::restartEnabled() const
 {
     return false;
 }
 
-void NextcloudUploader::start()
+void GhostCloudUploader::start()
 {
     if (!mediaItem())
         return;
@@ -77,7 +77,7 @@ void NextcloudUploader::start()
     setStatus(MediaTransferInterface::TransferStarted);
 }
 
-void NextcloudUploader::cancel()
+void GhostCloudUploader::cancel()
 {
     if (!mediaItem())
         return;

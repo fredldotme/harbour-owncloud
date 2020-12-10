@@ -3,21 +3,21 @@
 
 #include <QUrl>
 
-NextcloudPluginInfo::NextcloudPluginInfo()
+GhostCloudPluginInfo::GhostCloudPluginInfo()
     : m_ready(false)
 {
 }
 
-NextcloudPluginInfo::~NextcloudPluginInfo()
+GhostCloudPluginInfo::~GhostCloudPluginInfo()
 {
 }
 
-QList<TransferMethodInfo> NextcloudPluginInfo::info() const
+QList<TransferMethodInfo> GhostCloudPluginInfo::info() const
 {
     return m_infoList;
 }
 
-void NextcloudPluginInfo::query()
+void GhostCloudPluginInfo::query()
 {
     TransferMethodInfo info;
     QStringList capabilities;
@@ -40,7 +40,7 @@ void NextcloudPluginInfo::query()
     info.methodId        = harourowncloud::consts::SHARE_ID;
 
     // Path to the Sharing UI which this plugin provides.
-    info.shareUIPath     = QStringLiteral("/usr/share/nemo-transferengine/plugins/NextcloudShareUI.qml");
+    info.shareUIPath     = QStringLiteral("/usr/share/nemo-transferengine/plugins/GhostCloudShareUI.qml");
 
     info.accountIcon     = QStringLiteral("image://theme/icon-m-share-harbour-owncloud");
 
@@ -57,7 +57,7 @@ void NextcloudPluginInfo::query()
 }
 
 
-bool NextcloudPluginInfo::ready() const
+bool GhostCloudPluginInfo::ready() const
 {
     return m_ready;
 }

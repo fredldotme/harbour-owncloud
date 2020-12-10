@@ -5,30 +5,30 @@
 
 #include <QtPlugin>
 
-NextcloudSharePlugin::NextcloudSharePlugin()
+GhostCloudSharePlugin::GhostCloudSharePlugin()
 {
 }
 
-NextcloudSharePlugin::~NextcloudSharePlugin()
+GhostCloudSharePlugin::~GhostCloudSharePlugin()
 {
 }
 
-MediaTransferInterface * NextcloudSharePlugin::transferObject()
+MediaTransferInterface * GhostCloudSharePlugin::transferObject()
 {
-    return new NextcloudUploader;
+    return new GhostCloudUploader;
 }
 
-TransferPluginInfo *NextcloudSharePlugin::infoObject()
+TransferPluginInfo *GhostCloudSharePlugin::infoObject()
 {
-    return new NextcloudPluginInfo;
+    return new GhostCloudPluginInfo;
 }
 
-QString NextcloudSharePlugin::pluginId() const
+QString GhostCloudSharePlugin::pluginId() const
 {
     return harourowncloud::consts::SHARE_ID;
 }
 
-bool NextcloudSharePlugin::enabled() const
+bool GhostCloudSharePlugin::enabled() const
 {
     return true;
 }

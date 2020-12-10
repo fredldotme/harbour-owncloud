@@ -1,7 +1,7 @@
-#include "nextcloudshareplugin.h"
-#include "nextclouduploader.h"
-#include "nextcloudplugininfo.h"
-#include "nextcloudconsts.h"
+#include "ghostcloudshareplugin.h"
+#include "ghostclouduploader.h"
+#include "ghostcloudplugininfo.h"
+#include "ghostcloudconsts.h"
 
 #include <QtPlugin>
 

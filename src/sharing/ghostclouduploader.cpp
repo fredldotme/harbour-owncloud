@@ -1,4 +1,4 @@
-#include "nextclouduploader.h"
+#include "ghostclouduploader.h"
 
 #include <QDebug>
 #include <settings/nextcloudsettingsbase.h>

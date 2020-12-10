@@ -1,5 +1,5 @@
-#include "nextcloudplugininfo.h"
-#include "nextcloudconsts.h"
+#include "ghostcloudplugininfo.h"
+#include "ghostcloudconsts.h"
 
 #include <QUrl>
 

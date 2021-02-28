@@ -111,7 +111,8 @@ HEADERS += \
     $$PWD/src/util/qappprepareutil.h \
     $$PWD/src/provider/sharing/ocssharingcommandqueue.h \
     $$PWD/src/commands/ocs/ocssharelistcommandentity.h \
-    $$PWD/src/util/commandutil.h
+    $$PWD/src/util/commandutil.h \
+    src/settings/db/accountsdbinterface.h
 
 include($$PWD/../../3rdparty/libqtcommandqueue/libqtcommandqueue.pri)
 
@@ -165,11 +166,14 @@ macx {
 # Ubuntu Touch configuration
 contains(CONFIG, click) {
     DEFINES += GHOSTCLOUD_UBUNTU_TOUCH
+#    INCLUDEPATH += /usr/include
     SOURCES += \
-        $$PWD/src/commands/ubuntutouch/utfiledownloadcommandentity.cpp
+        $$PWD/src/commands/ubuntutouch/utfiledownloadcommandentity.cpp \
+        $$PWD/src/settings/db/utaccountsdb.cpp
     HEADERS += \
-        $$PWD/src/commands/ubuntutouch/utfiledownloadcommandentity.h
-    LIBS += -lubuntu-download-manager-client
+        $$PWD/src/commands/ubuntutouch/utfiledownloadcommandentity.h \
+        $$PWD/src/settings/db/utaccountsdb.h
+    LIBS += -lubuntu-download-manager-client -lOnlineAccountsQt
 }
 
 INSTALLS += qwebdavlib target

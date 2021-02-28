@@ -5,7 +5,8 @@
         "content_exchange_source",
         "networking",
         "audio",
-        "video"
+        "video",
+        "accounts"
     ],
     "policy_version": 16.04
 }

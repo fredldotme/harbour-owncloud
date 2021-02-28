@@ -34,6 +34,9 @@
 #include <qmlmap.h>
 #include <nextcloudendpointconsts.h>
 #include <cacheprovider.h>
+#ifdef GHOSTCLOUD_UBUNTU_TOUCH
+#include <settings/db/utaccountsdb.h>
+#endif
 
 // Platform-specific functionality
 #if !defined(QT_DBUS_LIB)
@@ -189,13 +192,14 @@ int main(int argc, char *argv[])
         createNecessaryDir(QStandardPaths::writableLocation(QStandardPaths::CacheLocation));
     }
 
+#ifndef GHOSTCLOUD_UBUNTU_TOUCH
     // Migrate settings from .ini to the new database
+    AccountDb accountsDb;
     {
-        AccountDb accounts;
         IniFileSettings iniSettings;
         if (QFile::exists(iniSettings.filePath())) {
             iniSettings.readSettings();
-            const bool addAccountSuccess = accounts.addAccount(&iniSettings);
+            const bool addAccountSuccess = accountsDb.addAccount(&iniSettings);
             if (!addAccountSuccess) {
                 qWarning() << "Failed to migrate account";
             } else {
@@ -206,6 +210,9 @@ int main(int argc, char *argv[])
             }
         }
     }
+#else
+    UtAccountsDb accountsDb;
+#endif
 
     bool gspParse = false;
     const int gspEnv = qgetenv("GRID_UNIT_PX").toInt(&gspParse);
@@ -238,6 +245,7 @@ int main(int argc, char *argv[])
     QQmlEngine* newEngine = new QQmlEngine;
     QQuickView *view = new QQuickView(newEngine, Q_NULLPTR); //SailfishApp::createView();
 
+    newEngine->rootContext()->setContextProperty("accountsDb", &accountsDb);
     view->setSource(QUrl("qrc:/qml/sfos/harbour-owncloud.qml"));
     view->showFullScreen();
 #else
@@ -245,6 +253,7 @@ int main(int argc, char *argv[])
     newEngine->rootContext()->setContextProperty("headerBarSize", headerBarSize);
     newEngine->rootContext()->setContextProperty("targetOs", targetOs);
     newEngine->rootContext()->setContextProperty("GRID_UNIT_PX", GRID_UNIT_PX);
+    newEngine->rootContext()->setContextProperty("accountsDb", &accountsDb);
     newEngine->load(QUrl("qrc:/qml/qqc/main.qml"));
 #endif
 

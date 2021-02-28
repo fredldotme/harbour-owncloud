@@ -12,7 +12,7 @@
 
 const int MAX_CURRENT_DB_VERSION = 1;
 
-AccountDb::AccountDb(QObject *parent) : QObject(parent)
+AccountDb::AccountDb(QObject *parent) : AccountsDbInterface(parent)
 {
     if (!qApp) {
         qWarning() << "QCoreApplication object hasn't been instantiated yet, bailing out.";

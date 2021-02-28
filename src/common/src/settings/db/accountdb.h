@@ -3,11 +3,9 @@
 
 #include <QObject>
 #include <QtSql/QSqlDatabase>
-#include <settings/nextcloudsettingsbase.h>
-#include <QVector>
-#include <QVariantList>
+#include "accountsdbinterface.h"
 
-class AccountDb : public QObject
+class AccountDb : public AccountsDbInterface
 {
     Q_OBJECT
 
@@ -17,15 +15,15 @@ public:
     explicit AccountDb(QObject *parent = Q_NULLPTR);
     ~AccountDb();
 
-    Q_INVOKABLE void refresh();
+    Q_INVOKABLE void refresh() override;
 
 public slots:
-    QVector<AccountBase*> accounts();
-    QVariantList accountVariantList();
-    bool accountExists(const AccountBase* account);
-    bool addAccount(AccountBase* account);
-    bool updateAccount(AccountBase* account);
-    bool removeAccount(AccountBase* account);
+    QVector<AccountBase*> accounts() override;
+    QVariantList accountVariantList() override;
+    bool accountExists(const AccountBase* account) override;
+    bool addAccount(AccountBase* account) override;
+    bool updateAccount(AccountBase* account) override;
+    bool removeAccount(AccountBase* account) override;
 
 private:
     void createDatabase();
@@ -36,9 +34,6 @@ private:
 
     QSqlDatabase m_database;
     QVector<AccountBase*> m_accounts;
-
-signals:
-    void accountsChanged();
 };
 
 #endif // ACCOUNTDB_H

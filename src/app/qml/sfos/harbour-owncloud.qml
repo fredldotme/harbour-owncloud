@@ -13,7 +13,7 @@ ApplicationWindow
 
     AccountWorkerGenerator {
         id: accountWorkerGenerator
-        database: AccountDb { }
+        database: accountsDb
     }
 
     OcsUserInfo {

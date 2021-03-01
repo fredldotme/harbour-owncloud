@@ -418,9 +418,10 @@ ApplicationWindow {
                     anchors.centerIn: parent
                     width: parent.width
                     visible: accountWorkerGenerator.accountWorkers.length < 1
+                    spacing: 8
 
                     Text {
-                        font.pixelSize: 32
+                        font.pixelSize: 24
                         width: parent.width
                         wrapMode: Label.WrapAtWordBoundaryOrAnywhere
                         anchors.horizontalCenter: parent.horizontalCenter

@@ -96,7 +96,7 @@ bool UtFileDownloadCommandEntity::abortWork()
 
 void UtFileDownloadCommandEntity::handleProgress(qulonglong received, qulonglong total)
 {
-    setProgress((qreal)(received/total));
+    setProgress((qreal)((qreal)received/(qreal)total));
 }
 
 void UtFileDownloadCommandEntity::handleFinished(const QString& path)

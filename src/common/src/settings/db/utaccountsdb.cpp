@@ -1,6 +1,7 @@
 #include "utaccountsdb.h"
 
 #include <QDebug>
+#include <QList>
 #include <OnlineAccountsQt/OnlineAccounts/AuthenticationData>
 #include <OnlineAccountsQt/OnlineAccounts/Account>
 #include <OnlineAccountsQt/OnlineAccounts/PendingCall>
@@ -54,7 +55,9 @@ void UtAccountsDb::refresh()
     }
 
     QVector<AccountBase*> accounts;
-    for (Account* account : this->m_manager->availableAccounts(desiredServiceId)) {
+    QList<Account*> availableAccounts = this->m_manager->availableAccounts(desiredServiceId);
+    qInfo() << "Number of available accounts: " << availableAccounts.length();
+    for (Account* account : availableAccounts) {
         if (!account->isValid())
             continue;
 

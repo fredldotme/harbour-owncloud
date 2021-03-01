@@ -27,6 +27,7 @@ public slots:
 private:
     OnlineAccounts::Manager* m_manager = nullptr;
     QVector<AccountBase*> m_accounts;
+    QString m_applicationId;
 };
 
 #endif // UTACCOUNTSDB_H

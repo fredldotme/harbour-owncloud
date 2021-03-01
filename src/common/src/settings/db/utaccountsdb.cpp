@@ -10,41 +10,34 @@ using namespace OnlineAccounts;
 
 UtAccountsDb::UtAccountsDb(QObject *parent) : AccountsDbInterface(parent)
 {
-    refresh();
-}
-
-UtAccountsDb::~UtAccountsDb()
-{
-    if (this->m_manager) {
-        delete this->m_manager;
-        this->m_manager = nullptr;
-    }
-}
-
-void UtAccountsDb::refresh()
-{
-    QString applicationId;
     QStringList parts = QString::fromUtf8(qgetenv("APP_ID")).split('_');
     if (parts.count() == 3) {
-        applicationId = QStringList(parts.mid(0, 2)).join('_');
+        this->m_applicationId = QStringList(parts.mid(0, 2)).join('_');
     } else {
         qWarning() << "Ubuntu.OnlineAccounts: No APP_ID defined "
                       "and no applicationId given!";
         return;
     }
-    const QString desiredServiceId = QStringLiteral("%1_nextcloud").arg(applicationId);
-
-    if (this->m_manager) {
-        QObject::disconnect(this->m_manager, nullptr, this, nullptr);
-        delete this->m_manager;
-    }
-
-    this->m_manager = new Manager(applicationId);
+    this->m_manager = new Manager(this->m_applicationId, this);
     this->m_manager->waitForReady();
     QObject::connect(this->m_manager, &Manager::accountAvailable, this, [=](Account*){
         qInfo() << "Refreshing accounts list";
         refresh();
     });
+
+    refresh();
+}
+
+UtAccountsDb::~UtAccountsDb()
+{
+}
+
+void UtAccountsDb::refresh()
+{
+    if (!this->m_manager)
+        return;
+
+    const QString desiredServiceId = QStringLiteral("%1_nextcloud").arg(this->m_applicationId);
 
     qInfo() << "Available services: ";
     bool hasService = false;

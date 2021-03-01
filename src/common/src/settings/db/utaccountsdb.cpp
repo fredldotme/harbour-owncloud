@@ -42,10 +42,10 @@ void UtAccountsDb::refresh()
 
     this->m_manager = new Manager(applicationId);
     this->m_manager->waitForReady();
-    QObject::connect(this->m_manager, &Manager::accountAvailable, this, [=](Account*){
+    /*QObject::connect(this->m_manager, &Manager::accountAvailable, this, [=](Account*){
         qInfo() << "Refreshing accounts list";
         refresh();
-    });
+    });*/
 
     qInfo() << "Available services: ";
     bool hasService = false;
@@ -92,8 +92,8 @@ void UtAccountsDb::refresh()
 
         // Also connect to changed and disabled signals of the SSO Account object
         // to refresh the list appropriately
-        QObject::connect(account, &Account::changed, this, &UtAccountsDb::refresh);
-        QObject::connect(account, &Account::disabled, this, &UtAccountsDb::refresh);
+        //QObject::connect(account, &Account::changed, this, &UtAccountsDb::refresh);
+        //QObject::connect(account, &Account::disabled, this, &UtAccountsDb::refresh);
     }
     this->m_accounts = accounts;
     emit accountsChanged();

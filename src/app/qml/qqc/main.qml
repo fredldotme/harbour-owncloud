@@ -58,6 +58,20 @@ ApplicationWindow {
         }
     }
 
+    // HACK: Refresh account db on Ubuntu Touch when focus changes.
+    //       This needs to be done until the Online Accounts Daemon
+    //       account enable/disable signal bug is fixed
+    onActiveChanged: {
+        if (!osIsUbuntuTouch)
+            return;
+        if (sideStack.currentItem !== sideStack.initialItem)
+            return;
+        if (!active)
+            return;
+
+        accountsDb.refresh()
+    }
+
     readonly property alias dirContents : directoryContents
 
     property int currentAccountIndex : 0

@@ -4,7 +4,7 @@
     "version": "0.9.8",
     "description": "A multi-platform client for ownCloud, NextCloud & WebDav",
     "architecture": "@CLICK_ARCH@",
-    "framework": "ubuntu-sdk-16.04",
+    "framework": "ubuntu-sdk-16.04.5",
     "maintainer": "Alfred Neumayer <dev.beidl@gmail.com>",
     "hooks": {
         "harbour-owncloud": {

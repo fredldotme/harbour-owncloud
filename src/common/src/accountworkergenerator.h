@@ -12,14 +12,14 @@ class AccountWorkerGenerator : public QObject
     Q_OBJECT
 
     Q_PROPERTY(QVariantList accountWorkers READ accountWorkers NOTIFY accountWorkersChanged)
-    Q_PROPERTY(AccountDb* database READ database WRITE setDatabase NOTIFY databaseChanged)
+    Q_PROPERTY(AccountsDbInterface* database READ database WRITE setDatabase NOTIFY databaseChanged)
 
 public:
     explicit AccountWorkerGenerator(QObject *parent = nullptr);
 
     QVariantList accountWorkers();
-    AccountDb* database();
-    void setDatabase(AccountDb* database);
+    AccountsDbInterface* database();
+    void setDatabase(AccountsDbInterface* database);
 
 public slots:
     AccountWorkers* newAccount();
@@ -29,7 +29,7 @@ private:
     void generateAccountWorkers();
     void cleanup();
     
-    AccountDb* m_database = Q_NULLPTR;
+    AccountsDbInterface* m_database = Q_NULLPTR;
     QVector<AccountWorkers*> m_accountWorkers;
     std::unique_ptr<AccountWorkers> m_defaultNewAW;
 

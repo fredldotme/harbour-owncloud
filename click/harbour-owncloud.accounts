@@ -1,0 +1,9 @@
+{
+  "services": [
+    {
+      "name": "GhostCloud",
+      "description": "Access your self-hosted cloud files",
+      "provider": "nextcloud"
+    }
+  ]
+}

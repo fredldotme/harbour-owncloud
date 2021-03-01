@@ -10,7 +10,7 @@ Dialog {
     property var accountWorkers : null
     property var clientSettings: accountWorkers.account
     property DaemonControl daemonCtrl : null
-    property AccountDb accountDatabase : null
+    property AccountsDbInterface accountDatabase : null
     property var viewStack : null
 
     readonly property CommandQueue ocsCommandQueue :

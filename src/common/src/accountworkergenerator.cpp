@@ -107,12 +107,12 @@ QVariantList AccountWorkerGenerator::accountWorkers()
     return accWorkers;
 }
 
-AccountDb* AccountWorkerGenerator::database()
+AccountsDbInterface* AccountWorkerGenerator::database()
 {
     return this->m_database;
 }
 
-void AccountWorkerGenerator::setDatabase(AccountDb* database)
+void AccountWorkerGenerator::setDatabase(AccountsDbInterface* database)
 {
     if (this->m_database == database)
         return;
@@ -127,7 +127,7 @@ void AccountWorkerGenerator::setDatabase(AccountDb* database)
     this->m_database = database;
 
     if (this->m_database) {
-           QObject::connect(this->m_database, &AccountDb::accountsChanged,
+           QObject::connect(this->m_database, &AccountsDbInterface::accountsChanged,
                             this, &AccountWorkerGenerator::generateAccountWorkers);
     }
 

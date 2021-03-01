@@ -21,6 +21,7 @@
 #include <provider/storage/webdavcommandqueue.h>
 #include <provider/accountinfo/ocscommandqueue.h>
 #include <settings/inifilesettings.h>
+#include <settings/db/accountsdbinterface.h>
 #include <settings/db/accountdb.h>
 #include <settings/db/syncdb.h>
 #include <auth/qwebdavauthenticator.h>
@@ -155,6 +156,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<DirectoryContentModel>("harbour.owncloud", 1, 0, "DirectoryContentModel");
     qmlRegisterType<AccountBase>("harbour.owncloud", 1, 0, "AccountBase");
     qmlRegisterType<AccountDb>("harbour.owncloud", 1, 0, "AccountDb");
+    qmlRegisterType<AccountsDbInterface>("harbour.owncloud", 1, 0, "AccountsDbInterface");
     qmlRegisterType<SyncDb>("harbour.owncloud", 1, 0, "SyncDb");
     qmlRegisterType<QWebDavAuthenticator>("harbour.owncloud", 1, 0, "QWebDavAuthenticator");
     qmlRegisterType<FlowLoginAuthenticator>("harbour.owncloud", 1, 0, "FlowLoginAuthenticator");

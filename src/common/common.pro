@@ -166,7 +166,6 @@ macx {
 # Ubuntu Touch configuration
 contains(CONFIG, click) {
     DEFINES += GHOSTCLOUD_UBUNTU_TOUCH
-#    INCLUDEPATH += /usr/include
     SOURCES += \
         $$PWD/src/commands/ubuntutouch/utfiledownloadcommandentity.cpp \
         $$PWD/src/settings/db/utaccountsdb.cpp

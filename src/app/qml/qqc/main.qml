@@ -124,7 +124,11 @@ ApplicationWindow {
     function addAccount() {
         // TODO: check if memory leaks happen here
         //detailsStack.push(webDavAccountDialog)
-        webDavAccountDialog.open()
+        if (osIsUbuntuTouch) {
+            Qt.openUrlExternally("settings:///online-accounts")
+        } else {
+            webDavAccountDialog.open()
+        }
     }
 
     // Android back button support

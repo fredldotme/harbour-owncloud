@@ -13,7 +13,16 @@ class UtAccountsDb : public AccountsDbInterface
 
 public:
     explicit UtAccountsDb(QObject *parent = nullptr);
+    ~UtAccountsDb();
     Q_INVOKABLE void refresh() override;
+
+public slots:
+    QVector<AccountBase*> accounts() override;
+    QVariantList accountVariantList() override;
+    bool accountExists(const AccountBase* account) override;
+    bool addAccount(AccountBase* account) override;
+    bool updateAccount(AccountBase* account) override;
+    bool removeAccount(AccountBase* account) override;
 
 private:
     OnlineAccounts::Manager* m_manager = nullptr;

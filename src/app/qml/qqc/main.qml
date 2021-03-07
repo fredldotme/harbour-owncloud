@@ -196,7 +196,7 @@ ApplicationWindow {
         id: headerBar
         height: headerBarSize
         width: rootWindow.width
-        background: Rectangle { color: "white" }
+
         RowLayout {
             anchors.fill: parent
             GCButton {
@@ -416,6 +416,7 @@ ApplicationWindow {
 
             Rectangle {
                 id: homeTab
+                color: "transparent"
                 objectName: "entrancePage"
                 Layout.alignment: Qt.AlignCenter
 
@@ -434,7 +435,7 @@ ApplicationWindow {
                     visible: accountWorkerGenerator.accountWorkers.length < 1
                     spacing: 8
 
-                    Text {
+                    Label {
                         font.pixelSize: 24
                         width: parent.width
                         wrapMode: Label.WrapAtWordBoundaryOrAnywhere
@@ -522,7 +523,7 @@ ApplicationWindow {
 
         Rectangle {
             id: mainContainer
-            color: "lightgray"
+            color: "transparent"
             anchors.fill: parent
             anchors.bottomMargin: Qt.inputMethod.visible ?
                                       Qt.inputMethod.keyboardRectangle.height / (GRID_UNIT_PX / 8) : 0
@@ -562,6 +563,7 @@ ApplicationWindow {
                                              : parent.width
                     height: parent.height
                     clip: true
+                    color: "transparent"
                 }
                 Rectangle {
                     id: sideStackContainer
@@ -572,6 +574,7 @@ ApplicationWindow {
                     height: parent.height
                     visible: sideStackIsActive
                     clip: true
+                    color: "transparent"
                 }
             }
         }

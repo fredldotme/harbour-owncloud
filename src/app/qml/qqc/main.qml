@@ -139,7 +139,7 @@ ApplicationWindow {
         // TODO: check if memory leaks happen here
         //detailsStack.push(webDavAccountDialog)
         if (osIsUbuntuTouch) {
-            Qt.openUrlExternally("settings:///online-accounts")
+            Qt.openUrlExternally("settings:///system/online-accounts")
         } else {
             webDavAccountDialog.open()
         }

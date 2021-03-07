@@ -46,8 +46,6 @@ AbstractButton {
                 enabled: buttonRoot.enabled
                 elide: Label.ElideRight
                 width: parent.width
-                color: enabled ? "black"
-                               : "lightgray"
             }
             Label {
                 id: detailLabel
@@ -55,8 +53,6 @@ AbstractButton {
                 enabled: buttonRoot.enabled
                 elide: Label.ElideRight
                 width: parent.width
-                color: enabled ? "black"
-                               : "lightgray"
             }
         }
     }

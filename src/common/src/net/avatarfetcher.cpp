@@ -40,7 +40,7 @@ void AvatarFetcher::fetch()
                                                                 QString::number(width()));
 
 
-    const QString identifier = QStringLiteral("/avatar.png");
+    const QString identifier = QStringLiteral("/avatar");
 
     const bool fileExists = this->cacheProvider()->cacheFileExists(identifier);
     const bool isCurrent = this->cacheProvider()->isFileCurrent(identifier);

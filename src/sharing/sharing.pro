@@ -23,7 +23,7 @@ SOURCES += \
 OTHER_FILES += \
     GhostCloudShareUI.qml
 
-target.path = /usr/lib/nemo-transferengine/plugins
+target.path = $$LIBDIR/nemo-transferengine/plugins
 
 shareui.files = $$PWD/*.qml
 shareui.path = /usr/share/nemo-transferengine/plugins

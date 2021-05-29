@@ -18,7 +18,7 @@ HEADERS += \
 
 OTHER_FILES += harbour-owncloud-permission-agent.service
 
-service.path = $$LIBDIR/systemd/user/
+service.path = /usr/lib/systemd/user/
 service.files += harbour-owncloud-permission-agent.service
 binary.path = /usr/bin/
 binary.files += $$OUT_PWD/harbour-owncloud-permission-agent

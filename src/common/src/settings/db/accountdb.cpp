@@ -19,6 +19,9 @@ AccountDb::AccountDb(QObject *parent) : AccountsDbInterface(parent)
         return;
     }
 
+    connect(this, &AccountsDbInterface::accountsChanged,
+            this, &AccountDb::accountsChangedInherited);
+
 #ifdef GHOSTCLOUD_UBUNTU_TOUCH
     const QStandardPaths::StandardLocation location = QStandardPaths::AppConfigLocation;
 #else

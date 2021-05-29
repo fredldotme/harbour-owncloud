@@ -9,7 +9,12 @@ class AccountDb : public AccountsDbInterface
 {
     Q_OBJECT
 
-    Q_PROPERTY(QVariantList accounts READ accountVariantList NOTIFY accountsChanged)
+    Q_PROPERTY(QVariantList accounts READ accountVariantList NOTIFY accountsChangedInherited)
+
+signals:
+    // NOTIFY signal has to be defined in the same class as the property
+    // see https://bugreports.qt.io/browse/QTBUG-7684
+    void accountsChangedInherited();
 
 public:
     explicit AccountDb(QObject *parent = Q_NULLPTR);

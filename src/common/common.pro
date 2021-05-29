@@ -145,8 +145,8 @@ DEPENDPATH += $$PWD/../../3rdparty/libqtcommandqueue/src
 
 # QtQuick.Controls-based implementations
 contains(CONFIG, quickcontrols) {
-    target.path = /usr/lib
-    qwebdavlib.path = /usr/lib
+    target.path = $$LIBDIR
+    qwebdavlib.path = $$LIBDIR
 }
 
 # QWebDav

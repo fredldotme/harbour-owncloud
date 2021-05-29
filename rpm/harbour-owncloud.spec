@@ -66,9 +66,9 @@ rm -rf %{buildroot}
 rm -r %{buildroot}%{_datadir}/%{name}/qml
 
 # >> install post
-mkdir -p %{buildroot}%{_libdir}/systemd/user/user-session.target.wants
-ln -sf %{_libdir}/systemd/user/%{name}-daemon.service %{buildroot}%{_libdir}/systemd/user/user-session.target.wants/%{name}-daemon.service
-ln -sf %{_libdir}/systemd/user/%{name}-permission-agent.service %{buildroot}%{_libdir}/systemd/user/user-session.target.wants/%{name}-permission-agent.service
+mkdir -p %{buildroot}/usr/lib/systemd/user/user-session.target.wants
+ln -sf /usr/lib/systemd/user/%{name}-daemon.service %{buildroot}/usr/lib/systemd/user/user-session.target.wants/%{name}-daemon.service
+ln -sf /usr/lib/systemd/user/%{name}-permission-agent.service %{buildroot}/usr/lib/systemd/user/user-session.target.wants/%{name}-permission-agent.service
 # << install post
 
 desktop-file-install --delete-original       \
@@ -87,10 +87,10 @@ desktop-file-install --delete-original       \
 %{_bindir}/%{name}-daemon
 %{_bindir}/%{name}-permission-agent
 %defattr(-,root,root,-)
-%{_libdir}/systemd/user/%{name}-daemon.service
-%{_libdir}/systemd/user/%{name}-permission-agent.service
-%{_libdir}/systemd/user/user-session.target.wants/%{name}-daemon.service
-%{_libdir}/systemd/user/user-session.target.wants/%{name}-permission-agent.service
+/usr/lib/systemd/user/%{name}-daemon.service
+/usr/lib/systemd/user/%{name}-permission-agent.service
+/usr/lib/systemd/user/user-session.target.wants/%{name}-daemon.service
+/usr/lib/systemd/user/user-session.target.wants/%{name}-permission-agent.service
 %{_datadir}/nemo-transferengine/plugins/
 %{_libdir}/nemo-transferengine/plugins/libghostcloudshareplugin.so
 %{_libdir}/qt5/qml/com/github/beidl/harbourowncloud/libharbourowncloudqmlplugin.so

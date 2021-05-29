@@ -20,7 +20,7 @@ OTHER_FILES += harbour-owncloud-daemon.service
 
 include($$PWD/../common/common.pri)
 
-service.path = $$LIBDIR/systemd/user/
+service.path = /usr/lib/systemd/user/
 service.files += harbour-owncloud-daemon.service
 target.path = /usr/bin/
 

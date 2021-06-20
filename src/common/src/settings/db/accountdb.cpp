@@ -160,18 +160,13 @@ void AccountDb::cleanup()
 
 void AccountDb::refresh()
 {
-    accounts();
-    Q_EMIT accountsChanged();
-}
-
-QVector<AccountBase*> AccountDb::accounts()
-{
+    qDebug() << Q_FUNC_INFO;
     QVector<AccountBase*> tmpAccounts;
 
     if (!this->m_database.open()) {
         qWarning() << "Failed to open AccountDb database:"
                    << this->m_database.lastError().text();
-        return tmpAccounts;
+        return;
     }
 
     const QString queryString =
@@ -183,7 +178,7 @@ QVector<AccountBase*> AccountDb::accounts()
     if (selectQuery.lastError().type() != QSqlError::NoError) {
         qWarning() << "Failed to read accounts from database:"
                    << selectQuery.lastError().text();
-        return tmpAccounts;
+        return;
     }
 
     while (selectQuery.next()) {
@@ -213,7 +208,13 @@ QVector<AccountBase*> AccountDb::accounts()
     }
 
     cleanup();
+    qDebug() << "Setting new accounts list, length" << tmpAccounts.length();
     this->m_accounts = tmpAccounts;
+    Q_EMIT accountsChanged();
+}
+
+QVector<AccountBase*> AccountDb::accounts()
+{
     return this->m_accounts;
 }
 

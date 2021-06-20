@@ -84,7 +84,7 @@ bool HttpCommandEntity::startWork()
     this->m_requestUrl = setupRequestUrl();
     this->m_request.setUrl(this->m_requestUrl);
 
-#if (QT_VERSION >= 0x050600)
+#if (QT_VERSION >= 0x050600) && (QT_VERSION < 0x060000)
     this->m_request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
 #endif
     for (const QByteArray& key : this->m_headers.keys()) {

@@ -2,7 +2,7 @@ QMAKE_CXXFLAGS += -std=gnu++0x
 
 TEMPLATE = subdirs
 CONFIG += ordered
-SUBDIRS = common
+SUBDIRS += common
 
 contains(CONFIG, sailfish_build) {
     SUBDIRS += app

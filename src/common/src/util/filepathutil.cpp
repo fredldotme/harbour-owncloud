@@ -33,7 +33,7 @@ QString FilePathUtil::destination(AccountBase* account)
         return QStringLiteral("/");
     }
 
-#ifdef GHOSTCLOUD_UBUNTU_TOUCH
+#if defined(GHOSTCLOUD_UBUNTU_TOUCH) || defined(Q_OS_MAC)
     const QStandardPaths::StandardLocation location = QStandardPaths::CacheLocation;
 #else
     const QStandardPaths::StandardLocation location = QStandardPaths::DownloadLocation;
@@ -50,7 +50,11 @@ QString FilePathUtil::getCanonicalPath(const QString &path)
 {
     const QString token = QStringLiteral("..");
     const QString slash = QStringLiteral("/");
+#if QT_VERSION < 0x060000
     const QStringList dirs = path.split(slash, QString::SkipEmptyParts);
+#else
+    const QStringList dirs = path.split(slash, Qt::SkipEmptyParts);
+#endif
 
     QStringList newDirs;
     for (const QString &dir : dirs) {

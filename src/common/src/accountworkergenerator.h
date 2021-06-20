@@ -18,6 +18,7 @@ public:
     explicit AccountWorkerGenerator(QObject *parent = nullptr);
 
     QVariantList accountWorkers();
+    QVector<AccountWorkers*> accountWorkersVector();
     AccountsDbInterface* database();
     void setDatabase(AccountsDbInterface* database);
 

@@ -1,8 +1,16 @@
 TEMPLATE = lib
+macx {
+    CONFIG += lib_bundle
+}
 TARGET = $$qtLibraryTarget(harbourowncloudcommon)
 
 CONFIG += qt c++11
 QT += network xml sql
+QT -= gui
+
+contains(CONFIG, qt6) {
+    QT += core5compat
+}
 
 linux:!android {
     QT += dbus
@@ -15,9 +23,11 @@ DEFINES += QWEBDAVITEM_EXTENDED_PROPERTIES
 
 OTHER_FILES += $$PWD/common.pri
 
-CONFIG(release, debug|release) {
-    QMAKE_POST_LINK=$(STRIP) $(TARGET)
-    DEFINES += QT_NO_DEBUG_OUTPUT
+!macx {
+    CONFIG(release, debug|release) {
+        QMAKE_POST_LINK=$(STRIP) $(TARGET)
+        DEFINES += QT_NO_DEBUG_OUTPUT
+    }
 }
 
 SOURCES += \
@@ -63,7 +73,8 @@ SOURCES += \
     $$PWD/src/provider/sharing/sharingprovider.cpp \
     $$PWD/src/provider/sharing/ocssharingcommandqueue.cpp \
     $$PWD/src/commands/ocs/ocssharelistcommandentity.cpp \
-    $$PWD/src/util/commandutil.cpp
+    $$PWD/src/util/commandutil.cpp \
+    src/sharedstatecontroller.cpp
 
 HEADERS += \
     $$PWD/src/net/abstractfetcher.h \
@@ -112,8 +123,12 @@ HEADERS += \
     $$PWD/src/provider/sharing/ocssharingcommandqueue.h \
     $$PWD/src/commands/ocs/ocssharelistcommandentity.h \
     $$PWD/src/util/commandutil.h \
-    src/settings/db/accountsdbinterface.h
+    $$PWD/src/settings/db/accountsdbinterface.h \
+    src/sharedstatecontroller.h
 
+macx {
+    include($$PWD/../../3rdparty/qwebdavlib/qwebdavlib/qwebdavlib.pri)
+}
 include($$PWD/../../3rdparty/libqtcommandqueue/libqtcommandqueue.pri)
 
 contains(QT, dbus) {
@@ -133,11 +148,8 @@ DEPENDPATH += $$PWD/../../3rdparty/qwebdavlib/qwebdavlib
 INCLUDEPATH += $$PWD/../../3rdparty/libqtcommandqueue/src
 DEPENDPATH += $$PWD/../../3rdparty/libqtcommandqueue/src
 
-INCLUDEPATH += $$PWD/../../3rdparty/libqtcommandqueue/src
-DEPENDPATH += $$PWD/../../3rdparty/libqtcommandqueue/src
-
 # SailfishOS configuration
-!contains(CONFIG, quickcontrols) {
+contains(CONFIG, sailfish_build) {
     QMAKE_RPATHDIR += /usr/share/harbour-owncloud/lib
     target.path = /usr/share/harbour-owncloud/lib
     qwebdavlib.path = /usr/share/harbour-owncloud/lib
@@ -159,8 +171,118 @@ linux:!android {
     qwebdavlib.files += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.so.1
 }
 macx {
-    LIBS += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.1.dylib
-    qwebdavlib.files += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.1.dylib
+    CONFIG += app_extension_api_only
+    CONFIG += force_debug_info
+
+    FRAMEWORK_HEADERS_QWEBDAVLIB.version = Versions
+    FRAMEWORK_HEADERS_QWEBDAVLIB.files = \
+        $$files($$PWD/../../3rdparty/qwebdavlib/qwebdavlib/*.h)
+    FRAMEWORK_HEADERS_QWEBDAVLIB.path = Headers
+    QMAKE_BUNDLE_DATA += FRAMEWORK_HEADERS_QWEBDAVLIB
+
+    FRAMEWORK_HEADERS_COMMANDQUEU.version = Versions
+    FRAMEWORK_HEADERS_COMMANDQUEU.files = \
+        $$files($$PWD/../../3rdparty/libqtcommandqueue/src/*.h)
+    FRAMEWORK_HEADERS_COMMANDQUEU.path = Headers
+    QMAKE_BUNDLE_DATA += FRAMEWORK_HEADERS_COMMANDQUEU
+
+    FRAMEWORK_HEADERS_SRC.version = Versions
+    FRAMEWORK_HEADERS_SRC.files = \
+        $$files($$PWD/src/*.h)
+    FRAMEWORK_HEADERS_SRC.path = Headers
+    QMAKE_BUNDLE_DATA += FRAMEWORK_HEADERS_SRC
+
+    FRAMEWORK_HEADERS_AUTH.version = Versions
+    FRAMEWORK_HEADERS_AUTH.files = \
+        $$files($$PWD/src/auth/*.h)
+    FRAMEWORK_HEADERS_AUTH.path = Headers/auth
+    QMAKE_BUNDLE_DATA += FRAMEWORK_HEADERS_AUTH
+
+    FRAMEWORK_HEADERS_COMMANDS.version = Versions
+    FRAMEWORK_HEADERS_COMMANDS.files = \
+        $$files($$PWD/src/commands/*.h)
+    FRAMEWORK_HEADERS_COMMANDS.path = Headers/commands
+    QMAKE_BUNDLE_DATA += FRAMEWORK_HEADERS_COMMANDS
+
+    FRAMEWORK_HEADERS_COMMANDS_HTTP.version = Versions
+    FRAMEWORK_HEADERS_COMMANDS_HTTP.files = \
+        $$files($$PWD/src/commands/http/*.h)
+    FRAMEWORK_HEADERS_COMMANDS_HTTP.path = Headers/commands/http
+    QMAKE_BUNDLE_DATA += FRAMEWORK_HEADERS_COMMANDS_HTTP
+
+    FRAMEWORK_HEADERS_COMMANDS_OCS.version = Versions
+    FRAMEWORK_HEADERS_COMMANDS_OCS.files = \
+        $$files($$PWD/src/commands/ocs/*.h)
+    FRAMEWORK_HEADERS_COMMANDS_OCS.path = Headers/commands/ocs
+    QMAKE_BUNDLE_DATA += FRAMEWORK_HEADERS_COMMANDS_OCS
+
+    FRAMEWORK_HEADERS_COMMANDS_SYNC.version = Versions
+    FRAMEWORK_HEADERS_COMMANDS_SYNC.files = \
+        $$files($$PWD/src/commands/sync/*.h)
+    FRAMEWORK_HEADERS_COMMANDS_SYNC.path = Headers/commands/sync
+    QMAKE_BUNDLE_DATA += FRAMEWORK_HEADERS_COMMANDS_SYNC
+
+    FRAMEWORK_HEADERS_COMMANDS_WEBDAV.version = Versions
+    FRAMEWORK_HEADERS_COMMANDS_WEBDAV.files = \
+        $$files($$PWD/src/commands/webdav/*.h)
+    FRAMEWORK_HEADERS_COMMANDS_WEBDAV.path = Headers/commands/webdav
+    QMAKE_BUNDLE_DATA += FRAMEWORK_HEADERS_COMMANDS_WEBDAV
+
+    FRAMEWORK_HEADERS_NET.version = Versions
+    FRAMEWORK_HEADERS_NET.files = \
+        $$files($$PWD/src/net/*.h)
+    FRAMEWORK_HEADERS_NET.path = Headers/net
+    QMAKE_BUNDLE_DATA += FRAMEWORK_HEADERS_NET
+
+    FRAMEWORK_HEADERS_PROV.version = Versions
+    FRAMEWORK_HEADERS_PROV.files = \
+        $$files($$PWD/src/provider/*.h)
+    FRAMEWORK_HEADERS_PROV.path = Headers/provider
+    QMAKE_BUNDLE_DATA += FRAMEWORK_HEADERS_PROV
+
+    FRAMEWORK_HEADERS_PROV_ACC.version = Versions
+    FRAMEWORK_HEADERS_PROV_ACC.files = \
+        $$files($$PWD/src/provider/accountinfo/*.h)
+    FRAMEWORK_HEADERS_PROV_ACC.path = Headers/provider/accountinfo
+    QMAKE_BUNDLE_DATA += FRAMEWORK_HEADERS_PROV_ACC
+
+    FRAMEWORK_HEADERS_PROV_SHARE.version = Versions
+    FRAMEWORK_HEADERS_PROV_SHARE.files = \
+        $$files($$PWD/src/provider/sharing/*.h)
+    FRAMEWORK_HEADERS_PROV_SHARE.path = Headers/provider/sharing
+    QMAKE_BUNDLE_DATA += FRAMEWORK_HEADERS_PROV_SHARE
+
+    FRAMEWORK_HEADERS_PROV_STORE.version = Versions
+    FRAMEWORK_HEADERS_PROV_STORE.files = \
+        $$files($$PWD/src/provider/storage/*.h)
+    FRAMEWORK_HEADERS_PROV_STORE.path = Headers/provider/storage
+    QMAKE_BUNDLE_DATA += FRAMEWORK_HEADERS_PROV_STORE
+
+    FRAMEWORK_HEADERS_SETTINGS.version = Versions
+    FRAMEWORK_HEADERS_SETTINGS.files = \
+        $$files($$PWD/src/settings/*.h)
+    FRAMEWORK_HEADERS_SETTINGS.path = Headers/settings
+    QMAKE_BUNDLE_DATA += FRAMEWORK_HEADERS_SETTINGS
+
+    FRAMEWORK_HEADERS_SETTINGS_DB.version = Versions
+    FRAMEWORK_HEADERS_SETTINGS_DB.files = \
+        $$files($$PWD/src/settings/db/*.h)
+    FRAMEWORK_HEADERS_SETTINGS_DB.path = Headers/settings/db
+    QMAKE_BUNDLE_DATA += FRAMEWORK_HEADERS_SETTINGS_DB
+
+    FRAMEWORK_HEADERS_UTIL.version = Versions
+    FRAMEWORK_HEADERS_UTIL.files = \
+        $$files($$PWD/src/util/*.h)
+    FRAMEWORK_HEADERS_UTIL.path = Headers/util
+    QMAKE_BUNDLE_DATA += FRAMEWORK_HEADERS_UTIL
+
+    FRAMEWORK_PLUGINS_SQLITE.version = Versions
+    FRAMEWORK_PLUGINS_SQLITE.files = $(QTDIR)/plugins/sqldrivers/libqsqlite.dylib
+    FRAMEWORK_PLUGINS_SQLITE.path = PlugIns/sqldrivers
+    QMAKE_BUNDLE_DATA += FRAMEWORK_PLUGINS_SQLITE
+
+    QMAKE_SONAME_PREFIX = @rpath
+    QMAKE_POST_LINK += $$quote(codesign -s \"Mac Developer\" $$OUT_PWD/$${TARGET}.framework/Versions/Current/PlugIns/sqldrivers/libqsqlite.dylib);
 }
 
 # Ubuntu Touch configuration

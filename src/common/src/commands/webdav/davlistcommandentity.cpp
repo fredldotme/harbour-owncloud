@@ -5,7 +5,12 @@ const QString getDirNameFromPath(const QString& path)
     const QString separator = QStringLiteral("/");
     if (!path.contains(separator))
         return path;
+
+#if QT_VERSION < 0x060000
     const QStringList splitPath = path.split(separator, QString::SkipEmptyParts);
+#else
+    const QStringList splitPath = path.split(separator, Qt::SkipEmptyParts);
+#endif
     if (splitPath.length() < 1)
         return separator;
     return splitPath[splitPath.length()-1];
@@ -34,6 +39,7 @@ bool DavListCommandEntity::startWork()
         qWarning() << "Error occured while parsing directory content for" << this->m_remotePath;
         qWarning() << this->m_parser.httpCode() << this->m_parser.error() << errorStr;
         this->m_parser.abort();
+        Q_EMIT aborted();
     });
 
     QObject::connect(&this->m_parser, &QWebdavDirParser::finished, this, [=]() {

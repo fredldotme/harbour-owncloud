@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include <QVector>
-#include <QVectorIterator>
 #include <QSharedPointer>
 #include <commandunit.h>
 #include <settings/nextcloudsettingsbase.h>
@@ -59,7 +58,11 @@ public:
         if (this->directories.empty())
             return nullptr;
 
+#if QT_VERSION < 0x060000
         QStringList crumbs = path.split("/", QString::SkipEmptyParts);
+#else
+        QStringList crumbs = path.split("/", Qt::SkipEmptyParts);
+#endif
         if (crumbs.empty())
             return nullptr;
 
@@ -106,7 +109,8 @@ public:
     NcDirTreeCommandUnit(QObject* parent = Q_NULLPTR,
                          CloudStorageProvider* client = Q_NULLPTR,
                          QString rootPath = NODE_PATH_SEPARATOR,
-                         QSharedPointer<NcDirNode> cachedTree = QSharedPointer<NcDirNode>());
+                         QSharedPointer<NcDirNode> cachedTree = QSharedPointer<NcDirNode>(),
+                         unsigned int depth = UINT_MAX);
 
 protected:
     void expand(CommandEntity* previousCommandEntity) Q_DECL_OVERRIDE;
@@ -120,6 +124,8 @@ private:
     // a pointer to the currently processed node to avoid
     // additional traversion of the whole tree.
     NcDirNode* m_currentNode = Q_NULLPTR;
+    unsigned int m_depth;
+    unsigned int m_currentDepthLevel = 0;
 };
 
 #endif // NCDIRTREECOMMANDUNIT_H

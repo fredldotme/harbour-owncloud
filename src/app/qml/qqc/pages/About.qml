@@ -136,6 +136,18 @@ Dialog {
             }
 
             Label {
+                text: qsTr("libharbourowncloudcommon (LGPL v2.1)")
+                font.pixelSize: fontSizeTiny
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                horizontalAlignment: Text.AlignHCenter
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                    leftMargin: fontSizeLarge
+                    rightMargin: fontSizeLarge
+                }
+            }
+            Label {
                 text: qsTr("libqtcommandqueue (LGPL v2.1)")
                 font.pixelSize: fontSizeTiny
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere

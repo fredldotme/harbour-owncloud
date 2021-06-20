@@ -12,9 +12,11 @@ android {
 
 DEFINES += QWEBDAVITEM_EXTENDED_PROPERTIES
 
-CONFIG(release, debug|release) {
-    QMAKE_POST_LINK=$(STRIP) $(TARGET)
-    DEFINES += QT_NO_DEBUG_OUTPUT
+!macx {
+    CONFIG(release, debug|release) {
+        QMAKE_POST_LINK=$(STRIP) $(TARGET)
+        DEFINES += QT_NO_DEBUG_OUTPUT
+    }
 }
 
 contains(CONFIG, quickcontrols) {
@@ -41,25 +43,9 @@ linux:!android {
     LIBS += $$OUT_PWD/../../src/common/libharbourowncloudcommon.so.1
 }
 
+# Build everything statically on macOS
 macx {
-    LIBS += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.1.dylib
-    PRE_TARGETDEPS += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.1.dylib
-
-    libs.path = Contents/MacOS
-    libs.files += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.1.dylib
-
-    CONFIG(release, debug|release) {
-        LIBS += $$OUT_PWD/../../src/common/libharbourowncloudcommon.1.dylib
-        PRE_TARGETDEPS += $$OUT_PWD/../../src/common/libharbourowncloudcommon.1.dylib
-        libs.files += $$OUT_PWD/../../src/common/libharbourowncloudcommon.1.dylib
-    }
-    CONFIG(debug, debug|release) {
-        LIBS += $$OUT_PWD/../../src/common/libharbourowncloudcommon_debug.1.dylib
-        PRE_TARGETDEPS += $$OUT_PWD/../../src/common/libharbourowncloudcommon_debug.1.dylib
-        libs.files += $$OUT_PWD/../../src/common/libharbourowncloudcommon_debug.1.dylib
-    }
-
-    QMAKE_BUNDLE_DATA += libs
+    include($$PWD/../../3rdparty/qwebdavlib/qwebdavlib/qwebdavlib.pri)
 }
 
 ios {
@@ -75,6 +61,7 @@ ios {
 # Sailfish additionals
 contains(CONFIG, sailfish_build) {
     CONFIG += ghostcloud_link
+    QMAKE_RPATHDIR += /usr/share/harbour-owncloud/lib
 }
 
 # Ubuntu Touch configuration
@@ -93,5 +80,3 @@ contains(CONFIG, ghostcloud_link) {
     LIBS += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.so.1
     LIBS += $$OUT_PWD/../../src/common/libharbourowncloudcommon.so.1
 }
-
-QMAKE_RPATHDIR += /usr/share/harbour-owncloud/lib

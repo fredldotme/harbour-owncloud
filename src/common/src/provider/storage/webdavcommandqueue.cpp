@@ -26,7 +26,6 @@
 #include <sys/types.h>
 #include <utime.h>
 
-#include <QDesktopServices>
 #ifdef Q_OS_ANDROID
 #include <QtAndroid>
 #endif

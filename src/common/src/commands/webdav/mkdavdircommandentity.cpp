@@ -22,7 +22,13 @@ bool MkDavDirCommandEntity::startWork()
     }
     this->m_reply = this->m_client->mkdir(this->m_remotePath);
 
-    QObject::connect(m_reply, static_cast<void(QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), this,
+    QObject::connect(m_reply,
+#if QT_VERSION < 0x06000
+                     static_cast<void(QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error),
+#else
+                     &QNetworkReply::errorOccurred,
+#endif
+                     this,
                      [=](QNetworkReply::NetworkError error) {
         qInfo() << "Remote directory creation" << this->m_remotePath << "failed,"
                 << "error:" << error;

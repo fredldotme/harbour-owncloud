@@ -51,8 +51,11 @@ bool NcSyncCommandUnit::fileExistsRemotely(const QString& localFilePath,
                                            QStringList& missingDirectories)
 {
     const QString relativeFilePath = localFilePath.mid(this->m_localPath.length());
+#if QT_VERSION < 0x060000
     QStringList pathCrumbs = relativeFilePath.split("/", QString::SkipEmptyParts);
-    QStringList usedCrumbs;
+#else
+    QStringList pathCrumbs = relativeFilePath.split("/", Qt::SkipEmptyParts);
+#endif
     const QString fileName = pathCrumbs.takeLast();
     QStringList dirCrumbs = pathCrumbs;
     NcDirNode* node = this->m_cachedTree.data();
@@ -231,7 +234,11 @@ void NcSyncCommandUnit::expand(CommandEntity *previousCommandEntity)
         // Remove m_localPath from sourcePath and build list of directories
         QStringList targetDirectory =
                 sourcePath.mid(this->m_localPath.length())
+#if QT_VERSION < 0x060000
                 .split('/', QString::SkipEmptyParts);
+#else
+                .split('/', Qt::SkipEmptyParts);
+#endif
 
         QString relativeTargetDir;
 

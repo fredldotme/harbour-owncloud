@@ -40,7 +40,8 @@ CommandEntityInfo defaultCommandInfo(const QString& rootPath)
 NcDirTreeCommandUnit::NcDirTreeCommandUnit(QObject *parent,
                                            CloudStorageProvider *client,
                                            QString rootPath,
-                                           QSharedPointer<NcDirNode> cachedTree) :
+                                           QSharedPointer<NcDirNode> cachedTree,
+                                           unsigned int depth) :
     CommandUnit(parent, {startingListCommand(rootPath, client)},
                 defaultCommandInfo(rootPath)),
     m_client(client)
@@ -62,6 +63,7 @@ NcDirTreeCommandUnit::NcDirTreeCommandUnit(QObject *parent,
 
     // Start content list retrieval at the root node
     this->m_currentNode = this->m_rootNode.data();
+    this->m_depth = depth;
 }
 
 void NcDirTreeCommandUnit::expand(CommandEntity* previousCommandEntity)
@@ -95,6 +97,10 @@ void NcDirTreeCommandUnit::expand(CommandEntity* previousCommandEntity)
 
     const QString remotePath = previousCommandEntity->info().property(QStringLiteral("remotePath")).toString();
     const QVariantList directoryContent = commandResult.value(QStringLiteral("dirContent")).toList();
+
+
+    // Don't traverse past the depth limit
+    bool lookNoFurther = (++this->m_currentDepthLevel) >= this->m_depth;
 
     for (const QVariant& tmpEntry : directoryContent) {
         // Skip invalid variants
@@ -134,10 +140,12 @@ void NcDirTreeCommandUnit::expand(CommandEntity* previousCommandEntity)
 
         const QString fullPath = remotePath + entryName + NODE_PATH_SEPARATOR;
 
-        // then add required DavListCommandEntity
-        CommandEntity* additionalCommand = this->m_client->directoryListingRequest(fullPath, false, false);
-        this->queue()->push_front(additionalCommand);
-        qDebug() << "DavListCommandEntity" << fullPath;
+        if (!lookNoFurther) {
+            // then add required DavListCommandEntity
+            CommandEntity* additionalCommand = this->m_client->directoryListingRequest(fullPath, false, false);
+            this->queue()->push_front(additionalCommand);
+            qDebug() << "DavListCommandEntity" << fullPath;
+        }
     }
 
     qDebug() << "remotePath of command" << remotePath;

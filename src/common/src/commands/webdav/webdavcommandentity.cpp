@@ -34,7 +34,12 @@ bool WebDavCommandEntity::startWork()
         });
 
         QObject::connect(this->m_reply,
-                         static_cast<void(QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), this,
+#if QT_VERSION < 0x060000
+                         static_cast<void(QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error),
+#else
+                         &QNetworkReply::errorOccurred,
+#endif
+                         this,
                          [=](QNetworkReply::NetworkError error) {
             qWarning() << "Aborting due to network error:" << error;
             // TODO: stale files when aborting?

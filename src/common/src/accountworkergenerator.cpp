@@ -107,6 +107,11 @@ QVariantList AccountWorkerGenerator::accountWorkers()
     return accWorkers;
 }
 
+QVector<AccountWorkers*> AccountWorkerGenerator::accountWorkersVector()
+{
+    return this->m_accountWorkers;
+}
+
 AccountsDbInterface* AccountWorkerGenerator::database()
 {
     return this->m_database;

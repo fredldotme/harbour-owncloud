@@ -134,6 +134,18 @@ Page {
             }
 
             Label {
+                text: qsTr("libharbourowncloudcommon (LGPL v2.1)")
+                font.pixelSize: Theme.fontSizeTiny
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                horizontalAlignment: Text.AlignHCenter
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                    leftMargin: Theme.paddingLarge
+                    rightMargin: Theme.paddingLarge
+                }
+            }
+            Label {
                 text: qsTr("libqtcommandqueue (LGPL v2.1)")
                 font.pixelSize: Theme.fontSizeTiny
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere

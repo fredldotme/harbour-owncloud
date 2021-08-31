@@ -65,10 +65,10 @@ bool DavListCommandEntity::startWork()
             info.insert("entityTag", item.entityTag());
             info.insert("uniqueId", item.entityTag());
             info.insert("fileId", item.fileId());
+            info.insert("lastModified", item.lastModified());
             if(!item.isDir()) {
                 info.insert("isExecutable", item.isExecutable());
                 info.insert("mimeType", item.mimeType());
-                info.insert("lastModified", item.lastModified());
             }
             directoryContent.append(info);
         }

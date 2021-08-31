@@ -1,0 +1,2 @@
+add_subdirectory(widgetsapp)
+add_subdirectory(finderextension)

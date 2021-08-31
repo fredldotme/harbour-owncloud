@@ -22,7 +22,8 @@ public slots:
                                                const QString mimeType = QStringLiteral(""),
                                                const bool open = false,
                                                const QDateTime lastModified = QDateTime(),
-                                               const bool enqueue = true) Q_DECL_OVERRIDE;
+                                               const bool enqueue = true,
+                                               const QString customDestination = QStringLiteral("")) Q_DECL_OVERRIDE;
 
     virtual CommandEntity* fileUploadRequest(const QString from,
                                              const QString to,

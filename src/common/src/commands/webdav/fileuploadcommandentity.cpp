@@ -25,7 +25,12 @@ FileUploadCommandEntity::FileUploadCommandEntity(QObject* parent,
     const QString fileName = QFileInfo(*this->m_localFile).fileName();
 #endif
 
+#ifdef Q_OS_MAC
+    // On macOS we set the filename explicitly in the remotePath
+    this->m_remotePath = remotePath;
+#else
     this->m_remotePath = remotePath + fileName;
+#endif
 
     // extensible list of command properties
     QMap<QString, QVariant> info;

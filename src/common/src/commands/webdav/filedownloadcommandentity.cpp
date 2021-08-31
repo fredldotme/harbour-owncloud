@@ -9,6 +9,7 @@ FileDownloadCommandEntity::FileDownloadCommandEntity(QObject* parent,
     WebDavCommandEntity(parent, client)
 {
     this->m_remotePath = remotePath;
+    this->m_localPath = localPath;
     this->m_localFile = new QFile(localPath, this);
     const QString localDir = localPath.left(localPath.lastIndexOf(QDir::separator())+1);
     this->m_localDir = QDir(localDir);
@@ -72,7 +73,7 @@ bool FileDownloadCommandEntity::startWork()
 
     this->m_reply = this->m_client->get(this->m_remotePath, this->m_localFile);
     QObject::connect(this->m_reply, &QNetworkReply::finished, this, [=]() {
-        qInfo() << "File download" << this->m_remotePath << "complete.";
+        qInfo() << "File download" << this->m_remotePath << "to" << this->m_localPath << "complete.";
     });
 
     const bool canStart = WebDavCommandEntity::startWork();

@@ -128,7 +128,8 @@ CommandEntity* WebDavCommandQueue::fileDownloadRequest(const QString remotePath,
                                                        const QString mimeType,
                                                        const bool open,
                                                        const QDateTime lastModified,
-                                                       const bool enqueue)
+                                                       const bool enqueue,
+                                                       const QString customDestination)
 {
 #ifdef Q_OS_ANDROID
     const QStringList requiredPermissions =
@@ -147,7 +148,10 @@ CommandEntity* WebDavCommandQueue::fileDownloadRequest(const QString remotePath,
     CommandEntity* downloadCommand = Q_NULLPTR;
     CommandEntity* lastModifiedCommand = Q_NULLPTR;
     Q_UNUSED(mimeType);
-    QString destination = FilePathUtil::destination(this->settings()) + remotePath;
+
+    QString destination = customDestination;
+    if (destination.isEmpty())
+        destination = FilePathUtil::destination(this->settings()) + remotePath;
 
 #if !defined(GHOSTCLOUD_UBUNTU_TOUCH) && !defined(GHOSTCLOUD_UBUNTU_TOUCH_PHOTOBACKUP)
     downloadCommand = new FileDownloadCommandEntity(this, remotePath,
@@ -158,7 +162,13 @@ CommandEntity* WebDavCommandQueue::fileDownloadRequest(const QString remotePath,
 #endif
     // if lastModified has been provided update the local lastModified information after download
     qDebug() << lastModified;
-    if (lastModified.isValid()) {
+
+    bool forceLastModified = false;
+#ifdef Q_OS_MAC
+    forceLastModified = true;
+#endif
+
+    if (lastModified.isValid() || forceLastModified) {
         lastModifiedCommand = localLastModifiedRequest(destination,
                                                        lastModified);
     }

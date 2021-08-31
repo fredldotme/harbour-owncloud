@@ -23,6 +23,7 @@ protected:
     bool staticProgress() const Q_DECL_OVERRIDE { return false; }
 
     QString m_remotePath = QStringLiteral("");
+    QString m_localPath = QStringLiteral("");
     QFile* m_localFile = Q_NULLPTR;
     QDir m_localDir;
 

@@ -19,13 +19,15 @@ public:
                                                const QString mimeType = QStringLiteral(""),
                                                const bool open = false,
                                                const QDateTime lastModified = QDateTime(),
-                                               const bool enqueue = false)
+                                               const bool enqueue = false,
+                                               const QString customDestination = QStringLiteral(""))
     {
         Q_UNUSED(from);
         Q_UNUSED(mimeType);
         Q_UNUSED(open);
         Q_UNUSED(lastModified);
         Q_UNUSED(enqueue);
+        Q_UNUSED(customDestination);
         return Q_NULLPTR;
     }
 

@@ -12,3 +12,4 @@ prime/
 openssl-*.*.*
 .DS_Store
 .clickable/
+CMakeLists.txt.user

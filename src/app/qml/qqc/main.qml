@@ -64,7 +64,7 @@ ApplicationWindow {
     onActiveChanged: {
         if (!osIsUbuntuTouch)
             return;
-        if (sideStack.currentItem !== sideStack.initialItem)
+        if (rootStack.currentItem !== rootStack.initialItem)
             return;
         if (!active)
             return;

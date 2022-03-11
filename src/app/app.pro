@@ -21,7 +21,11 @@ contains(CONFIG, quickcontrols) {
         desktop.files += harbour-owncloud.desktop
         desktop.path = /usr/share/applications
         target.path = /usr/bin
-        INSTALLS += desktop target
+        libwebdav.files += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.so.1
+        libwebdav.path = /usr/lib
+        libcommon.files += $$OUT_PWD/../common/libharbourowncloudcommon.so.1
+        libcommon.path = /usr/lib
+        INSTALLS += desktop target libwebdav libcommon
     }
 
     ios {

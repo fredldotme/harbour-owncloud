@@ -1,5 +1,5 @@
 {
-  "template": "qmake",
+  "builder": "qmake",
   "default": "clean build click-build",
   "kill": "harbour-owncloud",
   "dependencies_target": [

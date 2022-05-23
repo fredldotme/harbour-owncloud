@@ -35,6 +35,8 @@ BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:  pkgconfig(nemotransferengine-qt5)
 BuildRequires:  desktop-file-utils
 
+BuildRequires:  pkgconfig(systemd)
+
 %description
 Unofficial NextCloud/ownCloud client for SailfishOS
 
@@ -91,10 +93,10 @@ desktop-file-install --delete-original       \
 %{_bindir}/%{name}-daemon
 %{_bindir}/%{name}-permission-agent
 %defattr(-,root,root,-)
-/usr/lib/systemd/user/%{name}-daemon.service
-/usr/lib/systemd/user/%{name}-permission-agent.service
-/usr/lib/systemd/user/user-session.target.wants/%{name}-daemon.service
-/usr/lib/systemd/user/user-session.target.wants/%{name}-permission-agent.service
+%{_userunitdir}/%{name}-daemon.service
+%{_userunitdir}/%{name}-permission-agent.service
+%{_userunitdir}/user-session.target.wants/%{name}-daemon.service
+%{_userunitdir}/user-session.target.wants/%{name}-permission-agent.service
 %{_datadir}/nemo-transferengine/plugins/
 %{_libdir}/nemo-transferengine/plugins/libghostcloudshareplugin.so
 %{_libdir}/qt5/qml/com/github/beidl/harbourowncloud/libharbourowncloudqmlplugin.so

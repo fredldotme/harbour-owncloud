@@ -42,7 +42,8 @@ Unofficial NextCloud/ownCloud client for SailfishOS
 
 %package daemon
 Summary:   NextCloud/ownCloud background task for automatic camera backups
-Requires:  harbour-owncloud = %{version}
+#Requires:  harbour-owncloud = %{version}
+Requires:  harbour-owncloud
 
 %description daemon
 Nextcloud/ownCloud background task for automatic camera backups

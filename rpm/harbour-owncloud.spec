@@ -57,9 +57,9 @@ Nextcloud/ownCloud background task for automatic camera backups
 # >> build pre
 # << build pre
 
-%qtc_qmake5
+%qtc_qmake5 CONFIG+="sailfish_build nosharing"
 
-%qtc_make %{?_smp_mflags} CONFIG+=sailfish_build
+%qtc_make %{?_smp_mflags} CONFIG+="sailfish_build nosharing"
 
 # >> build post
 # << build post
@@ -97,14 +97,14 @@ desktop-file-install --delete-original       \
 %{_userunitdir}/%{name}-permission-agent.service
 %{_userunitdir}/user-session.target.wants/%{name}-daemon.service
 %{_userunitdir}/user-session.target.wants/%{name}-permission-agent.service
-%{_datadir}/nemo-transferengine/plugins/
-%{_libdir}/nemo-transferengine/plugins/libghostcloudshareplugin.so
+#%%{_datadir}/nemo-transferengine/plugins/
+#%%{_libdir}/nemo-transferengine/plugins/libghostcloudshareplugin.so
 %{_libdir}/qt5/qml/com/github/beidl/harbourowncloud/libharbourowncloudqmlplugin.so
 %{_libdir}/qt5/qml/com/github/beidl/harbourowncloud/qmldir
-%{_datadir}/themes/sailfish-default/meegotouch/z1.0/icons/icon-m-share-%{name}.png
-%{_datadir}/themes/sailfish-default/meegotouch/z1.25/icons/icon-m-share-%{name}.png
-%{_datadir}/themes/sailfish-default/meegotouch/z1.5-large/icons/icon-m-share-%{name}.png
-%{_datadir}/themes/sailfish-default/meegotouch/z1.75/icons/icon-m-share-%{name}.png
+#%%{_datadir}/themes/sailfish-default/meegotouch/z1.0/icons/icon-m-share-%{name}.png
+#%%{_datadir}/themes/sailfish-default/meegotouch/z1.25/icons/icon-m-share-%{name}.png
+#%%{_datadir}/themes/sailfish-default/meegotouch/z1.5-large/icons/icon-m-share-%{name}.png
+#%%{_datadir}/themes/sailfish-default/meegotouch/z1.75/icons/icon-m-share-%{name}.png
 
 # >> files
 # << files

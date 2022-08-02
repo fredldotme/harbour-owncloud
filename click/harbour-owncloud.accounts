@@ -4,6 +4,11 @@
       "name": "GhostCloud",
       "description": "Access your self-hosted cloud files",
       "provider": "nextcloud"
+    },
+    {
+      "name": "GhostCloud",
+      "description": "Access your self-hosted cloud files",
+      "provider": "owncloud"
     }
   ]
 }

@@ -24,7 +24,9 @@ UtAccountsDb::~UtAccountsDb()
 
 void UtAccountsDb::refresh()
 {
+    QVector<AccountBase*> accounts;
     QString applicationId;
+
     QStringList parts = QString::fromUtf8(qgetenv("APP_ID")).split('_');
     if (parts.count() == 3) {
         applicationId = QStringList(parts.mid(0, 2)).join('_');
@@ -33,7 +35,9 @@ void UtAccountsDb::refresh()
                       "and no applicationId given!";
         return;
     }
-    const QString desiredServiceId = QStringLiteral("%1_nextcloud").arg(applicationId);
+
+    const QString desiredServiceIdNextcloud = QStringLiteral("%1_nextcloud").arg(applicationId);
+    const QString desiredServiceIdOwncloud = QStringLiteral("%1_owncloud").arg(applicationId);
 
     if (this->m_manager) {
         QObject::disconnect(this->m_manager, nullptr, this, nullptr);
@@ -47,6 +51,15 @@ void UtAccountsDb::refresh()
         refresh();
     });*/
 
+    refreshAccountType(desiredServiceIdNextcloud, accounts);
+    refreshAccountType(desiredServiceIdOwncloud, accounts);
+
+    this->m_accounts = accounts;
+    emit accountsChanged();
+}
+
+void UtAccountsDb::refreshAccountType(const QString& desiredServiceId, QVector<AccountBase*>& accounts)
+{
     qInfo() << "Available services: ";
     bool hasService = false;
     for (const Service& service : this->m_manager->availableServices()) {
@@ -61,7 +74,6 @@ void UtAccountsDb::refresh()
         return;
     }
 
-    QVector<AccountBase*> accounts;
     QList<Account*> availableAccounts = this->m_manager->availableAccounts(desiredServiceId);
     qInfo() << "Number of available accounts: " << availableAccounts.length();
     for (Account* account : availableAccounts) {
@@ -95,10 +107,7 @@ void UtAccountsDb::refresh()
         //QObject::connect(account, &Account::changed, this, &UtAccountsDb::refresh);
         //QObject::connect(account, &Account::disabled, this, &UtAccountsDb::refresh);
     }
-    this->m_accounts = accounts;
-    emit accountsChanged();
 }
-
 
 QVector<AccountBase*> UtAccountsDb::accounts()
 {

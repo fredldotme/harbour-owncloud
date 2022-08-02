@@ -25,6 +25,8 @@ public slots:
     bool removeAccount(AccountBase* account) override;
 
 private:
+    void refreshAccountType(const QString& desiredServiceId, QVector<AccountBase*>& accounts);
+
     OnlineAccounts::Manager* m_manager = nullptr;
     QVector<AccountBase*> m_accounts;
 };

@@ -166,11 +166,22 @@ macx {
 # Ubuntu Touch configuration
 contains(CONFIG, click) {
     DEFINES += GHOSTCLOUD_UBUNTU_TOUCH
+    CONFIG += ubuntutouch
+}
+
+contains(CONFIG, clickphotobackup) {
+    DEFINES += GHOSTCLOUD_UBUNTU_TOUCH_PHOTOBACKUP
+    CONFIG += ubuntutouch
+}
+
+contains(CONFIG, ubuntutouch) {
     SOURCES += \
         $$PWD/src/commands/ubuntutouch/utfiledownloadcommandentity.cpp \
+        #$$PWD/src/commands/ubuntutouch/utfileuploadcommandentity.cpp \
         $$PWD/src/settings/db/utaccountsdb.cpp
     HEADERS += \
         $$PWD/src/commands/ubuntutouch/utfiledownloadcommandentity.h \
+        #$$PWD/src/commands/ubuntutouch/utfileuploadcommandentity.h \
         $$PWD/src/settings/db/utaccountsdb.h
     LIBS += -lubuntu-download-manager-client -lOnlineAccountsQt
 }

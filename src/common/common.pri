@@ -74,14 +74,24 @@ ios {
 
 # Sailfish additionals
 contains(CONFIG, sailfish_build) {
-    LIBS += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.so.1
-    LIBS += $$OUT_PWD/../../src/common/libharbourowncloudcommon.so.1
+    CONFIG += ghostcloud_link
 }
 
 # Ubuntu Touch configuration
 contains(CONFIG, click) {
     DEFINES += GHOSTCLOUD_UBUNTU_TOUCH
     DEFINES += OS_SUPPORTS_THEME_PROVIDER # Qml-Ui-Set
+}
+
+# Ubuntu Touch Photo Backup configuration
+contains(CONFIG, clickphotobackup) {
+    DEFINES += GHOSTCLOUD_UBUNTU_TOUCH_PHOTOBACKUP
+    CONFIG += ghostcloud_link
+}
+
+contains(CONFIG, ghostcloud_link) {
+    LIBS += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.so.1
+    LIBS += $$OUT_PWD/../../src/common/libharbourowncloudcommon.so.1
 }
 
 QMAKE_RPATHDIR += /usr/share/harbour-owncloud/lib

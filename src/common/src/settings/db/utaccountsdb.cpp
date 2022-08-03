@@ -28,7 +28,7 @@ void UtAccountsDb::refresh()
     QString applicationId;
 
     QStringList parts = QString::fromUtf8(qgetenv("APP_ID")).split('_');
-    if (parts.count() == 3) {
+    if (parts.count() == 2 || parts.count() == 3) {
         applicationId = QStringList(parts.mid(0, 2)).join('_');
     } else {
         qWarning() << "Ubuntu.OnlineAccounts: No APP_ID defined "
@@ -100,6 +100,7 @@ void UtAccountsDb::refreshAccountType(const QString& desiredServiceId, QVector<A
         newAccount->setHoststring(hostString);
         newAccount->setUsername(username);
         newAccount->setPassword(password);
+        newAccount->setUploadAutomatically(true);
         accounts.append(newAccount);
 
         // Also connect to changed and disabled signals of the SSO Account object

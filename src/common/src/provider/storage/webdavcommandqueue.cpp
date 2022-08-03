@@ -2,7 +2,7 @@
 
 #include <QDebug>
 
-#ifndef GHOSTCLOUD_UBUNTU_TOUCH
+#if !defined(GHOSTCLOUD_UBUNTU_TOUCH) && !defined(GHOSTCLOUD_UBUNTU_TOUCH_PHOTOBACKUP)
 #include <commands/webdav/filedownloadcommandentity.h>
 #else
 #include <commands/ubuntutouch/utfiledownloadcommandentity.h>
@@ -150,7 +150,7 @@ CommandEntity* WebDavCommandQueue::fileDownloadRequest(const QString remotePath,
     Q_UNUSED(mimeType);
     QString destination = FilePathUtil::destination(this->settings()) + remotePath;
 
-#ifndef GHOSTCLOUD_UBUNTU_TOUCH
+#if !defined(GHOSTCLOUD_UBUNTU_TOUCH) && !defined(GHOSTCLOUD_UBUNTU_TOUCH_PHOTOBACKUP)
     downloadCommand = new FileDownloadCommandEntity(this, remotePath,
                                                     destination, this->getWebdav());
 #else

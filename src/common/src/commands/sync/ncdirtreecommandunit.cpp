@@ -45,6 +45,8 @@ NcDirTreeCommandUnit::NcDirTreeCommandUnit(QObject *parent,
                 defaultCommandInfo(rootPath)),
     m_client(client)
 {
+    qInfo() << Q_FUNC_INFO << rootPath;
+
     if (!this->queue()->front()) {
         qCritical() << "The CommandUnit is supposed to have an entity in the queue but doesn't. Bailing out.";
         return;

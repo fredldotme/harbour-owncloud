@@ -9,15 +9,16 @@
 #include <QFile>
 #include <QFileInfo>
 
-CommandEntity* defaultCommandEntity(QObject* parent,
+static CommandEntity* defaultCommandEntity(QObject* parent,
                                     CloudStorageProvider* client,
                                     QString remotePath,
                                     QSharedPointer<NcDirNode> cachedTree)
 {
+    qInfo() << Q_FUNC_INFO << remotePath;
     return new NcDirTreeCommandUnit(parent, client, remotePath, cachedTree);
 }
 
-CommandEntityInfo defaultCommandInfo(const QString& localPath, const QString& remotePath)
+static CommandEntityInfo defaultCommandInfo(const QString& localPath, const QString& remotePath)
 {
     QVariantMap info;
     info.insert(QStringLiteral("type"), "dirTree");
@@ -51,13 +52,16 @@ bool NcSyncCommandUnit::fileExistsRemotely(const QString& localFilePath,
 {
     const QString relativeFilePath = localFilePath.mid(this->m_localPath.length());
     QStringList pathCrumbs = relativeFilePath.split("/", QString::SkipEmptyParts);
+    QStringList usedCrumbs;
     const QString fileName = pathCrumbs.takeLast();
+    QStringList dirCrumbs = pathCrumbs;
     NcDirNode* node = this->m_cachedTree.data();
 
-    qDebug() << "fileName" << fileName;
+    qInfo() << "fileName" << fileName;
+
     while (node && !pathCrumbs.isEmpty()) {
-        qDebug() << "node name" << node->name;
-        qDebug() << "crumb" << pathCrumbs[0];
+        qInfo() << "node name" << node->name;
+        qInfo() << "crumb" << pathCrumbs[0];
 
         NcDirNode* nextNode = nullptr;
         for (NcDirNode* potentialNode : node->directories) {
@@ -77,9 +81,8 @@ bool NcSyncCommandUnit::fileExistsRemotely(const QString& localFilePath,
         node = nextNode;
     }
 
-    const bool isFile = (pathCrumbs.isEmpty());
     bool fileFound = false;
-    if (isFile && node) {
+    if (node) {
         // examine the node's list of files for the file name
         for (QVariant file : node->files) {
             QVariantMap fileInfo = file.toMap();
@@ -90,7 +93,23 @@ bool NcSyncCommandUnit::fileExistsRemotely(const QString& localFilePath,
         }
     }
 
-    missingDirectories.append(pathCrumbs);
+    // Reliably find missing directories in the remote tree
+    qInfo() << "Finding missing remote directory structure:" << this->m_remotePath << dirCrumbs;
+    node = this->m_cachedTree.data();
+    while (node && dirCrumbs.count() > 0) {
+        for (NcDirNode* potentialNode : node->directories) {
+            if (potentialNode->name == dirCrumbs.first()) {
+                node = potentialNode;
+                dirCrumbs.takeFirst();
+                break;
+            }
+        }
+
+        node = nullptr;
+    }
+
+    missingDirectories.append(dirCrumbs);
+
     return fileFound;
 }
 
@@ -123,7 +142,7 @@ void NcSyncCommandUnit::expand(CommandEntity *previousCommandEntity)
     const bool success = dirTreeCommandResult.value(QStringLiteral("success")).toBool();
     if (!success) {
         if (!this->m_directoryCreation) {
-            qInfo() << "trying to create target directory";
+            qInfo() << "trying to create target directory" << this->m_remotePath;
             this->m_directoryCreation = true;
 
             CommandEntity* mkdirCommand =
@@ -164,7 +183,7 @@ void NcSyncCommandUnit::expand(CommandEntity *previousCommandEntity)
 
         QStringList missingDirectories;
         const bool exists = fileExistsRemotely(sourcePath, missingDirectories);
-        qDebug() << "file exists remotely?" << exists;
+        qInfo() << "file" << sourcePath << "exists remotely?" << exists << ", missing directories:" << missingDirectories.join("/");
 
         /*const QString remoteRelativeFilePath = localFilePath.mid(this->m_localPath.length());
         const QString remoteRelativeDir = remoteRelativeFilePath.split('/', QString::SkipEmptyParts).join('/');
@@ -176,8 +195,16 @@ void NcSyncCommandUnit::expand(CommandEntity *previousCommandEntity)
         // Policy: in case of doubt the server wins
 
         // Skip the file upload if it already exists remotely
-        if (exists)
+        if (exists) {
+            // Add the directory path to created dirs as to avoid breaking the unit
+            QString missingRelativeDir = this->m_remotePath;
+            for (QString remainingCrumb : missingDirectories) {
+                missingRelativeDir += remainingCrumb + NODE_PATH_SEPARATOR;
+            }
+            if (!dirsToCreate.contains(missingRelativeDir))
+                dirsToCreate.append(missingRelativeDir);
             continue;
+        }
 
         // Create missing directories first if any
         if (missingDirectories.length() > 0) {
@@ -186,9 +213,10 @@ void NcSyncCommandUnit::expand(CommandEntity *previousCommandEntity)
                 missingRelativeDir += remainingCrumb + NODE_PATH_SEPARATOR;
 
                 if (dirsToCreate.contains(missingRelativeDir))
-                    break;
+                    continue;
                 dirsToCreate.append(missingRelativeDir);
 
+                qInfo() << "MkDirCommand:" << missingRelativeDir;
                 CommandEntity* mkdirCommand =
                         this->m_client->makeDirectoryRequest(missingRelativeDir, false);
                 this->queue()->push_back(mkdirCommand);

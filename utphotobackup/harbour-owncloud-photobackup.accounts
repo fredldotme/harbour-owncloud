@@ -1,0 +1,14 @@
+{
+  "services": [
+    {
+      "name": "GhostCloud Photo Backups",
+      "description": "Backup camera photos to your cloud",
+      "provider": "nextcloud"
+    },
+    {
+      "name": "GhostCloud Photo Backups",
+      "description": "Backup camera photos to your cloud",
+      "provider": "owncloud"
+    }
+  ]
+}

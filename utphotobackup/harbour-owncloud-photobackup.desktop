@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Icon=ghostcloud.png
+Exec=run.sh
+Name=GhostCloud Photo Backup
+X-Ubuntu-Touch=true
+X-Ubuntu-Splash-Color=#F5F5F5

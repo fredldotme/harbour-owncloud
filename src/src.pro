@@ -2,7 +2,11 @@ QMAKE_CXXFLAGS += -std=gnu++0x
 
 TEMPLATE = subdirs
 CONFIG += ordered
-SUBDIRS = common app
+SUBDIRS = common
+
+!contains(CONFIG, noapp) {
+    CONFIG += app
+}
 
 contains(CONFIG, noadditionals) {
     CONFIG += nodaemon nopermissionagent noqmlextension nosharing
@@ -22,4 +26,8 @@ contains(CONFIG, noadditionals) {
 
 !contains(CONFIG, nosharing) {
     SUBDIRS += sharing
+}
+
+contains(CONFIG, clickphotobackup) {
+    SUBDIRS += ut-photobackup
 }

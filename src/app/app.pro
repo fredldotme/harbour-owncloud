@@ -15,6 +15,10 @@ contains(CONFIG, quickcontrols) {
     DEFINES += GHOSTCLOUD_UI_QUICKCONTROLS
     include($$PWD/../../3rdparty/qml-ui-set/qml-ui-set.pri)
 
+    contains(CONFIG, click) {
+        DEFINES += GHOSTCLOUD_UBUNTU_TOUCH
+    }
+
     unix:!macx {
         QMAKE_RPATHDIR += $$OUT_PWD/../../3rdparty/qwebdav
         QMAKE_RPATHDIR += $$OUT_PWD/../common

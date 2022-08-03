@@ -17,7 +17,12 @@
 #include <commands/sync/ncdirtreecommandunit.h>
 #include <commands/sync/ncsynccommandunit.h>
 #include <accountworkergenerator.h>
+
+#ifdef GHOSTCLOUD_UBUNTU_TOUCH_PHOTOBACKUP
+#include <settings/db/utaccountsdb.h>
+#else
 #include <settings/db/accountdb.h>
+#endif
 
 #ifdef Q_OS_UNIX
 #include <unistd.h>
@@ -44,7 +49,7 @@ QString remoteDirectoryFromHwRelease()
 
         }
     }
-#ifdef GHOSTCLOUD_UBUNTU_TOUCH
+#ifdef GHOSTCLOUD_UBUNTU_TOUCH_PHOTOBACKUP
     return QStringLiteral("/GhostCloud");
 #else
     return QStringLiteral("/Jolla");
@@ -80,8 +85,17 @@ int main(int argc, char *argv[])
 
     const QString targetDirectory = remoteDirectoryFromHwRelease();
 
-    AccountWorkerGenerator generator;
+#ifdef GHOSTCLOUD_UBUNTU_TOUCH_PHOTOBACKUP
+    UtAccountsDb accountDatabase;
+    QObject::connect(&accountDatabase, &AccountsDbInterface::accountsChanged,
+                     &app, [=](){
+        execv(argv[0], argv);
+    });
+#else
     AccountDb accountDatabase;
+#endif
+
+    AccountWorkerGenerator generator;
     generator.setDatabase(&accountDatabase);
 
     for (const QVariant& accountWorkerVariant : generator.accountWorkers()) {

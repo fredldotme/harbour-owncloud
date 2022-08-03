@@ -15,7 +15,7 @@ Uploader::Uploader(QObject *parent,
     m_settings(settings),
     m_webDavCommandQueue(new WebDavCommandQueue(this, settings))
 {
-    this->m_webDavCommandQueue->setImmediate(true);
+    this->m_webDavCommandQueue->setImmediate(false);
     QObject::connect(this->m_webDavCommandQueue, &WebDavCommandQueue::runningChanged,
                      this, &Uploader::runningChanged);
 }
@@ -48,7 +48,7 @@ void Uploader::triggerSync(const QString &localPath, const QString &remoteSubdir
     // create parent directory
     // NcSyncCommandUnit dont creating remote directories recursively
     // TODO: do it properly
-    this->m_webDavCommandQueue->makeDirectoryRequest(this->m_targetDirectory, true);
+    CommandEntity* mkdirRequest = this->m_webDavCommandQueue->makeDirectoryRequest(this->m_targetDirectory, false);
 
     NcSyncCommandUnit* syncDirectoriesUnit =
             new NcSyncCommandUnit(this->m_webDavCommandQueue,
@@ -61,7 +61,9 @@ void Uploader::triggerSync(const QString &localPath, const QString &remoteSubdir
     connect(syncDirectoriesUnit, &CommandEntity::aborted, [localPath, this](){ m_syncingPaths.remove(localPath); });
     connect(syncDirectoriesUnit, &CommandEntity::done,    [localPath, this](){ m_syncingPaths.remove(localPath); });
 
-    this->m_webDavCommandQueue->enqueue((CommandEntity*)syncDirectoriesUnit);
+    this->m_webDavCommandQueue->enqueue(mkdirRequest);
+    this->m_webDavCommandQueue->enqueue(syncDirectoriesUnit);
+    this->m_webDavCommandQueue->run();
 }
 
 void Uploader::stopSync()

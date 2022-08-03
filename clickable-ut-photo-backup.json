@@ -1,0 +1,18 @@
+{
+  "builder": "qmake",
+  "default": "clean build click-build",
+  "kill": "harbour-owncloud-photobackup",
+  "dependencies_target": [
+    "libubuntu-download-manager-client-dev",
+    "libonline-accounts-qt-dev"
+  ],
+  "build_args": [
+    "CONFIG+=noapp",
+    "CONFIG+=nopermissionagent",
+    "CONFIG+=noqmlextension",
+    "CONFIG+=nosharing",
+    "CONFIG+=clickphotobackup"
+  ],
+  "make_jobs": 4,
+  "qt_version": "5.12"
+}

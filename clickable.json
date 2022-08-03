@@ -7,6 +7,7 @@
     "libonline-accounts-qt-dev"
   ],
   "build_args": [
+    "CONFIG+=nodaemon",
     "CONFIG+=nopermissionagent",
     "CONFIG+=noqmlextension",
     "CONFIG+=nosharing",

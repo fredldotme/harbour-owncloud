@@ -22,6 +22,9 @@ android {
 contains(CONFIG,click) {
     SUBDIRS += click
 }
+contains(CONFIG,clickphotobackup) {
+    SUBDIRS += utphotobackup
+}
 
 # SailfishOS rpm packaging
 OTHER_FILES += \

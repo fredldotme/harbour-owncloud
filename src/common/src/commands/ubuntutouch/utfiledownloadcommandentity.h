@@ -6,8 +6,8 @@
 #include <QDir>
 #include "commandentity.h"
 #include <settings/nextcloudsettingsbase.h>
-#include <ubuntu/download_manager/download.h>
-#include <ubuntu/download_manager/manager.h>
+#include <lomiri/download_manager/download.h>
+#include <lomiri/download_manager/manager.h>
 
 class UtFileDownloadCommandEntity : public CommandEntity
 {
@@ -32,11 +32,11 @@ protected:
 private Q_SLOTS:
     void handleProgress(qulonglong received, qulonglong total);
     void handleFinished(const QString& path);
-    void handleError(Ubuntu::DownloadManager::Error* error);
+    void handleError(Lomiri::DownloadManager::Error* error);
 
 private:
-    Ubuntu::DownloadManager::Manager* m_dlManager = Q_NULLPTR;
-    Ubuntu::DownloadManager::Download* m_download = Q_NULLPTR;
+    Lomiri::DownloadManager::Manager* m_dlManager = Q_NULLPTR;
+    Lomiri::DownloadManager::Download* m_download = Q_NULLPTR;
     AccountBase* m_settings = Q_NULLPTR;
     bool m_running = false;
 };

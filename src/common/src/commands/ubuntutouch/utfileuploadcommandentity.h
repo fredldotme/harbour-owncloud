@@ -6,8 +6,8 @@
 #include <QDir>
 #include "commandentity.h"
 #include <settings/nextcloudsettingsbase.h>
-#include <ubuntu/download_manager/upload.h>
-#include <ubuntu/download_manager/manager.h>
+#include <lomiri/download_manager/upload.h>
+#include <lomiri/download_manager/manager.h>
 
 class UtFileUploadCommandEntity : public CommandEntity
 {
@@ -24,8 +24,8 @@ protected:
     bool staticProgress() const Q_DECL_OVERRIDE { return false; }
 
 private:
-    Ubuntu::DownloadManager::Manager* m_dlManager = Q_NULLPTR;
-    Ubuntu::DownloadManager::Download* m_download = Q_NULLPTR;
+    Lomiri::DownloadManager::Manager* m_dlManager = Q_NULLPTR;
+    Lomiri::DownloadManager::Download* m_download = Q_NULLPTR;
     AccountBase* m_settings = Q_NULLPTR;
     bool m_running = false;
     QFile* m_localFile = Q_NULLPTR;

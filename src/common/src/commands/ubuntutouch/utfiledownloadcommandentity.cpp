@@ -5,7 +5,7 @@
 #include <QDebug>
 #include <QFile>
 
-using namespace Ubuntu::DownloadManager;
+using namespace Lomiri::DownloadManager;
 
 UtFileDownloadCommandEntity::UtFileDownloadCommandEntity(QObject* parent,
                                                      QString remotePath,

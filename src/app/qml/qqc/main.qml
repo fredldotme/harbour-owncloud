@@ -68,6 +68,9 @@ ApplicationWindow {
             return;
         if (!active)
             return;
+        // TODO: investigate whether this is right or not
+        if (selectedAccount && selectedAccount.browserCommandQueue.length > 0)
+            return;
 
         accountsDb.refresh()
     }

@@ -5,7 +5,7 @@ CONFIG += ordered
 SUBDIRS = common
 
 !contains(CONFIG, noapp) {
-    CONFIG += app
+    SUBDIRS += app
 }
 
 contains(CONFIG, noadditionals) {

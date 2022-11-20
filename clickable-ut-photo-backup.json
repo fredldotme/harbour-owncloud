@@ -3,7 +3,7 @@
   "default": "clean build click-build",
   "kill": "harbour-owncloud-photobackup",
   "dependencies_target": [
-    "libubuntu-download-manager-client-dev",
+    "liblomiri-download-manager-client-dev",
     "libonline-accounts-qt-dev"
   ],
   "build_args": [

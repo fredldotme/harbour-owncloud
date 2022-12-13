@@ -1,5 +1,6 @@
 {
   "builder": "qmake",
+  "framework": "ubuntu-sdk-20.04",
   "default": "clean build click-build",
   "kill": "harbour-owncloud",
   "dependencies_target": [

@@ -28,7 +28,7 @@ Page {
             fileDetailsHelper.getIconFromMime(entry.mimeType)
 
     readonly property bool supportsMediaPreview : !(osIsIOS || osIsMacOs)
-    readonly property bool supportsDownloads : !osIsIOS
+    readonly property bool supportsDownloads : !(osIsIOS || osIsUbuntuTouch)
 
     readonly property bool isAudio :
         supportsMediaPreview && (!entry.isDirectory &&

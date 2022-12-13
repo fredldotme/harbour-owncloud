@@ -1,9 +1,12 @@
 import QtQuick 2.0
-import Lomiri.Components 0.1
-import Lomiri.Content 0.1
+import Lomiri.Components 1.1
+import Lomiri.Content 1.1
 
 Item {
     id: dialogRoot
+    anchors.fill: parent
+    visible: false
+
     property list<ContentItem> importItems
     property var activeTransfer
     property var fileUrls : new Array
@@ -21,33 +24,31 @@ Item {
             }
 
             dialogRoot.accepted()
+            dialogRoot.visible = false
         }
     }
 
     signal accepted()
 
     function open() {
-        var peer = null
-        for (var i = 0; i < model.peers.length; ++i) {
-            var p = model.peers[i]
-            if (p.appId.indexOf("com.ubuntu.filemanager_") === 0) {
-                peer = p
-            }
-        }
-
-        activeTransfer = peer.request()
+        dialogRoot.visible = true
     }
 
-    ContentPeerModel {
-        id: model
+    ContentPeerPicker {
+        id: contentPeer
+        anchors.fill: parent
         contentType: ContentType.Documents
         handler: ContentHandler.Source
+        onPeerSelected: { activeTransfer = peer.request() }
+        onCancelPressed: { dialogRoot.visible = false }
     }
+
     ContentTransferHint {
         id: importHint
         anchors.fill: parent
         activeTransfer: dialogRoot.activeTransfer
     }
+
     Connections {
         target: dialogRoot.activeTransfer
         onStateChanged: {

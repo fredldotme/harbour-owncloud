@@ -1,7 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.0
-import QtQuick.Dialogs 1.2
 import QtGraphicalEffects 1.0
 import harbour.owncloud 1.0
 import QmlUiSet 1.0
@@ -229,6 +228,9 @@ Page {
     }
 
     function openAvatarMenu() {
+        if (!avatarMenu.enabled)
+            return;
+
         avatarMenu.open()
         avatarMenuOpen = true
     }
@@ -239,6 +241,7 @@ Page {
         height: userInfoColumn.childrenRect.height + paddingMedium
         width: parent.width - paddingLarge*2
         x: paddingLarge
+        enabled: pageFlow.userInfo.enabled
 
         onClosed: {
             avatarMenuOpen = false

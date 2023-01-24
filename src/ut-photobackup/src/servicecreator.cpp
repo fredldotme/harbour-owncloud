@@ -1,6 +1,7 @@
 #include "servicecreator.h"
 
 #include <QDebug>
+#include <QDir>
 #include <QFile>
 #include <QProcess>
 #include <QStandardPaths>
@@ -11,15 +12,16 @@
 
 const QString serviceFileContent =
         QStringLiteral(
-            "start on started unity8\n"
-            "respawn\n"
-            "pre-start script\n"
-            "    initctl set-env LD_LIBRARY_PATH=/opt/click.ubuntu.com/me.fredl.ghostcloudphotobackup/current/usr/lib:$LD_LIBRARY_PATH\n"
-            "    initctl set-env APP_ID=%1\n"
-            "end script\n"
-            "exec /opt/click.ubuntu.com/me.fredl.ghostcloudphotobackup/current/usr/bin/harbour-owncloud-daemon\n");
+            "[Unit]\n"
+            "Description=GhostCloud photo backups\n"
+            "After=graphical.target\n"
+            "[Service]\n"
+            "Restart=on-failure\n"
+            "Environment=LD_LIBRARY_PATH=/opt/click.ubuntu.com/me.fredl.ghostcloudphotobackup/current/usr/lib\n"
+            "Environment=APP_ID=%1\n"
+            "ExecStart=/opt/click.ubuntu.com/me.fredl.ghostcloudphotobackup/current/usr/bin/harbour-owncloud-daemon\n");
 
-static const QString initctl = QStringLiteral("/sbin/initctl");
+static const QString initctl = QStringLiteral("/usr/bin/systemctl");
 
 ServiceCreator::ServiceCreator(QObject *parent)
     : QObject{parent}
@@ -30,7 +32,7 @@ ServiceCreator::ServiceCreator(QObject *parent)
 QString ServiceCreator::serviceFilePath()
 {
     const QString upstartServiceFile =
-            QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + QStringLiteral("/.config/upstart/ghostcloud-photobackup.conf");
+            QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + QStringLiteral("/.config/systemd/user/ghostcloud-photobackup.service");
     return upstartServiceFile;
 }
 
@@ -52,7 +54,7 @@ void ServiceCreator::initCtl(const QString& action)
 
 void ServiceCreator::initCtlReload()
 {
-    const QStringList args = { "--user", "reload-configuration" };
+    const QStringList args = { "--user", "daemon-reload" };
 
     QProcess initCommand;
     initCommand.start(initctl, args);
@@ -69,6 +71,10 @@ void ServiceCreator::setServiceEnabled(bool value)
     QString initAction;
 
     if (value) {
+        {
+            const QString userServices = QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + QStringLiteral("/.config/systemd/user");
+            QDir().mkpath(userServices);
+        }
         QFile serviceFile(serviceFilePath());
         if (!serviceFile.open(QFile::WriteOnly | QFile::Text)) {
             qWarning() << "Failed to create service file";

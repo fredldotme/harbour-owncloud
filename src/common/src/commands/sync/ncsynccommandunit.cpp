@@ -148,7 +148,7 @@ void NcSyncCommandUnit::expand(CommandEntity *previousCommandEntity)
             CommandEntity* mkdirCommand =
                     this->m_client->makeDirectoryRequest(this->m_remotePath, false);
 
-            this->queue()->push_back(mkdirCommand);
+            this->queue()->push_front(mkdirCommand);
             this->queue()->push_back(defaultCommandEntity(parent(),
                                                           this->m_client,
                                                           this->m_remotePath,
@@ -219,7 +219,7 @@ void NcSyncCommandUnit::expand(CommandEntity *previousCommandEntity)
                 qInfo() << "MkDirCommand:" << missingRelativeDir;
                 CommandEntity* mkdirCommand =
                         this->m_client->makeDirectoryRequest(missingRelativeDir, false);
-                this->queue()->push_back(mkdirCommand);
+                this->queue()->push_front(mkdirCommand);
             }
         }
 

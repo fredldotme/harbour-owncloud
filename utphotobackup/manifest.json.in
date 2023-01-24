@@ -4,7 +4,7 @@
     "version": "0.9.9.2",
     "description": "Photo backups, built on the multi-platform client for ownCloud & NextCloud",
     "architecture": "@CLICK_ARCH@",
-    "framework": "ubuntu-sdk-16.04.5",
+    "framework": "ubuntu-sdk-20.04",
     "maintainer": "Alfred Neumayer <dev.beidl@gmail.com>",
     "hooks": {
         "harbour-owncloud-photobackup": {

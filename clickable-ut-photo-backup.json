@@ -14,5 +14,6 @@
     "CONFIG+=clickphotobackup"
   ],
   "make_jobs": 4,
-  "qt_version": "5.12"
+  "qt_version": "5.12",
+  "framework": "ubuntu-sdk-20.04"
 }

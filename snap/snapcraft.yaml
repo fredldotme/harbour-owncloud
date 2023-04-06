@@ -1,8 +1,8 @@
 name: ghostcloud
-version: 0.9.5
+version: git
 grade: stable
 confinement: strict
-base: core18
+base: core22
 summary: A modern cross-platform client for Nextcloud, ownCloud, WebDav.
 description: |
   Allows you to easily access your NextCloud, ownCloud and WebDav 

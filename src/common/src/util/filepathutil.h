@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QString>
+#include <QDateTime>
 
 #include <settings/nextcloudsettingsbase.h>
 
@@ -18,6 +19,7 @@ public:
                                                 AccountBase* settings);
     Q_INVOKABLE static bool fileExists(const QString& filePath);
     Q_INVOKABLE static bool removeFile(const QString& filePath);
+    Q_INVOKABLE static QDateTime getLastModified(const QString& filePath);
 };
 
 #endif // FILEPATHUTIL_H

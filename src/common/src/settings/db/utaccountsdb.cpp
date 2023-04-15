@@ -9,7 +9,7 @@
 
 using namespace OnlineAccounts;
 
-UtAccountsDb::UtAccountsDb(QObject *parent) : AccountsDbInterface(parent)
+UtAccountsDb::UtAccountsDb(QObject *parent) : AccountsDbInterface(parent), m_webdavDb(new AccountDb)
 {
     refresh();
 }
@@ -53,6 +53,9 @@ void UtAccountsDb::refresh()
 
     refreshAccountType(desiredServiceIdNextcloud, accounts);
     refreshAccountType(desiredServiceIdOwncloud, accounts);
+
+    this->m_webdavDb->refresh();
+    accounts.append(this->m_webdavDb->accounts());
 
     this->m_accounts = accounts;
     emit accountsChanged();
@@ -126,24 +129,38 @@ QVariantList UtAccountsDb::accountVariantList()
 
 bool UtAccountsDb::accountExists(const AccountBase* account)
 {
-    Q_UNUSED(account);
+    if (account && account->providerType() == AccountBase::WebDav) {
+        return this->m_webdavDb->accountExists(account);
+    }
     return false;
 }
 
 bool UtAccountsDb::addAccount(AccountBase* account)
 {
-    Q_UNUSED(account);
+    if (account && account->providerType() == AccountBase::WebDav) {
+        const auto ret = this->m_webdavDb->addAccount(account);
+        refresh();
+        return ret;
+    }
     return false;
 }
 
 bool UtAccountsDb::updateAccount(AccountBase* account)
 {
-    Q_UNUSED(account);
+    if (account && account->providerType() == AccountBase::WebDav) {
+        const auto ret = this->m_webdavDb->updateAccount(account);
+        refresh();
+        return ret;
+    }
     return false;
 }
 
 bool UtAccountsDb::removeAccount(AccountBase* account)
 {
-    Q_UNUSED(account);
+    if (account && account->providerType() == AccountBase::WebDav) {
+        const auto ret = this->m_webdavDb->removeAccount(account);
+        refresh();
+        return ret;
+    }
     return false;
 }

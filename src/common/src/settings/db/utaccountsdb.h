@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include "accountsdbinterface.h"
+#include "accountdb.h"
 #include <OnlineAccountsQt/OnlineAccounts/Manager>
 
 class UtAccountsDb : public AccountsDbInterface
@@ -29,6 +30,7 @@ private:
 
     OnlineAccounts::Manager* m_manager = nullptr;
     QVector<AccountBase*> m_accounts;
+    AccountDb* m_webdavDb;
 };
 
 #endif // UTACCOUNTSDB_H

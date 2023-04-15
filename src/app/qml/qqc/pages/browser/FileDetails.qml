@@ -15,7 +15,7 @@ Page {
 
     readonly property bool destroyable : true
     
-    FileDetailsHelper { id: fileDetailsHelper}
+    FileDetailsHelper { id: fileDetailsHelper }
 
     property var entry : null;
     property AccountWorkers accountWorkers : null

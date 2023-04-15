@@ -53,8 +53,8 @@ Item {
             onClicked: {
                 var settingsPage = settingsPageComponent.createObject(detailStack,
                                                                       {
-                    accountDb : accountGenerator.database,
-                    accountWorkers : selectedAccountWorkers
+                                                                          accountDb : accountGenerator.database,
+                                                                          accountWorkers : selectedAccountWorkers
                                                                       });
                 detailStack.push(settingsPage)
             }
@@ -119,31 +119,46 @@ Item {
                 anchors.fill: mainColumn
                 color: {
                     if (accountMouseArea.pressed)
-                        return "lightgray"
+                        return "darkgray"
                     else
-                        return "transparent"
+                        return "lightgray"
                 }
             }
 
-            Column {
-                id: mainColumn
-                Label {
-                    id: providerLabel
-                    text: providerTypeNames[delegateAccountWorkers.account.providerType]
-                    font.bold: true
-                    font.pixelSize: fontSizeMedium
-                    enabled: __listCommand == null
-                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                    width: accountsList.width
+            Row {
+                width: accountsList.width
+                spacing: 8
+
+                Image {
+                    id: avatarImage
+                    height: 48
+                    width: height
+                    source: delegateAccountWorkers.avatarFetcher.source
+                    Component.onCompleted: {
+                        delegateAccountWorkers.avatarFetcher.fetch()
+                    }
                 }
 
-                Label {
-                    id: userLabel
-                    text: qsTr("%1 on %2", "username on https://server:443/dav/").arg(delegateAccountWorkers.account.username).arg(delegateAccountWorkers.account.hoststring)
-                    font.pixelSize: fontSizeMedium
-                    enabled: __listCommand == null
-                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                    width: accountsList.width
+                Column {
+                    id: mainColumn
+                    Label {
+                        id: providerLabel
+                        text: providerTypeNames[delegateAccountWorkers.account.providerType]
+                        font.bold: true
+                        font.pixelSize: fontSizeMedium
+                        enabled: __listCommand == null
+                        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                        width: accountsList.width - avatarImage.width
+                    }
+
+                    Label {
+                        id: userLabel
+                        text: qsTr("%1 on %2", "username on https://server:443/dav/").arg(delegateAccountWorkers.account.username).arg(delegateAccountWorkers.account.hoststring)
+                        font.pixelSize: fontSizeMedium
+                        enabled: __listCommand == null
+                        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                        width: accountsList.width - avatarImage.width
+                    }
                 }
             }
         }

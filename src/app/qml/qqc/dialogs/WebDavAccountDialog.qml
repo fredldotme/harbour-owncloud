@@ -33,6 +33,12 @@ Dialog {
         }
     }
 
+    onOpened: {
+        if (osIsUbuntuTouch) {
+            clientSettings.providerType = AccountBase.WebDav
+        }
+    }
+
     QWebDavAuthenticator {
         id: authenticator
         settings: clientSettings
@@ -93,6 +99,8 @@ Dialog {
             id: mainColumn
             width: Math.min(parent.width, 400)
             anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            spacing: paddingSmall
 
             TextField {
                 id: hostaddress
@@ -123,6 +131,7 @@ Dialog {
             ComboBox {
                 width: parent.width
                 enabled: !loginInProgress
+                visible: !osIsUbuntuTouch
                 displayText: qsTr("Provider:") + currentText
                 currentIndex: clientSettings.providerType
                 onCurrentIndexChanged: {

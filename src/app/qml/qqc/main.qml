@@ -142,7 +142,7 @@ ApplicationWindow {
         // TODO: check if memory leaks happen here
         //detailsStack.push(webDavAccountDialog)
         if (osIsUbuntuTouch) {
-            Qt.openUrlExternally("settings:///system/online-accounts")
+            providerTypeSelector.open()
         } else {
             webDavAccountDialog.open()
         }
@@ -165,7 +165,7 @@ ApplicationWindow {
     function getActionBarIcon(icon) {
         if (osIsUbuntuTouch) {
             if (icon === "application-menu") {
-                return "image://theme/navigation-menu"
+                return "image://theme/contextual-menu"
             }
 
             return "image://theme/" + icon
@@ -175,6 +175,14 @@ ApplicationWindow {
             }
 
             return "qrc:/icons/theme/actions/32/" + icon + ".svg"
+        }
+    }
+
+    function getPlacesIcon(icon) {
+        if (osIsUbuntuTouch) {
+            return "image://theme/" + icon
+        } else {
+            return "qrc:/icons/places/symbolic/" + icon + ".svg"
         }
     }
 
@@ -219,6 +227,7 @@ ApplicationWindow {
                          sideStack.depth == 1
                 height: parent.height
                 width: height
+                radius: width / 3
                 forcePressed: rootStack.currentItem.avatarMenuOpen !== undefined &&
                               rootStack.currentItem.avatarMenuOpen
                 source: {
@@ -253,7 +262,7 @@ ApplicationWindow {
                     } else if (rootStack.currentItem.title !== undefined) {
                         return rootStack.currentItem.title
                     } else {
-                        return ""
+                        return qsTr("GhostCloud")
                     }
                 }
             }
@@ -327,6 +336,26 @@ ApplicationWindow {
             Label {
                 id: msgDialogText
                 width: parent.width
+            }
+        }
+
+        Menu {
+            id: providerTypeSelector
+            x: (parent.width - width) / 2
+            y: (parent.height - height) / 2
+            MenuItem {
+                text: qsTr("NextCloud/ownCloud")
+                onClicked: {
+                    Qt.openUrlExternally("settings:///system/online-accounts")
+                    providerTypeSelector.close();
+                }
+            }
+            MenuItem {
+                text: qsTr("WebDav")
+                onClicked: {
+                    webDavAccountDialog.open()
+                    providerTypeSelector.close();
+                }
             }
         }
 
@@ -436,14 +465,13 @@ ApplicationWindow {
                     anchors.centerIn: parent
                     width: parent.width
                     visible: accountWorkerGenerator.accountWorkers.length < 1
-                    spacing: 8
+                    spacing: paddingMedium
 
                     Label {
                         font.pixelSize: 24
-                        width: parent.width
+                        width: parent.width - paddingLarge
                         wrapMode: Label.WrapAtWordBoundaryOrAnywhere
                         anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.margins: paddingSmall
                         text: qsTr("No account available yet. " +
                                    "Please add an account to continue.")
                         horizontalAlignment: Text.AlignHCenter

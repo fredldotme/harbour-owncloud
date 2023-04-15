@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
+import QtGraphicalEffects 1.0
 import harbour.owncloud 1.0
 import "qrc:/qml/qqc"
 import "qrc:/qml-ui-set"
@@ -60,13 +61,18 @@ Item {
             }
         }
         MenuItem {
-            text: qsTr("Remove account")
+            text: (osIsUbuntuTouch && selectedAccountWorkers.account.providerType === AccountBase.Nextcloud) ?
+                      qsTr("Deactivate account") : qsTr("Remove account")
             font.pixelSize: fontSizeSmall
             onClicked: {
-                console.log("Removing " + selectedAccountWorkers.account)
-                var deleteSuccess =
-                        accountGenerator.database.removeAccount(selectedAccountWorkers.account)
-                console.log("deleteSuccess: " + deleteSuccess)
+                if (osIsUbuntuTouch && selectedAccountWorkers.account.providerType === AccountBase.Nextcloud) {
+                    Qt.openUrlExternally("settings:///system/online-accounts")
+                } else {
+                    console.log("Removing " + selectedAccountWorkers.account)
+                    var deleteSuccess =
+                            accountGenerator.database.removeAccount(selectedAccountWorkers.account)
+                    console.log("deleteSuccess: " + deleteSuccess)
+                }
             }
         }
     }
@@ -116,26 +122,43 @@ Item {
             }
 
             Rectangle {
-                anchors.fill: mainColumn
-                color: {
-                    if (accountMouseArea.pressed)
-                        return "darkgray"
-                    else
-                        return "lightgray"
-                }
+                anchors.fill: accountRow
+                color: "darkgray"
+                visible: accountMouseArea.pressed
             }
 
             Row {
+                id: accountRow
                 width: accountsList.width
                 spacing: 8
 
-                Image {
-                    id: avatarImage
-                    height: 48
-                    width: height
-                    source: delegateAccountWorkers.avatarFetcher.source
-                    Component.onCompleted: {
-                        delegateAccountWorkers.avatarFetcher.fetch()
+                Column {
+                    width: paddingLarge * 2
+                    height: width
+                    spacing: 8
+
+                    Image {
+                        id: avatarImage
+                        anchors.fill: parent
+                        source: delegateAccountWorkers.account.providerType === AccountBase.Nextcloud ?
+                                    delegateAccountWorkers.avatarFetcher.source :
+                                    getPlacesIcon("network-server-symbolic")
+                        layer.enabled: true
+                        layer.effect: OpacityMask {
+                            maskSource: Item {
+                                width: avatarImage.width
+                                height: avatarImage.height
+                                Rectangle {
+                                    anchors.centerIn: parent
+                                    width: parent.width
+                                    height: parent.height
+                                    radius: Math.min(width, height) / 3
+                                }
+                            }
+                        }
+                        Component.onCompleted: {
+                            delegateAccountWorkers.avatarFetcher.fetch()
+                        }
                     }
                 }
 

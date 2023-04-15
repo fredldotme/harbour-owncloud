@@ -12,6 +12,7 @@ AbstractButton {
     property alias source : img.source
     property alias sourceSize : img.sourceSize
     property bool forcePressed : false
+    property int radius : 0
 
     signal clicked()
 
@@ -34,6 +35,19 @@ AbstractButton {
             id: img
             height: parent.height
             width: height
+            layer.enabled: buttonRoot.radius > 0
+            layer.effect: OpacityMask {
+                maskSource: Item {
+                    width: img.width
+                    height: img.height
+                    Rectangle {
+                        anchors.centerIn: parent
+                        width: parent.width
+                        height: parent.height
+                        radius: buttonRoot.radius
+                    }
+                }
+            }
         }
         Column {
             height: parent.height

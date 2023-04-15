@@ -173,13 +173,22 @@ Page {
                         const localFilePath = destinationDir + entry.path
                         const fileDestination = "file://" + localFilePath
                         const exists = FilePathUtil.fileExists(localFilePath);
+                        const localFileLastModified = FilePathUtil.getLastModified(localFilePath);
 
                         console.log("fileDestination: " + fileDestination)
 
                         if (exists) {
-                            // Open from cache
-                            openFileDestination(fileDestination);
-                            return;
+                            console.log("local last modified: " + localFileLastModified + ", entry.lastModified: " + entry.lastModified)
+                            // javascript Date object compare
+                            if(localFileLastModified.getTime() === entry.lastModified.getTime()){
+                                // Open from cache
+                                console.log("opening file from cache");
+                                openFileDestination(fileDestination);
+                                return;
+                            }else{
+                                console.log("removing old cache");
+                                FilePathUtil.removeFile(localFilePath);
+                            }
                         }
 
                         startDownload(entry.path,

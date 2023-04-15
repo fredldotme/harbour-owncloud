@@ -94,3 +94,9 @@ bool FilePathUtil::removeFile(const QString &filePath)
 {
     return QFile::remove(filePath);
 }
+
+QDateTime FilePathUtil::getLastModified(const QString& filePath)
+{
+    QFileInfo fileInfo(filePath);
+    return fileInfo.lastModified();
+}

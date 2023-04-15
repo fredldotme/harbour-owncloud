@@ -23,7 +23,7 @@ bool MkDavDirCommandEntity::startWork()
     this->m_reply = this->m_client->mkdir(this->m_remotePath);
 
     QObject::connect(m_reply,
-#if QT_VERSION < 0x06000
+#if QT_VERSION < 0x060000
                      static_cast<void(QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error),
 #else
                      &QNetworkReply::errorOccurred,

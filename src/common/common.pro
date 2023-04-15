@@ -1,8 +1,12 @@
 TEMPLATE = lib
 macx {
     CONFIG += lib_bundle
+    TARGET = harbourowncloudcommon
 }
-TARGET = $$qtLibraryTarget(harbourowncloudcommon)
+
+!macx {
+    TARGET = $$qtLibraryTarget(harbourowncloudcommon)
+}
 
 CONFIG += qt c++11
 QT += network xml sql
@@ -282,7 +286,7 @@ macx {
     QMAKE_BUNDLE_DATA += FRAMEWORK_PLUGINS_SQLITE
 
     QMAKE_SONAME_PREFIX = @rpath
-    QMAKE_POST_LINK += $$quote(codesign -s \"Mac Developer\" $$OUT_PWD/$${TARGET}.framework/Versions/Current/PlugIns/sqldrivers/libqsqlite.dylib);
+    QMAKE_POST_LINK += $$quote(codesign -s \"Apple Developer\" $$OUT_PWD/$${TARGET}.framework/Versions/Current/PlugIns/sqldrivers/libqsqlite.dylib);
 }
 
 # Ubuntu Touch configuration

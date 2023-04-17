@@ -86,9 +86,9 @@ ApplicationWindow {
 
     readonly property bool showBackButton :
         (rootStack.depth > 1) &&
-        (rootStack.currentItem !== null) ||
+        (rootStack.currentItem != null) ||
         (sideStack.depth > 1) &&
-        (sideStack.currentItem !== null)
+        (sideStack.currentItem != null)
 
     function refreshUserInfo() {
         // Skip in case there's already a userInfo command in the queue
@@ -241,7 +241,7 @@ ApplicationWindow {
                 onClicked: {
                     if (rootStack.currentItem === undefined)
                         return
-                    if (rootStack.currentItem === null)
+                    if (rootStack.currentItem == null)
                         return
 
                     rootStack.currentItem.openAvatarMenu()

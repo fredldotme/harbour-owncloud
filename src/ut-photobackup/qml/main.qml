@@ -44,6 +44,8 @@ ApplicationWindow {
                 width: Math.min(rootWindow.width, rootWindow.height) / 2
                 height: width
                 source: "qrc:/icons/icon_gray.svg"
+                sourceSize.width: width
+                sourceSize.height: height
             }
 
             Label {

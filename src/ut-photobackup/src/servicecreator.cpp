@@ -19,7 +19,9 @@ const QString serviceFileContent =
             "Restart=on-failure\n"
             "Environment=LD_LIBRARY_PATH=/opt/click.ubuntu.com/me.fredl.ghostcloudphotobackup/current/usr/lib\n"
             "Environment=APP_ID=%1\n"
-            "ExecStart=/opt/click.ubuntu.com/me.fredl.ghostcloudphotobackup/current/usr/bin/harbour-owncloud-daemon\n");
+            "ExecStart=/opt/click.ubuntu.com/me.fredl.ghostcloudphotobackup/current/usr/bin/harbour-owncloud-daemon\n"
+            "[Install]\n"
+            "WantedBy=graphical-session.target\n");
 
 static const QString initctl = QStringLiteral("/usr/bin/systemctl");
 
@@ -88,9 +90,11 @@ void ServiceCreator::setServiceEnabled(bool value)
         }
 
         initCtlReload();
+        initCtl("enable");
         initCtl("start");
     } else {
         initCtl("stop");
+        initCtl("disable");
         QFile::remove(serviceFilePath());
         initCtlReload();
     }

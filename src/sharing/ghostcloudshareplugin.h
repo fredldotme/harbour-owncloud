@@ -1,7 +1,7 @@
 #ifndef NEXTCLOUDSHAREPLUGIN_H
 #define NEXTCLOUDSHAREPLUGIN_H
 
-#include <TransferEngine-qt5/transferplugininterface.h>
+#include <transferplugininterface.h>
 #include "ghostcloudconsts.h"
 #include <QObject>
 

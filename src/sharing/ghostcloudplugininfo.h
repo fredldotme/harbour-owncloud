@@ -1,7 +1,7 @@
 #ifndef NEXTCLOUDPLUGININFO_H
 #define NEXTCLOUDPLUGININFO_H
 
-#include <TransferEngine-qt5/transferplugininfo.h>
+#include <transferplugininfo.h>
 #include <QList>
 
 class GhostCloudPluginInfo : public TransferPluginInfo

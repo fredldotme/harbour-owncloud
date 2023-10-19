@@ -28,15 +28,22 @@ BuildRequires:  pkgconfig(sailfishapp) >= 1.0.2
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  pkgconfig(Qt5Quick)
+BuildRequires:  pkgconfig(Qt5Xml)
+BuildRequires:  pkgconfig(Qt5Multimedia)
+BuildRequires:  pkgconfig(Qt5Svg)
+
 BuildRequires:  pkgconfig(nemotransferengine-qt5)
 BuildRequires:  desktop-file-utils
+
+BuildRequires:  pkgconfig(systemd)
 
 %description
 Unofficial NextCloud/ownCloud client for SailfishOS
 
 %package daemon
 Summary:   NextCloud/ownCloud background task for automatic camera backups
-Requires:  harbour-owncloud = %{version}
+#Requires:  harbour-owncloud = %{version}
+Requires:  harbour-owncloud
 
 %description daemon
 Nextcloud/ownCloud background task for automatic camera backups
@@ -51,9 +58,9 @@ Nextcloud/ownCloud background task for automatic camera backups
 # >> build pre
 # << build pre
 
-%qtc_qmake5
+%qtc_qmake5 CONFIG+="sailfish_build nosharing"
 
-%qtc_make %{?_smp_mflags} CONFIG+=sailfish_build
+%qtc_make %{?_smp_mflags} CONFIG+="sailfish_build nosharing"
 
 # >> build post
 # << build post
@@ -87,18 +94,18 @@ desktop-file-install --delete-original       \
 %{_bindir}/%{name}-daemon
 %{_bindir}/%{name}-permission-agent
 %defattr(-,root,root,-)
-/usr/lib/systemd/user/%{name}-daemon.service
-/usr/lib/systemd/user/%{name}-permission-agent.service
-/usr/lib/systemd/user/user-session.target.wants/%{name}-daemon.service
-/usr/lib/systemd/user/user-session.target.wants/%{name}-permission-agent.service
-%{_datadir}/nemo-transferengine/plugins/
-%{_libdir}/nemo-transferengine/plugins/libghostcloudshareplugin.so
+%{_userunitdir}/%{name}-daemon.service
+%{_userunitdir}/%{name}-permission-agent.service
+%{_userunitdir}/user-session.target.wants/%{name}-daemon.service
+%{_userunitdir}/user-session.target.wants/%{name}-permission-agent.service
+#%%{_datadir}/nemo-transferengine/plugins/
+#%%{_libdir}/nemo-transferengine/plugins/libghostcloudshareplugin.so
 %{_libdir}/qt5/qml/com/github/beidl/harbourowncloud/libharbourowncloudqmlplugin.so
 %{_libdir}/qt5/qml/com/github/beidl/harbourowncloud/qmldir
-%{_datadir}/themes/sailfish-default/meegotouch/z1.0/icons/icon-m-share-%{name}.png
-%{_datadir}/themes/sailfish-default/meegotouch/z1.25/icons/icon-m-share-%{name}.png
-%{_datadir}/themes/sailfish-default/meegotouch/z1.5-large/icons/icon-m-share-%{name}.png
-%{_datadir}/themes/sailfish-default/meegotouch/z1.75/icons/icon-m-share-%{name}.png
+#%%{_datadir}/themes/sailfish-default/meegotouch/z1.0/icons/icon-m-share-%{name}.png
+#%%{_datadir}/themes/sailfish-default/meegotouch/z1.25/icons/icon-m-share-%{name}.png
+#%%{_datadir}/themes/sailfish-default/meegotouch/z1.5-large/icons/icon-m-share-%{name}.png
+#%%{_datadir}/themes/sailfish-default/meegotouch/z1.75/icons/icon-m-share-%{name}.png
 
 # >> files
 # << files

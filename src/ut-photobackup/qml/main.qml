@@ -58,6 +58,7 @@ ApplicationWindow {
 
             Column {
                 width: parent.width
+                spacing: units.gu(1.5)
                 Label {
                     width: parent.width
                     horizontalAlignment: Text.AlignHCenter
@@ -75,6 +76,7 @@ ApplicationWindow {
 
             Column {
                 width: parent.width
+                spacing: units.gu(1)
                 Label {
                     width: parent.width
                     horizontalAlignment: Text.AlignHCenter
@@ -87,6 +89,19 @@ ApplicationWindow {
                     enabled: accountsDb.accounts.length > 0
                     onClicked: {
                         serviceCreator.serviceEnabled = !serviceCreator.serviceEnabled
+                    }
+                }
+            }
+
+            Column {
+                width: parent.width
+                spacing: units.gu(1)
+                Button {
+                    x: (parent.width - width) / 2
+                    text: qsTr("Retry sync")
+                    enabled: accountsDb.accounts.length > 0
+                    onClicked: {
+                        daemonCtrl.reloadConfig()
                     }
                 }
             }

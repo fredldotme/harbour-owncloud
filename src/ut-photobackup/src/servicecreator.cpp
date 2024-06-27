@@ -14,7 +14,7 @@ const QString serviceFileContent =
         QStringLiteral(
             "[Unit]\n"
             "Description=GhostCloud photo backups\n"
-            "After=graphical.target\n"
+            "After=graphical-session.target\n"
             "[Service]\n"
             "Restart=on-failure\n"
             "Environment=LD_LIBRARY_PATH=/opt/click.ubuntu.com/me.fredl.ghostcloudphotobackup/current/usr/lib\n"

@@ -1,7 +1,7 @@
 {
     "name": "me.fredl.ghostcloudphotobackup",
     "title": "GhostCloud Photo Backup",
-    "version": "0.9.9.6",
+    "version": "0.9.9.7",
     "description": "Photo backups, built on the multi-platform client for ownCloud & NextCloud",
     "architecture": "@CLICK_ARCH@",
     "framework": "ubuntu-sdk-20.04",

@@ -4,7 +4,7 @@
   "kill": "harbour-owncloud-photobackup",
   "dependencies_target": [
     "liblomiri-download-manager-client-dev",
-    "libonline-accounts-qt-dev"
+    "liblomiri-online-accounts-qt5-dev"
   ],
   "build_args": [
     "CONFIG+=noapp",
@@ -13,7 +13,7 @@
     "CONFIG+=nosharing",
     "CONFIG+=clickphotobackup"
   ],
-  "make_jobs": 4,
-  "qt_version": "5.12",
-  "framework": "ubuntu-sdk-20.04"
+  "make_jobs": 8,
+  "qt_version": "5.15",
+  "framework": "ubuntu-touch-24.04-1.x"
 }

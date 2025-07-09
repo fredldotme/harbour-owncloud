@@ -1,5 +1,5 @@
 [Desktop Entry]
 Type=Application
 Icon=${SNAP}/meta/gui/harbour-owncloud.png
-Exec=ghostcloud.harbour-owncloud
+Exec=ghostcloud
 Name=GhostCloud

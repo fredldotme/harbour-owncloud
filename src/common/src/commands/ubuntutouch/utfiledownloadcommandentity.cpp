@@ -77,7 +77,7 @@ bool UtFileDownloadCommandEntity::startWork()
 
     QString remoteUrlPath = FilePathUtil::getWebDavFileUrl(this->m_remotePath, this->m_settings);
 
-    DownloadStruct dlInfo(remoteUrlPath, QVariantMap{}, headerStrings);
+    DownloadStruct dlInfo(remoteUrlPath, QVariantMap(), headerStrings);
     this->m_dlManager->createDownload(dlInfo);
 
     setState(RUNNING);

@@ -4,7 +4,7 @@
 #include <QObject>
 #include "accountsdbinterface.h"
 #include "accountdb.h"
-#include <OnlineAccountsQt/OnlineAccounts/Manager>
+#include <lomiri-online-accounts-qt5/LomiriOnlineAccountsQt/Manager>
 
 class UtAccountsDb : public AccountsDbInterface
 {

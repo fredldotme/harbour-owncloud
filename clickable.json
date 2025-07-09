@@ -1,11 +1,11 @@
 {
   "builder": "qmake",
-  "framework": "ubuntu-sdk-20.04",
+  "framework": "ubuntu-touch-24.04-1.x",
   "default": "clean build click-build",
   "kill": "harbour-owncloud",
   "dependencies_target": [
     "liblomiri-download-manager-client-dev",
-    "libonline-accounts-qt-dev",
+    "liblomiri-online-accounts-qt5-dev",
     "libgles-dev"
   ],
   "build_args": [
@@ -14,8 +14,9 @@
     "CONFIG+=noqmlextension",
     "CONFIG+=nosharing",
     "CONFIG+=quickcontrols",
+    "CONFIG+=ubuntutouch",
     "CONFIG+=click"
   ],
-  "make_jobs": 4,
-  "qt_version": "5.12"
+  "make_jobs": 8,
+  "qt_version": "5.15"
 }

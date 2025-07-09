@@ -13,3 +13,4 @@ openssl-*.*.*
 .DS_Store
 .clickable/
 CMakeLists.txt.user
+*.snap

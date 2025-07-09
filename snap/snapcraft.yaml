@@ -2,10 +2,10 @@ name: ghostcloud
 version: git
 grade: stable
 confinement: strict
-base: core20
+base: core24
 summary: A modern cross-platform client for Nextcloud, ownCloud, WebDav.
 description: |
-  Allows you to easily access your NextCloud, ownCloud and WebDav 
+  Allows you to easily access your NextCloud, ownCloud and WebDav
   instances with a cross-platform, native Free Software application.
   
   Features:
@@ -17,23 +17,63 @@ description: |
   
   Also available on Android & SailfishOS.
 
+platforms:
+  amd64:
+  arm64:
+  armhf:
+
 apps:
-  harbour-owncloud:
+  ghostcloud:
     environment:
       QT_PLUGIN_PATH: ${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/qt5/plugins
       QML2_IMPORT_PATH: ${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/qt5/qml
-    command: desktop-launch harbour-owncloud -platform xcb
-    plugs: [ x11, wayland, desktop, desktop-legacy, opengl, alsa, pulseaudio, home, removable-media, network ]
+    command-chain:
+      - bin/gpu-2404-wrapper
+      - bin/lomiri-launch
+    command: usr/bin/harbour-owncloud
+    plugs:
+      - x11
+      - wayland
+      - desktop
+      - desktop-legacy
+      - opengl
+      - alsa
+      - pulseaudio
+      - home
+      - removable-media
+      - network
+      - audio-playback
+
+plugs:
+  lomiri-ui-toolkit:
+    interface: content
+    target: $SNAP/lomiri-ui-toolkit
+    default-provider: lomiri-ui-toolkit-core24
+  gpu-2404:
+    interface: content
+    target: $SNAP/gpu-2404
+    default-provider: mesa-2404
+
+layout:
+  /usr/share/X11/xkb:
+    symlink: $SNAP/lomiri-ui-toolkit/usr/share/X11/xkb
+  /usr/share/icons:
+    bind: $SNAP/lomiri-ui-toolkit/usr/share/icons
+  /usr/share/sounds:
+    bind: $SNAP/usr/share/sounds
+  /usr/share/qt5:
+    bind: $SNAP/lomiri-ui-toolkit/usr/share/qt5
+  /usr/share/alsa:
+    bind: $SNAP/lomiri-ui-toolkit/usr/share/alsa
 
 parts:
-  harbour-owncloud:
+  app:
     plugin: qmake
     source: .
-    options:
+    qmake-parameters:
       - CONFIG+=noadditionals
       - CONFIG+=quickcontrols
-    project-files:
-      - harbour-owncloud.pro
+    qmake-project-file: harbour-owncloud.pro
     build-packages:
       - make
       - qt5-qmake
@@ -58,57 +98,23 @@ parts:
       - qml-module-qtquick-controls
       - qml-module-qt-labs-settings
       - qml-module-qtquick-localstorage
-    stage-packages:
-      - libqt5multimedia5
-      - libqt5multimedia5-plugins
-      - libqt5sql5
-      - libqt5sql5-sqlite
-      - libqt5svg5
-      - libqt5webkit5
-      - libqt5xml5
-      - libqt5xmlpatterns5
-      - libqt5quickcontrols2-5
-      - qml-module-qtquick2
-      - qml-module-qtgraphicaleffects
-      - qml-module-qtquick-window2
-      - qml-module-qtquick-dialogs
-      - qml-module-qtquick-controls2
-      - qml-module-qtquick-layouts
-      - qml-module-qtquick-extras
-      - qml-module-qt-labs-folderlistmodel
-      - qml-module-qtquick-controls
-      - qml-module-qt-labs-settings
-      - qml-module-qtquick-localstorage
-      - qml-module-qtmultimedia
-      - gstreamer1.0-plugins-good
-      - gstreamer1.0-plugins-bad
-      - gstreamer1.0-plugins-ugly
-      - gstreamer1.0-libav
-      - libva2
-      - libva-x11-2
-      - mesa-va-drivers
-      - libslang2
-      - libslang2-modules
-    after: [ desktop-qt5 ]
-  desktop-qt5:
-    build-packages:
-      - qtbase5-dev
-      - dpkg-dev
-    make-parameters:
-      - FLAVOR=qt5
-    plugin: make
-    source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
-    source-subdir: qt
-    stage-packages:
-      - libxkbcommon0
-      - ttf-ubuntu-font-family
-      - dmz-cursor-theme
-      - light-themes
-      - adwaita-icon-theme
-      - gnome-themes-standard
-      - shared-mime-info
-      - libqt5gui5
-      - libgdk-pixbuf2.0-0
-      - libqt5svg5
-      - locales-all
-      - xdg-user-dirs
+    override-build: |
+        craftctl default
+        #cd $CRAFT_PART_SRC
+        #qmake CONFIG+=noadditionals CONFIG+=quickcontrols
+        #make -j$(nproc --all)
+        #DESTDIR=$CRAFT_PART_INSTALL make install
+    override-prime: |
+        craftctl default
+        mkdir -p ${CRAFT_PRIME}/bin
+        cp -a /snap/lomiri-ui-toolkit-core24/current/command-chain/lomiri-launch ${CRAFT_PRIME}/bin/lomiri-launch
+  gpu-2404:
+    after:
+      - app
+    source: https://github.com/canonical/gpu-snap.git
+    plugin: dump
+    override-prime: |
+      craftctl default
+      ${CRAFT_PART_SRC}/bin/gpu-2404-cleanup mesa-2404
+    prime:
+      - bin/gpu-2404-wrapper

@@ -2,10 +2,10 @@
 
 #include <QDebug>
 #include <QList>
-#include <OnlineAccountsQt/OnlineAccounts/AuthenticationData>
-#include <OnlineAccountsQt/OnlineAccounts/Account>
-#include <OnlineAccountsQt/OnlineAccounts/PendingCall>
-#include <OnlineAccountsQt/OnlineAccounts/PendingCallWatcher>
+#include <LomiriOnlineAccountsQt/AuthenticationData>
+#include <LomiriOnlineAccountsQt/Account>
+#include <LomiriOnlineAccountsQt/PendingCall>
+#include <LomiriOnlineAccountsQt/PendingCallWatcher>
 
 using namespace OnlineAccounts;
 

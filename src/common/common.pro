@@ -292,15 +292,15 @@ macx {
 # Ubuntu Touch configuration
 contains(CONFIG, click) {
     DEFINES += GHOSTCLOUD_UBUNTU_TOUCH
-    CONFIG += lomiritouch
+    CONFIG += ubuntutouch
 }
 
 contains(CONFIG, clickphotobackup) {
     DEFINES += GHOSTCLOUD_UBUNTU_TOUCH_PHOTOBACKUP
-    CONFIG += lomiritouch
+    CONFIG += ubuntutouch
 }
 
-contains(CONFIG, lomiritouch) {
+contains(CONFIG, ubuntutouch) {
     SOURCES += \
         $$PWD/src/commands/ubuntutouch/utfiledownloadcommandentity.cpp \
         #$$PWD/src/commands/ubuntutouch/utfileuploadcommandentity.cpp \
@@ -309,7 +309,11 @@ contains(CONFIG, lomiritouch) {
         $$PWD/src/commands/ubuntutouch/utfiledownloadcommandentity.h \
         #$$PWD/src/commands/ubuntutouch/utfileuploadcommandentity.h \
         $$PWD/src/settings/db/utaccountsdb.h
-    LIBS += -llomiri-download-manager-client -lOnlineAccountsQt
+    INCLUDEPATH += \
+        /usr/include/lomiri-online-accounts-qt5
+    DEPENDPATH += \
+        /usr/include/lomiri-online-accounts-qt5
+    LIBS += -llomiri-download-manager-client -llomiri-online-accounts-qt5
 }
 
 INSTALLS += qwebdavlib target

@@ -3,6 +3,7 @@ Nextcloud/ownCloud and WebDav client for SailfishOS
 
 ![Login](/misc/readme/cover.png) ![File browser](/misc/readme/filebrowser.png) ![User info](/misc/readme/userinfo.png) ![File details](/misc/readme/filedetails.png) ![Media preview](/misc/readme/mediapreview.png)
 
+[![OpenStore](https://open-store.io/badges/en_US.svg)](https://open-store.io/app/me.fredl.ghostcloudphotobackup)
 
 ## Description
 Allows you to easily access your ownCloud, NextCloud and WebDav instances with a native Free Software application.

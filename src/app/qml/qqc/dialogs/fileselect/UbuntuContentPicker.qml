@@ -37,7 +37,7 @@ Item {
     ContentPeerPicker {
         id: contentPeer
         anchors.fill: parent
-        contentType: ContentType.Documents
+        contentType: ContentType.All
         handler: ContentHandler.Source
         onPeerSelected: { activeTransfer = peer.request() }
         onCancelPressed: { dialogRoot.visible = false }

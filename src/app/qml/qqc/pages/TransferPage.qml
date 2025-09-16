@@ -158,7 +158,7 @@ Dialog {
                                 width: parent.width
                                 height: 48
                                 source: delegate.getIconForCommandType()
-                                enabled: false
+                                flat: true
                                 background: Rectangle { color: "transparent" }
                                 text: !delegate.isFileOpen ? delegate.fileName
                                                            : delegate.openFileHint

@@ -13,6 +13,7 @@ AbstractButton {
     property alias sourceSize : img.sourceSize
     property bool forcePressed : false
     property int radius : 0
+    property bool flat : false
 
     signal clicked()
 
@@ -79,6 +80,6 @@ AbstractButton {
                 return;
             buttonRoot.clicked()
         }
-        enabled: buttonRoot.enabled
+        enabled: buttonRoot.enabled && !buttonRoot.flat
     }
 }

@@ -43,9 +43,7 @@ ApplicationWindow {
                             text: qsTr("Sync")
                             enabled: accountsDb.accounts.length > 0 && serviceCreator.serviceEnabled
                             onTriggered: {
-                                // Might serviceCreator might need a restart for a sync
-                                serviceCreator.serviceEnabled = false
-                                serviceCreator.serviceEnabled = true
+                                daemonCtrl.reloadConfig()
                             }
                         }
                     ]
@@ -206,14 +204,25 @@ ApplicationWindow {
                         }
 
                         Icon {
+                            id: overallStatusIcon
                             anchors.horizontalCenter: parent.horizontalCenter
                             width: units.gu(4)
                             height: width
                             property bool visibility: selectAccountRow.ok && enableServiceRow.ok
                             opacity: visibility ? 1.0 : 0.0
                             visible: opacity > 0.0
-                            Behavior on opacity {
-                                LomiriNumberAnimation {}
+
+                            LomiriNumberAnimation {
+                                id: showAnimation
+                                from: 0.0
+                                to: 1.0
+                                duration: 150
+                                target: overallStatusIcon
+                                property: "opacity"
+                            }
+
+                            onNameChanged: {
+                                showAnimation.restart()
                             }
 
                             name: daemonCtrl.uploading ? "sync" : "tick"

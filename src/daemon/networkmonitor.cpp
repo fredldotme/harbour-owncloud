@@ -1,6 +1,7 @@
 #include "networkmonitor.h"
 
 #include <QCoreApplication>
+#include <QDebug>
 
 NetworkMonitor::NetworkMonitor(QObject *parent,
                                AccountBase* settings) :
@@ -26,9 +27,14 @@ void NetworkMonitor::recheckNetworks()
 {
     QMutexLocker locker(&checkerMutex);
 
+    qInfo() << Q_FUNC_INFO << this->m_settings;
+
     if (this->m_settings) {
         const bool uploadOverCellular = this->m_settings->mobileUpload();
         const bool uploadAutomatically = this->m_settings->uploadAutomatically();
+
+        qInfo() << "uploadOverCellular:" << uploadOverCellular
+                << "uploadAutomatically:" << uploadAutomatically;
 
         if (!uploadAutomatically) {
             setShouldDownload(false);
@@ -42,6 +48,8 @@ void NetworkMonitor::recheckNetworks()
             return;
         }
     }
+
+    qInfo() << "m_configManager.isOnline():" << m_configManager.isOnline();
 
     if (!m_configManager.isOnline()) {
         setShouldDownload(false);
@@ -57,6 +65,8 @@ void NetworkMonitor::recheckNetworks()
             break;
         }
     }
+
+    qInfo() << "hasNonCellular:" << hasNonCellular;
 
     if (hasNonCellular) {
         setShouldDownload(true);

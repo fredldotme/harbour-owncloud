@@ -104,6 +104,7 @@ void UtAccountsDb::refreshAccountType(const QString& desiredServiceId, QVector<A
         newAccount->setUsername(username);
         newAccount->setPassword(password);
         newAccount->setUploadAutomatically(true);
+        newAccount->setMobileUpload(true);
         accounts.append(newAccount);
 
         // Also connect to changed and disabled signals of the SSO Account object

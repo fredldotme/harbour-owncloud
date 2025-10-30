@@ -125,15 +125,15 @@ int main(int argc, char *argv[])
         // Periodically check for existence of the local pictures path until found.
         // Don't stop the timer as the external storage could be ejected anytime.
         // Every 10 minutes should be enough in this specific case.
-        QTimer localPathCheck;
-        localPathCheck.setInterval(60000 * 10);
-        localPathCheck.setSingleShot(false);
-        QObject::connect(&localPathCheck, &QTimer::timeout, &localPathCheck,
+        QTimer* localPathCheck = new QTimer();
+        localPathCheck->setInterval(60000 * 10);
+        localPathCheck->setSingleShot(false);
+        QObject::connect(localPathCheck, &QTimer::timeout, localPathCheck,
                          [fsHandler]() {
 
             fsHandler->triggerRescan();
         });
-        localPathCheck.start();
+        localPathCheck->start();
 
         QObject::connect(fsHandler, &Filesystem::locationFound, uploader, &Uploader::triggerSync);
 

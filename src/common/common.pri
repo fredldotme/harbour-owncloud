@@ -39,7 +39,7 @@ android {
 }
 
 linux:!android {
-    LIBS += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.so.1
+    LIBS += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav-qt5.so.1
     LIBS += $$OUT_PWD/../../src/common/libharbourowncloudcommon.so.1
 }
 
@@ -77,6 +77,6 @@ contains(CONFIG, clickphotobackup) {
 }
 
 contains(CONFIG, ghostcloud_link) {
-    LIBS += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.so.1
+    LIBS += $$OUT_PWD/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav-qt5.so.1
     LIBS += $$OUT_PWD/../../src/common/libharbourowncloudcommon.so.1
 }

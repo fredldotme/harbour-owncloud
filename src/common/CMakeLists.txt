@@ -83,7 +83,7 @@ qt_internal_add_cmake_library(harbourowncloudcommon
 
 qt_internal_extend_target(harbourowncloudcommon CONDITION LINUX
     PUBLIC_LIBRARIES
-        ${CMAKE_CURRENT_BINARY_DIR}/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.so.1
+        ${CMAKE_CURRENT_BINARY_DIR}/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav-qt5.so.1
         Qt::DBus
 )
 

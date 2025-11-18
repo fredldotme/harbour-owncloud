@@ -318,7 +318,7 @@ qt_internal_extend_target(harbour-owncloud CONDITION QT___contains___androidextr
 
 qt_internal_extend_target(harbour-owncloud CONDITION LINUX
     PUBLIC_LIBRARIES
-        ${CMAKE_CURRENT_BINARY_DIR}/../common/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.so.1
+        ${CMAKE_CURRENT_BINARY_DIR}/../common/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav-qt5.so.1
         ${CMAKE_CURRENT_BINARY_DIR}/../common/../../src/common/libharbourowncloudcommon.so.1
 )
 
@@ -390,7 +390,7 @@ qt_internal_extend_target(harbour-owncloud CONDITION CMAKE_BUILD_TYPE STREQUAL D
 
 qt_internal_extend_target(harbour-owncloud CONDITION CONFIG___contains___sailfish_build
     PUBLIC_LIBRARIES
-        ${CMAKE_CURRENT_BINARY_DIR}/../common/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav.so.1
+        ${CMAKE_CURRENT_BINARY_DIR}/../common/../../3rdparty/qwebdavlib/qwebdavlib/libqwebdav-qt5.so.1
         ${CMAKE_CURRENT_BINARY_DIR}/../common/../../src/common/libharbourowncloudcommon.so.1
 )
 

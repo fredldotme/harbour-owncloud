@@ -110,7 +110,8 @@ void NcDirTreeCommandUnit::expand(CommandEntity* previousCommandEntity)
         const QVariantMap entry = tmpEntry.toMap();
         const bool entryIsDirectory = entry.value(QStringLiteral("isDirectory")).toBool();
         const QString entryName = entry.value(QStringLiteral("name")).toString();
-        const QString uniqueId = entry.value(QStringLiteral("uniqueId")).toString();
+        // we cannot assume that uniqueId is unique for different paths, ETag uniqueness is only required per-URI resource, not globally.
+        const QString uniqueId = entry.value(QStringLiteral("path")).toString() + ":" + entry.value(QStringLiteral("uniqueId")).toString();
 
         qDebug() << "entryName:" << entryName;
 
@@ -119,8 +120,10 @@ void NcDirTreeCommandUnit::expand(CommandEntity* previousCommandEntity)
                     this->m_currentNode->containsDirWithUniqueId(uniqueId) :
                     this->m_currentNode->containsFileWithUniqueId(uniqueId);
 
-        if (uniqueIdsMatch)
+        if (uniqueIdsMatch) {
+            qInfo() << "Skipping entry as unique ID already exists:" << entryName << uniqueId;
             continue;
+        }
 
         if (!entryIsDirectory) {
             // Add to the list of files and

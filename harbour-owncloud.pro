@@ -3,7 +3,7 @@ CONFIG += ordered
 
 # Use shared libraries and dependencies on every platform
 !macx {
-    SUBDIRS = 3rdparty/qwebdavlib/qwebdavlib src
+    SUBDIRS = 3rdparty/qwebdavlib src
 }
 # .. except macOS
 macx {

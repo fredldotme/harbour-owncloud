@@ -24,9 +24,6 @@ platforms:
 
 apps:
   ghostcloud:
-    environment:
-      QT_PLUGIN_PATH: ${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/qt5/plugins
-      QML2_IMPORT_PATH: ${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/qt5/qml
     command-chain:
       - bin/gpu-2404-wrapper
       - bin/lomiri-launch

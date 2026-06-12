@@ -31,7 +31,7 @@ void UtAccountsDb::refresh()
     if (parts.count() == 2 || parts.count() == 3) {
         applicationId = QStringList(parts.mid(0, 2)).join('_');
     } else {
-        qWarning() << "Ubuntu.OnlineAccounts: No APP_ID defined "
+        qWarning() << "Lomiri.OnlineAccounts: No APP_ID defined "
                       "and no applicationId given!";
         return;
     }

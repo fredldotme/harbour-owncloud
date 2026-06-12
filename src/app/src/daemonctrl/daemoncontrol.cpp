@@ -43,6 +43,9 @@ DaemonControl::DaemonControl(QObject *parent) : QObject(parent)
 
 bool DaemonControl::daemonInstalled()
 {
+    if (getenv("SNAP"))
+        return true;
+
     const QString BINARY_NAME = QStringLiteral("harbour-owncloud-daemon");
     const QString ABSOLUTE_PATH = qApp->applicationDirPath() + "/" + BINARY_NAME;
     return QFile(ABSOLUTE_PATH).exists();

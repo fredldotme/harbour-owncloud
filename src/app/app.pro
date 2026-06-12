@@ -19,6 +19,11 @@ contains(CONFIG, quickcontrols) {
         DEFINES += GHOSTCLOUD_UBUNTU_TOUCH
     }
 
+    contains(CONFIG, snap) {
+        DEFINES += GHOSTCLOUD_UBUNTU_TOUCH GHOSTCLOUD_SNAP
+        QT += dbus
+    }
+
     unix:!macx {
         QMAKE_RPATHDIR += $$OUT_PWD/../../3rdparty/qwebdav
         QMAKE_RPATHDIR += $$OUT_PWD/../common

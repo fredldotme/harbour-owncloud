@@ -7,20 +7,27 @@ summary: A modern cross-platform client for Nextcloud, ownCloud, WebDav.
 description: |
   Allows you to easily access your NextCloud, ownCloud and WebDav
   instances with a cross-platform, native Free Software application.
-  
+
   Features:
     - Support for NextCloud, ownCloud & WebDav
     - File management
     - Document previews
     - Video & audio previews
     - Storage usage information
-  
-  Also available on Android & SailfishOS.
+
+  Also available on Android, SailfishOS & postmarketOS.
 
 platforms:
   amd64:
   arm64:
   armhf:
+
+package-repositories:
+  - type: apt
+    url: http://repo.ubports.com/
+    key-id: B551C909D750AA744948E9ED4BD4B4D6DBB583F1
+    components: [ main ]
+    suites: [ 24.04-2.x ]
 
 apps:
   ghostcloud:
@@ -31,6 +38,8 @@ apps:
     plugs:
       - x11
       - wayland
+      - mir
+      - maliit
       - desktop
       - desktop-legacy
       - opengl
@@ -40,6 +49,22 @@ apps:
       - removable-media
       - network
       - audio-playback
+      - media-hub
+      - online-accounts-service
+      - ghostcloud-daemon
+  daemon:
+    command-chain:
+      - bin/gpu-2404-wrapper # For libicui18n.so.74
+      - bin/lomiri-launch # For all the required Qt goodness
+    command: usr/bin/harbour-owncloud-daemon
+    daemon: simple
+    daemon-scope: user
+    plugs:
+      - network
+      - home
+      - online-accounts-service
+    slots:
+      - ghostcloud-service
 
 plugs:
   lomiri-ui-toolkit:
@@ -50,6 +75,16 @@ plugs:
     interface: content
     target: $SNAP/gpu-2404
     default-provider: mesa-2404
+  ghostcloud-daemon:
+    interface: dbus
+    bus: session
+    name: com.github.beidl.HarbourOwncloud.Daemon.Uploader
+
+slots:
+  ghostcloud-service:
+    interface: dbus
+    bus: session
+    name: com.github.beidl.HarbourOwncloud.Daemon.Uploader
 
 layout:
   /usr/share/X11/xkb:
@@ -64,14 +99,19 @@ layout:
     bind: $SNAP/lomiri-ui-toolkit/usr/share/alsa
 
 parts:
-  app:
+  ghostcloud:
     plugin: qmake
     source: .
     qmake-parameters:
-      - CONFIG+=noadditionals
+      - CONFIG+=snap
+      - CONFIG+=ubuntutouch
+      - CONFIG+=nopermissionagent
+      - CONFIG+=noqmlextension
+      - CONFIG+=nosharing
       - CONFIG+=quickcontrols
     qmake-project-file: harbour-owncloud.pro
     build-packages:
+      - wget
       - make
       - qt5-qmake
       - qttools5-dev
@@ -95,6 +135,8 @@ parts:
       - qml-module-qtquick-controls
       - qml-module-qt-labs-settings
       - qml-module-qtquick-localstorage
+      - liblomiri-download-manager-client-dev
+      - liblomiri-online-accounts-qt5-dev
     override-build: |
         craftctl default
         #cd $CRAFT_PART_SRC
@@ -104,13 +146,16 @@ parts:
     override-prime: |
         craftctl default
         mkdir -p ${CRAFT_PRIME}/bin
-        cp -a /snap/lomiri-ui-toolkit-core24/current/command-chain/lomiri-launch ${CRAFT_PRIME}/bin/lomiri-launch
+        wget "https://gitlab.com/ubports/development/core/packaging/snaps/lomiri-ui-toolkit-core24/-/raw/main/misc/command-chain/lomiri-launch"
+        mv lomiri-launch ${CRAFT_PRIME}/bin/lomiri-launch
+        chmod 755 ${CRAFT_PRIME}/bin/lomiri-launch
   gpu-2404:
     after:
-      - app
+      - ghostcloud
     source: https://github.com/canonical/gpu-snap.git
     plugin: dump
     override-prime: |
+      git config --global --add safe.directory $CRAFT_PROJECT_DIR
       craftctl default
       ${CRAFT_PART_SRC}/bin/gpu-2404-cleanup mesa-2404
     prime:

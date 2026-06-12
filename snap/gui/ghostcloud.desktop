@@ -1,5 +1,6 @@
 [Desktop Entry]
 Type=Application
-Icon=${SNAP}/meta/gui/harbour-owncloud.png
+Icon=${SNAP}/meta/gui/ghostcloud.png
 Exec=ghostcloud
 Name=GhostCloud
+X-Lomiri-Touch=true

@@ -136,6 +136,11 @@ enum GCTargetOs {
 
 int main(int argc, char *argv[])
 {
+#ifdef GHOSTCLOUD_SNAP
+    QGuiApplication::setApplicationName("GhostCloud");
+    QGuiApplication::setOrganizationName("fredldotme");
+#endif
+
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
 #ifdef Q_OS_ANDROID

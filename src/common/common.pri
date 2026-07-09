@@ -13,8 +13,12 @@ android {
 DEFINES += QWEBDAVITEM_EXTENDED_PROPERTIES
 
 !macx {
+    # In release builds we strip + disable debug output by default.
+    # For local development, you can opt out with CONFIG+=no_strip.
     CONFIG(release, debug|release) {
-        QMAKE_POST_LINK=$(STRIP) $(TARGET)
+        !contains(CONFIG, no_strip) {
+            QMAKE_POST_LINK=$(STRIP) $(TARGET)
+        }
         DEFINES += QT_NO_DEBUG_OUTPUT
     }
 }

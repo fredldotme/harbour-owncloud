@@ -15,11 +15,14 @@ const QString serviceFileContent =
             "[Unit]\n"
             "Description=GhostCloud photo backups\n"
             "After=graphical-session.target\n"
+            "\n"
             "[Service]\n"
+            "Slice=background.slice\n"
             "Restart=on-failure\n"
             "Environment=LD_LIBRARY_PATH=/opt/click.ubuntu.com/me.fredl.ghostcloudphotobackup/current/usr/lib\n"
             "Environment=APP_ID=%1\n"
             "ExecStart=/opt/click.ubuntu.com/me.fredl.ghostcloudphotobackup/current/usr/bin/harbour-owncloud-daemon\n"
+            "\n"
             "[Install]\n"
             "WantedBy=graphical-session.target\n");
 
